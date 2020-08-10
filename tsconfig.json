@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es2016",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "strict": false
+    },
+    "include": [
+        "./src/**/*"
+    ],
+     "exclude": [
+        "node_modules",
+        "zzz/*.ts"
+    ],
+    "typeRoots": [
+		"node_modules/@types",
+		"node_module/phaser/types"
+	],
+	"types": [
+		"phaser"
+	]
+}

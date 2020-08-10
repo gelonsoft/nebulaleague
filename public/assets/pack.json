@@ -1,0 +1,29 @@
+{ 
+    "preload": {
+        "files": [
+            {
+                "type": "atlas",
+                "key": "atlas",
+                "textureURL": "assets/tilesheet.png",
+                "atlasURL": "assets/tilesheet.json"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy1",
+                "url": "assets/backgrounds/galaxy1.jpg"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy2",
+                "url": "assets/backgrounds/galaxy2.jpg"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy3",
+                "url": "assets/backgrounds/galaxy3.jpg"
+            }
+            
+        ]
+    }
+}
+
