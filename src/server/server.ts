@@ -1,47 +1,24 @@
-const app = require('express')(); // new express instance
-const express = require('express');
-const http = require('http').Server(app);
-require('socket.io')(http);
+import * as express from "express"
+import * as path from "path"
+import * as socketIO from "socket.io"
 
-const port = 3000
+const app = express()
+app.set("port", process.env.PORT || 9001)
 
-
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../webpack.dev.config.js');
+const http = require("http").Server(app)
+const io = socketIO(http)
 
 
+app.use(express.static(path.resolve("./public")))
 
-const devServerEnabled = true;
+app.get("/", (req: any, res: any) => {
+    res.sendFile(path.resolve("./public/index.html"))
+})
 
-if (devServerEnabled) {
-    //reload=true:Enable auto reloading when changing JS files or content
-    //timeout=1000:Time from disconnecting from server to reconnecting
-    config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000');
+io.on("connection", function(socket: any) {
+    console.log("Client connected!")
+})
 
-    //Add HMR plugin
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
-
-    const compiler = webpack(config);
-
-    //Enable "webpack-dev-middleware"
-    app.use(webpackDevMiddleware(compiler, {
-        publicPath: config.output.publicPath
-    }));
-
-    //Enable "webpack-hot-middleware"
-    app.use(webpackHotMiddleware(compiler))
-}
-
-
-
-app.use(express.static('public'))
-
-app.get('/', (req, res) => {
-    res.sendfile(`./index.html`)
-});
-
-http.listen(port, () => {
-    console.info('listening on localhost:3000')
-});
+http.listen(9001, function() {
+    console.log("listening on *:9001")
+})

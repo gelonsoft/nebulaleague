@@ -39,6 +39,7 @@ export interface ProjectileInterface {
 }
 
 export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {
+    public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
     public gate: number
     public lifespan: number

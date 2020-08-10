@@ -48,6 +48,7 @@ export class RandomItem {
 
 
 export class Consumable extends Phaser.GameObjects.Sprite implements ConsumableInterface {
+    public body: Phaser.Physics.Arcade.Body
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | integer) {
         super(scene, x, y, texture, frame)
         scene.add.existing(this)

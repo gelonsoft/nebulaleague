@@ -54,6 +54,7 @@ interface AbilitiesInterface {
 
 
 export class Player extends Phaser.GameObjects.Container {
+    public body: Phaser.Physics.Arcade.Body
     public id: string
     public health: number
     public maxHealth: number

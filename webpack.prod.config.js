@@ -32,7 +32,12 @@ module.exports = {
     module: {
         rules: [{
             test: /\.ts?$/,
-            use: 'ts-loader',
+            use: {
+                loader: 'ts-loader',
+                options: {
+                    configFile: "tsconfig-client.json"
+                },  
+            },
             exclude: [
                 path.resolve(__dirname, "typings"),
                 path.resolve(__dirname, "node_modules"),
@@ -47,7 +52,7 @@ module.exports = {
                 {
                     loader: 'sass-loader',
                     options: {
-                        sourceMap: true,
+                        sourceMap: false,
                     }
                 }
             ]

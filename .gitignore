@@ -18,3 +18,5 @@ dist/
 public/app.js
 public/app.js.LICENSE.txt
 public/css
+src/server/**/*.js
+src/server/**/*.map
