@@ -3,6 +3,8 @@ const path = require("path")
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
+
+
 require('dotenv-flow').config()
 
 

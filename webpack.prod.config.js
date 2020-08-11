@@ -2,11 +2,12 @@ const webpack = require('webpack')
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const DotenvFlow = require('dotenv-flow-webpack');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
 require('dotenv-flow').config()
+
+
 
 module.exports = {
     mode: 'production',
@@ -68,6 +69,9 @@ module.exports = {
         }
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+        }),
         new webpack.EnvironmentPlugin({
             DEBUG: false,
         }),

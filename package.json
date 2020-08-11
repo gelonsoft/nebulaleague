@@ -4,7 +4,7 @@
     "description": "Starfighter",
     "main": "src/client/index.ts",
     "scripts": {
-        "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt",
+        "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
         "dev": "env NODE_ENV=local env TEST=1 webpack-dev-server --config webpack.dev.config.js",
         "server:watch": "env NODE_ENV=local env TEST=1 tsc-watch --onSuccess \"node src/server/server.js\"",
         "client:prod": "npm run clean && webpack --config webpack.prod.config.js",
@@ -15,9 +15,9 @@
     "author": "edil3ra",
     "license": "MIT",
     "dependencies": {
-        "dotenv-flow": "^3.2.0",
         "express": "^4.17.1",
         "fluent-behavior-tree": "^1.2.6",
+        "html-webpack-plugin": "^4.0.0-beta.14",
         "perlin.js": "^1.0.0",
         "phaser": "^3.22.0",
         "socket.io": "^2.3.0",
@@ -36,7 +36,7 @@
         "bulma": "^0.9.0",
         "css-loader": "^4.2.0",
         "dotenv": "^8.2.0",
-        "dotenv-flow-webpack": "^1.1.0",
+        "dotenv-flow": "^3.2.0",
         "eslint": "^7.4.0",
         "eslint-loader": "^4.0.2",
         "expose-loader": "0.7.5",
