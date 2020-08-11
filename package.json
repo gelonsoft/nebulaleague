@@ -5,8 +5,8 @@
     "main": "src/client/index.ts",
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
-        "dev": "env NODE_ENV=local env TEST=1 webpack-dev-server --config webpack.dev.config.js",
-        "server:watch": "env NODE_ENV=local env TEST=1 tsc-watch --onSuccess \"node src/server/server.js\"",
+        "dev": "env NODE_ENV=development webpack-dev-server --config webpack.dev.config.js",
+        "server:watch": "env NODE_ENV=development tsc-watch --onSuccess \"node src/server/server.js\"",
         "client:prod": "npm run clean && webpack --config webpack.prod.config.js",
         "server:prod": "tsc -p . && node src/server/server.js",
         "prod": "env NODE_ENV=production npm-run-all client:prod server:prod",

@@ -2,15 +2,28 @@ import * as express from "express"
 import * as path from "path"
 import * as socketIO from "socket.io"
 require('dotenv-flow').config()
+const webpackDevMiddleware = require('webpack-dev-middleware')
 
 
 
 const app = express()
 app.set('port', process.env.PORT || 3000)
+app.set('debug', process.env.DEBUG || false)
 
 const http = require("http").Server(app)
 const io = socketIO(http)
 
+if (app.get('debug')) {
+    const webpack = require('webpack')
+    const webpackDevMiddleware = require('webpack-dev-middleware')
+    const config = require(path.resolve('./webpack.dev.config.js'))
+    const compiler = webpack(config)
+    
+
+    app.use(webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath,
+    }))
+}
 
 app.use(express.static(path.resolve("./public")))
 
