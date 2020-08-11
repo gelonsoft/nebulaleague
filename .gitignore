@@ -13,7 +13,7 @@ node_modules/
 /npm-debug.log
 /public/dist/*
 dist/
-.env.local
+.env.development
 .env.production
 
 src/server/**/*.js
