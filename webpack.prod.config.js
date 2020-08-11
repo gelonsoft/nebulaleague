@@ -2,29 +2,25 @@ const webpack = require('webpack')
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const dotenv = require('dotenv')
-const env = dotenv.config().parsed;
-const currentPath = path.join(__dirname)
-const envPath = currentPath + '/.env'
-const fileEnv = dotenv.config({ path: envPath }).parsed;
+const DotenvFlow = require('dotenv-flow-webpack');
 
-// reduce it to a nice object, the same as before
-const envKeys = Object.keys(env).reduce((prev, next) => {
-    prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
-    return prev;
-}, {})
-
+const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
+const phaser = path.join(pathToPhaser, "dist/phaser.js")
+require('dotenv-flow').config()
 
 module.exports = {
     mode: 'production',
     entry: {
         app: [
             path.resolve(__dirname, 'src/client/index.ts')
-        ]
+        ],
+        vendor: ['phaser']
     },
     output: {
         path: path.resolve(__dirname, 'public'),
-        filename: 'app.js'
+        publicPath: '/',
+        filename: '[name].[hash].js',
+        chunkFilename: '[name].[hash].js'
     },
     resolve: {
         extensions: ['.ts', '.js']
@@ -61,9 +57,20 @@ module.exports = {
     optimization: {
         minimize: true,
         minimizer: [new TerserPlugin()],
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendor",
+                    chunks: "all"
+                }
+            }
+        }
     },
     plugins: [
-        new webpack.DefinePlugin(envKeys),
+        new webpack.EnvironmentPlugin({
+            DEBUG: false,
+        }),
         new MiniCssExtractPlugin({filename: 'css/mystyles.css'}),
     ]
 }

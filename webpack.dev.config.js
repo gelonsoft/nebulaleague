@@ -3,18 +3,7 @@ const path = require("path")
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
-
-const dotenv = require('dotenv')
-const env = dotenv.config().parsed;
-const currentPath = path.join(__dirname)
-const envPath = currentPath + '/.env.dev'
-const fileEnv = dotenv.config({ path: envPath }).parsed;
-
-// reduce it to a nice object, the same as before
-const envKeys = Object.keys(env).reduce((prev, next) => {
-    prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
-    return prev;
-}, {})
+require('dotenv-flow').config()
 
 
 module.exports = {
@@ -39,6 +28,7 @@ module.exports = {
         path: path.resolve(__dirname, "public"),
         publicPath: '/',
         filename: '[name].js',
+        chunkFilename: '[name].js'
     },
     resolve: {
         extensions: [".ts", ".js"],
@@ -77,8 +67,22 @@ module.exports = {
             ]
         }]
     },
+    optimization: {
+        runtimeChunk: "single", // enable "runtime" chunk
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendor",
+                    chunks: "all"
+                }
+            }
+        }
+    },
     plugins: [
-        new webpack.DefinePlugin(envKeys),
+        new webpack.EnvironmentPlugin({
+            DEBUG: false,
+        }),
         new MiniCssExtractPlugin({filename: 'css/mystyles.css'}),
     ]
 }

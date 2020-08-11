@@ -1,9 +1,12 @@
 import * as express from "express"
 import * as path from "path"
 import * as socketIO from "socket.io"
+require('dotenv-flow').config()
+
+
 
 const app = express()
-app.set("port", process.env.PORT || 9001)
+app.set('port', process.env.PORT || 3000)
 
 const http = require("http").Server(app)
 const io = socketIO(http)
@@ -19,6 +22,6 @@ io.on("connection", function(socket: any) {
     console.log("Client connected!")
 })
 
-http.listen(9001, function() {
-    console.log("listening on *:9001")
+http.listen(app.get('port'), function() {
+    console.log(`listening on ${app.get('port')}`)
 })

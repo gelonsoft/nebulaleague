@@ -13,10 +13,11 @@ node_modules/
 /npm-debug.log
 /public/dist/*
 dist/
-.env
-.env.dev
-public/app.js
-public/app.js.LICENSE.txt
-public/css
+.env.local
+.env.production
+
 src/server/**/*.js
 src/server/**/*.map
+public/*.js
+public/*.txt
+public/css
