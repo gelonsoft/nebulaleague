@@ -7,8 +7,6 @@ import { MenuScene } from './scenes/menuScene'
 
 
 const isDebug = process.env.DEBUG === 'true' || false
-console.log('hello')
-
 export class MyGame extends Phaser.Game {
     public debug: boolean
     constructor(GameConfig?: Phaser.Types.Core.GameConfig) {

@@ -11,14 +11,10 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, 'public'),
         host: `localhost`,
-        // port: 3000,
-        // disableHostCheck: true,
-        // overlay: true,
+        hot:true,
     },
     entry: {
         app: [
-            // 'webpack-dev-server/client?http://localhost:3000/',
-            // 'webpack/hot/only-dev-server',
             path.resolve(__dirname, 'src/client/index.ts'),
         ],
         vendor: ['phaser'],
@@ -83,6 +79,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
         }),
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.EnvironmentPlugin({
             DEBUG: true,
         }),
