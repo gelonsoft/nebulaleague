@@ -5,7 +5,6 @@ import { BootScene } from "./scenes/bootScene"
 import { DebugScene } from './scenes/debugScene'
 import { MenuScene } from './scenes/menuScene'
 
-
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {
     public debug: boolean
@@ -20,7 +19,7 @@ export class PhaserSpaceGame {
     constructor() {
         const scenes = [BootScene, MenuScene, MainScene, HudScene, DebugScene]
         this.game = new MyGame({
-            type: Phaser.AUTO,
+            type: Phaser.CANVAS,
             title: 'spacefighter',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,

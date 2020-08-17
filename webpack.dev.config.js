@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
+require('dotenv-flow').config()
 
 
 module.exports = {
@@ -79,9 +80,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
         }),
-        // new webpack.HotModuleReplacementPlugin(),
         new webpack.EnvironmentPlugin({
-            DEBUG: true,
+            DEBUG: process.env.DEBUG || true
         }),
         new MiniCssExtractPlugin({filename: 'css/mystyles.css'}),
     ]
