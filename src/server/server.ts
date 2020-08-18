@@ -27,9 +27,8 @@ if (app.get('debug')) {
 
     }))
     app.use(hotMiddleware(compiler))
-
-    
 }
+
 app.use(express.static(path.resolve("./public")))
 
 app.get("/", (req: any, res: any) => {
@@ -41,5 +40,5 @@ io.on("connection", function(socket: any) {
 })
 
 http.listen(app.get('port'), function() {
-    console.log(`listening on ${app.get('port')}`)
+    console.log(`Server running at http://127.0.0.1: ${app.get('port')}`)
 })

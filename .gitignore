@@ -21,3 +21,4 @@ src/server/**/*.map
 public/*.js
 public/*.txt
 public/css
+public/index.html
