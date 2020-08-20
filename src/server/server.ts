@@ -6,10 +6,13 @@ require('dotenv-flow').config()
 
 const app = express()
 app.set('port', process.env.PORT || 3000)
-app.set('debug', process.env.DEBUG || false)
+app.set('debug', process.env.DEBUG == 'true' || false)
+
+
 
 const http = require("http").Server(app)
 const io = socketIO(http)
+
 if (app.get('debug')) {
     const webpack = require('webpack')
     const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -29,10 +32,13 @@ if (app.get('debug')) {
     app.use(hotMiddleware(compiler))
 }
 
-app.use(express.static(path.resolve("./public")))
+app.use('/assets', express.static(path.resolve("./public/assets")))
+app.use('/js', express.static(path.resolve("./public/js")))
+app.use('/css', express.static(path.resolve("./public/css")))
+
 
 app.get("/", (req: any, res: any) => {
-    console.log('serve by express')
+    console.log('index.html is served by express')
     res.sendFile(path.resolve("./public/index.html"))
 })
 

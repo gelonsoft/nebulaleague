@@ -10,10 +10,9 @@ const phaser = path.join(pathToPhaser, "dist/phaser.js")
 module.exports = {
     mode: 'production',
     entry: {
-        app: [
+        'js/app': [
             path.resolve(__dirname, 'src/client/index.ts')
         ],
-        vendor: ['phaser']
     },
     output: {
         path: path.resolve(__dirname, 'public'),
@@ -58,9 +57,9 @@ module.exports = {
         minimizer: [new TerserPlugin()],
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                'js/vendor': {
                     test: /[\\/]node_modules[\\/]/,
-                    name: "vendor",
+                    name: "js/vendor",
                     chunks: "all"
                 }
             }

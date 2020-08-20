@@ -21,9 +21,6 @@ src/server/**/*.map
 public/*.js
 public/*.txt
 public/css
+public/js
 public/index.html
 
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml

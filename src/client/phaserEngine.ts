@@ -24,18 +24,22 @@ export class PhaserSpaceGame {
         const scenes = [BootScene, MenuScene, MainScene, HudScene, DebugScene]
         this.game = new MyGame({
             type: Phaser.CANVAS,
-            title: 'spacefighter',
+            title: 'starfighter',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,
                 height: window.innerHeight * window.devicePixelRatio,
                 mode: Phaser.Scale.NONE,
-                parent: "spacefighter",
+                parent: "starfighter",
             },
-            parent: 'spacefighter',
+            parent: 'starfighter',
             dom: {
                 createContainer: true
             },
             backgroundColor: 0x444400,
+            audio: {
+                noAudio: true
+            },
+            banner: isDebug,
             physics: {
                 default: 'arcade',
                 arcade: {
