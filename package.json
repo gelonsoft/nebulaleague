@@ -4,7 +4,7 @@
     "description": "Starfighter",
     "main": "src/client/index.ts",
     "engines": {
-        "node": "12.16.1"
+        "node": "12.18.3"
     },
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
