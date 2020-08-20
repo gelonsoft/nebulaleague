@@ -3,6 +3,7 @@
     "version": "1.0.2",
     "description": "Starfighter",
     "main": "src/client/index.ts",
+    "engines": { "node" : "12.16.1" },
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
         "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node src/server/server.js\"",
