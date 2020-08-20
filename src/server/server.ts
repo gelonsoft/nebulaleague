@@ -32,10 +32,12 @@ if (app.get('debug')) {
 app.use(express.static(path.resolve("./public")))
 
 app.get("/", (req: any, res: any) => {
+    console.log('serve by express')
     res.sendFile(path.resolve("./public/index.html"))
 })
 
 io.on("connection", function(socket: any) {
+    socket.send('Hello!');
     console.log("Client connected!")
 })
 

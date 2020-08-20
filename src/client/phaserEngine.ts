@@ -4,6 +4,8 @@ import { HudScene } from "./scenes/hudScene"
 import { BootScene } from "./scenes/bootScene"
 import { DebugScene } from './scenes/debugScene'
 import { MenuScene } from './scenes/menuScene'
+import * as io from 'socket.io-client'
+
 
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {
@@ -13,6 +15,8 @@ export class MyGame extends Phaser.Game {
         this.debug = isDebug
     }
 }
+
+io.connect()
 
 export class PhaserSpaceGame {
     private game: MyGame
