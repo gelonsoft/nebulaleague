@@ -11,7 +11,7 @@
         "build:client": "webpack --config webpack.prod.config.js",
         "build:server": "tsc -p .",
         "prod": "env NODE_ENV=production npm-run-all client:prod server:prod",
-        "predeploy": "npm run clean && npm install",
+        "predeploy": "npm run clean && npm install --unsafe-perm",
         "deploy": "env NODE_ENV=production npm-run-all build:client build:server",
         "postdeploy": "node src/server/server.js",
         "start": "npm run dev"
