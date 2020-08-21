@@ -1,8 +1,8 @@
 branch-defaults:
   master:
-    environment: starfighter-dev
+    environment: nebulaleague-prod
 global:
-  application_name: starfighter
+  application_name: nebulaleague
   branch: null
   default_ec2_keyname: main
   default_platform: Node.js 12 running on 64bit Amazon Linux 2
