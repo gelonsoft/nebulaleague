@@ -1,7 +1,7 @@
 {
-    "name": "Starfighter",
+    "name": "Nebulaleague",
     "version": "1.0.2",
-    "description": "Starfighter",
+    "description": "Nebulaleague",
     "main": "src/client/index.ts",
     "engines": {
         "node": "12.18.3"

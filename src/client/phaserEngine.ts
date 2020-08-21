@@ -24,14 +24,14 @@ export class PhaserSpaceGame {
         const scenes = [BootScene, MenuScene, MainScene, HudScene, DebugScene]
         this.game = new MyGame({
             type: Phaser.CANVAS,
-            title: 'starfighter',
+            title: 'nebulaleague',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,
                 height: window.innerHeight * window.devicePixelRatio,
                 mode: Phaser.Scale.NONE,
-                parent: "starfighter",
+                parent: "nebulaleague",
             },
-            parent: 'starfighter',
+            parent: 'nebulaleague',
             dom: {
                 createContainer: true
             },
