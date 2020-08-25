@@ -1,4 +1,6 @@
 branch-defaults:
+  integration-elasticbeanstalk:
+    environment: nebulaleague-prod
   master:
     environment: nebulaleague-prod
 global:
