@@ -74,10 +74,11 @@ export class Blink extends Ability implements AbilityInterface {
 }
 
 
+
 const abilitiesConfig = {
     blink: {
         name: 'blink',
-        frame: 'bolt_gold.png',
+        frame: 'teleport.png',
         cooldownDelay: 10,
         distance: 500,
     }

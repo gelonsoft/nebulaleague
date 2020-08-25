@@ -40,7 +40,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.innerWidth = this.width - HUD_PADDING
         this.innerHeight = this.height - HUD_PADDING
         this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(scene, 15, 10, 'atlas', frame)
+        this.image = new Phaser.GameObjects.Image(scene, 9, 9, 'atlas', frame)
         this.textCooldown = new Phaser.GameObjects.Text(scene, 0, 0, '', {})
         this.add([this.graphic, this.image, this.textCooldown])
         this.create()
@@ -51,7 +51,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.graphic.fillRect(0, 0, this.width, this.height)
         this.graphic.fillStyle(HUD_SLOT_COLOR_UNSELECTED)
         this.graphic.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, this.innerWidth, this.innerHeight)
-        this.image.setDisplaySize(30, 40)
+        this.image.setDisplaySize(42, 42)
         this.image.setDisplayOrigin(0, 0)
         this.graphic.setAlpha(0.4)
         this.image.setAlpha(0.4)
@@ -88,8 +88,8 @@ class SlotContainer extends Phaser.GameObjects.Container {
 
             this.textCooldown.setText(``)
         } else {
-            this.graphic.setAlpha(0.6)
-            this.image.setAlpha(0.6)
+            this.graphic.setAlpha(0.3)
+            this.image.setAlpha(0.3)
             this.textCooldown.setText(`${Math.round(this.cooldown * 10) / 10}`)
         }
     }

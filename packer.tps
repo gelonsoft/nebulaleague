@@ -34,7 +34,7 @@
         <key>dataFormat</key>
         <string>phaser</string>
         <key>textureFileName</key>
-        <filename>public/assets/tilesheet.png</filename>
+        <filename>public/assets/ttt.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>pvrCompressionQuality</key>
