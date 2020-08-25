@@ -1,5 +1,5 @@
 import { MainScene } from "../scenes/mainScene"
-import { ProjectileModel } from "../../shared/models"
+import { ProjectileModel, BlockModel } from "../../shared/models"
 import { Player } from "../player"
 
 
@@ -31,11 +31,12 @@ const projectilesConfig = {
         width: 20,
         height: 20,
     },
-    fireZone: {
-        name: 'fireZone',
+    flame: {
+        name: 'flame',
         radius: 50,
-        lifespan: 0.5,
-        damage: 100,
+        lifespan: 3,
+        damage: 200,
+        tickTime: 1,
     }
 }
 
@@ -106,6 +107,41 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
 }
 
 
+export class Block extends Phaser.GameObjects.Graphics{
+    public body: Phaser.Physics.Arcade.Body
+    public scene: MainScene
+    public radius: number
+    public tickTime: number
+    public lifespan: number
+    public damage: number
+    
+    public constructor(scene: MainScene, blockConfig: BlockModel) {
+        super(scene)
+        this.radius = blockConfig.radius
+        this.tickTime = blockConfig.tickTime
+        this.lifespan = blockConfig.lifespan
+        this.damage = blockConfig.damage
+        this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
+        this.scene.add.existing(this)
+        this.body.setEnable(false)
+        this.setActive(false)
+        this.setVisible(false)
+    }
+
+    public fire(position: Phaser.Math.Vector2) {
+        const body = this.body as Phaser.Physics.Arcade.Body
+        body.reset(position.x, position.y)
+        body.setEnable(true)
+        this.setActive(true)
+        this.setVisible(true)
+
+        this.clear()
+        this.fillStyle(0xff00ff, 0.8)
+        this.fillCircle(position.x, position.y, this.radius)
+    }
+}
+
+
 export class Projectiles
 {
     public projectiles: Map<string, Phaser.Physics.Arcade.Group>
@@ -117,6 +153,7 @@ export class Projectiles
         const laserBlueGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
         const laserRedGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
         const laserGreenGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
+        const flameGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
 
         const laserRedBullets = Array.from({length: 200}, () => {
             return new Bullet(scene, projectilesConfig.laserRed)
@@ -130,23 +167,29 @@ export class Projectiles
             return new Bullet(scene, projectilesConfig.laserGreen)
         })
 
+        const flameBlocks = Array.from({length: 20}, () => {
+            return new Block(scene, projectilesConfig.flame)
+        })
+        
         
         laserBlueGroup.addMultiple(laserBlueBullets)
         laserRedGroup.addMultiple(laserRedBullets)
         laserGreenGroup.addMultiple(laserGreenBullets)
+        flameGroup.addMultiple(flameBlocks)
         
         this.projectiles.set('laserRed', laserRedGroup)
         this.projectiles.set('laserBlue', laserBlueGroup)
         this.projectiles.set('laserGreen', laserGreenGroup)
+        this.projectiles.set('flame', flameGroup)
     }
 
     
     public fire(
         key: string,
         position: Phaser.Math.Vector2,
-        rotation: number): void {
-        const bulletGroup = this.projectiles.get(key)
-        const projectile = bulletGroup.getFirstDead()
+        rotation?: number): void {
+        const projectileGroup = this.projectiles.get(key)
+        const projectile = projectileGroup.getFirstDead()
         projectile.fire(position, rotation)
     }
 
@@ -161,6 +204,7 @@ export class Projectiles
             this.projectiles.get('laserRed'),
             this.projectiles.get('laserBlue'),
             this.projectiles.get('laserGreen'),
+            this.projectiles.get('flame'),
         ]
     }
 }

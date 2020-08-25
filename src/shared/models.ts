@@ -48,3 +48,13 @@ export interface ProjectileModel {
     width: number
     height: number
 }
+
+
+export interface BlockModel {
+    name: string
+    radius: number
+    lifespan: number
+    damage: number
+    tickTime: number
+}
+

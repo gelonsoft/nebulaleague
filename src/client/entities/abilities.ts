@@ -103,7 +103,7 @@ export class Blink extends Ability implements AbilityInterface {
 
 
 
-export class FireZone extends Ability implements AbilityInterface {
+export class Flame extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
         this.rangeGraphics = this.scene.add.graphics()
@@ -111,7 +111,7 @@ export class FireZone extends Ability implements AbilityInterface {
     }
 
     trigger(player: Player): void {
-        console.log('Trigger')
+        this.projectiles.fire('flame', player.body.center)
     }
 }
 
@@ -124,8 +124,8 @@ const abilitiesConfig = {
         cooldownDelay: 10,
         rangeDistance: 500,
     },
-    fireZone: {
-        name: 'fireZone',
+    flame: {
+        name: 'flame',
         frame: 'fire-zone.png',
         cooldownDelay: 10,
         rangeDistance: 500,
@@ -135,7 +135,7 @@ const abilitiesConfig = {
 
 const classNameToClass = {
     'blink': Blink,
-    'fireZone': FireZone,
+    'flame': Flame,
 }
 
 
