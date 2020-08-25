@@ -16,6 +16,7 @@ export interface  BlinkConfig extends AbilityConfig {
 export interface  AbilityInterface extends AbilityConfig {
     draw(player: Player): void
     trigger(player: Player): void
+    rangeGraphics: Phaser.GameObjects.Graphics
 }
 
 
@@ -25,14 +26,16 @@ export class Ability implements AbilityInterface  {
     public name: string
     public frame: string
     public cooldownDelay: number
-    public ready: boolean
-    public readyTimerEvent: Phaser.Time.TimerEvent | null
+    public rangeGraphics: Phaser.GameObjects.Graphics
+    
     
     constructor(scene: MainScene, config: AbilityConfig) {
         this.scene = scene
         this.name = config.name
         this.frame = config.frame
         this.cooldownDelay = config.cooldownDelay
+        this.rangeGraphics = this.scene.add.graphics()
+        
     }
     draw(_player: Player): void {
         throw new Error("Method not implemented.")
@@ -48,7 +51,6 @@ export class Blink extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
         this.distance = config.distance
-        
     }
 
     trigger(player: Player): void {
@@ -63,7 +65,11 @@ export class Blink extends Ability implements AbilityInterface {
     }
 
     draw(player: Player): void {
-        console.log('hello')
+        this.rangeGraphics.fillStyle(0xff00ff, 0.1)
+        this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.distance)
+
+        this.rangeGraphics.lineStyle(2, 0xff00ff, 0.2)
+        this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.distance)
     }
 }
 

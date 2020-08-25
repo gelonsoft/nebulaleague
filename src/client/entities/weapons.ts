@@ -114,7 +114,6 @@ export class Weapon implements WeaponInterface {
             position.x + Math.cos(angleToPointer) * distance * 0.98,
             position.y + Math.sin(angleToPointer) * distance * 0.98,
         )
-        this.laser.clear()
         this.laser.strokeLineShape(line)
     }
 }

@@ -184,9 +184,9 @@ export class HudScene extends Phaser.Scene {
         this.mainScene.events.on('abilitiesSelectedChanged', this.updateAbilitiesSelected, this)
 
         const top = this.scale.height - HUD_HEIGHT
-        const background = this.add.rectangle(0, 0, this.scale.width, HUD_HEIGHT, HUD_BACKGROUND, 0.2)
-            .setDisplayOrigin(0, 0)
-
+        const background = this.add.graphics()
+        background.fillStyle(HUD_BACKGROUND, 0.3)
+        background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
 
         this.healthBar = new HealthBar(this, 0, 0, this.player.maxHealth)
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.weaponPrimary.frame)

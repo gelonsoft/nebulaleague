@@ -33,6 +33,7 @@ export class MainScene extends Phaser.Scene {
     public playerControl: PlayerControl
     public isDebug: boolean
     public freeCamera: boolean
+    public mainCameraZoom: number
 
     constructor() {
         super({
@@ -49,7 +50,7 @@ export class MainScene extends Phaser.Scene {
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight)
         })
-        
+        this.mainCameraZoom = 0.8
         this.playersAI = []
         this.players = this.physics.add.group({
             collideWorldBounds: true,
@@ -64,19 +65,25 @@ export class MainScene extends Phaser.Scene {
 
     
     public settingCamera(): void {
-        this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
-        this.physics.world.setBounds(0, 0, WORLD_WIDTH , WORLD_HEIGHT - HUD_HEIGHT)
+        this.cameras.main.setZoom(this.mainCameraZoom)
+        this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT )
+        this.physics.world.setBounds(0, 0, WORLD_WIDTH , WORLD_HEIGHT - HUD_HEIGHT - this.player.displayHeight / 2)
         this.cameras.main.startFollow(this.player, true)
     }
 
 
+
     public createBackground() :void {
-        this.add.image(0, 0, 'backgroundGalaxy3')
+        this.add.image(
+            this.cameras.main.width - this.cameras.main.displayWidth,
+            this.cameras.main.height - this.cameras.main.displayHeight,
+            'backgroundGalaxy3'
+        )
             .setScrollFactor(PARALAX_SCROLL_FACTOR, PARALAX_SCROLL_FACTOR)
             .setOrigin(0, 0)
             .setDisplaySize(
-                this.scale.width + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
-                this.scale.height + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayWidth * 1 / this.mainCameraZoom + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayHeight * 1 / this.mainCameraZoom + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
             .setAlpha(0.4)
     }
@@ -161,8 +168,7 @@ export class MainScene extends Phaser.Scene {
         this.players.add(this.player)
     }
     
-    public create(): void {        
-        this.createBackground()
+    public create(): void {
         this.createConsumables()
         this.createProjectiles()
         this.createWeapons()
@@ -170,6 +176,7 @@ export class MainScene extends Phaser.Scene {
         this.createPlayer()
         this.createPlayers()
         this.settingCamera()
+        this.createBackground()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
 
