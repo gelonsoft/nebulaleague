@@ -181,7 +181,13 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/fire-ray.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/fire-zone.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/focused-lightning.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/rolling-bomb.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/root-tip.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/snail.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -573,7 +579,6 @@
             </struct>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserBlue10.png</key>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserGreen16.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed11.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -675,21 +680,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed10.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,9,19,18</rect>
-                <key>scale9Paddings</key>
-                <rect>9,9,19,18</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/bold_silver.png</key>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/bolt_bronze.png</key>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/bolt_gold.png</key>
@@ -725,42 +715,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_bolt.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_shield.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_star.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_bolt.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_shield.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_star.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_bolt.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_shield.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_star.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_bolt.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_shield.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_star.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,8,17,17</rect>
-                <key>scale9Paddings</key>
-                <rect>9,8,17,17</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_bronze.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_gold.png</key>
             <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_silver.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_bronze.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_gold.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_silver.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -772,23 +727,6 @@
                 <rect>8,8,15,15</rect>
                 <key>scale9Paddings</key>
                 <rect>8,8,15,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_bronze.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_gold.png</key>
-            <key type="filename">../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_silver.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,8,16,16</rect>
-                <key>scale9Paddings</key>
-                <rect>8,8,16,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -854,31 +792,7 @@
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/pill_green.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/pill_red.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/pill_yellow.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_bolt.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_shield.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupBlue_star.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_bolt.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_shield.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupGreen_star.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_bolt.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_shield.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupRed_star.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_bolt.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_shield.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/powerupYellow_star.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_bronze.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_gold.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/shield_silver.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_bronze.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_gold.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/star_silver.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_bronze.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_gold.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Power-ups/things_silver.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserBlue01.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserBlue02.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserBlue03.png</filename>
@@ -920,8 +834,6 @@
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed07.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed08.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed09.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed10.png</filename>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed11.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed12.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed13.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/Lasers/laserRed14.png</filename>
@@ -967,7 +879,13 @@
             <filename>../../../Pictures/spacefighter/kenny_shooter/PNG/Sprites/Missiles/spaceMissiles_038.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_shooter/PNG/Sprites/Missiles/spaceMissiles_039.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_shooter/PNG/Sprites/Missiles/spaceMissiles_040.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/charged-arrow.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/fire-ray.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/fire-zone.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/focused-lightning.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/rolling-bomb.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/root-tip.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/snail.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

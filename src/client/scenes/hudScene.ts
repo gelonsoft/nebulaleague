@@ -185,7 +185,7 @@ export class HudScene extends Phaser.Scene {
 
         const top = this.scale.height - HUD_HEIGHT
         const background = this.add.graphics()
-        background.fillStyle(HUD_BACKGROUND, 0.3)
+        background.fillStyle(HUD_BACKGROUND, 0.2)
         background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
 
         this.healthBar = new HealthBar(this, 0, 0, this.player.maxHealth)
