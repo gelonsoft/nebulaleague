@@ -64,7 +64,7 @@ export class Player extends Phaser.GameObjects.Container {
     public weaponPrimary: Weapon
     public weaponSecondary: Weapon
     public abilities: AbilitiesInterface
-    public selectedAbility: string | null
+    public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
     public previousDirection: PlayerDirection
@@ -213,7 +213,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public action(weaponSelected?: SelectedWeapon): void {
-        if (this.selectedAbility) {
+        if (this.selectedAbilityKey) {
             this.triggerSelectedAbility()
         } else {
             this.fire(weaponSelected)
@@ -257,9 +257,9 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public triggerAbility(selectedAbility: string) {
-        const ability = this.abilities[selectedAbility]
-        const actionTime = this.actionTimes[selectedAbility]
+    public triggerAbility(selectedAbilityKey: string) {
+        const ability = this.abilities[selectedAbilityKey]
+        const actionTime = this.actionTimes[selectedAbilityKey]
 
         if (actionTime.ready) {
             actionTime.ready = false
@@ -270,7 +270,7 @@ export class Player extends Phaser.GameObjects.Container {
                 delay: 0.1 * 1000,
                 callback: () => {
                     actionTime.cooldown -= 0.1
-                    this.scene.syncAbilitiesCooldown(this, selectedAbility, actionTime)
+                    this.scene.syncAbilitiesCooldown(this, selectedAbilityKey, actionTime)
                 },
                 callbackScope: this,
                 loop: true,
@@ -290,25 +290,25 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public triggerSelectedAbility() {
-        this.triggerAbility(this.selectedAbility)
-        this.scene.syncSelectedAbility(this, this.selectedAbility, false)
+        this.triggerAbility(this.selectedAbilityKey)
+        this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
-        this.selectedAbility = null
+        this.selectedAbilityKey = null
     }
 
 
     public selectAbility(key) {
         if (this.actionTimes[key].cooldown === 0) {
-            if (this.selectedAbility === key) {
-                this.scene.syncSelectedAbility(this, this.selectedAbility, false)
+            if (this.selectedAbilityKey === key) {
+                this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
                 this.scene.syncSelectedWeapon(this, true)
-                this.selectedAbility = null
+                this.selectedAbilityKey = null
             } else {
-                if (this.selectedAbility) {
-                    this.scene.syncSelectedAbility(this, this.selectedAbility, false)
+                if (this.selectedAbilityKey) {
+                    this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
                 }
-                this.selectedAbility = key
-                this.scene.syncSelectedAbility(this, this.selectedAbility, true)
+                this.selectedAbilityKey = key
+                this.scene.syncSelectedAbility(this, this.selectedAbilityKey, true)
                 this.scene.syncSelectedWeapon(this, false)
             }   
         }

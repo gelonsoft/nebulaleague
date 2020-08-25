@@ -236,14 +236,14 @@ export class HudScene extends Phaser.Scene {
         this.healthBar.refresh(this.player.health)
     }
 
-    private updateAbilitiesCooldown(selectedAbility: string, actionTime: ActionTimeInterface) {
-        const container = this.abilityToContainer[selectedAbility]
+    private updateAbilitiesCooldown(selectedAbilityKey: string, actionTime: ActionTimeInterface) {
+        const container = this.abilityToContainer[selectedAbilityKey]
         container.cooldown = actionTime.cooldown
         container.refresh()
     }
 
-    private updateAbilitiesSelected(selectedAbility: string, selected: boolean) {
-        const container = this.abilityToContainer[selectedAbility]
+    private updateAbilitiesSelected(selectedAbilityKey: string, selected: boolean) {
+        const container = this.abilityToContainer[selectedAbilityKey]
         container.selected = selected
         container.refresh()
     }

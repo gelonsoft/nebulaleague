@@ -34,10 +34,10 @@ export class Ability implements AbilityInterface  {
         this.frame = config.frame
         this.cooldownDelay = config.cooldownDelay
     }
-    draw(): void {
+    draw(_player: Player): void {
         throw new Error("Method not implemented.")
     }
-    trigger(player: Player): void {
+    trigger(_player: Player): void {
         throw new Error("Method not implemented.")
     }
 }
@@ -47,7 +47,7 @@ export class Blink extends Ability implements AbilityInterface {
     public distance: number
     constructor(scene, config) {
         super(scene, config)
-        this.distance = 500
+        this.distance = config.distance
         
     }
 
@@ -61,6 +61,10 @@ export class Blink extends Ability implements AbilityInterface {
         player.body.x = blinkPosition.x
         player.body.y = blinkPosition.y
     }
+
+    draw(player: Player): void {
+        console.log('hello')
+    }
 }
 
 
@@ -70,12 +74,11 @@ const abilitiesConfig = {
         frame: 'bolt_gold.png',
         cooldownDelay: 10,
         distance: 500,
-        className: 'Blink'
     }
 }
 
 const classNameToClass = {
-    'Blink': Blink
+    'blink': Blink
 }
 
 
@@ -84,8 +87,8 @@ export function buildAbilities(
 ): Record<string, Ability> {
     const abilities = {}
     for(const [key, config] of Object.entries(abilitiesConfig)) {
-        const classToInstance = classNameToClass[config.className]
-        abilities[key] = new  classToInstance(scene, config)
+        const createInstanceFromClassName = classNameToClass[key]
+        abilities[key] = new createInstanceFromClassName(scene, config)
     }
     return abilities
 }

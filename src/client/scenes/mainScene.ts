@@ -184,15 +184,15 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public syncAbilitiesCooldown(player: Player, selectedAbility: string, actionTime: ActionTimeInterface): void {
+    public syncAbilitiesCooldown(player: Player, selectedAbilityKey: string, actionTime: ActionTimeInterface): void {
         if (player.id === this.player.id) {
-            this.events.emit('abilitiesCooldownChanged', selectedAbility, actionTime)
+            this.events.emit('abilitiesCooldownChanged', selectedAbilityKey, actionTime)
         }
     }
 
-    public syncSelectedAbility(player: Player, selectedAbility: string, selected: boolean): void {
+    public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
         if (player.id === this.player.id) {
-            this.events.emit('abilitiesSelectedChanged', selectedAbility, selected)
+            this.events.emit('abilitiesSelectedChanged', selectedAbilityKey, selected)
         }
     }
 
