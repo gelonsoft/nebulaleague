@@ -15,7 +15,7 @@ const weaponsConfig = {
         laserConfig: {
             color: 0xff5252,
             width: 1,
-            alpha: 0.8,
+            alpha: 0.7,
         }
     },
     laserBlue: {
@@ -28,7 +28,7 @@ const weaponsConfig = {
         laserConfig: {
             color: 0x00f8f8,
             width: 1,
-            alpha: 0.8
+            alpha: 0.7,
         }
     },
     laserGreen: {
@@ -41,7 +41,7 @@ const weaponsConfig = {
         laserConfig: {
             color: 0x00ff00,
             width: 1,
-            alpha: 0.8
+            alpha: 0.7,
         }
     }
 }

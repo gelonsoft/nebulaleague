@@ -24,7 +24,6 @@ export class Ability implements AbilityInterface  {
     public scene: MainScene
     public name: string
     public frame: string
-    public cooldown: number
     public cooldownDelay: number
     public ready: boolean
     public readyTimerEvent: Phaser.Time.TimerEvent | null
@@ -34,7 +33,6 @@ export class Ability implements AbilityInterface  {
         this.name = config.name
         this.frame = config.frame
         this.cooldownDelay = config.cooldownDelay
-        this.cooldown = 0
     }
     draw(): void {
         throw new Error("Method not implemented.")
@@ -71,7 +69,6 @@ const abilitiesConfig = {
         name: 'blink',
         frame: 'bolt_gold.png',
         cooldownDelay: 10,
-        cooldown: 0,
         distance: 500,
         className: 'Blink'
     }

@@ -298,17 +298,19 @@ export class Player extends Phaser.GameObjects.Container {
 
 
     public selectAbility(key) {
-        if (this.selectedAbility === key) {
-            this.scene.syncSelectedAbility(this, this.selectedAbility, false)
-            this.scene.syncSelectedWeapon(this, true)
-            this.selectedAbility = null
-        } else {
-            if (this.selectedAbility) {
+        if (this.actionTimes[key].cooldown === 0) {
+            if (this.selectedAbility === key) {
                 this.scene.syncSelectedAbility(this, this.selectedAbility, false)
-            }
-            this.selectedAbility = key
-            this.scene.syncSelectedAbility(this, this.selectedAbility, true)
-            this.scene.syncSelectedWeapon(this, false)
+                this.scene.syncSelectedWeapon(this, true)
+                this.selectedAbility = null
+            } else {
+                if (this.selectedAbility) {
+                    this.scene.syncSelectedAbility(this, this.selectedAbility, false)
+                }
+                this.selectedAbility = key
+                this.scene.syncSelectedAbility(this, this.selectedAbility, true)
+                this.scene.syncSelectedWeapon(this, false)
+            }   
         }
     }
 

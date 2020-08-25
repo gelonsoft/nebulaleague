@@ -10,8 +10,8 @@ const projectilesConfig = {
         frame: 'laserRed03.png',
         speed: 1300,
         lifespan: 0.4,
-        width: 6,
-        height: 6,
+        width: 8,
+        height: 8,
     },
     laserBlue: {
         name: 'laserBlue',
