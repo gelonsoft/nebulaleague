@@ -89,7 +89,6 @@ export class Weapon implements WeaponInterface {
         const angleToPointer = this.scene.angleToPointer(position)
         this.projectiles.fire(
             this.projectileKey,
-            this,
             position,
             angleToPointer,
         )

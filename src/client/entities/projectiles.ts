@@ -1,13 +1,13 @@
 import { MainScene } from "../scenes/mainScene"
 import { ProjectileModel } from "../../shared/models"
 import { Player } from "../player"
-import { Weapon } from "./weapons"
 
 
 const projectilesConfig = {
     laserRed: {
         name: 'laserRed',
         frame: 'laserRed03.png',
+        damage: 100,
         speed: 1300,
         lifespan: 0.4,
         width: 8,
@@ -16,6 +16,7 @@ const projectilesConfig = {
     laserBlue: {
         name: 'laserBlue',
         frame: 'laserBlue03.png',
+        damage: 200,
         speed: 1400,
         lifespan: 0.5,
         width: 10,
@@ -24,17 +25,24 @@ const projectilesConfig = {
     laserGreen: {
         name: 'laserGreen',
         frame: 'laserGreen03.png',
+        damage: 500,
         speed: 1600,
         lifespan: 0.2,
         width: 20,
         height: 20,
+    },
+    fireZone: {
+        name: 'fireZone',
+        radius: 50,
+        lifespan: 0.5,
+        damage: 100,
     }
 }
 
 
 
 export interface ProjectileInterface {
-    fire(weapon: Weapon, position: Phaser.Math.Vector2, rotation: number): void
+    fire(position: Phaser.Math.Vector2, rotation: number): void
     actionOnCollision(hittedPlayer: Player): void
 }
 
@@ -52,6 +60,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.gate = 0
         this.lifespan = projectileConfig.lifespan
         this.speed = projectileConfig.speed
+        this.damage = projectileConfig.damage
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         
@@ -61,9 +70,8 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.setVisible(false)
     }
 
-    public fire(weapon: Weapon, position: Phaser.Math.Vector2, rotation: number) {
+    public fire(position: Phaser.Math.Vector2, rotation: number) {
         const body = this.body as Phaser.Physics.Arcade.Body
-        this.damage = weapon.damage
         const ux = Math.cos(rotation)
         const uy = Math.sin(rotation)
         body.reset(position.x, position.y)
@@ -135,12 +143,11 @@ export class Projectiles
     
     public fire(
         key: string,
-        weapon: Weapon,
         position: Phaser.Math.Vector2,
         rotation: number): void {
         const bulletGroup = this.projectiles.get(key)
         const projectile = bulletGroup.getFirstDead()
-        projectile.fire(weapon, position, rotation)
+        projectile.fire(position, rotation)
     }
 
 

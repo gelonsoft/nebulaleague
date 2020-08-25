@@ -43,6 +43,7 @@ export interface ProjectileModel {
     name: string
     frame: string
     speed: number
+    damage: number
     lifespan: number
     width: number
     height: number
