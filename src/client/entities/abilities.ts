@@ -1,5 +1,6 @@
 import { MainScene } from '../scenes/mainScene'
 import { Player } from '../player'
+import { Projectiles } from './projectiles'
 
 
 export interface  AbilityConfig {
@@ -7,9 +8,9 @@ export interface  AbilityConfig {
     frame: string
     cooldownDelay: number
     rangeDistance?: number
-    areaDistance?: number
+    radiusDistance?: number
     rangeDistanceColor?: number
-    areaDistanceColor?: number
+    radiusDistanceColor?: number
 }
 
 
@@ -23,26 +24,28 @@ export interface  AbilityInterface extends AbilityConfig {
 
 export class Ability implements AbilityInterface  {
     public scene: MainScene
+    public projectiles: Projectiles
     public name: string
     public frame: string
     public cooldownDelay: number
     public rangeDistance?: number
-    public areaDistance?: number
+    public radiusDistance?: number
     public rangeDistanceColor?: number
-    public areaDistanceColor?: number
+    public radiusDistanceColor?: number
     public rangeGraphics?: Phaser.GameObjects.Graphics
-    public areaGraphics?: Phaser.GameObjects.Graphics
+    public radiusGraphics?: Phaser.GameObjects.Graphics
     
     
     constructor(scene: MainScene, config: AbilityConfig) {
         this.scene = scene
+        this.projectiles = this.scene.projectiles
         this.name = config.name
         this.frame = config.frame
         this.cooldownDelay = config.cooldownDelay
         this.rangeDistance = config.rangeDistance
-        this.areaDistance = config.areaDistance
+        this.radiusDistance = config.radiusDistance
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
-        this.areaDistanceColor = config.areaDistanceColor || 0xffffff
+        this.radiusDistanceColor = config.radiusDistanceColor || 0xffffff
     }
     draw(player: Player): void {
         if (this.rangeGraphics) {
@@ -53,15 +56,15 @@ export class Ability implements AbilityInterface  {
             this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
         }
 
-        if (this.areaGraphics) {
+        if (this.radiusGraphics) {
             const pointer = this.scene.input.activePointer
             const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
             
-            this.areaGraphics.clear()
-            this.areaGraphics.fillStyle(this.rangeDistanceColor, 0.4)
-            this.areaGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.areaDistance)
-            this.areaGraphics.lineStyle(2, this.rangeDistanceColor, 0.4)
-            this.areaGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.areaDistance)
+            this.radiusGraphics.clear()
+            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.4)
+            this.radiusGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.4)
+            this.radiusGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
         }
     }
     
@@ -69,8 +72,8 @@ export class Ability implements AbilityInterface  {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
         }
-        if (this.areaGraphics) {
-            this.areaGraphics.clear()
+        if (this.radiusGraphics) {
+            this.radiusGraphics.clear()
         }
     }
     
@@ -104,11 +107,11 @@ export class FireZone extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
         this.rangeGraphics = this.scene.add.graphics()
-        this.areaGraphics = this.scene.add.graphics()
+        this.radiusGraphics = this.scene.add.graphics()
     }
 
     trigger(player: Player): void {
-        console.log('trigger')
+        console.log('Trigger')
     }
 }
 
@@ -126,7 +129,7 @@ const abilitiesConfig = {
         frame: 'fire-zone.png',
         cooldownDelay: 10,
         rangeDistance: 500,
-        areaDistance: 30,
+        radiusDistance: 50,
     }
 }
 
