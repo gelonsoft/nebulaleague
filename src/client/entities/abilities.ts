@@ -6,17 +6,17 @@ export interface  AbilityConfig {
     name: string
     frame: string
     cooldownDelay: number
-}
-
-export interface  BlinkConfig extends AbilityConfig {
-    distance: number
+    rangeDistance?: number
+    areaDistance?: number
+    rangeDistanceColor?: number
+    areaDistanceColor?: number
 }
 
 
 export interface  AbilityInterface extends AbilityConfig {
     draw(player: Player): void
     trigger(player: Player): void
-    rangeGraphics: Phaser.GameObjects.Graphics
+    clearDraw(): void
 }
 
 
@@ -26,7 +26,12 @@ export class Ability implements AbilityInterface  {
     public name: string
     public frame: string
     public cooldownDelay: number
-    public rangeGraphics: Phaser.GameObjects.Graphics
+    public rangeDistance?: number
+    public areaDistance?: number
+    public rangeDistanceColor?: number
+    public areaDistanceColor?: number
+    public rangeGraphics?: Phaser.GameObjects.Graphics
+    public areaGraphics?: Phaser.GameObjects.Graphics
     
     
     constructor(scene: MainScene, config: AbilityConfig) {
@@ -34,12 +39,41 @@ export class Ability implements AbilityInterface  {
         this.name = config.name
         this.frame = config.frame
         this.cooldownDelay = config.cooldownDelay
-        this.rangeGraphics = this.scene.add.graphics()
-        
+        this.rangeDistance = config.rangeDistance
+        this.areaDistance = config.areaDistance
+        this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
+        this.areaDistanceColor = config.areaDistanceColor || 0xffffff
     }
-    draw(_player: Player): void {
-        throw new Error("Method not implemented.")
+    draw(player: Player): void {
+        if (this.rangeGraphics) {
+            this.rangeGraphics.clear()
+            this.rangeGraphics.fillStyle(this.rangeDistanceColor, 0.2)
+            this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
+            this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
+            this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
+        }
+
+        if (this.areaGraphics) {
+            const pointer = this.scene.input.activePointer
+            const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
+            
+            this.areaGraphics.clear()
+            this.areaGraphics.fillStyle(this.rangeDistanceColor, 0.4)
+            this.areaGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.areaDistance)
+            this.areaGraphics.lineStyle(2, this.rangeDistanceColor, 0.4)
+            this.areaGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.areaDistance)
+        }
     }
+    
+    clearDraw(): void {
+        if (this.rangeGraphics) {
+            this.rangeGraphics.clear()
+        }
+        if (this.areaGraphics) {
+            this.areaGraphics.clear()
+        }
+    }
+    
     trigger(_player: Player): void {
         throw new Error("Method not implemented.")
     }
@@ -47,29 +81,34 @@ export class Ability implements AbilityInterface  {
 
 
 export class Blink extends Ability implements AbilityInterface {
-    public distance: number
     constructor(scene, config) {
         super(scene, config)
-        this.distance = config.distance
+        this.rangeGraphics = this.scene.add.graphics()
     }
 
     trigger(player: Player): void {
         const blinkVector = Phaser.Math.Vector2.ONE
             .clone()
             .setToPolar(player.rotation - Math.PI / 2)
-            .scale(this.distance)
+            .scale(this.rangeDistance)
         const blinkPosition = new Phaser.Math.Vector2(player.x, player.y)
             .add(blinkVector)
         player.body.x = blinkPosition.x
         player.body.y = blinkPosition.y
     }
+}
 
-    draw(player: Player): void {
-        this.rangeGraphics.fillStyle(0xff00ff, 0.1)
-        this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.distance)
 
-        this.rangeGraphics.lineStyle(2, 0xff00ff, 0.2)
-        this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.distance)
+
+export class FireZone extends Ability implements AbilityInterface {
+    constructor(scene, config) {
+        super(scene, config)
+        this.rangeGraphics = this.scene.add.graphics()
+        this.areaGraphics = this.scene.add.graphics()
+    }
+
+    trigger(player: Player): void {
+        console.log('trigger')
     }
 }
 
@@ -80,12 +119,20 @@ const abilitiesConfig = {
         name: 'blink',
         frame: 'teleport.png',
         cooldownDelay: 10,
-        distance: 500,
+        rangeDistance: 500,
+    },
+    fireZone: {
+        name: 'fireZone',
+        frame: 'fire-zone.png',
+        cooldownDelay: 10,
+        rangeDistance: 500,
+        areaDistance: 30,
     }
 }
 
 const classNameToClass = {
-    'blink': Blink
+    'blink': Blink,
+    'fireZone': FireZone,
 }
 
 

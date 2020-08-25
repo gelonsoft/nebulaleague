@@ -131,7 +131,7 @@ export class MainScene extends Phaser.Scene {
                     weaponPrimaryKey: 'laserRed',
                     weaponSecondaryKey: 'laserBlue',
                     abilityKey1: 'blink',
-                    abilityKey2: 'blink',
+                    abilityKey2: 'fireZone',
                     abilityKey3: 'blink',
                     abilityKey4: 'blink',
                 })
@@ -158,7 +158,7 @@ export class MainScene extends Phaser.Scene {
             weaponPrimaryKey: 'laserRed',
             weaponSecondaryKey: 'laserBlue',
             abilityKey1: 'blink',
-            abilityKey2: 'blink',
+            abilityKey2: 'fireZone',
             abilityKey3: 'blink',
             abilityKey4: 'blink',
         })

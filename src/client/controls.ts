@@ -91,7 +91,9 @@ export class PlayerControl {
     
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
-        const angleToPointer = this.scene.angleToPointer(new Phaser.Math.Vector2(this.player.x, this.player.y))
+        const angleToPointer = this.scene.angleToPointer(
+            new Phaser.Math.Vector2(this.player.x, this.player.y)
+        )
         this.player.rotation = angleToPointer + Math.PI / 2
 
         if (this.canLeftTrigger) {
@@ -134,8 +136,6 @@ export class PlayerControl {
     }
 }
 
-
-// const toogleCamera = this.scene.input.keyboard.checkDown(this.controls.toggleCamera, 100)
 
 export class DebugControl {
     public scene: DebugScene

@@ -205,12 +205,8 @@ export class Player extends Phaser.GameObjects.Container {
     public draw(): void {
         if (this.selectedAbilityKey) {
             const selectedAbily = this.abilities[this.selectedAbilityKey] as AbilityInterface
-            selectedAbily.rangeGraphics.clear()
             selectedAbily.draw(this)
         } else {
-            this.weaponPrimary.laser.clear()
-            this.weaponSecondary.laser.clear()
-            
             this.weaponPrimary.draw(
                 this.getPrimaryWeaponPosition(),
                 this.actionTimes.weaponPrimary.ready
@@ -303,7 +299,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.triggerAbility(this.selectedAbilityKey)
         this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
-        this.abilities[this.selectedAbilityKey].rangeGraphics.clear()
+        this.abilities[this.selectedAbilityKey].clearDraw()
         this.selectedAbilityKey = null
     }
 
@@ -313,11 +309,12 @@ export class Player extends Phaser.GameObjects.Container {
             if (this.selectedAbilityKey === key) {
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
                 this.scene.syncSelectedWeapon(this, true)
-                this.abilities[this.selectedAbilityKey].rangeGraphics.clear()
+                this.abilities[this.selectedAbilityKey].clearDraw()
                 this.selectedAbilityKey = null
             } else {
                 if (this.selectedAbilityKey) {
                     this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
+                    this.abilities[this.selectedAbilityKey].clearDraw()
                 }
                 this.selectedAbilityKey = key
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, true)
