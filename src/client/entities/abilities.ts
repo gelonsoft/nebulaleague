@@ -17,6 +17,7 @@ export interface  AbilityConfig {
 export interface  AbilityInterface extends AbilityConfig {
     draw(player: Player): void
     trigger(player: Player): void
+    isInRangeToTrigger(player): boolean
     clearDraw(): void
 }
 
@@ -47,7 +48,7 @@ export class Ability implements AbilityInterface  {
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
         this.radiusDistanceColor = config.radiusDistanceColor || 0xffffff
     }
-    draw(player: Player): void {
+   public draw(player: Player): void {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
             this.rangeGraphics.fillStyle(this.rangeDistanceColor, 0.2)
@@ -59,16 +60,24 @@ export class Ability implements AbilityInterface  {
         if (this.radiusGraphics) {
             const pointer = this.scene.input.activePointer
             const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
+
             
             this.radiusGraphics.clear()
-            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.2)
-            this.radiusGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
-            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
-            this.radiusGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+            if(this.isInRangeToTrigger(player)) {
+                this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.8)
+                this.radiusGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+                this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.8)
+                this.radiusGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+            } else {
+                this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.2)
+                this.radiusGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+                this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
+                this.radiusGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
+            }
         }
     }
     
-    clearDraw(): void {
+   public clearDraw(): void {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
         }
@@ -76,8 +85,13 @@ export class Ability implements AbilityInterface  {
             this.radiusGraphics.clear()
         }
     }
+
+    public isInRangeToTrigger(player: Player) {
+        const pointerDistance = this.scene.distanceToPointer(player.body.center)
+        return pointerDistance <= this.rangeDistance
+    }
     
-    trigger(_player: Player): void {
+    public trigger(_player: Player): void {
         throw new Error("Method not implemented.")
     }
 }
@@ -89,7 +103,7 @@ export class Blink extends Ability implements AbilityInterface {
         this.rangeGraphics = this.scene.add.graphics()
     }
 
-    trigger(player: Player): void {
+    public trigger(player: Player): void {
         const blinkVector = Phaser.Math.Vector2.ONE
             .clone()
             .setToPolar(player.rotation - Math.PI / 2)
@@ -109,11 +123,11 @@ export class Flame extends Ability implements AbilityInterface {
         this.rangeGraphics = this.scene.add.graphics()
         this.radiusGraphics = this.scene.add.graphics()
     }
-
-    trigger(player: Player): void {
+    
+    public trigger(player: Player): void {
         const pointer = this.scene.input.activePointer
         const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        this.projectiles.fire('flame', transformedPoint)
+        this.projectiles.fire('flame', transformedPoint)   
     }
 }
 

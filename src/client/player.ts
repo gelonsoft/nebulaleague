@@ -132,13 +132,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.accelerationChange = PLAYER_ACCELERATION_CHANGE
         this.accelerationSteady = PLAYER_ACCELERATION_STEADY
-
-        const body = this.body as Phaser.Physics.Arcade.Body
-        body.setCircle(PLAYER_SIZE / 2)
-        body.setAllowDrag(true)
-        body.setDrag(PLAYER_DRAG, PLAYER_DRAG)
-        body.setMaxSpeed(PLAYER_MAX_VELOCITY)
-        body.immovable = true
+        this.body.setCircle(PLAYER_SIZE / 2)
+        this.body.setAllowDrag(true)
+        this.body.setDrag(PLAYER_DRAG, PLAYER_DRAG)
+        this.body.setMaxSpeed(PLAYER_MAX_VELOCITY)
+        this.body.immovable = true
     }
 
 
@@ -262,10 +260,10 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public triggerAbility(selectedAbilityKey: string) {
-        const ability = this.abilities[selectedAbilityKey]
+        const ability = this.abilities[selectedAbilityKey] as AbilityInterface
         const actionTime = this.actionTimes[selectedAbilityKey]
 
-        if (actionTime.ready) {
+        if (actionTime.ready && ability.isInRangeToTrigger(this)) {
             actionTime.ready = false
             ability.trigger(this)
             actionTime.cooldown = ability.cooldownDelay

@@ -55,10 +55,13 @@ export interface BlockModel {
     radius: number
     lifespan: number
     damage: number
-    tickTime: number
     fillColor?: number
     strokeColor?: number
     fillAlpha?: number
     strokeAlpha?: number
+}
+
+export interface BlockModelMultiple extends BlockModel {
+    tick?: number
 }
 

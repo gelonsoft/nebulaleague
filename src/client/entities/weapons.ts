@@ -14,7 +14,7 @@ const weaponsConfig = {
         projectileKey: 'laserRed',
         laserConfig: {
             color: 0xff5252,
-            width: 1,
+            width: 2,
             alpha: 0.7,
         }
     },
@@ -27,7 +27,7 @@ const weaponsConfig = {
         projectileKey: 'laserBlue',
         laserConfig: {
             color: 0x00f8f8,
-            width: 1,
+            width: 2,
             alpha: 0.7,
         }
     },
@@ -40,7 +40,7 @@ const weaponsConfig = {
         projectileKey: 'laserGreen',
         laserConfig: {
             color: 0x00ff00,
-            width: 1,
+            width: 2,
             alpha: 0.7,
         }
     }
@@ -103,9 +103,9 @@ export class Weapon implements WeaponInterface {
         const distance = this.getDistance()
         
         if (isLaserReady) {
-            this.laser.alpha = 0.8
+            this.laser.alpha = 0.7
         } else {
-            this.laser.alpha = 0.4
+            this.laser.alpha = 0.3
         }
 
         const line = new Phaser.Geom.Line(

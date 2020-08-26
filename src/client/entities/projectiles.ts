@@ -1,5 +1,5 @@
 import { MainScene } from "../scenes/mainScene"
-import { ProjectileModel, BlockModel } from "../../shared/models"
+import { ProjectileModel, BlockModel, BlockModelMultiple } from "../../shared/models"
 import { Player } from "../player"
 
 
@@ -10,8 +10,8 @@ const projectilesConfig = {
         damage: 100,
         speed: 1300,
         lifespan: 0.4,
-        width: 8,
-        height: 8,
+        width: 12,
+        height: 12,
     },
     laserBlue: {
         name: 'laserBlue',
@@ -19,8 +19,8 @@ const projectilesConfig = {
         damage: 200,
         speed: 1400,
         lifespan: 0.5,
-        width: 10,
-        height: 10,
+        width: 16,
+        height: 16,
     },
     laserGreen: {
         name: 'laserGreen',
@@ -35,8 +35,8 @@ const projectilesConfig = {
         name: 'flame',
         radius: 50,
         lifespan: 3,
-        damage: 200,
-        tickTime: 1,
+        damage: 50,
+        tick: 0.2,
         fillColor: 0xaa0000,
         strokeColor: 0xff0000,
         fillAlpha: 0.6,
@@ -76,18 +76,16 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     }
 
     public fire(position: Phaser.Math.Vector2, rotation: number) {
-        const body = this.body as Phaser.Physics.Arcade.Body
         const ux = Math.cos(rotation)
         const uy = Math.sin(rotation)
-        body.reset(position.x, position.y)
+        this.body.reset(position.x, position.y)
         this.setRotation(rotation + Math.PI / 2)
-        body.velocity.x = ux * this.speed
-        body.velocity.y = uy * this.speed
-        body.setEnable(true)
+        this.body.velocity.x = ux * this.speed
+        this.body.velocity.y = uy * this.speed
+        this.body.setEnable(true)
         this.setActive(true)
         this.setVisible(true)
 
-        
         this.scene.time.addEvent({
             delay: this.lifespan * 1000,
             callback: function() {
@@ -111,11 +109,10 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
 }
 
 
-export class Block extends Phaser.GameObjects.Graphics{
+export class Block extends Phaser.GameObjects.Graphics {
     public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
     public radius: number
-    public tickTime: number
     public lifespan: number
     public damage: number
     public fillColor: number
@@ -126,7 +123,6 @@ export class Block extends Phaser.GameObjects.Graphics{
     public constructor(scene: MainScene, blockConfig: BlockModel) {
         super(scene)
         this.radius = blockConfig.radius
-        this.tickTime = blockConfig.tickTime
         this.lifespan = blockConfig.lifespan
         this.damage = blockConfig.damage
         this.fillColor = blockConfig.fillColor
@@ -136,6 +132,7 @@ export class Block extends Phaser.GameObjects.Graphics{
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.body.setEnable(false)
+        this.body.reset(-10000, -10000)
         this.setActive(false)
         this.setVisible(false)
     }
@@ -147,7 +144,7 @@ export class Block extends Phaser.GameObjects.Graphics{
         this.lineStyle(2, this.strokeColor, this.strokeAlpha)
         this.strokeCircle(0, 0, this.radius)
     }
-    
+
     public fire(position: Phaser.Math.Vector2) {
         this.body.setEnable(true)
         this.setActive(true)
@@ -156,8 +153,47 @@ export class Block extends Phaser.GameObjects.Graphics{
         this.body.setCircle(this.radius)
         this.body.setOffset(-this.radius, -this.radius)
         this.draw()
+
+        this.scene.time.addEvent({
+            delay: this.lifespan * 1000,
+            callback: function() {
+                this.kill()
+            },
+            callbackScope: this,
+        })
+    }
+    
+    public kill() {
+        this.setActive(false)
+        this.setVisible(false)
+        this.body.setEnable(false)
+        this.body.reset(-10000, -10000)        
+    }
+    
+}
+
+export class BlockMultiple extends Block implements ProjectileInterface {
+    public tick: number
+    public tickTimer: number
+    public constructor(scene: MainScene, blockConfig: BlockModelMultiple) {
+        super(scene, blockConfig)
+        this.tick = blockConfig.tick
+    }
+
+    public fire(position: Phaser.Math.Vector2) {
+        super.fire(position)
+        this.tickTimer = this.tick
+    }
+    
+    public actionOnCollision(hittedPlayer: Player) {
+        this.tickTimer += this.scene.game.loop.delta / 1000
+        if (this.tickTimer >= this.tick) {
+            this.tickTimer = 0
+            hittedPlayer.health -= this.damage
+        }
     }
 }
+
 
 
 export class Projectiles
@@ -186,7 +222,7 @@ export class Projectiles
         })
 
         const flameBlocks = Array.from({length: 20}, () => {
-            return new Block(scene, projectilesConfig.flame)
+            return new BlockMultiple(scene, projectilesConfig.flame)
         })
         
         

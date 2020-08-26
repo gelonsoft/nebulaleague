@@ -219,12 +219,15 @@ export class MainScene extends Phaser.Scene {
     public angleToPointer(position: Phaser.Math.Vector2) {
         const pointer = this.input.activePointer
         const transformedPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        return Phaser.Math.Angle.Between(
-            position.x, position.y,
-            transformedPoint.x,
-            transformedPoint.y,
-        )
+        return Phaser.Math.Angle.Between(position.x, position.y, transformedPoint.x, transformedPoint.y,)
     }
+
+    public distanceToPointer(position: Phaser.Math.Vector2) {
+        const pointer = this.input.activePointer
+        const transformedPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
+        return Phaser.Math.Distance.Between(position.x, position.y, transformedPoint.x, transformedPoint.y,)
+    }
+    
 
     
     public handlePlayerPlayerCollide(player1: Player , player2: Player): void {
