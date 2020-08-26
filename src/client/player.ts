@@ -178,11 +178,9 @@ export class Player extends Phaser.GameObjects.Container {
         }
         const newPosition =
             body.position.clone()
-                .add(
-                    newVelocity.clone()
-                        .add(newAcceleration)
-                        .scale(this.scene.game.loop.delta / 1000)
-                )
+                .add(newVelocity.clone()
+                .add(newAcceleration)
+                .scale(this.scene.game.loop.delta / 1000))
 
 
         return {

@@ -37,6 +37,10 @@ const projectilesConfig = {
         lifespan: 3,
         damage: 200,
         tickTime: 1,
+        fillColor: 0xaa0000,
+        strokeColor: 0xff0000,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
     }
 }
 
@@ -114,6 +118,10 @@ export class Block extends Phaser.GameObjects.Graphics{
     public tickTime: number
     public lifespan: number
     public damage: number
+    public fillColor: number
+    public strokeColor: number
+    public fillAlpha: number
+    public strokeAlpha: number
     
     public constructor(scene: MainScene, blockConfig: BlockModel) {
         super(scene)
@@ -121,6 +129,10 @@ export class Block extends Phaser.GameObjects.Graphics{
         this.tickTime = blockConfig.tickTime
         this.lifespan = blockConfig.lifespan
         this.damage = blockConfig.damage
+        this.fillColor = blockConfig.fillColor
+        this.strokeColor = blockConfig.strokeColor
+        this.fillAlpha = blockConfig.fillAlpha
+        this.strokeAlpha = blockConfig.strokeAlpha
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.body.setEnable(false)
@@ -128,16 +140,22 @@ export class Block extends Phaser.GameObjects.Graphics{
         this.setVisible(false)
     }
 
+    public draw() {
+        this.clear()
+        this.fillStyle(this.fillColor, this.fillAlpha)
+        this.fillCircle(0, 0, this.radius)
+        this.lineStyle(2, this.strokeColor, this.strokeAlpha)
+        this.strokeCircle(0, 0, this.radius)
+    }
+    
     public fire(position: Phaser.Math.Vector2) {
-        const body = this.body as Phaser.Physics.Arcade.Body
-        body.reset(position.x, position.y)
-        body.setEnable(true)
+        this.body.setEnable(true)
         this.setActive(true)
         this.setVisible(true)
-
-        this.clear()
-        this.fillStyle(0xff00ff, 0.8)
-        this.fillCircle(position.x, position.y, this.radius)
+        this.body.reset(position.x, position.y)
+        this.body.setCircle(this.radius)
+        this.body.setOffset(-this.radius, -this.radius)
+        this.draw()
     }
 }
 

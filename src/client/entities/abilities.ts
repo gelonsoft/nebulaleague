@@ -61,9 +61,9 @@ export class Ability implements AbilityInterface  {
             const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
             
             this.radiusGraphics.clear()
-            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.4)
+            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.2)
             this.radiusGraphics.fillCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
-            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.4)
+            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
             this.radiusGraphics.strokeCircle(transformedPoint.x, transformedPoint.y, this.radiusDistance)
         }
     }
@@ -111,7 +111,9 @@ export class Flame extends Ability implements AbilityInterface {
     }
 
     trigger(player: Player): void {
-        this.projectiles.fire('flame', player.body.center)
+        const pointer = this.scene.input.activePointer
+        const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
+        this.projectiles.fire('flame', transformedPoint)
     }
 }
 

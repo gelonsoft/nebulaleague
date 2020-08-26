@@ -56,5 +56,9 @@ export interface BlockModel {
     lifespan: number
     damage: number
     tickTime: number
+    fillColor?: number
+    strokeColor?: number
+    fillAlpha?: number
+    strokeAlpha?: number
 }
 
