@@ -101,17 +101,13 @@ export class Blink extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
         this.rangeGraphics = this.scene.add.graphics()
+        this.radiusGraphics = this.scene.add.graphics()
     }
 
     public trigger(player: Player): void {
-        const blinkVector = Phaser.Math.Vector2.ONE
-            .clone()
-            .setToPolar(player.rotation - Math.PI / 2)
-            .scale(this.rangeDistance)
-        const blinkPosition = new Phaser.Math.Vector2(player.x, player.y)
-            .add(blinkVector)
-        player.body.x = blinkPosition.x
-        player.body.y = blinkPosition.y
+        const pointer = this.scene.input.activePointer
+        const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
+        player.body.reset(transformedPoint.x, transformedPoint.y)
     }
 }
 
@@ -139,6 +135,7 @@ const abilitiesConfig = {
         frame: 'teleport.png',
         cooldownDelay: 10,
         rangeDistance: 500,
+        radiusDistance: 30,
     },
     flame: {
         name: 'flame',
