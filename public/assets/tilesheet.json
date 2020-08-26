@@ -220,28 +220,28 @@
 					}
 				},
 				{
-					"filename": "charged-arrow.png",
+					"filename": "lighten_bullet.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 48,
-						"h": 48
+						"w": 62,
+						"h": 54
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 48,
-						"h": 48
+						"w": 62,
+						"h": 54
 					},
 					"frame": {
 						"x": 115,
 						"y": 214,
-						"w": 48,
-						"h": 48
+						"w": 62,
+						"h": 54
 					}
 				},
 				{
-					"filename": "fire-ray.png",
+					"filename": "charged-arrow.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -276,94 +276,31 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 165,
+						"x": 179,
 						"y": 205,
 						"w": 13,
 						"h": 57
 					}
 				},
 				{
-					"filename": "laserGreen02.png",
+					"filename": "spaceMissiles_035.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 13,
-						"h": 57
+						"w": 20,
+						"h": 44
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 13,
-						"h": 57
+						"w": 20,
+						"h": 44
 					},
 					"frame": {
 						"x": 180,
 						"y": 155,
-						"w": 13,
-						"h": 57
-					}
-				},
-				{
-					"filename": "laserGreen06.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 13,
-						"h": 57
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 13,
-						"h": 57
-					},
-					"frame": {
-						"x": 180,
-						"y": 214,
-						"w": 13,
-						"h": 57
-					}
-				},
-				{
-					"filename": "laserBlue11.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 38,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 38,
-						"h": 37
-					},
-					"frame": {
-						"x": 115,
-						"y": 264,
-						"w": 38,
-						"h": 37
-					}
-				},
-				{
-					"filename": "spaceMissiles_006.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 19,
-						"h": 40
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 19,
-						"h": 40
-					},
-					"frame": {
-						"x": 155,
-						"y": 264,
-						"w": 19,
-						"h": 40
+						"w": 20,
+						"h": 44
 					}
 				},
 				{
@@ -430,24 +367,87 @@
 					}
 				},
 				{
-					"filename": "bold_silver.png",
+					"filename": "spaceMissiles_006.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 19,
-						"h": 30
+						"h": 40
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 19,
-						"h": 30
+						"h": 40
 					},
 					"frame": {
-						"x": 176,
-						"y": 273,
+						"x": 179,
+						"y": 264,
 						"w": 19,
-						"h": 30
+						"h": 40
+					}
+				},
+				{
+					"filename": "laserBlue11.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 38,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 38,
+						"h": 37
+					},
+					"frame": {
+						"x": 115,
+						"y": 270,
+						"w": 38,
+						"h": 37
+					}
+				},
+				{
+					"filename": "spaceMissiles_001.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 20,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 35
+					},
+					"frame": {
+						"x": 155,
+						"y": 270,
+						"w": 20,
+						"h": 35
+					}
+				},
+				{
+					"filename": "fire-ray.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 48,
+						"h": 48
+					},
+					"frame": {
+						"x": 203,
+						"y": 309,
+						"w": 48,
+						"h": 48
 					}
 				},
 				{
@@ -465,7 +465,7 @@
 						"h": 48
 					},
 					"frame": {
-						"x": 203,
+						"x": 253,
 						"y": 309,
 						"w": 48,
 						"h": 48
@@ -486,27 +486,6 @@
 						"h": 48
 					},
 					"frame": {
-						"x": 253,
-						"y": 309,
-						"w": 48,
-						"h": 48
-					}
-				},
-				{
-					"filename": "rolling-bomb.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 48,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 48,
-						"h": 48
-					},
-					"frame": {
 						"x": 203,
 						"y": 359,
 						"w": 48,
@@ -514,7 +493,7 @@
 					}
 				},
 				{
-					"filename": "laserRed12.png",
+					"filename": "laserGreen02.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -535,7 +514,7 @@
 					}
 				},
 				{
-					"filename": "laserRed14.png",
+					"filename": "laserGreen06.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -556,6 +535,48 @@
 					}
 				},
 				{
+					"filename": "laserRed12.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 57
+					},
+					"frame": {
+						"x": 31,
+						"y": 386,
+						"w": 13,
+						"h": 57
+					}
+				},
+				{
+					"filename": "laserRed14.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 57
+					},
+					"frame": {
+						"x": 46,
+						"y": 386,
+						"w": 13,
+						"h": 57
+					}
+				},
+				{
 					"filename": "laserBlue13.png",
 					"rotated": false,
 					"trimmed": false,
@@ -570,7 +591,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 31,
+						"x": 61,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -591,7 +612,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 42,
+						"x": 72,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -612,7 +633,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 53,
+						"x": 83,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -633,7 +654,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 64,
+						"x": 94,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -654,7 +675,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 75,
+						"x": 105,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -675,7 +696,7 @@
 						"h": 57
 					},
 					"frame": {
-						"x": 86,
+						"x": 116,
 						"y": 386,
 						"w": 9,
 						"h": 57
@@ -696,7 +717,7 @@
 						"h": 54
 					},
 					"frame": {
-						"x": 97,
+						"x": 127,
 						"y": 386,
 						"w": 13,
 						"h": 54
@@ -717,7 +738,7 @@
 						"h": 54
 					},
 					"frame": {
-						"x": 112,
+						"x": 142,
 						"y": 386,
 						"w": 13,
 						"h": 54
@@ -738,7 +759,7 @@
 						"h": 54
 					},
 					"frame": {
-						"x": 127,
+						"x": 157,
 						"y": 386,
 						"w": 13,
 						"h": 54
@@ -759,7 +780,7 @@
 						"h": 54
 					},
 					"frame": {
-						"x": 142,
+						"x": 172,
 						"y": 386,
 						"w": 9,
 						"h": 54
@@ -780,56 +801,14 @@
 						"h": 54
 					},
 					"frame": {
-						"x": 153,
+						"x": 183,
 						"y": 386,
 						"w": 9,
 						"h": 54
 					}
 				},
 				{
-					"filename": "laserRed01.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 9,
-						"h": 54
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 9,
-						"h": 54
-					},
-					"frame": {
-						"x": 164,
-						"y": 386,
-						"w": 9,
-						"h": 54
-					}
-				},
-				{
-					"filename": "spaceMissiles_003.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 18,
-						"h": 51
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 18,
-						"h": 51
-					},
-					"frame": {
-						"x": 175,
-						"y": 386,
-						"w": 18,
-						"h": 51
-					}
-				},
-				{
-					"filename": "root-tip.png",
+					"filename": "rolling-bomb.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -850,7 +829,7 @@
 					}
 				},
 				{
-					"filename": "snail.png",
+					"filename": "root-tip.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -864,10 +843,52 @@
 						"h": 48
 					},
 					"frame": {
-						"x": 195,
+						"x": 194,
 						"y": 409,
 						"w": 48,
 						"h": 48
+					}
+				},
+				{
+					"filename": "laserRed01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 54
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 54
+					},
+					"frame": {
+						"x": 1,
+						"y": 445,
+						"w": 9,
+						"h": 54
+					}
+				},
+				{
+					"filename": "spaceMissiles_003.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 51
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 51
+					},
+					"frame": {
+						"x": 12,
+						"y": 445,
+						"w": 18,
+						"h": 51
 					}
 				},
 				{
@@ -885,7 +906,7 @@
 						"h": 51
 					},
 					"frame": {
-						"x": 1,
+						"x": 32,
 						"y": 445,
 						"w": 18,
 						"h": 51
@@ -906,7 +927,7 @@
 						"h": 51
 					},
 					"frame": {
-						"x": 21,
+						"x": 52,
 						"y": 445,
 						"w": 18,
 						"h": 51
@@ -927,10 +948,31 @@
 						"h": 49
 					},
 					"frame": {
-						"x": 41,
+						"x": 72,
 						"y": 445,
 						"w": 16,
 						"h": 49
+					}
+				},
+				{
+					"filename": "snail.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 48,
+						"h": 48
+					},
+					"frame": {
+						"x": 90,
+						"y": 445,
+						"w": 48,
+						"h": 48
 					}
 				},
 				{
@@ -948,136 +990,10 @@
 						"h": 48
 					},
 					"frame": {
-						"x": 59,
-						"y": 445,
+						"x": 140,
+						"y": 442,
 						"w": 48,
 						"h": 48
-					}
-				},
-				{
-					"filename": "spaceMissiles_009.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 48
-					},
-					"frame": {
-						"x": 109,
-						"y": 442,
-						"w": 12,
-						"h": 48
-					}
-				},
-				{
-					"filename": "spaceMissiles_010.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 48
-					},
-					"frame": {
-						"x": 123,
-						"y": 442,
-						"w": 12,
-						"h": 48
-					}
-				},
-				{
-					"filename": "spaceMissiles_011.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 48
-					},
-					"frame": {
-						"x": 137,
-						"y": 442,
-						"w": 12,
-						"h": 48
-					}
-				},
-				{
-					"filename": "spaceMissiles_024.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 47
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 47
-					},
-					"frame": {
-						"x": 151,
-						"y": 442,
-						"w": 12,
-						"h": 47
-					}
-				},
-				{
-					"filename": "spaceMissiles_025.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 47
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 47
-					},
-					"frame": {
-						"x": 165,
-						"y": 442,
-						"w": 12,
-						"h": 47
-					}
-				},
-				{
-					"filename": "spaceMissiles_026.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 47
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 47
-					},
-					"frame": {
-						"x": 179,
-						"y": 439,
-						"w": 12,
-						"h": 47
 					}
 				},
 				{
@@ -1095,7 +1011,7 @@
 						"h": 46
 					},
 					"frame": {
-						"x": 245,
+						"x": 244,
 						"y": 409,
 						"w": 48,
 						"h": 46
@@ -1116,7 +1032,7 @@
 						"h": 46
 					},
 					"frame": {
-						"x": 295,
+						"x": 294,
 						"y": 409,
 						"w": 48,
 						"h": 46
@@ -1368,94 +1284,115 @@
 						"h": 46
 					},
 					"frame": {
-						"x": 345,
+						"x": 344,
 						"y": 311,
 						"w": 22,
 						"h": 46
 					}
 				},
 				{
-					"filename": "spaceMissiles_022.png",
+					"filename": "spaceMissiles_009.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 22,
-						"h": 46
+						"w": 12,
+						"h": 48
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 22,
-						"h": 46
+						"w": 12,
+						"h": 48
 					},
 					"frame": {
 						"x": 303,
 						"y": 328,
-						"w": 22,
-						"h": 46
+						"w": 12,
+						"h": 48
 					}
 				},
 				{
-					"filename": "laserBlue02.png",
+					"filename": "spaceMissiles_010.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 13,
-						"h": 37
+						"w": 12,
+						"h": 48
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 13,
-						"h": 37
+						"w": 12,
+						"h": 48
 					},
 					"frame": {
-						"x": 327,
+						"x": 317,
 						"y": 311,
-						"w": 13,
-						"h": 37
+						"w": 12,
+						"h": 48
 					}
 				},
 				{
-					"filename": "laserBlue04.png",
+					"filename": "laserBlue07.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 13,
+						"w": 9,
 						"h": 37
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 13,
+						"w": 9,
 						"h": 37
 					},
 					"frame": {
-						"x": 327,
-						"y": 350,
-						"w": 13,
+						"x": 331,
+						"y": 311,
+						"w": 9,
 						"h": 37
 					}
 				},
 				{
-					"filename": "bolt_bronze.png",
+					"filename": "laserGreen05.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 19,
-						"h": 30
+						"w": 9,
+						"h": 37
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 19,
-						"h": 30
+						"w": 9,
+						"h": 37
+					},
+					"frame": {
+						"x": 331,
+						"y": 350,
+						"w": 9,
+						"h": 37
+					}
+				},
+				{
+					"filename": "pill_blue.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 22,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 22,
+						"h": 21
 					},
 					"frame": {
 						"x": 303,
-						"y": 376,
-						"w": 19,
-						"h": 30
+						"y": 378,
+						"w": 22,
+						"h": 21
 					}
 				},
 				{
@@ -1480,7 +1417,7 @@
 					}
 				},
 				{
-					"filename": "spaceMissiles_023.png",
+					"filename": "spaceMissiles_022.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1501,24 +1438,24 @@
 					}
 				},
 				{
-					"filename": "pill_blue.png",
+					"filename": "spaceMissiles_023.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 22,
-						"h": 21
+						"h": 46
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 22,
-						"h": 21
+						"h": 46
 					},
 					"frame": {
 						"x": 366,
 						"y": 81,
 						"w": 22,
-						"h": 21
+						"h": 46
 					}
 				},
 				{
@@ -1537,7 +1474,7 @@
 					},
 					"frame": {
 						"x": 366,
-						"y": 104,
+						"y": 129,
 						"w": 22,
 						"h": 21
 					}
@@ -1558,7 +1495,7 @@
 					},
 					"frame": {
 						"x": 366,
-						"y": 127,
+						"y": 152,
 						"w": 22,
 						"h": 21
 					}
@@ -1579,34 +1516,13 @@
 					},
 					"frame": {
 						"x": 366,
-						"y": 150,
+						"y": 175,
 						"w": 22,
 						"h": 21
 					}
 				},
 				{
-					"filename": "spaceMissiles_035.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 20,
-						"h": 44
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 20,
-						"h": 44
-					},
-					"frame": {
-						"x": 366,
-						"y": 173,
-						"w": 20,
-						"h": 44
-					}
-				},
-				{
-					"filename": "laserBlue07.png",
+					"filename": "laserGreen09.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1627,7 +1543,7 @@
 					}
 				},
 				{
-					"filename": "spaceMissiles_001.png",
+					"filename": "spaceMissiles_002.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1642,13 +1558,13 @@
 					},
 					"frame": {
 						"x": 365,
-						"y": 219,
+						"y": 198,
 						"w": 20,
 						"h": 35
 					}
 				},
 				{
-					"filename": "laserGreen05.png",
+					"filename": "laserGreen13.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1669,48 +1585,6 @@
 					}
 				},
 				{
-					"filename": "spaceMissiles_002.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 20,
-						"h": 35
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 20,
-						"h": 35
-					},
-					"frame": {
-						"x": 365,
-						"y": 256,
-						"w": 20,
-						"h": 35
-					}
-				},
-				{
-					"filename": "laserGreen09.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 9,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 9,
-						"h": 37
-					},
-					"frame": {
-						"x": 353,
-						"y": 272,
-						"w": 9,
-						"h": 37
-					}
-				},
-				{
 					"filename": "spaceMissiles_018.png",
 					"rotated": false,
 					"trimmed": false,
@@ -1725,10 +1599,31 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 345,
-						"y": 359,
+						"x": 365,
+						"y": 235,
 						"w": 20,
 						"h": 35
+					}
+				},
+				{
+					"filename": "laserRed03.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 37
+					},
+					"frame": {
+						"x": 354,
+						"y": 271,
+						"w": 9,
+						"h": 37
 					}
 				},
 				{
@@ -1746,8 +1641,8 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 367,
-						"y": 359,
+						"x": 365,
+						"y": 272,
 						"w": 20,
 						"h": 35
 					}
@@ -1767,8 +1662,8 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 388,
-						"y": 173,
+						"x": 344,
+						"y": 359,
 						"w": 20,
 						"h": 35
 					}
@@ -1788,8 +1683,8 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 398,
-						"y": 1,
+						"x": 366,
+						"y": 359,
 						"w": 20,
 						"h": 35
 					}
@@ -1809,8 +1704,8 @@
 						"h": 40
 					},
 					"frame": {
-						"x": 390,
-						"y": 38,
+						"x": 387,
+						"y": 198,
 						"w": 19,
 						"h": 40
 					}
@@ -1830,10 +1725,52 @@
 						"h": 40
 					},
 					"frame": {
-						"x": 390,
-						"y": 80,
+						"x": 398,
+						"y": 1,
 						"w": 19,
 						"h": 40
+					}
+				},
+				{
+					"filename": "bold_silver.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 30
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 30
+					},
+					"frame": {
+						"x": 390,
+						"y": 43,
+						"w": 19,
+						"h": 30
+					}
+				},
+				{
+					"filename": "bolt_bronze.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 30
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 30
+					},
+					"frame": {
+						"x": 390,
+						"y": 75,
+						"w": 19,
+						"h": 30
 					}
 				},
 				{
@@ -1852,7 +1789,7 @@
 					},
 					"frame": {
 						"x": 390,
-						"y": 122,
+						"y": 107,
 						"w": 19,
 						"h": 30
 					}
@@ -1872,10 +1809,31 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 388,
-						"y": 210,
+						"x": 390,
+						"y": 139,
 						"w": 18,
 						"h": 33
+					}
+				},
+				{
+					"filename": "spaceMissiles_012.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 22
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 22
+					},
+					"frame": {
+						"x": 390,
+						"y": 174,
+						"w": 16,
+						"h": 22
 					}
 				},
 				{
@@ -1894,7 +1852,7 @@
 					},
 					"frame": {
 						"x": 387,
-						"y": 245,
+						"y": 240,
 						"w": 18,
 						"h": 33
 					}
@@ -1915,93 +1873,30 @@
 					},
 					"frame": {
 						"x": 387,
-						"y": 280,
+						"y": 275,
 						"w": 17,
 						"h": 38
 					}
 				},
 				{
-					"filename": "laserBlue06.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 13,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 13,
-						"h": 37
-					},
-					"frame": {
-						"x": 369,
-						"y": 293,
-						"w": 13,
-						"h": 37
-					}
-				},
-				{
-					"filename": "spaceMissiles_012.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 16,
-						"h": 22
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 16,
-						"h": 22
-					},
-					"frame": {
-						"x": 384,
-						"y": 320,
-						"w": 16,
-						"h": 22
-					}
-				},
-				{
-					"filename": "spaceMissiles_015.png",
+					"filename": "spaceMissiles_011.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 12,
-						"h": 25
+						"h": 48
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 12,
-						"h": 25
+						"h": 48
 					},
 					"frame": {
-						"x": 369,
-						"y": 332,
+						"x": 368,
+						"y": 309,
 						"w": 12,
-						"h": 25
-					}
-				},
-				{
-					"filename": "laserGreen04.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 13,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 13,
-						"h": 37
-					},
-					"frame": {
-						"x": 389,
-						"y": 344,
-						"w": 13,
-						"h": 37
+						"h": 48
 					}
 				},
 				{
@@ -2019,10 +1914,31 @@
 						"h": 22
 					},
 					"frame": {
-						"x": 402,
-						"y": 320,
+						"x": 382,
+						"y": 315,
 						"w": 16,
 						"h": 22
+					}
+				},
+				{
+					"filename": "spaceMissiles_024.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 12,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 47
+					},
+					"frame": {
+						"x": 388,
+						"y": 339,
+						"w": 12,
+						"h": 47
 					}
 				},
 				{
@@ -2040,8 +1956,8 @@
 						"h": 22
 					},
 					"frame": {
-						"x": 411,
-						"y": 38,
+						"x": 400,
+						"y": 315,
 						"w": 16,
 						"h": 22
 					}
@@ -2061,10 +1977,94 @@
 						"h": 20
 					},
 					"frame": {
-						"x": 420,
-						"y": 1,
+						"x": 411,
+						"y": 43,
 						"w": 14,
 						"h": 20
+					}
+				},
+				{
+					"filename": "laserBlue02.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 37
+					},
+					"frame": {
+						"x": 419,
+						"y": 1,
+						"w": 13,
+						"h": 37
+					}
+				},
+				{
+					"filename": "laserBlue04.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 37
+					},
+					"frame": {
+						"x": 411,
+						"y": 65,
+						"w": 13,
+						"h": 37
+					}
+				},
+				{
+					"filename": "laserBlue06.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 37
+					},
+					"frame": {
+						"x": 411,
+						"y": 104,
+						"w": 13,
+						"h": 37
+					}
+				},
+				{
+					"filename": "laserGreen04.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 13,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 13,
+						"h": 37
+					},
+					"frame": {
+						"x": 410,
+						"y": 143,
+						"w": 13,
+						"h": 37
 					}
 				},
 				{
@@ -2082,8 +2082,8 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 411,
-						"y": 62,
+						"x": 408,
+						"y": 182,
 						"w": 13,
 						"h": 37
 					}
@@ -2103,8 +2103,8 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 411,
-						"y": 101,
+						"x": 408,
+						"y": 221,
 						"w": 13,
 						"h": 37
 					}
@@ -2124,8 +2124,8 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 411,
-						"y": 140,
+						"x": 407,
+						"y": 260,
 						"w": 13,
 						"h": 37
 					}
@@ -2145,10 +2145,52 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 410,
-						"y": 179,
+						"x": 388,
+						"y": 388,
 						"w": 13,
 						"h": 37
+					}
+				},
+				{
+					"filename": "spaceMissiles_025.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 12,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 47
+					},
+					"frame": {
+						"x": 344,
+						"y": 396,
+						"w": 12,
+						"h": 47
+					}
+				},
+				{
+					"filename": "spaceMissiles_026.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 12,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 47
+					},
+					"frame": {
+						"x": 358,
+						"y": 396,
+						"w": 12,
+						"h": 47
 					}
 				},
 				{
@@ -2166,9 +2208,51 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 408,
-						"y": 218,
+						"x": 372,
+						"y": 396,
 						"w": 13,
+						"h": 37
+					}
+				},
+				{
+					"filename": "spaceMissiles_015.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 12,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 25
+					},
+					"frame": {
+						"x": 402,
+						"y": 339,
+						"w": 12,
+						"h": 25
+					}
+				},
+				{
+					"filename": "laserRed05.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 37
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 37
+					},
+					"frame": {
+						"x": 403,
+						"y": 366,
+						"w": 9,
 						"h": 37
 					}
 				},
@@ -2187,115 +2271,10 @@
 						"h": 25
 					},
 					"frame": {
-						"x": 407,
-						"y": 257,
+						"x": 403,
+						"y": 405,
 						"w": 12,
 						"h": 25
-					}
-				},
-				{
-					"filename": "spaceMissiles_017.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 12,
-						"h": 25
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 12,
-						"h": 25
-					},
-					"frame": {
-						"x": 406,
-						"y": 284,
-						"w": 12,
-						"h": 25
-					}
-				},
-				{
-					"filename": "spaceMissiles_037.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 11,
-						"h": 35
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 11,
-						"h": 35
-					},
-					"frame": {
-						"x": 389,
-						"y": 383,
-						"w": 11,
-						"h": 35
-					}
-				},
-				{
-					"filename": "laserGreen13.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 9,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 9,
-						"h": 37
-					},
-					"frame": {
-						"x": 345,
-						"y": 396,
-						"w": 9,
-						"h": 37
-					}
-				},
-				{
-					"filename": "laserRed03.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 9,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 9,
-						"h": 37
-					},
-					"frame": {
-						"x": 356,
-						"y": 396,
-						"w": 9,
-						"h": 37
-					}
-				},
-				{
-					"filename": "laserRed05.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 9,
-						"h": 37
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 9,
-						"h": 37
-					},
-					"frame": {
-						"x": 367,
-						"y": 396,
-						"w": 9,
-						"h": 37
 					}
 				},
 				{
@@ -2313,10 +2292,31 @@
 						"h": 37
 					},
 					"frame": {
-						"x": 378,
-						"y": 396,
+						"x": 387,
+						"y": 427,
 						"w": 9,
 						"h": 37
+					}
+				},
+				{
+					"filename": "spaceMissiles_037.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 11,
+						"h": 35
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 11,
+						"h": 35
+					},
+					"frame": {
+						"x": 190,
+						"y": 459,
+						"w": 11,
+						"h": 35
 					}
 				},
 				{
@@ -2334,8 +2334,8 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 402,
-						"y": 383,
+						"x": 90,
+						"y": 495,
 						"w": 11,
 						"h": 35
 					}
@@ -2355,8 +2355,8 @@
 						"h": 35
 					},
 					"frame": {
-						"x": 404,
-						"y": 344,
+						"x": 1,
+						"y": 501,
 						"w": 11,
 						"h": 35
 					}
@@ -2376,10 +2376,31 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 415,
-						"y": 381,
+						"x": 14,
+						"y": 498,
 						"w": 9,
 						"h": 33
+					}
+				},
+				{
+					"filename": "spaceMissiles_017.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 12,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 25
+					},
+					"frame": {
+						"x": 25,
+						"y": 498,
+						"w": 12,
+						"h": 25
 					}
 				},
 				{
@@ -2397,8 +2418,8 @@
 						"h": 23
 					},
 					"frame": {
-						"x": 425,
-						"y": 179,
+						"x": 25,
+						"y": 525,
 						"w": 10,
 						"h": 23
 					}
@@ -2409,6 +2430,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:0eb5e75c8bd221ac9425da582a98526e:501148e580985da55bb099dcee76904f:3d1796b17358e00e40886a2f90737def$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d4b44d3c2c3877c2421f03c5d55c90a3:f54cdb6c7aa9595cc7ff8571a9d0d5f0:3d1796b17358e00e40886a2f90737def$"
 	}
 }

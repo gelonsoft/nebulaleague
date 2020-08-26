@@ -9,7 +9,7 @@ const projectilesConfig = {
         frame: 'laserRed03.png',
         damage: 100,
         speed: 1300,
-        lifespan: 0.4,
+        lifespan: 0.3,
         width: 12,
         height: 12,
     },
@@ -18,7 +18,7 @@ const projectilesConfig = {
         frame: 'laserBlue03.png',
         damage: 200,
         speed: 1400,
-        lifespan: 0.5,
+        lifespan: 0.35,
         width: 16,
         height: 16,
     },
@@ -41,7 +41,17 @@ const projectilesConfig = {
         strokeColor: 0xff0000,
         fillAlpha: 0.6,
         strokeAlpha: 0.8,
+    },
+    chargedArrow: {
+        name: 'chargedArrow',
+        frame: 'laserGreen03.png',
+        damage: 500,
+        speed: 1600,
+        lifespan: 0.2,
+        width: 20,
+        height: 20,
     }
+    
 }
 
 
@@ -162,6 +172,11 @@ export class Block extends Phaser.GameObjects.Graphics {
             callbackScope: this,
         })
     }
+
+    public actionOnCollision(hittedPlayer: Player) {
+        hittedPlayer.health -= this.damage
+    }
+    
     
     public kill() {
         this.setActive(false)
@@ -169,10 +184,9 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.body.setEnable(false)
         this.body.reset(-10000, -10000)        
     }
-    
 }
 
-export class BlockMultiple extends Block implements ProjectileInterface {
+export class BlockWithTick extends Block implements ProjectileInterface {
     public tick: number
     public tickTimer: number
     public constructor(scene: MainScene, blockConfig: BlockModelMultiple) {
@@ -222,7 +236,7 @@ export class Projectiles
         })
 
         const flameBlocks = Array.from({length: 20}, () => {
-            return new BlockMultiple(scene, projectilesConfig.flame)
+            return new BlockWithTick(scene, projectilesConfig.flame)
         })
         
         
