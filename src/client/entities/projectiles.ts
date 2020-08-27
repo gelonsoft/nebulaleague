@@ -1,7 +1,6 @@
 import { MainScene } from "../scenes/mainScene"
 import { ProjectileModel, BlockModel, BlockModelMultiple } from "../../shared/models"
-import { Player } from "../player"
-import { ChargedArrow } from "./abilities"
+import { Player, EffectKeys, EffectInterface } from "../player"
 
 
 const projectilesConfig = {
@@ -51,6 +50,12 @@ const projectilesConfig = {
         lifespan: 0.5,
         width: 25,
         height: 25,
+        effects: {
+            [EffectKeys.Slow]: {
+                value: 10,
+                duration: 2,
+            }
+        }
     }
 }
 
@@ -69,6 +74,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public speed: number
     public shotInterval: number
     public damage?: number
+    public effects?: Record<string, EffectInterface>
     public constructor(scene: MainScene, projectileConfig: ProjectileModel) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
         this.scene = scene
@@ -76,6 +82,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.lifespan = projectileConfig.lifespan
         this.speed = projectileConfig.speed
         this.damage = projectileConfig.damage
+        this.effects = projectileConfig.effects || {}
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         
@@ -107,6 +114,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
 
     public actionOnCollision(hittedPlayer: Player) {
         hittedPlayer.health -= this.damage
+        hittedPlayer.addEffects(this.effects)
         this.kill()
     }
     
@@ -125,6 +133,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public radius: number
     public lifespan: number
     public damage: number
+    public effects?: Record<string, EffectInterface>
     public fillColor: number
     public strokeColor: number
     public fillAlpha: number
@@ -135,6 +144,7 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.radius = blockConfig.radius
         this.lifespan = blockConfig.lifespan
         this.damage = blockConfig.damage
+        this.effects = blockConfig.effects || {}
         this.fillColor = blockConfig.fillColor
         this.strokeColor = blockConfig.strokeColor
         this.fillAlpha = blockConfig.fillAlpha
@@ -175,6 +185,7 @@ export class Block extends Phaser.GameObjects.Graphics {
 
     public actionOnCollision(hittedPlayer: Player) {
         hittedPlayer.health -= this.damage
+        hittedPlayer.addEffects(this.effects)
     }
     
     
@@ -204,6 +215,7 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         if (this.tickTimer >= this.tick) {
             this.tickTimer = 0
             hittedPlayer.health -= this.damage
+            hittedPlayer.addEffects(this.effects)
         }
     }
 }

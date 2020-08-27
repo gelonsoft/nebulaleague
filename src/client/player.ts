@@ -18,6 +18,16 @@ export enum SelectedWeapon {
     Secondary,
 }
 
+export enum EffectKeys {
+    Slow = 'slow'
+}
+
+export interface EffectInterface {
+    value: number
+    duration: number
+}
+
+
 export interface PlayerDirection {
     x: number
     y: number
@@ -67,6 +77,7 @@ export class Player extends Phaser.GameObjects.Container {
     public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
+    public effects: Record<string, EffectInterface>
     public previousDirection: PlayerDirection
     public actionTimes: ActionTimesInterface
 
@@ -98,6 +109,7 @@ export class Player extends Phaser.GameObjects.Container {
             ability4: this.scene.abilities[playerConfig.abilityKey4],
         }
         this.selectedAbilityKey = null
+        this.effects = {}
     }
 
 
@@ -346,10 +358,18 @@ export class Player extends Phaser.GameObjects.Container {
         return positionCenter.clone().add(offset)
     }
 
+    public addEffects(effects: Record<number, EffectInterface>): void {
+        this.effects = { ...effects, ...this.effects }
+        console.log('hello')
+        console.log(this.effects)
+    }
+    
     public reset(): void {
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.setPosition(x, y)
         this.health = this.maxHealth
     }
+
+    
 }

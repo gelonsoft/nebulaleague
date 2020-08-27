@@ -45,6 +45,7 @@ export interface ProjectileModel {
     speed: number
     damage: number
     lifespan: number
+    effects?: Record<string, any>
     width: number
     height: number
 }
@@ -55,6 +56,7 @@ export interface BlockModel {
     radius: number
     lifespan: number
     damage: number
+    effects?: Record<string, any>
     fillColor?: number
     strokeColor?: number
     fillAlpha?: number
