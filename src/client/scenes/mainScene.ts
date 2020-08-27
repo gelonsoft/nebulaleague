@@ -54,6 +54,7 @@ export class MainScene extends Phaser.Scene {
         this.playersAI = []
         this.players = this.physics.add.group({
             collideWorldBounds: true,
+            classType: Player,
         })
         this.freeCamera = false
         this.randomTable = new RandomItem()
@@ -147,6 +148,9 @@ export class MainScene extends Phaser.Scene {
                 index += 1
             }
         }
+        const pt: Player = this.players.getChildren()[1] as Player
+        pt.x = 200
+        pt.y = 200
     }
     
 
@@ -166,6 +170,7 @@ export class MainScene extends Phaser.Scene {
         this.registry.values.currentHealth = this.player.maxHealth
         this.events.emit("healthChanged")
         this.players.add(this.player)
+        window['p'] = this.player
     }
     
     public create(): void {
@@ -270,10 +275,9 @@ export class MainScene extends Phaser.Scene {
     public update(time: number, delta: number): void {
         this.mainControl.update()
         this.playerControl.update()
-        // this.playersAIUpdate(delta)
+        this.playersAIUpdate(delta)
         
-
-        // // collide with other players
+        // collide with other players
         this.physics.overlap(
             this.players,
             this.players,
@@ -300,18 +304,12 @@ export class MainScene extends Phaser.Scene {
             this
         )
         
-        // draw weapon and skills
-        this.player.draw() 
+        // draw weapon and skills        
+        this.player.draw()
         
-        // check if player are dead
+        // update players
         this.players.getChildren().forEach((player: Player) => {
-            if (player.health <= 0) {
-                player.reset()
-                if (player.id === this.player.id) {
-                    this.registry.values.currentHealth = player.health
-                }
-                this.events.emit("healthChanged")
-            }
+            player.update(delta)
         })
     }
 

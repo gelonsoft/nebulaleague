@@ -192,7 +192,6 @@ export class HudScene extends Phaser.Scene {
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.weaponPrimary.frame)
         this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.weaponSecondary.frame)
         this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.abilities.ability1.frame)
-        console.log(this.player.abilities)
         this.abilityContainer2 = new SlotContainer(this, 380 + 62, 0, this.player.abilities.ability2.frame)
         this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.abilities.ability3.frame)
         this.abilityContainer4 = new SlotContainer(this, 380 + 62 * 3, 0, this.player.abilities.ability4.frame)

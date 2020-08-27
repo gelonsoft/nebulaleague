@@ -52,7 +52,7 @@ const projectilesConfig = {
         height: 25,
         effects: {
             [EffectKeys.Slow]: {
-                value: 10,
+                value: 0.2,
                 duration: 2,
             }
         }
@@ -185,7 +185,7 @@ export class Block extends Phaser.GameObjects.Graphics {
 
     public actionOnCollision(hittedPlayer: Player) {
         hittedPlayer.health -= this.damage
-        hittedPlayer.addEffects(this.effects)
+        // hittedPlayer.addEffects(this.effects)
     }
     
     
@@ -215,7 +215,7 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         if (this.tickTimer >= this.tick) {
             this.tickTimer = 0
             hittedPlayer.health -= this.damage
-            hittedPlayer.addEffects(this.effects)
+            // hittedPlayer.addEffects(this.effects)
         }
     }
 }

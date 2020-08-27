@@ -48,7 +48,6 @@ export class Ability implements AbilityInterface  {
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
     
-    
     constructor(scene: MainScene, config: AbilityConfig) {
         this.scene = scene
         this.projectiles = this.scene.projectiles

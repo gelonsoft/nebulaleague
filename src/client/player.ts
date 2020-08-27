@@ -5,8 +5,8 @@ import {
     PLAYER_ACCELERATION_CHANGE,
     PLAYER_ACCELERATION_STEADY,
     PLAYER_DRAG,
-    PLAYER_MAX_VELOCITY,
-    PLAYER_MAX_HEALTH,
+    PLAYER_DEFAULT_VELOCITY,
+    PLAYER_DEFAULT_HEALTH,
     PLAYER_SIZE,
 } from './config'
 import { Weapon } from './entities/weapons'
@@ -25,8 +25,8 @@ export enum EffectKeys {
 export interface EffectInterface {
     value: number
     duration: number
+    timePassed?: number
 }
-
 
 export interface PlayerDirection {
     x: number
@@ -117,7 +117,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.id = playerConfig.id
         this.x = playerConfig.x
         this.y = playerConfig.y
-        this.maxHealth = PLAYER_MAX_HEALTH
+        this.maxHealth = PLAYER_DEFAULT_HEALTH
         this.health = this.maxHealth
         this.previousDirection = { x: 0, y: 0 }
 
@@ -147,7 +147,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.body.setCircle(PLAYER_SIZE / 2)
         this.body.setAllowDrag(true)
         this.body.setDrag(PLAYER_DRAG, PLAYER_DRAG)
-        this.body.setMaxSpeed(PLAYER_MAX_VELOCITY)
+        this.body.setMaxSpeed(PLAYER_DEFAULT_VELOCITY)
         this.body.immovable = true
     }
 
@@ -359,9 +359,36 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public addEffects(effects: Record<number, EffectInterface>): void {
+        //make sure the effects timePassed is reset
+        for (const effect of Object.values(effects)) {
+            effect.timePassed = 0
+        }
         this.effects = { ...effects, ...this.effects }
-        console.log('hello')
-        console.log(this.effects)
+    }
+
+    public applyEffects(delta: number) {
+        for (const name of Object.keys(this.effects)) {
+            const effect: EffectInterface = this.effects[name]
+            if (effect.timePassed <= effect.duration) {
+                effect.timePassed += delta / 1000
+                switch(name) {
+                    case EffectKeys.Slow:
+                        this.body.setMaxSpeed(
+                            PLAYER_DEFAULT_VELOCITY - (PLAYER_DEFAULT_VELOCITY * effect.value)
+                        )
+                        break
+                }
+            } 
+        }
+    }
+
+    public update(delta: number) {
+        this.applyEffects(delta)
+
+        if (this.health <= 0) {
+            this.reset()
+            this.scene.events.emit("healthChanged")
+        }
     }
     
     public reset(): void {
