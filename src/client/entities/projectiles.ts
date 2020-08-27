@@ -1,6 +1,7 @@
 import { MainScene } from "../scenes/mainScene"
 import { ProjectileModel, BlockModel, BlockModelMultiple } from "../../shared/models"
 import { Player } from "../player"
+import { ChargedArrow } from "./abilities"
 
 
 const projectilesConfig = {
@@ -44,14 +45,13 @@ const projectilesConfig = {
     },
     chargedArrow: {
         name: 'chargedArrow',
-        frame: 'laserGreen03.png',
-        damage: 500,
-        speed: 1600,
-        lifespan: 0.2,
-        width: 20,
-        height: 20,
+        frame: 'charged_arrow_bullet.png',
+        damage: 400,
+        speed: 1200,
+        lifespan: 0.5,
+        width: 25,
+        height: 25,
     }
-    
 }
 
 
@@ -222,6 +222,7 @@ export class Projectiles
         const laserRedGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
         const laserGreenGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
         const flameGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
+        const chargedArrowGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
 
         const laserRedBullets = Array.from({length: 200}, () => {
             return new Bullet(scene, projectilesConfig.laserRed)
@@ -239,16 +240,22 @@ export class Projectiles
             return new BlockWithTick(scene, projectilesConfig.flame)
         })
         
+        const chargedArrowBullets = Array.from({length: 20}, () => {
+            return new Bullet(scene, projectilesConfig.chargedArrow)
+        })
+        
         
         laserBlueGroup.addMultiple(laserBlueBullets)
         laserRedGroup.addMultiple(laserRedBullets)
         laserGreenGroup.addMultiple(laserGreenBullets)
         flameGroup.addMultiple(flameBlocks)
+        chargedArrowGroup.addMultiple(chargedArrowBullets)
         
         this.projectiles.set('laserRed', laserRedGroup)
         this.projectiles.set('laserBlue', laserBlueGroup)
         this.projectiles.set('laserGreen', laserGreenGroup)
         this.projectiles.set('flame', flameGroup)
+        this.projectiles.set('chargedArrow', chargedArrowGroup)
     }
 
     
@@ -273,6 +280,7 @@ export class Projectiles
             this.projectiles.get('laserBlue'),
             this.projectiles.get('laserGreen'),
             this.projectiles.get('flame'),
+            this.projectiles.get('chargedArrow'),
         ]
     }
 }

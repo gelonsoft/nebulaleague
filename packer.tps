@@ -188,6 +188,7 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/rolling-bomb.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/root-tip.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/snail.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/teleport.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -770,7 +771,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../Pictures/spacefighter/lighten_bullet.png</key>
+            <key type="filename">../../../Pictures/spacefighter/my/charged_arrow_bullet.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../Pictures/spacefighter/my/lighten_bullet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -901,7 +917,9 @@
             <filename>../../../Pictures/spacefighter/game-icons/rolling-bomb.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/root-tip.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/snail.png</filename>
-            <filename>../../../Pictures/spacefighter/lighten_bullet.png</filename>
+            <filename>../../../Pictures/spacefighter/my/lighten_bullet.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/teleport.png</filename>
+            <filename>../../../Pictures/spacefighter/my/charged_arrow_bullet.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

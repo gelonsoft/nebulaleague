@@ -177,12 +177,13 @@ export class Flame extends Ability implements AbilityInterface {
 export class ChargedArrow extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
+        this.rangeDistance = this.projectiles.getDistance('chargedArrow')
     }
     
     public trigger(player: Player): void {
-        const pointer = this.scene.input.activePointer
-        const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        this.projectiles.fire('chargedArrow', transformedPoint)   
+        const position = player.body.center
+        const angleToPointer = this.scene.angleToPointer(position)
+        this.projectiles.fire('chargedArrow', position, angleToPointer)   
     }
 }
 
@@ -210,7 +211,7 @@ const abilitiesConfig = {
         frame: 'charged-arrow.png',
         type: AbilityTypes.Ray,
         cooldownDelay: 1,
-        rangeDistance: 400,
+        // rangeDistance: 400,
     },
 }
 
