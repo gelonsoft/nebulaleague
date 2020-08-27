@@ -51,8 +51,8 @@ const projectilesConfig = {
         width: 25,
         height: 25,
         effects: [{
-            name: EffectKeys.Slow,
-            value: 0.2,
+            name: EffectKeys.ChangeMaxSpeed,
+            value: 0.8,
             duration: 2,
         }]
     }

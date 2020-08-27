@@ -19,7 +19,7 @@ export enum SelectedWeapon {
 }
 
 export enum EffectKeys {
-    Slow = 'slow'
+    ChangeMaxSpeed = 'changeMaxSpeed'
 }
 
 export interface EffectInterface {
@@ -363,32 +363,38 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public addEffects(recieveEffects: Array<EffectInterface>): void {
-        // make sure the effects timePassed is reset
-        
         for (const effect of recieveEffects) {
-            // do something
             const appliedEffect = Object.assign(effect)
             this.effects.add(appliedEffect)
-            console.log('effect apply')
-
+            this.handleEffectCreated(appliedEffect)
             this.scene.time.addEvent({
                 delay: effect.duration * 1000,
                 callback: () => {
-                    console.log('effect remove')
+                    this.handleEffectRemoved(appliedEffect)
                     this.effects.delete(appliedEffect)
                 }
             })
         }
-        
     }
 
-    public applyEffects(delta: number) {
-        // console.log('applied effects')
+    public handleEffectCreated (effect) {
+        const value = effect.value
+        switch(effect.name) {
+            case EffectKeys.ChangeMaxSpeed:
+                this.body.maxSpeed = this.body.maxSpeed * value
+        }
     }
+
+    public handleEffectRemoved(effect) {
+        const value = effect.value
+        switch(effect.name) {
+            case EffectKeys.ChangeMaxSpeed:
+                this.body.maxSpeed = this.body.maxSpeed / value
+        }
+    }
+    
 
     public update(delta: number) {
-        this.applyEffects(delta)
-
         if (this.health <= 0) {
             this.reset()
             this.scene.events.emit("healthChanged")
