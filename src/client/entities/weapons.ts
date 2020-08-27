@@ -54,7 +54,7 @@ export interface WeaponInterface {
     name: string
     frame: string
     damage: number
-    fire(position: Phaser.Math.Vector2, rotation: number): void
+    fire(position: Phaser.Math.Vector2, playerId: string, rotation: number): void
 }
 
 
@@ -85,12 +85,12 @@ export class Weapon implements WeaponInterface {
         })
     }
 
-    public fire(position: Phaser.Math.Vector2): void {
-        const angleToPointer = this.scene.angleToPointer(position)
+    public fire(position: Phaser.Math.Vector2, playerId: string, rotation: number ): void {
         this.projectiles.fire(
             this.projectileKey,
             position,
-            angleToPointer,
+            playerId,
+            rotation,
         )
     }
 

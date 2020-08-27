@@ -118,7 +118,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = this.maxHealth
+        this.health = PLAYER_DEFAULT_HEALTH
         this.previousDirection = { x: 0, y: 0 }
 
         this.playerSprite = this.scene.add.sprite(
@@ -137,8 +137,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.setSize(PLAYER_SIZE, PLAYER_SIZE)
         this.attachPhysics()
     }
-
-
 
     private attachPhysics(): void {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
@@ -189,8 +187,8 @@ export class Player extends Phaser.GameObjects.Container {
         const newPosition =
             body.position.clone()
                 .add(newVelocity.clone()
-                .add(newAcceleration)
-                .scale(this.scene.game.loop.delta / 1000))
+                    .add(newAcceleration)
+                    .scale(this.scene.game.loop.delta / 1000))
 
 
         return {
@@ -235,17 +233,22 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
 
-    public fire(weaponSelected?: SelectedWeapon): void {
+    public fire(weaponSelected?: SelectedWeapon, targetFire?: Phaser.Math.Vector2): void {
         weaponSelected = weaponSelected || SelectedWeapon.Primary
         const weapon = weaponSelected === SelectedWeapon.Primary ?
             this.weaponPrimary : this.weaponSecondary
         const weaponTime = weaponSelected === SelectedWeapon.Primary ?
             this.actionTimes.weaponPrimary : this.actionTimes.weaponSecondary
-        const positionFire = weaponSelected === SelectedWeapon.Primary ?
+        const sourceFire = weaponSelected === SelectedWeapon.Primary ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
+        const angleFire = targetFire ?
+            Phaser.Math.Angle.Between(sourceFire.x, sourceFire.y, targetFire.x, targetFire.y) :
+            this.scene.angleToPointer(sourceFire)
+
+
         if (weaponTime.ready) {
             weaponTime.ready = false
-            weapon.fire(positionFire)
+            weapon.fire(sourceFire, this.id, angleFire)
             weaponTime.cooldown = weapon.shotInterval
 
             weaponTime.timerEvent = this.scene.time.addEvent({
@@ -329,7 +332,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, false)
                 this.weaponPrimary.laser.clear()
                 this.weaponSecondary.laser.clear()
-            }   
+            }
         }
     }
 
@@ -371,14 +374,14 @@ export class Player extends Phaser.GameObjects.Container {
             const effect: EffectInterface = this.effects[name]
             if (effect.timePassed <= effect.duration) {
                 effect.timePassed += delta / 1000
-                switch(name) {
+                switch (name) {
                     case EffectKeys.Slow:
                         this.body.setMaxSpeed(
                             PLAYER_DEFAULT_VELOCITY - (PLAYER_DEFAULT_VELOCITY * effect.value)
                         )
                         break
                 }
-            } 
+            }
         }
     }
 
@@ -390,13 +393,11 @@ export class Player extends Phaser.GameObjects.Container {
             this.scene.events.emit("healthChanged")
         }
     }
-    
+
     public reset(): void {
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.setPosition(x, y)
         this.health = this.maxHealth
     }
-
-    
 }

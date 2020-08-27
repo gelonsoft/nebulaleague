@@ -244,12 +244,12 @@ export class MainScene extends Phaser.Scene {
 
 
     public handleEnemyProjectileCollide(
-        enemy: Player,
+        hittedPlayer: Player,
         projectile: Phaser.GameObjects.Sprite & ProjectileInterface)
     : void {
-        if (enemy.id !== this.player.id) {
-            projectile.actionOnCollision(enemy)
-            this.syncHealth(enemy)
+        if (hittedPlayer.id !== projectile.fromPlayerId) {
+            projectile.actionOnCollision(hittedPlayer)
+            this.syncHealth(hittedPlayer)
         }
     }
 

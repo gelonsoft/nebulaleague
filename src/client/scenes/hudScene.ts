@@ -130,7 +130,8 @@ class HealthBar extends Phaser.GameObjects.Graphics {
         const height = HUD_HEIGHT
         const innerWidth = width - HUD_PADDING
         const innerHeight = height - HUD_PADDING
-
+        this.fillStyle(HUD_HEALTH_BAR_COLOR_BACKGROUND)
+        this.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, innerWidth, innerHeight)
         if (health <= this.maxHealth / 10) {
             this.fillStyle(HUD_HEALTH_BAR_COLOR_LOW)
         } else if (health <= this.maxHealth / 10 * 3) {

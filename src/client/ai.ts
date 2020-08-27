@@ -1,4 +1,4 @@
-import { Player, PlayerDirection } from './player'
+import { Player, SelectedWeapon } from './player'
 import { MainScene } from './scenes/mainScene'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import { PlayerAIConfig } from './playersAI'
@@ -17,6 +17,7 @@ export class PlayerAI {
     public steeringsForce: Array<Phaser.Math.Vector2>
     public steeringsBehaviour: Array<string>
     public wander: steering.Wander
+    public weaponPrecisionHandicap: number
     public tree: IBehaviorTreeNode
     
     
@@ -34,6 +35,7 @@ export class PlayerAI {
         this.steeringsForce = []
         this.steeringsBehaviour = []
         this.wander = playerConfig.wander
+        this.weaponPrecisionHandicap = playerConfig.weaponPrecisionHandicap
         this.tree = this.buildTree()
     }
 
@@ -50,7 +52,7 @@ export class PlayerAI {
             })
             .Do('seekingAction', () => {
                 if (this.playersInViewRange.length > 0) {
-                    // this.doSeekTarget()
+                    this.doSeekTarget()
                     return BehaviorTreeStatus.Success                    
                 }
                 return BehaviorTreeStatus.Failure
@@ -74,6 +76,7 @@ export class PlayerAI {
         this.setPlayersInVisibleRange()
         this.setPlayersInHittableRange()
         this.tree.Tick(new TimeData(deltaTime))
+        this.player.body.acceleration = this.sumSteeringsForce()
     }
 
 
@@ -124,38 +127,35 @@ export class PlayerAI {
     
 
     public doSeekTarget(): void {
-        const target = this.playersInViewRange[0].body.position
-        const newForce = steering.seekSteer(this.player.body, target)
+        const target = this.playersInViewRange[0].body
+        const newForce = steering.pursuit(this.player.body, target)
         this.steeringsBehaviour.push(SEEK_BEHAVIOUR)
         this.steeringsForce.push(newForce)
-        this.player.body.acceleration = newForce
     }
 
 
     public doWander(): void {
-        const body = this.player.body as Phaser.Physics.Arcade.Body
         const newForce = steering.limit(steering.wander(this.player.body, this.wander), 1000)
         this.steeringsBehaviour.push(WANDER_BEHAVIOUR)
         this.steeringsForce.push(newForce)
         this.wander.angle += Phaser.Math.Between(-this.wander.variance, this.wander.variance)
-        body.acceleration = newForce
-        body.rotation = steering.facing(this.player.body)
+        this.player.rotation = steering.facing(this.player.body.velocity)
     }
 
     
     public doAttack(): void {
         const choosenTarget: Player = Phaser.Math.RND.pick(this.players)
+        const playerToTarget = choosenTarget.body.position.clone()
+            .subtract(this.player.body.center)
 
-        const angle = Phaser.Math.Angle.Between(
-            this.player.x,
-            this.player.y,
-            choosenTarget.x,
-            choosenTarget.y,
-        )
-        const handicapPrecision = Phaser.Math.RND.normal() / 8
-        // improve make the ia anticipate your moves
-        this.player.rotation = angle + Math.PI / 2 + handicapPrecision
-        this.player.fire()
+
+        const handicapPrecisionAngle = Phaser.Math.RND.normal() * Math.PI / (5 * 360)
+        const predictedPosition = choosenTarget.body.position.clone()
+            .add(choosenTarget.body.velocity)
+            .rotate(handicapPrecisionAngle)
+        
+        this.player.rotation = steering.facing(playerToTarget)
+        this.player.fire(SelectedWeapon.Primary, predictedPosition)
     }
 
 }

@@ -64,6 +64,7 @@ const projectilesConfig = {
 export interface ProjectileInterface {
     fire(position: Phaser.Math.Vector2, rotation: number): void
     actionOnCollision(hittedPlayer: Player): void
+    fromPlayerId?: string
 }
 
 export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {
@@ -74,6 +75,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public speed: number
     public shotInterval: number
     public damage?: number
+    public fromPlayerId?: string
     public effects?: Record<string, EffectInterface>
     public constructor(scene: MainScene, projectileConfig: ProjectileModel) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
@@ -133,11 +135,13 @@ export class Block extends Phaser.GameObjects.Graphics {
     public radius: number
     public lifespan: number
     public damage: number
+    public fromPlayerId?: string
     public effects?: Record<string, EffectInterface>
     public fillColor: number
     public strokeColor: number
     public fillAlpha: number
     public strokeAlpha: number
+
     
     public constructor(scene: MainScene, blockConfig: BlockModel) {
         super(scene)
@@ -185,7 +189,7 @@ export class Block extends Phaser.GameObjects.Graphics {
 
     public actionOnCollision(hittedPlayer: Player) {
         hittedPlayer.health -= this.damage
-        // hittedPlayer.addEffects(this.effects)
+        hittedPlayer.addEffects(this.effects)
     }
     
     
@@ -215,7 +219,7 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         if (this.tickTimer >= this.tick) {
             this.tickTimer = 0
             hittedPlayer.health -= this.damage
-            // hittedPlayer.addEffects(this.effects)
+            hittedPlayer.addEffects(this.effects)
         }
     }
 }
@@ -274,9 +278,11 @@ export class Projectiles
     public fire(
         key: string,
         position: Phaser.Math.Vector2,
+        playerId?: string,
         rotation?: number): void {
         const projectileGroup = this.projectiles.get(key)
         const projectile = projectileGroup.getFirstDead()
+        projectile.fromPlayerId = playerId
         projectile.fire(position, rotation)
     }
 

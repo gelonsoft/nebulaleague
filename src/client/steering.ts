@@ -12,8 +12,8 @@ export interface Wander {
     variance: number
 }
 
-export function facing(source: Body): number {
-    return Math.atan2(source.velocity.x, -source.velocity.y) * 180 / Math.PI
+export function facing(source: Vector2): number {
+    return Math.atan2(source.x, -source.y)
 }
 
 export function seek(source: Vector2, target: Vector2): Vector2 {
@@ -58,7 +58,8 @@ export function arrivalSteer(source: Body, target: Vector2, slowingRadius=50){
 export function pursuit(source: Body, target: Body){
     const distance = source.position.distance(target.position)
     const futurVelocityScaled = distance / target.maxSpeed
-    const futurPosition = target.position.clone().add(target.velocity.scale(futurVelocityScaled))
+    const futurPosition = target.position.clone()
+        .add(target.velocity.clone().scale(futurVelocityScaled))
 
     const desired = this.seek(source.position, futurPosition)
         .normalize()
@@ -72,7 +73,8 @@ export function pursuit(source: Body, target: Body){
 export function evade(source: Body, target: Body){
     const distance = source.position.distance(target.position)
     const futurVelocityScaled = distance / target.maxSpeed
-    const futurPosition = target.position.clone().add(target.velocity.scale(futurVelocityScaled))
+    const futurPosition = target.position.clone()
+        .add(target.velocity.clone().scale(futurVelocityScaled))
 
     const desired = this.flee(source.position, futurPosition)
         .normalize()

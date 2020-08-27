@@ -167,7 +167,7 @@ export class Flame extends Ability implements AbilityInterface {
     public trigger(player: Player): void {
         const pointer = this.scene.input.activePointer
         const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        this.projectiles.fire('flame', transformedPoint)   
+        this.projectiles.fire('flame', transformedPoint, player.id)   
     }
 }
 
@@ -182,7 +182,7 @@ export class ChargedArrow extends Ability implements AbilityInterface {
     public trigger(player: Player): void {
         const position = player.body.center
         const angleToPointer = this.scene.angleToPointer(position)
-        this.projectiles.fire('chargedArrow', position, angleToPointer)   
+        this.projectiles.fire('chargedArrow', position, player.id, angleToPointer)   
     }
 }
 

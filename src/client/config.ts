@@ -11,7 +11,7 @@ export const PLAYER_BLINK_TIMING = 10
 
 export const WORLD_WIDTH = 6000
 export const WORLD_HEIGHT = 6000
-export const MAX_PLAYER = 10
+export const MAX_PLAYER = 2
 
 export const HUD_HEIGHT = 60
 export const HUD_PADDING = 4

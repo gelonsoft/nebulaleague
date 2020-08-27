@@ -3,6 +3,7 @@ import { Wander } from './steering'
 
 export interface PlayerAIConfig {
     wander: Wander
+    weaponPrecisionHandicap: number
 }
 
 export const playerAI1 = {
@@ -10,8 +11,9 @@ export const playerAI1 = {
         radialMag: 200,
         distanceExtension: 100,
         angle: 0,
-        variance: 0.1,        
-    }
+        variance: 0.1,
+    },
+    weaponPrecisionHandicap: 1,
 }
 
 
@@ -20,8 +22,9 @@ export const playerAI2 = {
         radialMag: 100,
         distanceExtension: 150,
         angle: 0,
-        variance: 0.01, 
-    }
+        variance: 0.01,
+    },
+    weaponPrecisionHandicap: 2,
 }
 
 
@@ -30,8 +33,9 @@ export const playerAI3 = {
         radialMag: 300,
         distanceExtension: 200,
         angle: 0,
-        variance: 0.03,        
-    }
+        variance: 0.03,
+    },
+    weaponPrecisionHandicap: 3,
 }
 
 
@@ -42,7 +46,8 @@ export const playerAI4 = {
         distanceExtension: 600,
         angle: 0,
         variance: 0.004,
-    }
+    },
+    weaponPrecisionHandicap: 4,
 }
 
 
@@ -52,7 +57,8 @@ export const playerAI5 = {
         distanceExtension: 100,
         angle: 0,
         variance: 0.005,        
-    }
+    },
+    weaponPrecisionHandicap: 5,
 }
 
 
@@ -62,7 +68,8 @@ export const playerAI6 = {
         distanceExtension: 500,
         angle: 0,
         variance: 0.03,        
-    }
+    },
+    weaponPrecisionHandicap: 6,
 }
 
 
@@ -72,7 +79,8 @@ export const playerAI7 = {
         distanceExtension: 170,
         angle: 0,
         variance: 0.05,
-    }
+    },
+    weaponPrecisionHandicap: 7,
 }
 
 
@@ -82,7 +90,8 @@ export const playerAI8 = {
         distanceExtension: 300,
         angle: 0,
         variance: 0.1,        
-    }
+    },
+    weaponPrecisionHandicap: 8,
 }
 
 
@@ -92,7 +101,8 @@ export const playerAI9 = {
         distanceExtension: 200,
         angle: 0,
         variance: 0.01,
-    }
+    },
+    weaponPrecisionHandicap: 9,
 }
 
 export const playersAIConfig = [
