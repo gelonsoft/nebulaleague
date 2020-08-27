@@ -210,7 +210,6 @@ const abilitiesConfig = {
         frame: 'charged-arrow.png',
         type: AbilityTypes.Ray,
         cooldownDelay: 1,
-        // rangeDistance: 400,
     },
 }
 

@@ -50,7 +50,7 @@ export class MainScene extends Phaser.Scene {
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight)
         })
-        this.mainCameraZoom = 0.8
+        this.mainCameraZoom = 0.75
         this.playersAI = []
         this.players = this.physics.add.group({
             collideWorldBounds: true,
@@ -268,7 +268,7 @@ export class MainScene extends Phaser.Scene {
 
     public playersAIUpdate(delta: number): void {
         for(const playerAI of this.playersAI) {
-            playerAI.update(delta)
+            // playerAI.update(delta)
         }
     }
     

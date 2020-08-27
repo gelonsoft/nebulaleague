@@ -23,6 +23,7 @@ export enum EffectKeys {
 }
 
 export interface EffectInterface {
+    name: string
     value: number
     duration: number
     timePassed?: number
@@ -77,7 +78,7 @@ export class Player extends Phaser.GameObjects.Container {
     public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
-    public effects: Record<string, EffectInterface>
+    public effects: Set<EffectInterface>
     public previousDirection: PlayerDirection
     public actionTimes: ActionTimesInterface
 
@@ -109,7 +110,7 @@ export class Player extends Phaser.GameObjects.Container {
             ability4: this.scene.abilities[playerConfig.abilityKey4],
         }
         this.selectedAbilityKey = null
-        this.effects = {}
+        this.effects = new Set()
     }
 
 
@@ -361,28 +362,28 @@ export class Player extends Phaser.GameObjects.Container {
         return positionCenter.clone().add(offset)
     }
 
-    public addEffects(effects: Record<number, EffectInterface>): void {
-        //make sure the effects timePassed is reset
-        for (const effect of Object.values(effects)) {
-            effect.timePassed = 0
+    public addEffects(recieveEffects: Array<EffectInterface>): void {
+        // make sure the effects timePassed is reset
+        
+        for (const effect of recieveEffects) {
+            // do something
+            const appliedEffect = Object.assign(effect)
+            this.effects.add(appliedEffect)
+            console.log('effect apply')
+
+            this.scene.time.addEvent({
+                delay: effect.duration * 1000,
+                callback: () => {
+                    console.log('effect remove')
+                    this.effects.delete(appliedEffect)
+                }
+            })
         }
-        this.effects = { ...effects, ...this.effects }
+        
     }
 
     public applyEffects(delta: number) {
-        for (const name of Object.keys(this.effects)) {
-            const effect: EffectInterface = this.effects[name]
-            if (effect.timePassed <= effect.duration) {
-                effect.timePassed += delta / 1000
-                switch (name) {
-                    case EffectKeys.Slow:
-                        this.body.setMaxSpeed(
-                            PLAYER_DEFAULT_VELOCITY - (PLAYER_DEFAULT_VELOCITY * effect.value)
-                        )
-                        break
-                }
-            }
-        }
+        // console.log('applied effects')
     }
 
     public update(delta: number) {

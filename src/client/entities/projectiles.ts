@@ -50,12 +50,11 @@ const projectilesConfig = {
         lifespan: 0.5,
         width: 25,
         height: 25,
-        effects: {
-            [EffectKeys.Slow]: {
-                value: 0.2,
-                duration: 2,
-            }
-        }
+        effects: [{
+            name: EffectKeys.Slow,
+            value: 0.2,
+            duration: 2,
+        }]
     }
 }
 
@@ -76,7 +75,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public shotInterval: number
     public damage?: number
     public fromPlayerId?: string
-    public effects?: Record<string, EffectInterface>
+    public effects?: Array<EffectInterface>
     public constructor(scene: MainScene, projectileConfig: ProjectileModel) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
         this.scene = scene
@@ -84,7 +83,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.lifespan = projectileConfig.lifespan
         this.speed = projectileConfig.speed
         this.damage = projectileConfig.damage
-        this.effects = projectileConfig.effects || {}
+        this.effects = projectileConfig.effects || []
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         
@@ -136,7 +135,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public lifespan: number
     public damage: number
     public fromPlayerId?: string
-    public effects?: Record<string, EffectInterface>
+    public effects?: Array<EffectInterface>
     public fillColor: number
     public strokeColor: number
     public fillAlpha: number
@@ -148,7 +147,7 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.radius = blockConfig.radius
         this.lifespan = blockConfig.lifespan
         this.damage = blockConfig.damage
-        this.effects = blockConfig.effects || {}
+        this.effects = blockConfig.effects || []
         this.fillColor = blockConfig.fillColor
         this.strokeColor = blockConfig.strokeColor
         this.fillAlpha = blockConfig.fillAlpha
