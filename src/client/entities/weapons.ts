@@ -5,45 +5,67 @@ import { Projectiles } from './projectiles'
 
 
 const weaponsConfig = {
-    laserRed: {
-        name: 'laserRed',
-        frame: 'laserRed02.png',
-        damage: 100,
+    pistol: {
+        name: 'pistol',
+        frame: 'pistol-gun.png',
         shotInterval: 1,
         cooldown: 0,
-        projectileKey: 'laserRed',
+        projectileKey: 'pistolBullet',
         laserConfig: {
             color: 0xff5252,
             width: 3,
             alpha: 0.9,
         }
     },
-    laserBlue: {
-        name: 'laserBlue',
-        frame: 'laserBlue02.png',
-        damage: 200,
-        shotInterval: 4,
+    ak47: {
+        name: 'ak47',
+        frame: 'ak47.png',
+        shotInterval: 0.5,
         cooldown: 0,
-        projectileKey: 'laserBlue',
+        projectileKey: 'ak47Bullet',
         laserConfig: {
             color: 0x00f8f8,
             width: 3,
             alpha: 0.9,
         }
     },
-    laserGreen: {
-        name: 'laserGreen',
-        frame: 'laserGreen02.png',
-        damage: 500,
+    p90: {
+        name: 'p90',
+        frame: 'p90.png',
+        shotInterval: 0.2,
+        cooldown: 0,
+        projectileKey: 'p90Bullet',
+        laserConfig: {
+            color: 0x00ff00,
+            width: 3,
+            alpha: 0.9,
+        }
+    },
+    revolver: {
+        name: 'revolver',
+        frame: 'revolver.png',
+        shotInterval: 10,
+        cooldown: 0,
+        projectileKey: 'revolverBullet',
+        laserConfig: {
+            color: 0x00ff00,
+            width: 3,
+            alpha: 0.9,
+        }
+    },
+    thompson: {
+        name: 'thompson',
+        frame: 'thompson-m1928.png',
         shotInterval: 12,
         cooldown: 0,
-        projectileKey: 'laserGreen',
+        projectileKey: 'thompsonBullet',
         laserConfig: {
             color: 0x00ff00,
             width: 3,
             alpha: 0.9,
         }
     }
+    
 }
 
 
@@ -53,7 +75,6 @@ export interface WeaponInterface {
     shotInterval: number
     name: string
     frame: string
-    damage: number
     fire(position: Phaser.Math.Vector2, playerId: string, rotation: number): void
 }
 
@@ -64,7 +85,6 @@ export class Weapon implements WeaponInterface {
     public projectiles: Projectiles
     public name: string
     public frame: string
-    public damage: number
     public laser: Phaser.GameObjects.Graphics
     public projectileKey: string
     public shotInterval: number
@@ -76,7 +96,6 @@ export class Weapon implements WeaponInterface {
         this.projectiles = scene.projectiles
         this.name = weaponModel.name
         this.frame = weaponModel.frame
-        this.damage = weaponModel.damage
         this.shotInterval = weaponModel.shotInterval
         this.projectileKey =  weaponModel.projectileKey
         this.canFire = true

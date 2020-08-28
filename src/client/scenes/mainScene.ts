@@ -50,7 +50,7 @@ export class MainScene extends Phaser.Scene {
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight)
         })
-        this.mainCameraZoom = 0.70
+        this.mainCameraZoom = 0.6
         this.playersAI = []
         this.players = this.physics.add.group({
             collideWorldBounds: true,
@@ -115,11 +115,11 @@ export class MainScene extends Phaser.Scene {
             id: 'mainPlayer',
             x: 0,
             y: 0,
-            weaponPrimaryKey: 'laserRed',
-            weaponSecondaryKey: 'laserBlue',
-            abilityKey1: 'chargedArrow',
-            abilityKey2: 'rootTip',
-            abilityKey3: 'blink',
+            weaponPrimaryKey: 'pistol',
+            weaponSecondaryKey: 'thompson',
+            abilityKey1: 'blink',
+            abilityKey2: 'chargedArrow',
+            abilityKey3: 'rootTip',
             abilityKey4: 'flame',
         }
         this.createPlayer(mainPlayerConfig, 'mainPlayer')
@@ -270,7 +270,7 @@ export class MainScene extends Phaser.Scene {
 
     public playersAIUpdate(delta: number): void {
         for(const playerAI of this.playersAI) {
-            playerAI.update(delta)
+            // playerAI.update(delta)
         }
     }
     

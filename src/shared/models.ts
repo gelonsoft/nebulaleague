@@ -23,7 +23,6 @@ export interface LaserModel {
 export interface WeaponModel {
     name: string
     frame: string
-    damage: number
     shotInterval: number
     projectileKey: string
     laserConfig: LaserModel
@@ -46,8 +45,7 @@ export interface ProjectileModel {
     damage: number
     lifespan: number
     effects?: Array<any>
-    width: number
-    height: number
+    radius: number
 }
 
 

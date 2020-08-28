@@ -181,14 +181,19 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../../../Pictures/spacefighter/game-icons/ak47.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-ray.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-zone.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/focused-lightning.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/p90.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/pistol-gun.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/revolver.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/rolling-bomb.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/root-tip.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/snail.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/teleport.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/thompson-m1928.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -920,6 +925,11 @@
             <filename>../../../Pictures/spacefighter/my/lighten_bullet.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/teleport.png</filename>
             <filename>../../../Pictures/spacefighter/my/charged_arrow_bullet.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/thompson-m1928.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/pistol-gun.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/ak47.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/p90.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/revolver.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

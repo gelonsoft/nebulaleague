@@ -47,25 +47,10 @@ export class PhaserSpaceGame {
                     debug: isDebug,
                 }
             },
-            // physics: {
-            //     default: 'matter',
-            //     matter: {
-            //         enableSleeping: true,
-            //         gravity: {
-            //             y: 0
-            //         },
-            //         debug: {
-            //             showBody: true,
-            //             showStaticBody: true
-            //         }
-            //     }
-            // },
             scene: scenes,
         })
 
         this.game.scene.start('bootScene')
-
-
         window['a'] = this.game
 
     }

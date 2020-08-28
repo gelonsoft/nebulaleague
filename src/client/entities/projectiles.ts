@@ -4,41 +4,53 @@ import { Player, EffectKeys, EffectInterface } from "../player"
 
 
 const projectilesConfig = {
-    laserRed: {
-        name: 'laserRed',
+    pistolBullet: {
+        name: 'pistolBullet',
         frame: 'laserRed03.png',
-        damage: 100,
+        damage: 80,
         speed: 1300,
         lifespan: 0.3,
-        width: 12,
-        height: 12,
+        radius: 14,
     },
-    laserBlue: {
-        name: 'laserBlue',
-        frame: 'laserBlue03.png',
-        damage: 200,
-        speed: 1400,
+    ak47Bullet: {
+        name: 'ak47Bullet',
+        frame: 'laserRed03.png',
+        damage: 50,
+        speed: 1000,
         lifespan: 0.35,
-        width: 16,
-        height: 16,
+        radius: 12,
     },
-    laserGreen: {
-        name: 'laserGreen',
-        frame: 'laserGreen03.png',
-        damage: 500,
-        speed: 1600,
+    p90Bullet: {
+        name: 'p90Bullet',
+        frame: 'laserRed03.png',
+        damage: 40,
+        speed: 1500,
+        lifespan: 0.22,
+        radius: 12,
+    },
+    revolverBullet: {
+        name: 'revolverBullet',
+        frame: 'laserRed03.png',
+        damage: 200,
+        speed: 1000,
         lifespan: 0.2,
-        width: 20,
-        height: 20,
+        radius: 12,
+    },
+    thompsonBullet: {
+        name: 'thompsonBullet',
+        frame: 'laserRed03.png',
+        damage: 150,
+        speed: 1700,
+        lifespan: 0.35,
+        radius: 18,
     },
     chargedArrow: {
         name: 'chargedArrow',
         frame: 'charged_arrow_bullet.png',
-        damage: 400,
+        damage: 80,
         speed: 1200,
         lifespan: 0.5,
-        width: 25,
-        height: 25,
+        radius: 25,
         effects: [{
             name: EffectKeys.ChangeMaxSpeed,
             value: 0.8,
@@ -49,7 +61,7 @@ const projectilesConfig = {
         name: 'flame',
         radius: 50,
         lifespan: 3,
-        damage: 50,
+        damage: 25,
         tick: 0.5,
         fillColor: 0xaa0000,
         strokeColor: 0xff0000,
@@ -57,7 +69,7 @@ const projectilesConfig = {
         strokeAlpha: 0.8,
         effects: [{
             name: EffectKeys.Burn,
-            value: 20,
+            value: 10,
             duration: 3,
             tick: 0.5,
         }]
@@ -65,7 +77,7 @@ const projectilesConfig = {
     rootTip: {
         name: 'rootTip',
         radius: 60,
-        damage: 50,
+        damage: 30,
         lifespan: 0.6,
         triggerAfter: 0.4,
         fillColor: 0x00aa00,
@@ -95,6 +107,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public lifespan: number
     public speed: number
     public shotInterval: number
+    public radius: number
     public damage?: number
     public fromPlayerId?: string
     public effects?: Array<EffectInterface>
@@ -108,8 +121,8 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.effects = projectileConfig.effects || []
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
-        
-        this.setDisplaySize(projectileConfig.width, projectileConfig.height)
+        this.radius = projectileConfig.radius
+        this.setDisplaySize(projectileConfig.radius, projectileConfig.radius )
         this.body.setEnable(false)
         this.setActive(false)
         this.setVisible(false)
@@ -119,12 +132,12 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         const ux = Math.cos(rotation)
         const uy = Math.sin(rotation)
         this.body.reset(position.x, position.y)
+        this.setVisible(true)
+        this.setActive(true)
+        this.body.setEnable(true)
         this.setRotation(rotation + Math.PI / 2)
         this.body.velocity.x = ux * this.speed
         this.body.velocity.y = uy * this.speed
-        this.body.setEnable(true)
-        this.setActive(true)
-        this.setVisible(true)
 
         this.scene.time.addEvent({
             delay: this.lifespan * 1000,
@@ -291,9 +304,11 @@ export class Projectiles
         this.projectiles = new Map()
         this.scene = scene
         
-        this.addProjectile('laserRed', Bullet, projectilesConfig.laserRed, 200)
-        this.addProjectile('laserBlue', Bullet, projectilesConfig.laserBlue, 200)
-        this.addProjectile('laserGreen', Bullet, projectilesConfig.laserGreen, 200)
+        this.addProjectile('pistolBullet', Bullet, projectilesConfig.pistolBullet, 200)
+        this.addProjectile('ak47Bullet', Bullet, projectilesConfig.ak47Bullet, 200)
+        this.addProjectile('p90Bullet', Bullet, projectilesConfig.p90Bullet, 200)
+        this.addProjectile('revolverBullet', Bullet, projectilesConfig.revolverBullet, 200)
+        this.addProjectile('thompsonBullet', Bullet, projectilesConfig.thompsonBullet, 200)
         this.addProjectile('chargedArrow', Bullet, projectilesConfig.chargedArrow, 20)
         this.addProjectile('flame', BlockWithTick, projectilesConfig.flame, 20)
         this.addProjectile('rootTip', BlockWithDelay, projectilesConfig.rootTip, 20)

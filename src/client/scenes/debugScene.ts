@@ -118,19 +118,24 @@ export class DebugScene extends Phaser.Scene {
         this.debugMenu.on('click', event => {
             if (event.target.name === 'switchPlayerButton') {
                 this.switchToPlayer(event.target.dataset.id)
-                this.debugMenu.setVisible(false)
             }
-            if (event.target.name === 'switchMainPlayerButton') {
+            else if (event.target.name === 'switchMainPlayerButton') {
                 this.switchMainPlayer()
-                this.debugMenu.setVisible(false)
             }
+            else if (event.target.name === 'displayBodyButton') {
+                this.mainScene.playerControl.active = true
+                this.mainScene.physics.world.drawDebug = !this.mainScene.physics.world.drawDebug
+            }
+            this.debugMenu.setVisible(false)
+
+            
         })
     }
 
     switchToPlayer(index: number) {
         const player: Player = this.mainScene.players.getChildren()[index]  as Player
-        this.mainScene.cameras.main.startFollow(player, true)
         this.mainScene.playerControl.active = false
+        this.mainScene.cameras.main.startFollow(player, true)
     }
     
     switchMainPlayer() {
