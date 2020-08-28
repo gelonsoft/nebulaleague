@@ -172,6 +172,18 @@ export class Flame extends Ability implements AbilityInterface {
 }
 
 
+export class RootTip extends Ability implements AbilityInterface {
+    constructor(scene, config) {
+        super(scene, config)
+    }
+    
+    public trigger(player: Player): void {
+        console.log('root tip')
+    }
+}
+
+
+
 
 export class ChargedArrow extends Ability implements AbilityInterface {
     constructor(scene, config) {
@@ -192,16 +204,24 @@ const abilitiesConfig = {
     blink: {
         name: 'blink',
         frame: 'teleport.png',
-        cooldownDelay: 10,
         type: AbilityTypes.Zone,
+        cooldownDelay: 10,
         rangeDistance: 500,
         radiusDistance: 30,
     },
     flame: {
         name: 'flame',
         frame: 'fire-zone.png',
-        cooldownDelay: 10,
         type: AbilityTypes.Zone,
+        cooldownDelay: 10,
+        rangeDistance: 420,
+        radiusDistance: 50,
+    },
+    rootTip: {
+        name: 'rootTip',
+        frame: 'root-tip.png',
+        type: AbilityTypes.Zone,
+        cooldownDelay: 1,
         rangeDistance: 420,
         radiusDistance: 50,
     },
@@ -217,6 +237,7 @@ const classNameToClass = {
     'blink': Blink,
     'flame': Flame,
     'chargedArrow': ChargedArrow,
+    'rootTip': RootTip,
 }
 
 

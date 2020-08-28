@@ -31,17 +31,6 @@ const projectilesConfig = {
         width: 20,
         height: 20,
     },
-    flame: {
-        name: 'flame',
-        radius: 50,
-        lifespan: 3,
-        damage: 50,
-        tick: 0.2,
-        fillColor: 0xaa0000,
-        strokeColor: 0xff0000,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-    },
     chargedArrow: {
         name: 'chargedArrow',
         frame: 'charged_arrow_bullet.png',
@@ -54,6 +43,33 @@ const projectilesConfig = {
             name: EffectKeys.ChangeMaxSpeed,
             value: 0.8,
             duration: 2,
+        }]
+    },
+    flame: {
+        name: 'flame',
+        radius: 50,
+        lifespan: 3,
+        damage: 50,
+        tick: 0.2,
+        fillColor: 0xaa0000,
+        strokeColor: 0xff0000,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+    },
+    rootTip: {
+        name: 'rootTip',
+        radius: 50,
+        damage: 50,
+        lifespan: 3,
+        fillColor: 0xaa0000,
+        strokeColor: 0xff0000,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+        delay: 1, // delay when the spell is active
+        effects: [{
+            name: EffectKeys.Paralyze,
+            value: 0.8,
+            duration: 3,
         }]
     }
 }
@@ -233,44 +249,26 @@ export class Projectiles
     {
         this.projectiles = new Map()
         this.scene = scene
-        const laserBlueGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
-        const laserRedGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
-        const laserGreenGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
-        const flameGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
-        const chargedArrowGroup = new Phaser.Physics.Arcade.Group(scene.physics.world, scene)
-
-        const laserRedBullets = Array.from({length: 200}, () => {
-            return new Bullet(scene, projectilesConfig.laserRed)
-        })
-
-        const laserBlueBullets = Array.from({length: 200}, () => {
-            return new Bullet(scene, projectilesConfig.laserBlue)
-        })
-
-        const laserGreenBullets = Array.from({length: 200}, () => {
-            return new Bullet(scene, projectilesConfig.laserGreen)
-        })
-
-        const flameBlocks = Array.from({length: 20}, () => {
-            return new BlockWithTick(scene, projectilesConfig.flame)
-        })
         
-        const chargedArrowBullets = Array.from({length: 20}, () => {
-            return new Bullet(scene, projectilesConfig.chargedArrow)
+        this.addProjectile('laserRed', Bullet, projectilesConfig.laserRed, 200)
+        this.addProjectile('laserBlue', Bullet, projectilesConfig.laserBlue, 200)
+        this.addProjectile('laserGreen', Bullet, projectilesConfig.laserGreen, 200)
+        this.addProjectile('chargedArrow', Bullet, projectilesConfig.chargedArrow, 20)
+        this.addProjectile('flame', BlockWithTick, projectilesConfig.flame, 20)
+        this.addProjectile('rootTip', BlockWithTick, projectilesConfig.rootTip, 20)
+    }
+
+    public addProjectile(
+        key: string,
+        ProjectileClass: new (scene: MainScene, projectileConfig: any) => any,
+        projectileConfig: any,
+        length: number): void {
+        const projectiles = Array.from({length: length}, () => {
+            return new ProjectileClass(this.scene, projectileConfig)
         })
-        
-        
-        laserBlueGroup.addMultiple(laserBlueBullets)
-        laserRedGroup.addMultiple(laserRedBullets)
-        laserGreenGroup.addMultiple(laserGreenBullets)
-        flameGroup.addMultiple(flameBlocks)
-        chargedArrowGroup.addMultiple(chargedArrowBullets)
-        
-        this.projectiles.set('laserRed', laserRedGroup)
-        this.projectiles.set('laserBlue', laserBlueGroup)
-        this.projectiles.set('laserGreen', laserGreenGroup)
-        this.projectiles.set('flame', flameGroup)
-        this.projectiles.set('chargedArrow', chargedArrowGroup)
+        const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
+            .addMultiple(projectiles)
+        this.projectiles.set(key, group)
     }
 
     
@@ -292,12 +290,6 @@ export class Projectiles
     }
 
     public getAll(): Array<Phaser.Physics.Arcade.Group> {
-        return [
-            this.projectiles.get('laserRed'),
-            this.projectiles.get('laserBlue'),
-            this.projectiles.get('laserGreen'),
-            this.projectiles.get('flame'),
-            this.projectiles.get('chargedArrow'),
-        ]
+        return Array.from(this.projectiles.values())
     }
 }

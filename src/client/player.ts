@@ -19,7 +19,9 @@ export enum SelectedWeapon {
 }
 
 export enum EffectKeys {
-    ChangeMaxSpeed = 'changeMaxSpeed'
+    ChangeMaxSpeed = 'changeMaxSpeed',
+    Paralyze = 'paralyze',
+    Stun = 'stun',
 }
 
 export interface EffectInterface {
@@ -200,11 +202,9 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public move(playerDirection: PlayerDirection): void {
-        const body = this.body as Phaser.Physics.Arcade.Body
-
         const playerMoveNextForce = this.getNextMove(playerDirection)
-        body.acceleration = playerMoveNextForce.acceleration
-        body.velocity = playerMoveNextForce.velocity
+        this.body.acceleration = playerMoveNextForce.acceleration
+        this.body.velocity = playerMoveNextForce.velocity
         this.previousDirection = playerDirection
     }
 
