@@ -58,14 +58,15 @@ const projectilesConfig = {
     },
     rootTip: {
         name: 'rootTip',
-        radius: 50,
+        radius: 60,
         damage: 50,
-        lifespan: 3,
-        fillColor: 0xaa0000,
-        strokeColor: 0xff0000,
+        lifespan: 0.6,
+        triggerAfter: 0.4,
+        fillColor: 0x00aa00,
+        strokeColor: 0x00ff00,
         fillAlpha: 0.6,
         strokeAlpha: 0.8,
-        delay: 1, // delay when the spell is active
+
         effects: [{
             name: EffectKeys.Paralyze,
             value: 0.8,
@@ -195,7 +196,7 @@ export class Block extends Phaser.GameObjects.Graphics {
 
         this.scene.time.addEvent({
             delay: this.lifespan * 1000,
-            callback: function() {
+            callback: () => {
                 this.kill()
             },
             callbackScope: this,
@@ -215,6 +216,46 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.body.reset(-10000, -10000)        
     }
 }
+
+export class BlockWithDelay extends Block implements ProjectileInterface {
+    public triggerAfter: number
+    public active: boolean
+    public constructor(scene: MainScene, blockConfig: BlockModelMultiple) {
+        super(scene, blockConfig)
+        this.triggerAfter = blockConfig.triggerAfter
+        this.active = false
+    }
+
+    public fire(position: Phaser.Math.Vector2) {
+        super.fire(position)
+        this.active = false
+
+        this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 0, to: 1 },
+            duration: this.triggerAfter * 1000,
+            ease: 'Cubic.easeIn',
+            completeDelay: this.triggerAfter * 1000
+        });
+        
+        this.scene.time.addEvent({
+            delay: this.triggerAfter * 1000,
+            callback: () => {
+                this.active = true
+            }
+        })
+    }
+
+    public actionOnCollision(hittedPlayer: Player) {
+        console.log(this.active)
+        if (this.active) {
+            hittedPlayer.health -= this.damage
+            super.actionOnCollision(hittedPlayer)
+            this.kill()            
+        }
+    }
+}
+
 
 export class BlockWithTick extends Block implements ProjectileInterface {
     public tick: number
@@ -255,7 +296,7 @@ export class Projectiles
         this.addProjectile('laserGreen', Bullet, projectilesConfig.laserGreen, 200)
         this.addProjectile('chargedArrow', Bullet, projectilesConfig.chargedArrow, 20)
         this.addProjectile('flame', BlockWithTick, projectilesConfig.flame, 20)
-        this.addProjectile('rootTip', BlockWithTick, projectilesConfig.rootTip, 20)
+        this.addProjectile('rootTip', BlockWithDelay, projectilesConfig.rootTip, 20)
     }
 
     public addProjectile(

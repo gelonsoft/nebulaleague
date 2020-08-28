@@ -65,5 +65,6 @@ export interface BlockModel {
 
 export interface BlockModelMultiple extends BlockModel {
     tick?: number
+    triggerAfter?: number
 }
 

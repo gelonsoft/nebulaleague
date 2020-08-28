@@ -174,7 +174,7 @@ export class RootTip extends Ability implements AbilityInterface {
     }
     
     public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        this.projectiles.fire('flame', player.id, pointerPosition)   
+        this.projectiles.fire('rootTip', player.id, pointerPosition)   
     }
 }
 
