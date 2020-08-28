@@ -22,13 +22,14 @@ export enum EffectKeys {
     ChangeMaxSpeed = 'changeMaxSpeed',
     Paralyze = 'paralyze',
     Stun = 'stun',
+    Burn = 'burn',
 }
 
 export interface EffectInterface {
     name: string
     value: number
     duration: number
-    timePassed?: number
+    tick?: number
 }
 
 export interface PlayerDirection {
@@ -74,15 +75,18 @@ export class Player extends Phaser.GameObjects.Container {
     public scene: MainScene
     public playerSprite: Phaser.GameObjects.Sprite
     public playerState: Map<string, boolean | number>
+    public previousDirection: PlayerDirection
     public weaponPrimary: Weapon
     public weaponSecondary: Weapon
     public abilities: AbilitiesInterface
     public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
-    public effects: Set<EffectInterface>
-    public previousDirection: PlayerDirection
     public actionTimes: ActionTimesInterface
+    public effects: Set<EffectInterface>
+    public isParalyzed: boolean
+    public isStunned: boolean
+    public burningTime: Phaser.Time.TimerEvent | null
 
 
     constructor(scene: MainScene, playerConfig: PlayerModel) {
@@ -113,6 +117,9 @@ export class Player extends Phaser.GameObjects.Container {
         }
         this.selectedAbilityKey = null
         this.effects = new Set()
+        this.isParalyzed = false
+        this.isStunned = false
+        this.burningTime = null
     }
 
 
@@ -190,9 +197,8 @@ export class Player extends Phaser.GameObjects.Container {
         const newPosition =
             body.position.clone()
                 .add(newVelocity.clone()
-                    .add(newAcceleration)
-                    .scale(this.scene.game.loop.delta / 1000))
-
+                .add(newAcceleration)
+                .scale(this.scene.game.loop.delta / 1000))
 
         return {
             acceleration: newAcceleration,
@@ -202,10 +208,12 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public move(playerDirection: PlayerDirection): void {
-        const playerMoveNextForce = this.getNextMove(playerDirection)
-        this.body.acceleration = playerMoveNextForce.acceleration
-        this.body.velocity = playerMoveNextForce.velocity
-        this.previousDirection = playerDirection
+        if (!this.isParalyzed) {
+            const playerMoveNextForce = this.getNextMove(playerDirection)
+            this.body.acceleration = playerMoveNextForce.acceleration
+            this.body.velocity = playerMoveNextForce.velocity
+            this.previousDirection = playerDirection
+        }
     }
 
 
@@ -385,11 +393,27 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public handleEffectCreated (effect) {
+    public handleEffectCreated (effect: EffectInterface) {
         const value = effect.value
         switch(effect.name) {
             case EffectKeys.ChangeMaxSpeed:
                 this.body.maxSpeed = this.body.maxSpeed * value
+                break
+            case EffectKeys.Paralyze:
+                this.isParalyzed = true
+                break
+            case EffectKeys.Burn:
+                if(!this.burningTime) {
+                    this.burningTime = this.scene.time.addEvent({
+                        delay: effect.tick * 1000,
+                        callback: () => {
+                            this.health -= value
+                        },
+                        callbackScope: this,
+                        loop: true,
+                    })
+                }
+                break
         }
     }
 
@@ -398,6 +422,16 @@ export class Player extends Phaser.GameObjects.Container {
         switch(effect.name) {
             case EffectKeys.ChangeMaxSpeed:
                 this.body.maxSpeed = this.body.maxSpeed / value
+                break
+            case EffectKeys.Paralyze:
+                this.isParalyzed = false
+                break
+            case EffectKeys.Burn:
+                if (this.burningTime) {
+                    this.burningTime.remove(false)
+                    this.burningTime = null
+                }
+                break
         }
     }
     

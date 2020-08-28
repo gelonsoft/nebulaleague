@@ -156,8 +156,8 @@ export class MainScene extends Phaser.Scene {
             }
         }
         const pt: Player = this.players.getChildren()[1] as Player
-        pt.x = 200
-        pt.y = 200
+        pt.x = 300
+        pt.y = 300
     }
     
 

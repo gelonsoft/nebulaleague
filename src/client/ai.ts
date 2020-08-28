@@ -76,7 +76,12 @@ export class PlayerAI {
         this.setPlayersInVisibleRange()
         this.setPlayersInHittableRange()
         this.tree.Tick(new TimeData(deltaTime))
-        this.player.body.acceleration = this.sumSteeringsForce()
+        if (this.player.isParalyzed || this.player.isStunned) {
+            this.player.body.acceleration = Phaser.Math.Vector2.ZERO.clone()
+            this.player.body.velocity = Phaser.Math.Vector2.ZERO.clone()
+        } else {
+            this.player.body.acceleration = this.sumSteeringsForce()
+        }
     }
 
 

@@ -50,11 +50,17 @@ const projectilesConfig = {
         radius: 50,
         lifespan: 3,
         damage: 50,
-        tick: 0.2,
+        tick: 0.5,
         fillColor: 0xaa0000,
         strokeColor: 0xff0000,
         fillAlpha: 0.6,
         strokeAlpha: 0.8,
+        effects: [{
+            name: EffectKeys.Burn,
+            value: 20,
+            duration: 3,
+            tick: 0.5,
+        }]
     },
     rootTip: {
         name: 'rootTip',
@@ -66,7 +72,6 @@ const projectilesConfig = {
         strokeColor: 0x00ff00,
         fillAlpha: 0.6,
         strokeAlpha: 0.8,
-
         effects: [{
             name: EffectKeys.Paralyze,
             value: 0.8,
@@ -247,9 +252,7 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
     }
 
     public actionOnCollision(hittedPlayer: Player) {
-        console.log(this.active)
         if (this.active) {
-            hittedPlayer.health -= this.damage
             super.actionOnCollision(hittedPlayer)
             this.kill()            
         }
