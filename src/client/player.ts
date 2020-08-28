@@ -434,8 +434,20 @@ export class Player extends Phaser.GameObjects.Container {
                 break
         }
     }
-    
 
+    public hit(damage:number, recieveEffects: Array<EffectInterface>) {
+        this.health -= damage
+        this.addEffects(recieveEffects)
+        this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 0.4, to: 1 },
+            duration: 0.5 * 1000,
+            ease: 'Power2',
+            completeDelay: 0.5 * 1000,
+        });
+        
+    }
+    
     public update(delta: number) {
         if (this.health <= 0) {
             this.reset()

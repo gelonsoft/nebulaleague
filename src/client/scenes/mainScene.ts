@@ -156,8 +156,8 @@ export class MainScene extends Phaser.Scene {
             }
         }
         const pt: Player = this.players.getChildren()[1] as Player
-        pt.x = 300
-        pt.y = 300
+        pt.x = 500
+        pt.y = 500
     }
     
 
@@ -277,7 +277,7 @@ export class MainScene extends Phaser.Scene {
     public update(time: number, delta: number): void {
         this.mainControl.update()
         this.playerControl.update()
-        // this.playersAIUpdate(delta)
+        this.playersAIUpdate(delta)
         
         // collide with other players
         this.physics.overlap(

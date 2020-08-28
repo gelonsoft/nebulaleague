@@ -136,8 +136,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     }
 
     public actionOnCollision(hittedPlayer: Player) {
-        hittedPlayer.health -= this.damage
-        hittedPlayer.addEffects(this.effects)
+        hittedPlayer.hit(this.damage, this.effects)
         this.kill()
     }
     
@@ -209,8 +208,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     }
 
     public actionOnCollision(hittedPlayer: Player) {
-        hittedPlayer.health -= this.damage
-        hittedPlayer.addEffects(this.effects)
+        hittedPlayer.hit(this.damage, this.effects)
     }
     
     
@@ -277,8 +275,7 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         this.tickTimer += this.scene.game.loop.delta / 1000
         if (this.tickTimer >= this.tick) {
             this.tickTimer = 0
-            hittedPlayer.health -= this.damage
-            hittedPlayer.addEffects(this.effects)
+            hittedPlayer.hit(this.damage, this.effects)
         }
     }
 }
