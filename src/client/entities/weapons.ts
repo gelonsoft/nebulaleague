@@ -14,8 +14,8 @@ const weaponsConfig = {
         projectileKey: 'laserRed',
         laserConfig: {
             color: 0xff5252,
-            width: 2,
-            alpha: 0.7,
+            width: 3,
+            alpha: 0.9,
         }
     },
     laserBlue: {
@@ -27,8 +27,8 @@ const weaponsConfig = {
         projectileKey: 'laserBlue',
         laserConfig: {
             color: 0x00f8f8,
-            width: 2,
-            alpha: 0.7,
+            width: 3,
+            alpha: 0.9,
         }
     },
     laserGreen: {
@@ -40,8 +40,8 @@ const weaponsConfig = {
         projectileKey: 'laserGreen',
         laserConfig: {
             color: 0x00ff00,
-            width: 2,
-            alpha: 0.7,
+            width: 3,
+            alpha: 0.9,
         }
     }
 }
@@ -112,7 +112,7 @@ export class Weapon implements WeaponInterface {
         const distance = this.getDistance()
         
         if (isLaserReady) {
-            this.laser.alpha = 0.7
+            this.laser.alpha = 0.9
         } else {
             this.laser.alpha = 0.3
         }

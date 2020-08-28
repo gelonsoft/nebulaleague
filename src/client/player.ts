@@ -353,7 +353,7 @@ export class Player extends Phaser.GameObjects.Container {
         const offset = Phaser.Math.Vector2.ONE
             .clone()
             .setToPolar(this.rotation - Math.PI / 2 - Math.PI / 2)
-            .scale(this.displayWidth * 0.45)
+            .scale(this.displayWidth * 0.5)
         return positionCenter.clone().add(offset)
     }
 
@@ -366,7 +366,7 @@ export class Player extends Phaser.GameObjects.Container {
         const offset = Phaser.Math.Vector2.ONE
             .clone()
             .setToPolar(this.rotation - Math.PI / 2 + Math.PI / 2)
-            .scale(this.displayWidth * 0.45)
+            .scale(this.displayWidth * 0.46)
         return positionCenter.clone().add(offset)
     }
 
