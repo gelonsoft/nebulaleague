@@ -98,8 +98,17 @@ export class Weapon implements WeaponInterface {
         return this.projectiles.getDistance(this.projectileKey)
     }
     
-    public draw(position: Phaser.Math.Vector2, isLaserReady: boolean): void {
-        const angleToPointer = this.scene.angleToPointer(position)
+    public draw(
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2,
+        isLaserReady: boolean
+    ): void {
+        const angleToPointer =
+            Phaser.Math.Angle.Between(
+                sourcePosition.x, sourcePosition.y,
+                pointerPosition.x, pointerPosition.y,
+            )
+        
         const distance = this.getDistance()
         
         if (isLaserReady) {
@@ -109,9 +118,9 @@ export class Weapon implements WeaponInterface {
         }
 
         const line = new Phaser.Geom.Line(
-            position.x, position.y,
-            position.x + Math.cos(angleToPointer) * distance * 0.98,
-            position.y + Math.sin(angleToPointer) * distance * 0.98,
+            sourcePosition.x, sourcePosition.y,
+            sourcePosition.x + Math.cos(angleToPointer) * distance * 0.98,
+            sourcePosition.y + Math.sin(angleToPointer) * distance * 0.98,
         )
         this.laser.clear()
         this.laser.strokeLineShape(line)

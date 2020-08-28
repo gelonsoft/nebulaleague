@@ -91,9 +91,11 @@ export class PlayerControl {
     
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
-        const angleToPointer = this.scene.angleToPointer(
-            new Phaser.Math.Vector2(this.player.x, this.player.y)
-        )
+        const angleToPointer = Phaser.Math.Angle.Between(
+            this.player.body.center.x, this.player.body.center.y,
+            this.scene.pointerPosition.x, this.scene.pointerPosition.y
+        ) 
+        
         this.player.rotation = angleToPointer + Math.PI / 2
 
         if (this.canLeftTrigger) {

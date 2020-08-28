@@ -212,14 +212,16 @@ export class Player extends Phaser.GameObjects.Container {
     public draw(): void {
         if (this.selectedAbilityKey) {
             const selectedAbily = this.abilities[this.selectedAbilityKey] as AbilityInterface
-            selectedAbily.draw(this)
+            selectedAbily.draw(this, this.scene.pointerPosition)
         } else {
             this.weaponPrimary.draw(
                 this.getPrimaryWeaponPosition(),
+                this.scene.pointerPosition,
                 this.actionTimes.weaponPrimary.ready
             )
             this.weaponSecondary.draw(
                 this.getSecondaryWeaponPosition(),
+                this.scene.pointerPosition,
                 this.actionTimes.weaponSecondary.ready
             )
         }
@@ -234,7 +236,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
 
-    public fire(weaponSelected?: SelectedWeapon, targetFire?: Phaser.Math.Vector2): void {
+    public fire(weaponSelected?: SelectedWeapon, targetFirePosition?: Phaser.Math.Vector2): void {
         weaponSelected = weaponSelected || SelectedWeapon.Primary
         const weapon = weaponSelected === SelectedWeapon.Primary ?
             this.weaponPrimary : this.weaponSecondary
@@ -242,10 +244,15 @@ export class Player extends Phaser.GameObjects.Container {
             this.actionTimes.weaponPrimary : this.actionTimes.weaponSecondary
         const sourceFire = weaponSelected === SelectedWeapon.Primary ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
-        const angleFire = targetFire ?
-            Phaser.Math.Angle.Between(sourceFire.x, sourceFire.y, targetFire.x, targetFire.y) :
-            this.scene.angleToPointer(sourceFire)
-
+        const angleFire = targetFirePosition ?
+            Phaser.Math.Angle.Between(
+                sourceFire.x, sourceFire.y,
+                targetFirePosition.x, targetFirePosition.y
+            ) :
+            Phaser.Math.Angle.Between(
+                sourceFire.x, sourceFire.y,
+                this.scene.pointerPosition.x, this.scene.pointerPosition.y
+            ) 
 
         if (weaponTime.ready) {
             weaponTime.ready = false
@@ -278,8 +285,9 @@ export class Player extends Phaser.GameObjects.Container {
     public triggerAbility(selectedAbilityKey: string, targetAbilityPosition?: Phaser.Math.Vector2): void {
         const ability = this.abilities[selectedAbilityKey] as AbilityInterface
         const actionTime = this.actionTimes[selectedAbilityKey]
-
-        if (actionTime.ready && ability.isInRangeToTrigger(this)) {
+        const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
+        
+        if (actionTime.ready && isInRange) {
             actionTime.ready = false
             ability.trigger(this, targetAbilityPosition)
             actionTime.cooldown = ability.cooldownDelay
