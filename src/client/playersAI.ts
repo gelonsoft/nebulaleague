@@ -7,6 +7,7 @@ export interface PlayerAIConfig {
 }
 
 export const playerAI1 = {
+    id: 'playerAI1',
     wander: {
         radialMag: 200,
         distanceExtension: 100,
@@ -14,10 +15,17 @@ export const playerAI1 = {
         variance: 0.1,
     },
     weaponPrecisionHandicap: 1,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI2 = {
+    id: 'playerAI2',
     wander: {
         radialMag: 100,
         distanceExtension: 150,
@@ -25,10 +33,17 @@ export const playerAI2 = {
         variance: 0.01,
     },
     weaponPrecisionHandicap: 2,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI3 = {
+    id: 'playerAI3',
     wander: {
         radialMag: 300,
         distanceExtension: 200,
@@ -36,11 +51,18 @@ export const playerAI3 = {
         variance: 0.03,
     },
     weaponPrecisionHandicap: 3,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 
 export const playerAI4 = {
+    id: 'playerAI4',
     wander: {
         radialMag: 400,
         distanceExtension: 600,
@@ -48,10 +70,17 @@ export const playerAI4 = {
         variance: 0.004,
     },
     weaponPrecisionHandicap: 4,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI5 = {
+    id: 'playerAI5',
     wander: {
         radialMag: 100,
         distanceExtension: 100,
@@ -59,10 +88,17 @@ export const playerAI5 = {
         variance: 0.005,        
     },
     weaponPrecisionHandicap: 5,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI6 = {
+    id: 'playerAI6',
     wander: {
         radialMag: 400,
         distanceExtension: 500,
@@ -70,10 +106,17 @@ export const playerAI6 = {
         variance: 0.03,        
     },
     weaponPrecisionHandicap: 6,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI7 = {
+    id: 'playerAI7',
     wander: {
         radialMag: 189,
         distanceExtension: 170,
@@ -81,10 +124,17 @@ export const playerAI7 = {
         variance: 0.05,
     },
     weaponPrecisionHandicap: 7,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI8 = {
+    id: 'playerAI8',
     wander: {
         radialMag: 400,
         distanceExtension: 300,
@@ -92,10 +142,17 @@ export const playerAI8 = {
         variance: 0.1,        
     },
     weaponPrecisionHandicap: 8,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 
 export const playerAI9 = {
+    id: 'playerAI9',
     wander: {
         radialMag: 1000,
         distanceExtension: 200,
@@ -103,6 +160,12 @@ export const playerAI9 = {
         variance: 0.01,
     },
     weaponPrecisionHandicap: 9,
+    weaponPrimaryKey: 'laserRed',
+    weaponSecondaryKey: 'laserBlue',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'blink',
 }
 
 export const playersAIConfig = [

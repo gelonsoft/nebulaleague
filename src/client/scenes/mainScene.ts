@@ -110,8 +110,24 @@ export class MainScene extends Phaser.Scene {
     
 
     public createPlayers(): void {
+        // should recieve something in parametres to choosee between mainPlayer Otherplayers and AIPlayiers
+        const mainPlayerConfig = {
+            id: 'mainPlayer',
+            x: 0,
+            y: 0,
+            weaponPrimaryKey: 'laserRed',
+            weaponSecondaryKey: 'laserBlue',
+            abilityKey1: 'chargedArrow',
+            abilityKey2: 'flame',
+            abilityKey3: 'blink',
+            abilityKey4: 'blink',
+        }
+        this.createPlayer(mainPlayerConfig, 'mainPlayer')
+
+        // create ai players
         let index = 0
         while (this.players.getLength() < MAX_PLAYER) {
+            const playerAIConfig = playersAIConfig[index]
             const x = Phaser.Math.Between(PLAYER_SIZE / 2, WORLD_WIDTH - PLAYER_SIZE / 2)
             const y = Phaser.Math.Between(PLAYER_SIZE / 2, WORLD_HEIGHT - PLAYER_SIZE / 2)
             
@@ -123,28 +139,19 @@ export class MainScene extends Phaser.Scene {
                 }
             })
             
-            const playersChildren = this.players.getChildren() as Player[]
             if(!overlaping) {
-                const enemy = new Player(this, {
-                    id: (index + 1).toString(),
+                const playerConfig = {
+                    id: playerAIConfig.id,
                     x: x,
                     y: y,
-                    weaponPrimaryKey: 'laserRed',
-                    weaponSecondaryKey: 'laserBlue',
-                    abilityKey1: 'chargedArrow',
-                    abilityKey2: 'flame',
-                    abilityKey3: 'blink',
-                    abilityKey4: 'blink',
-                })
-                const enemyAI = new PlayerAI(
-                    this,
-                    enemy,
-                    playersChildren.filter((player) => player.id !== enemy.id),
-                    playersAIConfig[index]
-                )
-
-                this.players.add(enemy)
-                this.playersAI.push(enemyAI)
+                    weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
+                    weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
+                    abilityKey1: playerAIConfig.abilityKey1,
+                    abilityKey2: playerAIConfig.abilityKey2,
+                    abilityKey3: playerAIConfig.abilityKey3,
+                    abilityKey4: playerAIConfig.abilityKey4,
+                }
+                this.createPlayer(playerConfig, 'aiPlayer', playerAIConfig)
                 index += 1
             }
         }
@@ -154,31 +161,37 @@ export class MainScene extends Phaser.Scene {
     }
     
 
-    public createPlayer(): void {
-        this.player = new Player(this, {
-            id: '0',
-            x: 0,
-            y: 0,
-            weaponPrimaryKey: 'laserRed',
-            weaponSecondaryKey: 'laserBlue',
-            abilityKey1: 'chargedArrow',
-            abilityKey2: 'flame',
-            abilityKey3: 'blink',
-            abilityKey4: 'blink',
-        })
-        this.registry.values.maxHealth = this.player.maxHealth
-        this.registry.values.currentHealth = this.player.maxHealth
-        this.events.emit("healthChanged")
-        this.players.add(this.player)
-        window['p'] = this.player
+    public createPlayer(playerConfig, associateBehavior: string, playerConfigAI?: any): void {
+        const newPlayer = new Player(this, playerConfig)
+        if (associateBehavior === 'mainPlayer') {
+            this.player = newPlayer
+            this.players.add(newPlayer)
+            window['p'] = newPlayer
+        }
+        else if (associateBehavior === 'otherPlayer') {
+            this.players.add(newPlayer)
+        }
+        else if (associateBehavior === 'aiPlayer') {
+            const playersChildren = this.players.getChildren() as Player[]
+            
+            this.players.add(newPlayer)
+            const playerAI = new PlayerAI(
+                this,
+                newPlayer,
+                playersChildren.filter((player) => player.id !== newPlayer.id),
+                playerConfigAI
+            )
+            this.playersAI.push(playerAI)
+        }
     }
+
+    
     
     public create(): void {
         this.createConsumables()
         this.createProjectiles()
         this.createWeapons()
         this.createAbilities()
-        this.createPlayer()
         this.createPlayers()
         this.settingCamera()
         this.createBackground()
@@ -268,7 +281,7 @@ export class MainScene extends Phaser.Scene {
 
     public playersAIUpdate(delta: number): void {
         for(const playerAI of this.playersAI) {
-            // playerAI.update(delta)
+            playerAI.update(delta)
         }
     }
     

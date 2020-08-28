@@ -116,6 +116,11 @@ export class PlayerAI {
         this.playersInHittableRange = playersInRange
     }
 
+    public setProjectilesInHittableRange(): void {
+        this.scene.projectiles.getAll()
+    }
+    
+
 
     public sumSteeringsForce(): Phaser.Math.Vector2 {
         const netForce = Phaser.Math.Vector2.ZERO.clone()
@@ -149,7 +154,7 @@ export class PlayerAI {
             .subtract(this.player.body.center)
 
 
-        const handicapPrecisionAngle = Phaser.Math.RND.normal() * Math.PI / (5 * 360)
+        const handicapPrecisionAngle = Phaser.Math.RND.normal() * Math.PI / (this.weaponPrecisionHandicap * 360)
         const predictedPosition = choosenTarget.body.position.clone()
             .add(choosenTarget.body.velocity)
             .rotate(handicapPrecisionAngle)
