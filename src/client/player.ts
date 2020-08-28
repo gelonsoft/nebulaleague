@@ -275,13 +275,13 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public triggerAbility(selectedAbilityKey: string) {
+    public triggerAbility(selectedAbilityKey: string, targetAbilityPosition?: Phaser.Math.Vector2): void {
         const ability = this.abilities[selectedAbilityKey] as AbilityInterface
         const actionTime = this.actionTimes[selectedAbilityKey]
 
         if (actionTime.ready && ability.isInRangeToTrigger(this)) {
             actionTime.ready = false
-            ability.trigger(this)
+            ability.trigger(this, targetAbilityPosition)
             actionTime.cooldown = ability.cooldownDelay
 
             actionTime.timerEvent = this.scene.time.addEvent({
@@ -308,7 +308,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public triggerSelectedAbility() {
-        this.triggerAbility(this.selectedAbilityKey)
+        this.triggerAbility(this.selectedAbilityKey, this.scene.pointerPosition)
         this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
         this.abilities[this.selectedAbilityKey].clearDraw()

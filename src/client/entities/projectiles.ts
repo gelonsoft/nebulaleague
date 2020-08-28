@@ -274,8 +274,8 @@ export class Projectiles
     
     public fire(
         key: string,
+        playerId: string,
         position: Phaser.Math.Vector2,
-        playerId?: string,
         rotation?: number): void {
         const projectileGroup = this.projectiles.get(key)
         const projectile = projectileGroup.getFirstDead()

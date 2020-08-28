@@ -88,8 +88,8 @@ export class Weapon implements WeaponInterface {
     public fire(position: Phaser.Math.Vector2, playerId: string, rotation: number ): void {
         this.projectiles.fire(
             this.projectileKey,
-            position,
             playerId,
+            position,
             rotation,
         )
     }

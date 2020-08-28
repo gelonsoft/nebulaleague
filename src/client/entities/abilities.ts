@@ -24,7 +24,7 @@ export interface AbilityConfig {
 
 export interface  AbilityInterface extends AbilityConfig {
     draw(player: Player): void
-    trigger(player: Player): void
+    trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void
     isInRangeToTrigger(player): boolean
     clearDraw(): void
 }
@@ -137,7 +137,7 @@ export class Ability implements AbilityInterface  {
         return pointerDistance <= this.rangeDistance
     }
     
-    public trigger(_player: Player): void {
+    public trigger(_player: Player, pointerPosition: Phaser.Math.Vector2): void {
         throw new Error("Method not implemented.")
     }
 }
@@ -150,10 +150,8 @@ export class Blink extends Ability implements AbilityInterface {
         this.radiusGraphics = this.scene.add.graphics()
     }
 
-    public trigger(player: Player): void {
-        const pointer = this.scene.input.activePointer
-        const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        player.body.reset(transformedPoint.x, transformedPoint.y)
+    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
+        player.body.reset(pointerPosition.x, pointerPosition.y)
     }
 }
 
@@ -164,10 +162,8 @@ export class Flame extends Ability implements AbilityInterface {
         super(scene, config)
     }
     
-    public trigger(player: Player): void {
-        const pointer = this.scene.input.activePointer
-        const transformedPoint = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y)
-        this.projectiles.fire('flame', transformedPoint, player.id)   
+    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
+        this.projectiles.fire('flame', player.id, pointerPosition)   
     }
 }
 
@@ -177,12 +173,10 @@ export class RootTip extends Ability implements AbilityInterface {
         super(scene, config)
     }
     
-    public trigger(player: Player): void {
-        console.log('root tip')
+    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
+        this.projectiles.fire('flame', player.id, pointerPosition)   
     }
 }
-
-
 
 
 export class ChargedArrow extends Ability implements AbilityInterface {
@@ -191,10 +185,15 @@ export class ChargedArrow extends Ability implements AbilityInterface {
         this.rangeDistance = this.projectiles.getDistance('chargedArrow')
     }
     
-    public trigger(player: Player): void {
-        const position = player.body.center
-        const angleToPointer = this.scene.angleToPointer(position)
-        this.projectiles.fire('chargedArrow', position, player.id, angleToPointer)   
+    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
+        const positionPlayer = player.body.center
+        const rotationPlayer =  Phaser.Math.Angle.Between(
+            positionPlayer.x,
+            positionPlayer.y,
+            pointerPosition.x,
+            pointerPosition.y
+        )
+        this.projectiles.fire('chargedArrow', player.id,  positionPlayer, rotationPlayer)   
     }
 }
 
@@ -222,7 +221,7 @@ const abilitiesConfig = {
         frame: 'root-tip.png',
         type: AbilityTypes.Zone,
         cooldownDelay: 1,
-        rangeDistance: 420,
+        rangeDistance: 450,
         radiusDistance: 50,
     },
     chargedArrow: {
