@@ -14,11 +14,6 @@ import { Ability } from './entities/abilities'
 import { PlayerAI } from './ai'
 
 
-export enum SelectedWeapon {
-    Primary,
-    Secondary,
-}
-
 export enum EffectKeys {
     ChangeMaxSpeed = 'changeMaxSpeed',
     Paralyze = 'paralyze',
@@ -252,22 +247,19 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public action(weaponSelected?: SelectedWeapon): void {
+    public action(selectedWeaponKey: string): void {
         if (this.selectedAbilityKey) {
             this.castSelectedAbility(this.scene.pointerPosition)
         } else {
-            this.fire(weaponSelected, this.scene.pointerPosition)
+            this.fire(selectedWeaponKey, this.scene.pointerPosition)
         }
     }
 
 
-    public fire(weaponSelected: SelectedWeapon, targetFirePosition: Phaser.Math.Vector2): void {
-        weaponSelected = weaponSelected || SelectedWeapon.Primary
-        const weapon = weaponSelected === SelectedWeapon.Primary ?
-            this.actions.weaponPrimary : this.actions.weaponSecondary
-        const weaponTime = weaponSelected === SelectedWeapon.Primary ?
-            this.actionTimes.weaponPrimary : this.actionTimes.weaponSecondary
-        const sourceFirePosition = weaponSelected === SelectedWeapon.Primary ?
+    public fire(selectedWeaponKey: string, targetFirePosition: Phaser.Math.Vector2): void {
+        const weapon = this.actions[selectedWeaponKey]
+        const weaponTime = this.actionTimes[selectedWeaponKey]
+        const sourceFirePosition = selectedWeaponKey === 'WeaponPrimary' ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
 
 
@@ -280,7 +272,7 @@ export class Player extends Phaser.GameObjects.Container {
                 delay: 0.1 * 1000,
                 callback: () => {
                     weaponTime.cooldown -= 0.1
-                    this.scene.syncWeaponCooldown(this, weaponSelected, weaponTime)
+                    this.scene.syncWeaponCooldown(this, selectedWeaponKey, weaponTime)
                 },
                 callbackScope: this,
                 loop: true,

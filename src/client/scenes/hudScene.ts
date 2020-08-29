@@ -12,7 +12,7 @@ import {
     HUD_HEALTH_BAR_COLOR_MEDIUM,
     HUD_BACKGROUND,
 } from '../config'
-import { Player, ActionTimeInterface, SelectedWeapon } from "../player"
+import { Player, ActionTimeInterface } from "../player"
 import { MainScene } from "./mainScene"
 
 
@@ -249,8 +249,8 @@ export class HudScene extends Phaser.Scene {
         container.refresh()
     }
 
-    private updateWeaponCooldown(selectedWeapon: SelectedWeapon, actionTime: ActionTimeInterface) {
-        const container = selectedWeapon === SelectedWeapon.Primary ?
+    private updateWeaponCooldown(selectedWeaponKey: string, actionTime: ActionTimeInterface) {
+        const container = selectedWeaponKey === 'weaponPrimary' ?
             this.weaponPrimaryContainer : this.weaponSecondaryContainer
 
         container.cooldown = actionTime.cooldown

@@ -157,7 +157,7 @@ export class Ability  {
             )
             this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
         } else {
-            this.projectiles.fire(this.projectileKey, player.id, sourcePosition)
+            this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
         }
     }
 

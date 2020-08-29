@@ -1,4 +1,4 @@
-import { Player, SelectedWeapon } from './player'
+import { Player } from './player'
 import { MainScene } from './scenes/mainScene'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import { PlayerAIConfig } from './playersAI'
@@ -29,7 +29,7 @@ export class PlayerAI {
     public scene: MainScene
     public player: Player
     public players: Array<Player>
-    public playersInHittableRange: Array<Player>
+    public playersInHittableRange: Array<PlayerAIActionsInterface>
     public playersInViewRange: Array<Player>
     public steeringsForce: Array<Phaser.Math.Vector2>
     public steeringsBehaviour: Array<string>
@@ -131,26 +131,25 @@ export class PlayerAI {
         const playersInRange = []
         const actionsKeysReady = Object.keys(this.player.actionTimes)
             .filter(key => this.player.actionTimes[key].ready)
-        
-        
-
-        
 
         for (const playerInViewRange of this.playersInViewRange ) {
-            if (playerInViewRange.id !== this.player.id)
-                playersInRange.push({
-                    player: playerInViewRange,
-                    actions: actionsKeysReady.filter((key) => {
-                        return this.isInRangeCircle(
-                            this.player.body.center,
-                            playerInViewRange.body.center,
-                            this.player.actions[key].rangeDistance
-                        )
-                    })
+            if (playerInViewRange.id !== this.player.id) {
+                const actionsInRange = actionsKeysReady.filter((key) => {
+                    return this.isInRangeCircle(
+                        this.player.body.center,
+                        playerInViewRange.body.center,
+                        this.player.actions[key].rangeDistance
+                    )
                 })
+                if (actionsInRange.length > 0) {
+                    playersInRange.push({
+                        player: playerInViewRange,
+                        actions: actionsInRange,
+                    })        
+                }
             }
+        }
         this.playersInHittableRange = playersInRange
-        
     }
 
     public setProjectilesInHittableRange(): void {
@@ -202,11 +201,16 @@ export class PlayerAI {
 
     
     public doAttack(): void {
-        // const choosenTarget: Player = Phaser.Math.RND.pick(this.playersInHittableRange).player
-        // console.log(this.playersInHittableRange)
-        // const playerToTarget = choosenTarget.body.position.clone()
+        const choosenTarget: PlayerAIActionsInterface = Phaser.Math.RND.pick(this.playersInHittableRange)
+        const choosenActionKey: string = Phaser.Math.RND.pick(choosenTarget.actions)
+        const choosenPlayer: Player = choosenTarget.player
+        // cnost choosenAction = 
+        
+        // const playerToTarget = choosenPlayer.body.position.clone()
         //     .subtract(this.player.body.center)
 
+        
+        
 
         // const handicapPrecisionAngle = Phaser.Math.RND.normal() * Math.PI / (this.weaponPrecisionHandicap * 360)
         // const predictedPosition = choosenTarget.body.position.clone()

@@ -1,5 +1,5 @@
 import { MainScene } from './scenes/mainScene'
-import { Player, PlayerDirection, SelectedWeapon } from './player'
+import { Player, PlayerDirection } from './player'
 import { DebugScene } from './scenes/debugScene'
 
 
@@ -100,14 +100,14 @@ export class PlayerControl {
 
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
-                this.player.action(SelectedWeapon.Primary)
+                this.player.action('weaponPrimary')
                 this.canLeftTrigger = false
-            }            
+            }    
         }
 
         if (this.canRightTrigger) {
             if (pointer.rightButtonDown()) {
-                this.player.action(SelectedWeapon.Secondary)
+                this.player.action('weaponSecondary')
                 this.canRightTrigger = false
             }            
         }

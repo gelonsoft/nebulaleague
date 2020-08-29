@@ -1,4 +1,4 @@
-import { Player, ActionTimeInterface, SelectedWeapon } from '../player'
+import { Player, ActionTimeInterface } from '../player'
 import { MainControl, PlayerControl } from '../controls'
 import { Consumable, RandomItem } from '../entities/consumables'
 import { Projectiles, ProjectileInterface } from '../entities/projectiles'
@@ -222,9 +222,9 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public syncWeaponCooldown(player: Player, selectedWeapon: SelectedWeapon, actionTime: ActionTimeInterface): void {
+    public syncWeaponCooldown(player: Player, selectedWeaponKey: string, actionTime: ActionTimeInterface): void {
         if (player.id === this.player.id) {
-            this.events.emit("weaponsCooldownChanged", selectedWeapon, actionTime)
+            this.events.emit("weaponsCooldownChanged", selectedWeaponKey, actionTime)
         }
     }
 
