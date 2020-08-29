@@ -55,6 +55,15 @@ interface ActionTimesInterface {
     ability4: ActionTimeInterface
 }
 
+interface ActionsInterface {
+    weaponPrimary: Weapon
+    weaponSecondary: Weapon
+    ability1: Ability
+    ability2: Ability
+    ability3: Ability
+    ability4: Ability
+}
+
 export interface ActionInterface {
     draw(sourcePosition: Phaser.Math.Vector2,
          pointerPosition: Phaser.Math.Vector2,
@@ -64,15 +73,6 @@ export interface ActionInterface {
             sourcePosition: Phaser.Math.Vector2,
             pointerPosition: Phaser.Math.Vector2): void
     rangeDistance: number
-}
-
-interface ActionsInterface {
-    weaponPrimary: Weapon
-    weaponSecondary: Weapon
-    ability1: Ability
-    ability2: Ability
-    ability3: Ability
-    ability4: Ability
 }
 
 

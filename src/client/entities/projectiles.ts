@@ -9,7 +9,7 @@ const projectilesConfig = {
         frame: 'laserRed03.png',
         damage: 80,
         speed: 1300,
-        lifespan: 0.3,
+        lifespan: 1,
         radius: 14,
     },
     ak47Bullet: {
@@ -341,8 +341,18 @@ export class Projectiles
 
 
     public getDistance(key): number {
-        const projectileModel = projectilesConfig[key]
-        return projectileModel.speed * projectileModel.lifespan
+        const projectileConfig = projectilesConfig[key]
+        return projectileConfig.speed * projectileConfig.lifespan
+    }
+
+    public getTimeToReachTarget(key: string, targetDistance: number) {
+        if (projectilesConfig[key]?.speed) {
+            return targetDistance / projectilesConfig[key].speed
+        } else if(projectilesConfig[key]?.triggerAfter) {
+            return projectilesConfig[key].triggerAfter 
+        } else {
+            return 0
+        }
     }
 
     public getAll(): Array<Phaser.Physics.Arcade.Group> {

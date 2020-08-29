@@ -199,7 +199,7 @@ const abilitiesConfig = {
         action: Action.Projectile,
         projectileKey: 'flameProjectile',
         drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 10,
+        cooldownDelay: 20,
         rangeDistance: 420,
         radiusDistance: 50,
     },
@@ -209,7 +209,7 @@ const abilitiesConfig = {
         projectileKey: 'rootTipProjectile',
         action: Action.Projectile,
         drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 1,
+        cooldownDelay: 15,
         rangeDistance: 450,
         radiusDistance: 50,
     },
@@ -219,7 +219,7 @@ const abilitiesConfig = {
         action: Action.ProjectileWithRotation,
         projectileKey: 'chargedArrowProjectile',
         drawingStyle: DrawingStyles.Ray,
-        cooldownDelay: 1,
+        cooldownDelay: 10,
     },
 }
 

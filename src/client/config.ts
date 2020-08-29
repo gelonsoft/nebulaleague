@@ -1,4 +1,4 @@
-export const PLAYER_SIZE = 36
+export const PLAYER_SIZE = 42
 export const PLAYER_ACCELERATION_STEADY = 5000
 export const PLAYER_ACCELERATION_CHANGE = 1000
 export const PLAYER_DRAG = 400

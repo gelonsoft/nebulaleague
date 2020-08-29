@@ -3,6 +3,8 @@ import { MainScene } from './scenes/mainScene'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import { PlayerAIConfig } from './playersAI'
 import * as steering from './steering'
+import { Weapon } from './entities/weapons'
+import { Ability } from './entities/abilities'
 
 export const SEEK_BEHAVIOUR = 'seek'
 export const WANDER_BEHAVIOUR = 'wander'
@@ -204,20 +206,37 @@ export class PlayerAI {
         const choosenTarget: PlayerAIActionsInterface = Phaser.Math.RND.pick(this.playersInHittableRange)
         const choosenActionKey: string = Phaser.Math.RND.pick(choosenTarget.actions)
         const choosenPlayer: Player = choosenTarget.player
-        // cnost choosenAction = 
-        
-        // const playerToTarget = choosenPlayer.body.position.clone()
-        //     .subtract(this.player.body.center)
+        const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 
-        
-        
 
-        // const handicapPrecisionAngle = Phaser.Math.RND.normal() * Math.PI / (this.weaponPrecisionHandicap * 360)
-        // const predictedPosition = choosenTarget.body.position.clone()
-        //     .add(choosenTarget.body.velocity)
-        //     .rotate(handicapPrecisionAngle)
+        const timeToReachTarget = choosenAction.projectiles.getTimeToReachTarget(
+            choosenAction.projectileKey,
+            choosenPlayer.body.center.clone().distance(this.player.body.center)
+        )
+                
+        const playerToTarget = choosenPlayer.body.center.clone()
+            .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget))
         
-        // this.player.rotation = steering.facing(playerToTarget)
-        // this.player.fire(SelectedWeapon.Primary, predictedPosition)
+        const handicapPrecisionAngle = Phaser.Math.RND.normal()
+            * Math.PI * (this.weaponPrecisionHandicap / 360)
+        const predictedPosition = playerToTarget.clone()
+            .rotate(handicapPrecisionAngle)
+
+        if (choosenAction instanceof Weapon) {
+            this.player.fire(choosenActionKey, predictedPosition)
+            this.player.rotation = steering.facing(predictedPosition)
+        } else {
+            if (this.player.actions[choosenActionKey].name === 'blink') {
+                this.player.castAbility(
+                    choosenActionKey,
+                    Phaser.Math.Vector2.UP.clone()
+                        .rotate(Phaser.Math.RND.normal() * Math.PI)
+                        .scale(this.player.actions[choosenActionKey].rangeDistance)
+                        .add(this.player.body.center)
+                )
+            } else {
+                this.player.castAbility(choosenActionKey, predictedPosition)
+            }
+        }
     }
 }
