@@ -8,7 +8,7 @@ const weaponsConfig = {
     pistol: {
         name: 'pistol',
         frame: 'pistol-gun.png',
-        shotInterval: 1,
+        cooldownDelay: 1,
         cooldown: 0,
         projectileKey: 'pistolBullet',
         laserConfig: {
@@ -20,7 +20,7 @@ const weaponsConfig = {
     ak47: {
         name: 'ak47',
         frame: 'ak47.png',
-        shotInterval: 0.5,
+        cooldownDelay: 0.5,
         cooldown: 0,
         projectileKey: 'ak47Bullet',
         laserConfig: {
@@ -32,7 +32,7 @@ const weaponsConfig = {
     p90: {
         name: 'p90',
         frame: 'p90.png',
-        shotInterval: 0.2,
+        cooldownDelay: 0.2,
         cooldown: 0,
         projectileKey: 'p90Bullet',
         laserConfig: {
@@ -44,7 +44,7 @@ const weaponsConfig = {
     revolver: {
         name: 'revolver',
         frame: 'revolver.png',
-        shotInterval: 10,
+        cooldownDelay: 10,
         cooldown: 0,
         projectileKey: 'revolverBullet',
         laserConfig: {
@@ -56,7 +56,7 @@ const weaponsConfig = {
     thompson: {
         name: 'thompson',
         frame: 'thompson-m1928.png',
-        shotInterval: 12,
+        cooldownDelay: 12,
         cooldown: 0,
         projectileKey: 'thompsonBullet',
         laserConfig: {
@@ -65,21 +65,24 @@ const weaponsConfig = {
             alpha: 0.9,
         }
     }
-    
 }
 
+export interface LaserConfig {
+    width: number
+    color: number
+    alpha: number
+}
 
-export interface WeaponInterface {
-    scene: MainScene
-    projectiles: Projectiles
-    shotInterval: number
+export interface WeaponConfig {
     name: string
     frame: string
-    fire(position: Phaser.Math.Vector2, playerId: string, rotation: number): void
+    cooldownDelay: number
+    projectileKey: string
+    laserConfig: LaserConfig
 }
 
 
-export class Weapon implements WeaponInterface {
+export class Weapon  {
     public scene: MainScene
     public player: Player
     public projectiles: Projectiles
@@ -87,32 +90,36 @@ export class Weapon implements WeaponInterface {
     public frame: string
     public laser: Phaser.GameObjects.Graphics
     public projectileKey: string
-    public shotInterval: number
+    public cooldownDelay: number
     public canFire: boolean
     public rangeDistance: number
     public weaponTimerEvent: Phaser.Time.TimerEvent | null
     
-    constructor(scene: MainScene, weaponModel: WeaponModel) {
+    constructor(scene: MainScene, weaponConfig: WeaponConfig) {
         this.scene = scene
         this.projectiles = scene.projectiles
-        this.name = weaponModel.name
-        this.frame = weaponModel.frame
-        this.shotInterval = weaponModel.shotInterval
-        this.projectileKey =  weaponModel.projectileKey
+        this.name = weaponConfig.name
+        this.frame = weaponConfig.frame
+        this.cooldownDelay = weaponConfig.cooldownDelay
+        this.projectileKey =  weaponConfig.projectileKey
         this.canFire = true
         this.rangeDistance = this.projectiles.getDistance(this.projectileKey)
         this.laser = this.scene.add.graphics({
-            lineStyle: weaponModel.laserConfig
+            lineStyle: weaponConfig.laserConfig
         })
     }
 
-    public fire(position: Phaser.Math.Vector2, playerId: string, rotation: number ): void {
-        this.projectiles.fire(
-            this.projectileKey,
-            playerId,
-            position,
-            rotation,
+    // public trigger(position: Phaser.Math.Vector2, playerId: string, rotation: number ): void {
+    public trigger(
+        player: Player,
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2,
+    ) : void {
+        const rotationPlayer =  Phaser.Math.Angle.Between(
+            sourcePosition.x, sourcePosition.y,
+            pointerPosition.x, pointerPosition.y,
         )
+        this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
     }
 
     
@@ -148,8 +155,8 @@ export function buildWeapons(
     scene: MainScene,
 ): Record<string, Weapon> {
     const weapons = {}
-    for(const [key, value] of Object.entries(weaponsConfig)) {
-        weapons[key] = new Weapon(scene, value)
+    for(const [key, weaponConfig] of Object.entries(weaponsConfig)) {
+        weapons[key] = new Weapon(scene, weaponConfig)
     }
     return weapons
 }

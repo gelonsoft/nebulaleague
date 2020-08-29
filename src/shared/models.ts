@@ -29,15 +29,6 @@ export interface WeaponModel {
 }
 
 
-export interface AbilitYModel {
-    name: string
-    frame: string
-    damage: number
-    cooldownDelay: number
-    cooldown: number
-}
-
-
 export interface ProjectileModel {
     name: string
     frame: string

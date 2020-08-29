@@ -10,7 +10,7 @@ import {
     PLAYER_SIZE,
 } from './config'
 import { Weapon } from './entities/weapons'
-import { AbilityInterface } from './entities/abilities'
+import { Ability } from './entities/abilities'
 import { PlayerAI } from './ai'
 
 
@@ -60,13 +60,20 @@ interface ActionTimesInterface {
     ability4: ActionTimeInterface
 }
 
-interface AactionsInterface {
+export interface ActionInterface {
+    draw: () => void
+    trigger: () => void
+    cleaDraw: () => void
+    
+}
+
+interface ActionsInterface {
     weaponPrimary: Weapon
     weaponSecondary: Weapon
-    ability1: AbilityInterface
-    ability2: AbilityInterface
-    ability3: AbilityInterface
-    ability4: AbilityInterface
+    ability1: Ability
+    ability2: Ability
+    ability3: Ability
+    ability4: Ability
 }
 
 
@@ -80,9 +87,7 @@ export class Player extends Phaser.GameObjects.Container {
     public playerState: Map<string, boolean | number>
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
-    // public weaponPrimary: Weapon
-    // public weaponSecondary: Weapon
-    public actions: AactionsInterface
+    public actions: ActionsInterface
     public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
@@ -227,7 +232,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     public draw(): void {
         if (this.selectedAbilityKey) {
-            const selectedAbily = this.actions[this.selectedAbilityKey] as AbilityInterface
+            const selectedAbily = this.actions[this.selectedAbilityKey]
             selectedAbily.draw(this, this.scene.pointerPosition)
         } else {
             this.actions.weaponPrimary.draw(
@@ -245,35 +250,27 @@ export class Player extends Phaser.GameObjects.Container {
 
     public action(weaponSelected?: SelectedWeapon): void {
         if (this.selectedAbilityKey) {
-            this.triggerSelectedAbility()
+            this.castSelectedAbility(this.scene.pointerPosition)
         } else {
-            this.fire(weaponSelected)
+            this.fire(weaponSelected, this.scene.pointerPosition)
         }
     }
 
 
-    public fire(weaponSelected?: SelectedWeapon, targetFirePosition?: Phaser.Math.Vector2): void {
+    public fire(weaponSelected: SelectedWeapon, targetFirePosition: Phaser.Math.Vector2): void {
         weaponSelected = weaponSelected || SelectedWeapon.Primary
         const weapon = weaponSelected === SelectedWeapon.Primary ?
             this.actions.weaponPrimary : this.actions.weaponSecondary
         const weaponTime = weaponSelected === SelectedWeapon.Primary ?
             this.actionTimes.weaponPrimary : this.actionTimes.weaponSecondary
-        const sourceFire = weaponSelected === SelectedWeapon.Primary ?
+        const sourceFirePosition = weaponSelected === SelectedWeapon.Primary ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
-        const angleFire = targetFirePosition ?
-            Phaser.Math.Angle.Between(
-                sourceFire.x, sourceFire.y,
-                targetFirePosition.x, targetFirePosition.y
-            ) :
-            Phaser.Math.Angle.Between(
-                sourceFire.x, sourceFire.y,
-                this.scene.pointerPosition.x, this.scene.pointerPosition.y
-            ) 
+
 
         if (weaponTime.ready) {
             weaponTime.ready = false
-            weapon.fire(sourceFire, this.id, angleFire)
-            weaponTime.cooldown = weapon.shotInterval
+            weapon.trigger(this, sourceFirePosition, targetFirePosition)
+            weaponTime.cooldown = weapon.cooldownDelay
 
             weaponTime.timerEvent = this.scene.time.addEvent({
                 delay: 0.1 * 1000,
@@ -286,7 +283,7 @@ export class Player extends Phaser.GameObjects.Container {
             })
 
             this.scene.time.addEvent({
-                delay: weapon.shotInterval * 1000,
+                delay: weapon.cooldownDelay * 1000,
                 callback: () => {
                     weaponTime.ready = true
                     weaponTime.cooldown = 0
@@ -298,8 +295,8 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public triggerAbility(selectedAbilityKey: string, targetAbilityPosition?: Phaser.Math.Vector2): void {
-        const ability = this.actions[selectedAbilityKey] as AbilityInterface
+    public castAbility(selectedAbilityKey: string, targetAbilityPosition: Phaser.Math.Vector2): void {
+        const ability = this.actions[selectedAbilityKey]
         const actionTime = this.actionTimes[selectedAbilityKey]
         const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
         
@@ -331,8 +328,8 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public triggerSelectedAbility() {
-        this.triggerAbility(this.selectedAbilityKey, this.scene.pointerPosition)
+    public castSelectedAbility(pointerPosition: Phaser.Math.Vector2) {
+        this.castAbility(this.selectedAbilityKey, pointerPosition)
         this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
         this.actions[this.selectedAbilityKey].clearDraw()

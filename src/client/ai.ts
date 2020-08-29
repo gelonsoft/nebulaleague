@@ -126,29 +126,6 @@ export class PlayerAI {
     }
 
 
-    // public setPlayerAIActions(): PlayerAIActionsInterface {
-    //     return {
-    //        weaponPrimary: {
-    //            distance: this.player.weaponPrimary.rangeDistance,
-    //        },
-    //        weaponSecondary: {
-    //            distance: this.player.weaponSecondary.rangeDistance,
-    //        },
-    //        ability1: {
-    //            distance: this.player.abilities.ability1.rangeDistance,
-    //        },
-    //        ability2: {
-    //            distance: this.player.abilities.ability2.rangeDistance,
-    //        },
-    //        ability3: {
-    //            distance: this.player.abilities.ability3.rangeDistance,
-    //        },
-    //        ability4: {
-    //            distance: this.player.abilities.ability4.rangeDistance,
-    //        }
-    //     }        
-    // }
-    
 
     public setPlayersInHittableRange(): void {
         const playersInRange = []
@@ -158,26 +135,21 @@ export class PlayerAI {
         
 
         
-        // console.log(distances)
-            
 
-
-        
-
-        // for (const playerInViewRange of this.playersInViewRange ) {
-        //     if (playerInViewRange.id !== this.player.id)
-        //         playersInRange.push({
-        //             player: playerInViewRange,
-        //             actions: actionsKeysReady.filter((key) => {
-        //                 return this.isInRangeCircle(
-        //                     this.player.body.center,
-        //                     playerInViewRange.body.center,
-        //                     this.playerAIActions[key].distance
-        //                 )
-        //             })
-        //         })
-        //     }
-        // this.playersInHittableRange = playersInRange
+        for (const playerInViewRange of this.playersInViewRange ) {
+            if (playerInViewRange.id !== this.player.id)
+                playersInRange.push({
+                    player: playerInViewRange,
+                    actions: actionsKeysReady.filter((key) => {
+                        return this.isInRangeCircle(
+                            this.player.body.center,
+                            playerInViewRange.body.center,
+                            this.player.actions[key].rangeDistance
+                        )
+                    })
+                })
+            }
+        this.playersInHittableRange = playersInRange
         
     }
 

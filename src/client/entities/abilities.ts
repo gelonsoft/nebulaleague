@@ -11,9 +11,9 @@ export enum AbilityTypes {
 export interface AbilityConfig {
     name: string
     frame: string
-    type: AbilityTypes
     cooldownDelay: number
     rangeDistance?: number
+    type: AbilityTypes
     radiusDistance?: number
     rangeDistanceColor?: number
     radiusDistanceColor?: number
@@ -22,24 +22,16 @@ export interface AbilityConfig {
 }
 
 
-export interface  AbilityInterface extends AbilityConfig {
-    draw(player: Player, pointerPosition: Phaser.Math.Vector2): void
-    trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void
-    isInRangeToTrigger(sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2): boolean
-    clearDraw(): void
-}
 
-
-
-export class Ability implements AbilityInterface  {
+export class Ability  {
     public scene: MainScene
     public projectiles: Projectiles
     public name: string
     public frame: string
     public cooldownDelay: number
     public type: AbilityTypes
-    public rangeDistance?: number
-    public radiusDistance?: number
+    public rangeDistance: number
+    public radiusDistance: number
     public rangeDistanceColor?: number
     public radiusDistanceColor?: number
     public raySize?: number
@@ -55,8 +47,8 @@ export class Ability implements AbilityInterface  {
         this.frame = config.frame
         this.type = config.type
         this.cooldownDelay = config.cooldownDelay
-        this.rangeDistance = config.rangeDistance
-        this.radiusDistance = config.radiusDistance
+        this.rangeDistance = config.rangeDistance || 0
+        this.radiusDistance = config.radiusDistance || 0
         this.raySize = config.raySize || 20
         this.rayColor = config.rayColor || 0xffffff
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
@@ -143,7 +135,7 @@ export class Ability implements AbilityInterface  {
 }
 
 
-export class Blink extends Ability implements AbilityInterface {
+export class Blink extends Ability {
     constructor(scene, config) {
         super(scene, config)
         this.rangeGraphics = this.scene.add.graphics()
@@ -155,7 +147,7 @@ export class Blink extends Ability implements AbilityInterface {
     }
 }
 
-export class Flame extends Ability implements AbilityInterface {
+export class Flame extends Ability {
     constructor(scene, config) {
         super(scene, config)
     }
@@ -166,7 +158,7 @@ export class Flame extends Ability implements AbilityInterface {
 }
 
 
-export class RootTip extends Ability implements AbilityInterface {
+export class RootTip extends Ability {
     constructor(scene, config) {
         super(scene, config)
     }
@@ -177,7 +169,7 @@ export class RootTip extends Ability implements AbilityInterface {
 }
 
 
-export class ChargedArrow extends Ability implements AbilityInterface {
+export class ChargedArrow extends Ability {
     constructor(scene, config) {
         super(scene, config)
         this.rangeDistance = this.projectiles.getDistance('chargedArrow')
