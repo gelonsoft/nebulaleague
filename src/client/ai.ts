@@ -57,7 +57,6 @@ export class PlayerAI {
         this.steeringsBehaviour = []
         this.wander = playerConfig.wander
         this.weaponPrecisionHandicap = playerConfig.weaponPrecisionHandicap
-        // this.playerAIActions = this.setPlayerAIActions()
         
         this.tree = this.buildTree()
         if (this.scene.game.debug) {
@@ -133,7 +132,6 @@ export class PlayerAI {
         const playersInRange = []
         const actionsKeysReady = Object.keys(this.player.actionTimes)
             .filter(key => this.player.actionTimes[key].ready)
-        console.log(actionsKeysReady)
         
         for (const playerInViewRange of this.playersInViewRange ) {
             if (playerInViewRange.id !== this.player.id) {
@@ -208,7 +206,6 @@ export class PlayerAI {
         const choosenActionKey: string = Phaser.Math.RND.pick(choosenTarget.actions)
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
-
 
         const timeToReachTarget = choosenAction.projectiles.getTimeToReachTarget(
             choosenAction.projectileKey,

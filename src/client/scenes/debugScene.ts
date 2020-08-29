@@ -28,7 +28,6 @@ export class DebugScene extends Phaser.Scene {
     public cornerCoords: Array<any>
     public helpText: Array<any>
     public helpDisplayed: boolean
-    public isPaused: boolean
     public debugControl: DebugControl
     public debugMenu: Phaser.GameObjects.DOMElement
     public debugEntities: Array<any>
@@ -40,7 +39,7 @@ export class DebugScene extends Phaser.Scene {
 			key: 'debugScene',
 			active: false
 		})
-		
+
 		const config = {
 			props: [
                 'x',
@@ -63,7 +62,7 @@ export class DebugScene extends Phaser.Scene {
 			fill: config.color,
 			stroke: config.color,
 			strokeThickness: 1
-		};
+		}
 		
 		
 		this.showCornerCoords = config.showCornerCoords
@@ -95,8 +94,6 @@ export class DebugScene extends Phaser.Scene {
 
         // debug players
         this.debugEntities = this.mainScene.players.getChildren() as Player[]
-        // this.debug.push(...this.mainScene.players)
-        // this.debug.push(...this.mainScene.consumables.getChildren())
 
         // debug AI
         this.debugEntitiesAI = this.mainScene.playersAI
@@ -152,11 +149,9 @@ export class DebugScene extends Phaser.Scene {
             const graphicDistanceExtension = this.mainScene.add.graphics({
                 lineStyle: {width: 4, color: 0xff00ff }
             })
+            const graphicNetForce = this.mainScene.add.graphics({lineStyle: {width: 2, color: 0xffffff }})
             graphics.set('wanderDistanceExtension', graphicDistanceExtension)
             graphics.set('wanderRadial', graphicRadial)
-
-
-            const graphicNetForce = this.mainScene.add.graphics({lineStyle: {width: 2, color: 0xffffff }})
             graphics.set('netForce', graphicNetForce)
             this.debugEntitiesAIGraphics.set(playerAI.player.id, graphics)
 
@@ -252,7 +247,6 @@ export class DebugScene extends Phaser.Scene {
                     )
                     graphic.strokeCircleShape(circle)
                 }
-                
             }
         }
     }
@@ -267,6 +261,7 @@ export class DebugScene extends Phaser.Scene {
 			this.gameDelayText.setText('');
 		}
 
+        
         this.updateText()
         this.updateSteeringGraphics()
 	}
@@ -304,12 +299,10 @@ export class DebugScene extends Phaser.Scene {
 
 	pauseScene() {
 		this.scene.pause(this.mainScene.scene.key);
-		// this.isPaused = true;
 	}
 	
 	resumeScene() {
 		this.scene.resume(this.mainScene.scene.key);
-		// this.isPaused = false;
 	}
 	
 

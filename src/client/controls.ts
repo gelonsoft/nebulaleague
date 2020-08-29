@@ -6,21 +6,32 @@ import { DebugScene } from './scenes/debugScene'
 export class MainControl {
     public scene: MainScene
     public controls: any
+    public isDebugSceneActive: boolean
     constructor (scene: MainScene) {
         this.scene = scene
         this.controls = {
             fullscreen: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F),
+            toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H),
         }
+        this.isDebugSceneActive = true
     }
     
     public update(): void {
         const fullscreen = this.scene.input.keyboard.checkDown(this.controls.fullscreen, 200)
+        const toggleDebugScene = this.scene.input.keyboard.checkDown(this.controls.toggleDebugScene, 200)
         if (fullscreen) {
             if(this.scene.scale.isFullscreen) {
                 this.scene.scale.stopFullscreen()
             } else {
                 this.scene.scale.startFullscreen()
             }
+        }
+        if (this.scene.game.debug && toggleDebugScene && this.isDebugSceneActive) {
+            this.scene.scene.pause('debugScene')
+            this.isDebugSceneActive = false
+        } else if (this.scene.game.debug && toggleDebugScene && !this.isDebugSceneActive) {
+            this.scene.scene.resume('debugScene')
+            this.isDebugSceneActive = true
         }
     }
 }
@@ -45,10 +56,18 @@ export class PlayerControl {
         this.canRightTrigger = true
         this.active = true
         this.controls = {
-            moveLeft: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-            moveRight: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-            moveUp: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA),
-            moveDown: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
+            moveLeftDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            moveRightDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+            moveUpDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA),
+            moveDownDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
+            moveLeftQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            moveRightQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            moveUpQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            moveDownQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            moveLeftAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+            moveRightAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            moveUpAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
+            moveDownAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             skill1: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
             skill2: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
             skill3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
@@ -57,10 +76,18 @@ export class PlayerControl {
     }
 
     public handleMovement(): void {
-        const left = this.controls.moveLeft.isDown ? -1: 0
-        const right = this.controls.moveRight.isDown ? 1: 0
-        const up = this.controls.moveUp.isDown ? -1: 0
-        const down =this.controls.moveDown.isDown ? 1: 0
+        const left = (this.controls.moveLeftDvorak.isDown ||
+            this.controls.moveLeftQwerty.isDown ||
+            this.controls.moveLeftAzerty.isDown ) ? -1: 0
+        const right = (this.controls.moveRightDvorak.isDown ||
+            this.controls.moveRightQwerty.isDown ||
+            this.controls.moveRightAzerty.isDown ) ? 1: 0
+        const up = (this.controls.moveUpDvorak.isDown ||
+            this.controls.moveUpQwerty.isDown ||
+            this.controls.moveUpAzerty.isDown ) ? -1: 0
+        const down = (this.controls.moveDownDvorak.isDown ||
+            this.controls.moveDownQwerty.isDown ||
+            this.controls.moveDownAzerty.isDown ) ? 1: 0
         const playerDirection: PlayerDirection = {
             x: left + right,
             y: up + down,
@@ -111,7 +138,6 @@ export class PlayerControl {
                 this.canRightTrigger = false
             }            
         }
-
         
         if (pointer.leftButtonReleased()) {
             this.canLeftTrigger = true
@@ -148,7 +174,7 @@ export class DebugControl {
     constructor (scene: DebugScene) {
         this.scene = scene
         this.controls = {
-            toggleCamera: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            toggleCamera: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T),
             pause: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
             slowGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
             speedGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
