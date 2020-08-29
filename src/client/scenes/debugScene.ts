@@ -59,7 +59,7 @@ export class DebugScene extends Phaser.Scene {
         this.globalProps = config.props
 		
 		this.style = {
-			font: '12px Arial',
+			font: '16px Arial',
 			fill: config.color,
 			stroke: config.color,
 			strokeThickness: 1
@@ -127,11 +127,10 @@ export class DebugScene extends Phaser.Scene {
                 this.mainScene.physics.world.drawDebug = !this.mainScene.physics.world.drawDebug
             }
             this.debugMenu.setVisible(false)
-
-            
         })
     }
 
+    
     switchToPlayer(index: number) {
         const player: Player = this.mainScene.players.getChildren()[index]  as Player
         this.mainScene.playerControl.active = false
@@ -179,7 +178,7 @@ export class DebugScene extends Phaser.Scene {
 		const offset = 20
 		for(let i = 0; i < this.debugEntities.length; i++) {
 			const obj = this.debugEntities[i]
-			obj.props = this.getProps()
+			obj.props = this.getProps(obj)
 			obj.text = {}
 			
 			const x = this.getX(obj)
@@ -330,8 +329,13 @@ export class DebugScene extends Phaser.Scene {
 		this.gameDelay = 0
 	}
 
-	getProps() {
-		return this.globalProps
+	getProps(obj: any) {
+        const addedProps = []
+        if(obj['controlledByAI']) {
+            addedProps.push('controlledByAI.playersInViewRange.length')
+            addedProps.push('controlledByAI.playersInHittableRange.length')
+        }
+		return [...this.globalProps, ...addedProps]
 	}
     
 	

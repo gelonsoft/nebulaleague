@@ -190,12 +190,12 @@ export class HudScene extends Phaser.Scene {
         background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
 
         this.healthBar = new HealthBar(this, 0, 0, this.player.maxHealth)
-        this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.weaponPrimary.frame)
-        this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.weaponSecondary.frame)
-        this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.abilities.ability1.frame)
-        this.abilityContainer2 = new SlotContainer(this, 380 + 62, 0, this.player.abilities.ability2.frame)
-        this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.abilities.ability3.frame)
-        this.abilityContainer4 = new SlotContainer(this, 380 + 62 * 3, 0, this.player.abilities.ability4.frame)
+        this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.actions.weaponPrimary.frame)
+        this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.actions.weaponSecondary.frame)
+        this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.actions.ability1.frame)
+        this.abilityContainer2 = new SlotContainer(this, 380 + 62, 0, this.player.actions.ability2.frame)
+        this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.actions.ability3.frame)
+        this.abilityContainer4 = new SlotContainer(this, 380 + 62 * 3, 0, this.player.actions.ability4.frame)
         this.abilityToContainer = {
             'ability1': this.abilityContainer1,
             'ability2': this.abilityContainer2,

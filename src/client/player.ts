@@ -11,6 +11,7 @@ import {
 } from './config'
 import { Weapon } from './entities/weapons'
 import { AbilityInterface } from './entities/abilities'
+import { PlayerAI } from './ai'
 
 
 export enum SelectedWeapon {
@@ -59,7 +60,9 @@ interface ActionTimesInterface {
     ability4: ActionTimeInterface
 }
 
-interface AbilitiesInterface {
+interface AactionsInterface {
+    weaponPrimary: Weapon
+    weaponSecondary: Weapon
     ability1: AbilityInterface
     ability2: AbilityInterface
     ability3: AbilityInterface
@@ -75,10 +78,11 @@ export class Player extends Phaser.GameObjects.Container {
     public scene: MainScene
     public playerSprite: Phaser.GameObjects.Sprite
     public playerState: Map<string, boolean | number>
+    public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
-    public weaponPrimary: Weapon
-    public weaponSecondary: Weapon
-    public abilities: AbilitiesInterface
+    // public weaponPrimary: Weapon
+    // public weaponSecondary: Weapon
+    public actions: AactionsInterface
     public selectedAbilityKey: string | null
     public accelerationChange: number
     public accelerationSteady: number
@@ -88,13 +92,13 @@ export class Player extends Phaser.GameObjects.Container {
     public isStunned: boolean
     public burningTime: Phaser.Time.TimerEvent | null
 
-
     constructor(scene: MainScene, playerConfig: PlayerModel) {
         super(scene)
         this.scene = scene
         this.playerState = new Map()
         this.initPlayer(playerConfig)
         this.scene.add.existing(this)
+        this.controlledByAI = null
 
 
         this.actionTimes = {
@@ -106,10 +110,9 @@ export class Player extends Phaser.GameObjects.Container {
             ability4: { cooldown: 0, ready: true },
         }
 
-        this.weaponPrimary = this.scene.weapons[playerConfig.weaponPrimaryKey]
-        this.weaponSecondary = this.scene.weapons[playerConfig.weaponSecondaryKey]
-
-        this.abilities = {
+        this.actions = {
+            weaponPrimary: this.scene.weapons[playerConfig.weaponPrimaryKey],
+            weaponSecondary: this.scene.weapons[playerConfig.weaponSecondaryKey],
             ability1: this.scene.abilities[playerConfig.abilityKey1],
             ability2: this.scene.abilities[playerConfig.abilityKey2],
             ability3: this.scene.abilities[playerConfig.abilityKey3],
@@ -120,6 +123,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.isParalyzed = false
         this.isStunned = false
         this.burningTime = null
+
+        if (this.scene.game.debug) {
+            window[`${this.id}`] = this
+        }
+        
     }
 
 
@@ -219,15 +227,15 @@ export class Player extends Phaser.GameObjects.Container {
 
     public draw(): void {
         if (this.selectedAbilityKey) {
-            const selectedAbily = this.abilities[this.selectedAbilityKey] as AbilityInterface
+            const selectedAbily = this.actions[this.selectedAbilityKey] as AbilityInterface
             selectedAbily.draw(this, this.scene.pointerPosition)
         } else {
-            this.weaponPrimary.draw(
+            this.actions.weaponPrimary.draw(
                 this.getPrimaryWeaponPosition(),
                 this.scene.pointerPosition,
                 this.actionTimes.weaponPrimary.ready
             )
-            this.weaponSecondary.draw(
+            this.actions.weaponSecondary.draw(
                 this.getSecondaryWeaponPosition(),
                 this.scene.pointerPosition,
                 this.actionTimes.weaponSecondary.ready
@@ -247,7 +255,7 @@ export class Player extends Phaser.GameObjects.Container {
     public fire(weaponSelected?: SelectedWeapon, targetFirePosition?: Phaser.Math.Vector2): void {
         weaponSelected = weaponSelected || SelectedWeapon.Primary
         const weapon = weaponSelected === SelectedWeapon.Primary ?
-            this.weaponPrimary : this.weaponSecondary
+            this.actions.weaponPrimary : this.actions.weaponSecondary
         const weaponTime = weaponSelected === SelectedWeapon.Primary ?
             this.actionTimes.weaponPrimary : this.actionTimes.weaponSecondary
         const sourceFire = weaponSelected === SelectedWeapon.Primary ?
@@ -291,7 +299,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public triggerAbility(selectedAbilityKey: string, targetAbilityPosition?: Phaser.Math.Vector2): void {
-        const ability = this.abilities[selectedAbilityKey] as AbilityInterface
+        const ability = this.actions[selectedAbilityKey] as AbilityInterface
         const actionTime = this.actionTimes[selectedAbilityKey]
         const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
         
@@ -327,7 +335,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.triggerAbility(this.selectedAbilityKey, this.scene.pointerPosition)
         this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
-        this.abilities[this.selectedAbilityKey].clearDraw()
+        this.actions[this.selectedAbilityKey].clearDraw()
         this.selectedAbilityKey = null
     }
 
@@ -337,18 +345,18 @@ export class Player extends Phaser.GameObjects.Container {
             if (this.selectedAbilityKey === key) {
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
                 this.scene.syncSelectedWeapon(this, true)
-                this.abilities[this.selectedAbilityKey].clearDraw()
+                this.actions[this.selectedAbilityKey].clearDraw()
                 this.selectedAbilityKey = null
             } else {
                 if (this.selectedAbilityKey) {
                     this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
-                    this.abilities[this.selectedAbilityKey].clearDraw()
+                    this.actions[this.selectedAbilityKey].clearDraw()
                 }
                 this.selectedAbilityKey = key
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, true)
                 this.scene.syncSelectedWeapon(this, false)
-                this.weaponPrimary.laser.clear()
-                this.weaponSecondary.laser.clear()
+                this.actions.weaponPrimary.laser.clear()
+                this.actions.weaponSecondary.laser.clear()
             }
         }
     }
@@ -377,6 +385,7 @@ export class Player extends Phaser.GameObjects.Container {
             .scale(this.displayWidth * 0.46)
         return positionCenter.clone().add(offset)
     }
+
 
     public addEffects(recieveEffects: Array<EffectInterface>): void {
         for (const effect of recieveEffects) {
@@ -455,6 +464,7 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
+    
     public reset(): void {
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)

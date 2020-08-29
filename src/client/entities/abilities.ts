@@ -155,8 +155,6 @@ export class Blink extends Ability implements AbilityInterface {
     }
 }
 
-
-
 export class Flame extends Ability implements AbilityInterface {
     constructor(scene, config) {
         super(scene, config)
