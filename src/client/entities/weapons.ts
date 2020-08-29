@@ -89,6 +89,7 @@ export class Weapon implements WeaponInterface {
     public projectileKey: string
     public shotInterval: number
     public canFire: boolean
+    public rangeDistance: number
     public weaponTimerEvent: Phaser.Time.TimerEvent | null
     
     constructor(scene: MainScene, weaponModel: WeaponModel) {
@@ -99,6 +100,7 @@ export class Weapon implements WeaponInterface {
         this.shotInterval = weaponModel.shotInterval
         this.projectileKey =  weaponModel.projectileKey
         this.canFire = true
+        this.rangeDistance = this.projectiles.getDistance(this.projectileKey)
         this.laser = this.scene.add.graphics({
             lineStyle: weaponModel.laserConfig
         })
@@ -113,9 +115,6 @@ export class Weapon implements WeaponInterface {
         )
     }
 
-    public getDistance(): number {
-        return this.projectiles.getDistance(this.projectileKey)
-    }
     
     public draw(
         sourcePosition: Phaser.Math.Vector2,
@@ -128,8 +127,6 @@ export class Weapon implements WeaponInterface {
                 pointerPosition.x, pointerPosition.y,
             )
         
-        const distance = this.getDistance()
-        
         if (isLaserReady) {
             this.laser.alpha = 0.9
         } else {
@@ -138,8 +135,8 @@ export class Weapon implements WeaponInterface {
 
         const line = new Phaser.Geom.Line(
             sourcePosition.x, sourcePosition.y,
-            sourcePosition.x + Math.cos(angleToPointer) * distance * 0.98,
-            sourcePosition.y + Math.sin(angleToPointer) * distance * 0.98,
+            sourcePosition.x + Math.cos(angleToPointer) * this.rangeDistance * 0.98,
+            sourcePosition.y + Math.sin(angleToPointer) * this.rangeDistance * 0.98,
         )
         this.laser.clear()
         this.laser.strokeLineShape(line)

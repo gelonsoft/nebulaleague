@@ -104,7 +104,7 @@ export class PlayerAI {
 
     public setPlayersInHittableRange(): void {
         const playersInRange = []
-        const distance = this.player.weaponPrimary.getDistance()
+        const distance = this.player.weaponPrimary.rangeDistance
             
         const circleVision = new Phaser.Geom.Circle(
             this.player.x,
