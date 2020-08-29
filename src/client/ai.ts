@@ -124,7 +124,6 @@ export class PlayerAI {
     public setProjectilesInHittableRange(): void {
         this.scene.projectiles.getAll()
     }
-    
 
 
     public sumSteeringsForce(): Phaser.Math.Vector2 {
@@ -141,6 +140,10 @@ export class PlayerAI {
         const newForce = steering.pursuit(this.player.body, target)
         this.steeringsBehaviour.push(SEEK_BEHAVIOUR)
         this.steeringsForce.push(newForce)
+    }
+
+    public doObstacleAvoidance(): void {
+        console.log('avoid obstacle')
     }
 
 
@@ -167,5 +170,4 @@ export class PlayerAI {
         this.player.rotation = steering.facing(playerToTarget)
         this.player.fire(SelectedWeapon.Primary, predictedPosition)
     }
-
 }

@@ -68,8 +68,7 @@ export class MainScene extends Phaser.Scene {
     public settingCamera(): void {
         this.cameras.main.setZoom(this.mainCameraZoom)
         this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT )
-        this.physics.world.setBounds(0, 0, WORLD_WIDTH , WORLD_HEIGHT - HUD_HEIGHT - this.player.displayHeight / 2)
-        this.cameras.main.startFollow(this.player, true)
+        this.physics.world.setBounds(0, 0, WORLD_WIDTH , WORLD_HEIGHT - HUD_HEIGHT - PLAYER_SIZE / 2)
     }
 
 
@@ -113,8 +112,8 @@ export class MainScene extends Phaser.Scene {
         // should recieve something in parametres to choosee between mainPlayer Otherplayers and AIPlayiers
         const mainPlayerConfig = {
             id: 'mainPlayer',
-            x: 0,
-            y: 0,
+            x: this.cameras.main.displayWidth / 2,
+            y: this.cameras.main.displayHeight / 2,
             weaponPrimaryKey: 'pistol',
             weaponSecondaryKey: 'thompson',
             abilityKey1: 'blink',
@@ -188,13 +187,15 @@ export class MainScene extends Phaser.Scene {
     
     
     public create(): void {
+        this.settingCamera()
         this.createConsumables()
         this.createProjectiles()
         this.createWeapons()
         this.createAbilities()
         this.createPlayers()
-        this.settingCamera()
         this.createBackground()
+        this.cameras.main.startFollow(this.player, true)
+
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
 
