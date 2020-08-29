@@ -61,10 +61,14 @@ interface ActionTimesInterface {
 }
 
 export interface ActionInterface {
-    draw: () => void
-    trigger: () => void
-    cleaDraw: () => void
-    
+    draw(sourcePosition: Phaser.Math.Vector2,
+         pointerPosition: Phaser.Math.Vector2,
+         isLaserReady?: boolean): void,
+    cleaDraw(): void,
+    trigger(player: Player,
+            sourcePosition: Phaser.Math.Vector2,
+            pointerPosition: Phaser.Math.Vector2): void
+    rangeDistance: number
 }
 
 interface ActionsInterface {

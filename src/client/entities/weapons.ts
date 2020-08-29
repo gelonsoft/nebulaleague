@@ -145,6 +145,8 @@ export class Weapon  {
         this.laser.clear()
         this.laser.strokeLineShape(line)
     }
+
+    public clearDraw() {}
 }
 
 
