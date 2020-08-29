@@ -44,8 +44,8 @@ const projectilesConfig = {
         lifespan: 0.35,
         radius: 18,
     },
-    chargedArrow: {
-        name: 'chargedArrow',
+    chargedArrowProjectile: {
+        name: 'chargedArrowProjectile',
         frame: 'charged_arrow_bullet.png',
         damage: 80,
         speed: 1200,
@@ -57,8 +57,8 @@ const projectilesConfig = {
             duration: 2,
         }]
     },
-    flame: {
-        name: 'flame',
+    flameProjectile: {
+        name: 'flameProjectile',
         radius: 50,
         lifespan: 3,
         damage: 25,
@@ -74,8 +74,8 @@ const projectilesConfig = {
             tick: 0.5,
         }]
     },
-    rootTip: {
-        name: 'rootTip',
+    rootTipProjectile: {
+        name: 'rootTipProjectile',
         radius: 60,
         damage: 30,
         lifespan: 0.6,
@@ -309,9 +309,9 @@ export class Projectiles
         this.addProjectile('p90Bullet', Bullet, projectilesConfig.p90Bullet, 200)
         this.addProjectile('revolverBullet', Bullet, projectilesConfig.revolverBullet, 200)
         this.addProjectile('thompsonBullet', Bullet, projectilesConfig.thompsonBullet, 200)
-        this.addProjectile('chargedArrow', Bullet, projectilesConfig.chargedArrow, 20)
-        this.addProjectile('flame', BlockWithTick, projectilesConfig.flame, 20)
-        this.addProjectile('rootTip', BlockWithDelay, projectilesConfig.rootTip, 20)
+        this.addProjectile('chargedArrowProjectile', Bullet, projectilesConfig.chargedArrowProjectile, 20)
+        this.addProjectile('flameProjectile', BlockWithTick, projectilesConfig.flameProjectile, 20)
+        this.addProjectile('rootTipProjectile', BlockWithDelay, projectilesConfig.rootTipProjectile, 20)
     }
 
     public addProjectile(

@@ -1,5 +1,4 @@
 import { MainScene } from '../scenes/mainScene'
-import { WeaponModel } from '../../shared/models'
 import { Player } from '../player'
 import { Projectiles } from './projectiles'
 
@@ -109,13 +108,12 @@ export class Weapon  {
         })
     }
 
-    // public trigger(position: Phaser.Math.Vector2, playerId: string, rotation: number ): void {
     public trigger(
         player: Player,
         sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2,
     ) : void {
-        const rotationPlayer =  Phaser.Math.Angle.Between(
+        const rotationPlayer = Phaser.Math.Angle.Between(
             sourcePosition.x, sourcePosition.y,
             pointerPosition.x, pointerPosition.y,
         )
@@ -128,11 +126,10 @@ export class Weapon  {
         pointerPosition: Phaser.Math.Vector2,
         isLaserReady: boolean
     ): void {
-        const angleToPointer =
-            Phaser.Math.Angle.Between(
-                sourcePosition.x, sourcePosition.y,
-                pointerPosition.x, pointerPosition.y,
-            )
+        const angleToPointer = Phaser.Math.Angle.Between(
+            sourcePosition.x, sourcePosition.y,
+            pointerPosition.x, pointerPosition.y,
+        )
         
         if (isLaserReady) {
             this.laser.alpha = 0.9

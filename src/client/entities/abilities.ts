@@ -3,17 +3,26 @@ import { Player } from '../player'
 import { Projectiles } from './projectiles'
 
 
-export enum AbilityTypes {
+export enum DrawingStyles {
     Zone,
     Ray,
 }
 
+export enum Action {
+    Blink,
+    Projectile,
+    ProjectileWithRotation,
+}
+
+
 export interface AbilityConfig {
     name: string
     frame: string
+    action: Action
+    projectileKey?: string
     cooldownDelay: number
     rangeDistance?: number
-    type: AbilityTypes
+    drawingStyle: DrawingStyles
     radiusDistance?: number
     rangeDistanceColor?: number
     radiusDistanceColor?: number
@@ -28,8 +37,10 @@ export class Ability  {
     public projectiles: Projectiles
     public name: string
     public frame: string
+    public action: Action
     public cooldownDelay: number
-    public type: AbilityTypes
+    public drawingStyle: DrawingStyles
+    public projectileKey?: string
     public rangeDistance: number
     public radiusDistance: number
     public rangeDistanceColor?: number
@@ -45,7 +56,9 @@ export class Ability  {
         this.projectiles = this.scene.projectiles
         this.name = config.name
         this.frame = config.frame
-        this.type = config.type
+        this.action = config.action
+        this.drawingStyle = config.drawingStyle
+        this.projectileKey = config.projectileKey
         this.cooldownDelay = config.cooldownDelay
         this.rangeDistance = config.rangeDistance || 0
         this.radiusDistance = config.radiusDistance || 0
@@ -54,13 +67,14 @@ export class Ability  {
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
         this.radiusDistanceColor = config.radiusDistanceColor || 0xffffff
 
-        switch(config.type) {
-            case AbilityTypes.Zone:
+        switch(config.drawingStyle) {
+            case DrawingStyles.Zone:
                 this.rangeGraphics = this.scene.add.graphics()
                 this.radiusGraphics = this.scene.add.graphics()
                 break;
                 
-            case AbilityTypes.Ray:
+            case DrawingStyles.Ray:
+                this.rangeDistance = this.projectiles.getDistance(this.projectileKey)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break;
@@ -128,60 +142,42 @@ export class Ability  {
        )
         return distance <= this.rangeDistance
     }
-    
-    public trigger(_player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        throw new Error("Method not implemented.")
-    }
-}
 
 
-export class Blink extends Ability {
-    constructor(scene, config) {
-        super(scene, config)
-        this.rangeGraphics = this.scene.add.graphics()
-        this.radiusGraphics = this.scene.add.graphics()
+    public triggerProjectile(
+        player: Player,
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2,
+        withRotation = false,
+    ): void {
+        if (withRotation) {
+            const rotationPlayer = Phaser.Math.Angle.Between(
+                sourcePosition.x, sourcePosition.y,
+                pointerPosition.x, pointerPosition.y,
+            )
+            this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
+        } else {
+            this.projectiles.fire(this.projectileKey, player.id, sourcePosition)
+        }
     }
 
-    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        player.body.reset(pointerPosition.x, pointerPosition.y)
-    }
-}
 
-export class Flame extends Ability {
-    constructor(scene, config) {
-        super(scene, config)
-    }
-    
-    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        this.projectiles.fire('flame', player.id, pointerPosition)   
-    }
-}
-
-
-export class RootTip extends Ability {
-    constructor(scene, config) {
-        super(scene, config)
-    }
-    
-    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        this.projectiles.fire('rootTip', player.id, pointerPosition)   
-    }
-}
-
-
-export class ChargedArrow extends Ability {
-    constructor(scene, config) {
-        super(scene, config)
-        this.rangeDistance = this.projectiles.getDistance('chargedArrow')
-    }
-    
-    public trigger(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        const positionPlayer = player.body.center
-        const rotationPlayer =  Phaser.Math.Angle.Between(
-            positionPlayer.x, positionPlayer.y,
-            pointerPosition.x, pointerPosition.y,
-        )
-        this.projectiles.fire('chargedArrow', player.id,  positionPlayer, rotationPlayer)   
+    public trigger(
+        player: Player,
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2
+    ): void {
+        switch (this.action) {
+            case Action.Blink:
+                player.body.reset(pointerPosition.x, pointerPosition.y)
+                break
+            case Action.Projectile:
+                this.triggerProjectile(player, sourcePosition, pointerPosition)
+                break
+            case Action.ProjectileWithRotation:
+                this.triggerProjectile(player, sourcePosition, pointerPosition, true)
+                break
+        }
     }
 }
 
@@ -191,7 +187,8 @@ const abilitiesConfig = {
     blink: {
         name: 'blink',
         frame: 'teleport.png',
-        type: AbilityTypes.Zone,
+        action: Action.Blink,
+        drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 10,
         rangeDistance: 500,
         radiusDistance: 30,
@@ -199,7 +196,9 @@ const abilitiesConfig = {
     flame: {
         name: 'flame',
         frame: 'fire-zone.png',
-        type: AbilityTypes.Zone,
+        action: Action.Projectile,
+        projectileKey: 'flameProjectile',
+        drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 10,
         rangeDistance: 420,
         radiusDistance: 50,
@@ -207,7 +206,9 @@ const abilitiesConfig = {
     rootTip: {
         name: 'rootTip',
         frame: 'root-tip.png',
-        type: AbilityTypes.Zone,
+        projectileKey: 'rootTipProjectile',
+        action: Action.Projectile,
+        drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 1,
         rangeDistance: 450,
         radiusDistance: 50,
@@ -215,16 +216,11 @@ const abilitiesConfig = {
     chargedArrow: {
         name: 'chargedArrow',
         frame: 'charged-arrow.png',
-        type: AbilityTypes.Ray,
+        action: Action.ProjectileWithRotation,
+        projectileKey: 'chargedArrowProjectile',
+        drawingStyle: DrawingStyles.Ray,
         cooldownDelay: 1,
     },
-}
-
-const classNameToClass = {
-    'blink': Blink,
-    'flame': Flame,
-    'chargedArrow': ChargedArrow,
-    'rootTip': RootTip,
 }
 
 
@@ -233,8 +229,7 @@ export function buildAbilities(
 ): Record<string, Ability> {
     const abilities = {}
     for(const [key, config] of Object.entries(abilitiesConfig)) {
-        const createInstanceFromClassName = classNameToClass[key]
-        abilities[key] = new createInstanceFromClassName(scene, config)
+        abilities[key] = new Ability(scene, config)
     }
     return abilities
 }

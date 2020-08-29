@@ -298,11 +298,14 @@ export class Player extends Phaser.GameObjects.Container {
     public castAbility(selectedAbilityKey: string, targetAbilityPosition: Phaser.Math.Vector2): void {
         const ability = this.actions[selectedAbilityKey]
         const actionTime = this.actionTimes[selectedAbilityKey]
+        const sourceAbilityPosition = this.body.center
+
+        
         const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
         
         if (actionTime.ready && isInRange) {
             actionTime.ready = false
-            ability.trigger(this, targetAbilityPosition)
+            ability.trigger(this, sourceAbilityPosition, targetAbilityPosition)
             actionTime.cooldown = ability.cooldownDelay
 
             actionTime.timerEvent = this.scene.time.addEvent({
