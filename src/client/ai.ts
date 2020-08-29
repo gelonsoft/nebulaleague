@@ -133,7 +133,8 @@ export class PlayerAI {
         const playersInRange = []
         const actionsKeysReady = Object.keys(this.player.actionTimes)
             .filter(key => this.player.actionTimes[key].ready)
-
+        console.log(actionsKeysReady)
+        
         for (const playerInViewRange of this.playersInViewRange ) {
             if (playerInViewRange.id !== this.player.id) {
                 const actionsInRange = actionsKeysReady.filter((key) => {

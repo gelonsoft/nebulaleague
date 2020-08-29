@@ -14,13 +14,13 @@ export const playerAI1 = {
         angle: 0,
         variance: 0.1,
     },
-    weaponPrecisionHandicap: 8,
+    weaponPrecisionHandicap: 14,
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -32,13 +32,13 @@ export const playerAI2 = {
         angle: 0,
         variance: 0.01,
     },
-    weaponPrecisionHandicap: 12,
-    weaponPrimaryKey: 'pistol',
+    weaponPrecisionHandicap: 14,
+    weaponPrimaryKey: 'p90',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -50,13 +50,13 @@ export const playerAI3 = {
         angle: 0,
         variance: 0.03,
     },
-    weaponPrecisionHandicap: 12,
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
+    weaponPrecisionHandicap: 14,
+    weaponPrimaryKey: 'revolver',
+    weaponSecondaryKey: 'thompson',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -69,13 +69,13 @@ export const playerAI4 = {
         angle: 0,
         variance: 0.004,
     },
-    weaponPrecisionHandicap: 4,
+    weaponPrecisionHandicap: 18,
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -93,7 +93,7 @@ export const playerAI5 = {
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -111,7 +111,7 @@ export const playerAI6 = {
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -129,7 +129,7 @@ export const playerAI7 = {
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -141,13 +141,13 @@ export const playerAI8 = {
         angle: 0,
         variance: 0.1,        
     },
-    weaponPrecisionHandicap: 8,
+    weaponPrecisionHandicap: 28,
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 
@@ -159,13 +159,13 @@ export const playerAI9 = {
         angle: 0,
         variance: 0.01,
     },
-    weaponPrecisionHandicap: 9,
+    weaponPrecisionHandicap: 10,
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
-    abilityKey4: 'blink',
+    abilityKey4: 'rootTip',
 }
 
 export const playersAIConfig = [

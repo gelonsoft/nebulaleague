@@ -7,7 +7,7 @@ const weaponsConfig = {
     pistol: {
         name: 'pistol',
         frame: 'pistol-gun.png',
-        cooldownDelay: 1,
+        cooldownDelay: 0.8,
         cooldown: 0,
         projectileKey: 'pistolBullet',
         laserConfig: {
@@ -43,7 +43,7 @@ const weaponsConfig = {
     revolver: {
         name: 'revolver',
         frame: 'revolver.png',
-        cooldownDelay: 10,
+        cooldownDelay: 4,
         cooldown: 0,
         projectileKey: 'revolverBullet',
         laserConfig: {
@@ -55,7 +55,7 @@ const weaponsConfig = {
     thompson: {
         name: 'thompson',
         frame: 'thompson-m1928.png',
-        cooldownDelay: 12,
+        cooldownDelay: 7,
         cooldown: 0,
         projectileKey: 'thompsonBullet',
         laserConfig: {
