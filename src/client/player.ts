@@ -259,7 +259,7 @@ export class Player extends Phaser.GameObjects.Container {
     public fire(selectedWeaponKey: string, targetFirePosition: Phaser.Math.Vector2): void {
         const weapon = this.actions[selectedWeaponKey]
         const weaponTime = this.actionTimes[selectedWeaponKey]
-        const sourceFirePosition = selectedWeaponKey === 'WeaponPrimary' ?
+        const sourceFirePosition = selectedWeaponKey === 'weaponPrimary' ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
 
 

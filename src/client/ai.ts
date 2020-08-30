@@ -7,18 +7,8 @@ import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 
 export const SEEK_BEHAVIOUR = 'seek'
+export const FLEE_BEHAVIOUR = 'flee'
 export const WANDER_BEHAVIOUR = 'wander'
-
-
-
-interface PlayerAIDistanceActionsInterface {
-    weaponPrimary: number
-    weaponSecondary: number
-    ability1: number
-    ability2: number
-    ability3: number
-    ability4: number
-}
 
 
 interface PlayerAIActionsInterface {
@@ -37,7 +27,13 @@ export class PlayerAI {
     public steeringsBehaviour: Array<string>
     public wander: steering.Wander
     public weaponPrecisionHandicap: number
-    public playerAIActions: PlayerAIActionsInterface
+    public fleeRatio: number
+    public weaponPrimaryTriggerRange: [number, number]
+    public weaponSecondaryTriggerRange: [number, number]
+    public ability1TriggerRange: [number, number]
+    public ability2TriggerRange: [number, number]
+    public ability3TriggerRange: [number, number]
+    public ability4TriggerRange: [number, number]
     public tree: IBehaviorTreeNode
     
     
@@ -57,8 +53,17 @@ export class PlayerAI {
         this.steeringsBehaviour = []
         this.wander = playerConfig.wander
         this.weaponPrecisionHandicap = playerConfig.weaponPrecisionHandicap
+        this.fleeRatio = playerConfig.fleeRatio
+        this.weaponPrimaryTriggerRange = playerConfig.weaponPrimaryTriggerRange
+        this.weaponSecondaryTriggerRange = playerConfig.weaponSecondaryTriggerRange
+        this.ability1TriggerRange = playerConfig.ability1TriggerRange
+        this.ability2TriggerRange = playerConfig.ability2TriggerRange
+        this.ability3TriggerRange = playerConfig.ability3TriggerRange
+        this.ability4TriggerRange = playerConfig.ability4TriggerRange
+
         
         this.tree = this.buildTree()
+        
         if (this.scene.game.debug) {
             window[`ia-${player.id}`] = this
         }
@@ -67,7 +72,7 @@ export class PlayerAI {
     public buildTree(): IBehaviorTreeNode  {
         const builder = new BehaviorTreeBuilder()
             .Selector('attackingSelector')
-            .Do('attackingAction', () => {
+            .Do('playersInHittableRange', () => {
                 if (this.playersInHittableRange.length > 0) {
                     // this.doSeekTarget()
                     this.doAttack()
@@ -75,9 +80,16 @@ export class PlayerAI {
                 }
                 return BehaviorTreeStatus.Failure
             })
-            .Do('seekingAction', () => {
+            .Do('playersInViewActionSeek', () => {
                 if (this.playersInViewRange.length > 0) {
-                    this.doSeekTarget()
+                    this.doFleeTarget()
+                    return BehaviorTreeStatus.Success                    
+                }
+                return BehaviorTreeStatus.Failure
+            })
+            .Do('playersInViewActionFlee', () => {
+                if (this.playersInViewRange.length > 0) {
+                    this.doFleeTarget()
                     return BehaviorTreeStatus.Success                    
                 }
                 return BehaviorTreeStatus.Failure
@@ -186,6 +198,14 @@ export class PlayerAI {
         this.steeringsBehaviour.push(SEEK_BEHAVIOUR)
         this.steeringsForce.push(newForce)
     }
+
+    public doFleeTarget(): void {
+        const target = this.playersInViewRange[0].body
+        const newForce = steering.evade(this.player.body, target)
+        this.steeringsBehaviour.push(FLEE_BEHAVIOUR)
+        this.steeringsForce.push(newForce)
+    }
+    
 
     public doObstacleAvoidance(): void {
         console.log('avoid obstacle')

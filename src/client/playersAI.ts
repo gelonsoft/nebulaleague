@@ -4,10 +4,24 @@ import { Wander } from './steering'
 export interface PlayerAIConfig {
     wander: Wander
     weaponPrecisionHandicap: number
+    fleeRatio: number
+    weaponPrimaryTriggerRange: [number, number]
+    weaponSecondaryTriggerRange: [number, number]
+    ability1TriggerRange: [number, number]
+    ability2TriggerRange: [number, number]
+    ability3TriggerRange: [number, number]
+    ability4TriggerRange: [number, number]
 }
+
 
 export const playerAI1 = {
     id: 'playerAI1',
+    weaponPrimaryKey: 'pistol',
+    weaponSecondaryKey: 'ak47',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'rootTip',
     wander: {
         radialMag: 200,
         distanceExtension: 100,
@@ -15,17 +29,24 @@ export const playerAI1 = {
         variance: 0.1,
     },
     weaponPrecisionHandicap: 14,
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
 }
 
 
 export const playerAI2 = {
     id: 'playerAI2',
+    weaponPrimaryKey: 'p90',
+    weaponSecondaryKey: 'ak47',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'rootTip',
     wander: {
         radialMag: 100,
         distanceExtension: 150,
@@ -33,17 +54,24 @@ export const playerAI2 = {
         variance: 0.01,
     },
     weaponPrecisionHandicap: 14,
-    weaponPrimaryKey: 'p90',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
 }
 
 
 export const playerAI3 = {
     id: 'playerAI3',
+    weaponPrimaryKey: 'revolver',
+    weaponSecondaryKey: 'thompson',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'rootTip',
     wander: {
         radialMag: 300,
         distanceExtension: 200,
@@ -51,18 +79,25 @@ export const playerAI3 = {
         variance: 0.03,
     },
     weaponPrecisionHandicap: 14,
-    weaponPrimaryKey: 'revolver',
-    weaponSecondaryKey: 'thompson',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
 }
 
 
 
 export const playerAI4 = {
     id: 'playerAI4',
+    weaponPrimaryKey: 'pistol',
+    weaponSecondaryKey: 'ak47',
+    abilityKey1: 'chargedArrow',
+    abilityKey2: 'flame',
+    abilityKey3: 'blink',
+    abilityKey4: 'rootTip',
     wander: {
         radialMag: 400,
         distanceExtension: 600,
@@ -70,35 +105,49 @@ export const playerAI4 = {
         variance: 0.004,
     },
     weaponPrecisionHandicap: 18,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+}
+
+
+export const playerAI5 = {
+    id: 'playerAI5',
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
     abilityKey4: 'rootTip',
-}
-
-
-export const playerAI5 = {
-    id: 'playerAI5',
     wander: {
         radialMag: 100,
         distanceExtension: 100,
         angle: 0,
         variance: 0.005,        
     },
-    weaponPrecisionHandicap: 5,
+    weaponPrecisionHandicap: 20,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+}
+
+
+export const playerAI6 = {
+    id: 'playerAI6',
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
     abilityKey4: 'rootTip',
-}
-
-
-export const playerAI6 = {
-    id: 'playerAI6',
     wander: {
         radialMag: 400,
         distanceExtension: 500,
@@ -106,17 +155,25 @@ export const playerAI6 = {
         variance: 0.03,        
     },
     weaponPrecisionHandicap: 20,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+    
+}
+
+
+export const playerAI7 = {
+    id: 'playerAI7',
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
     abilityKey4: 'rootTip',
-}
-
-
-export const playerAI7 = {
-    id: 'playerAI7',
     wander: {
         radialMag: 189,
         distanceExtension: 170,
@@ -124,17 +181,24 @@ export const playerAI7 = {
         variance: 0.05,
     },
     weaponPrecisionHandicap: 30,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+}
+
+
+export const playerAI8 = {
+    id: 'playerAI8',
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
     abilityKey4: 'rootTip',
-}
-
-
-export const playerAI8 = {
-    id: 'playerAI8',
     wander: {
         radialMag: 400,
         distanceExtension: 300,
@@ -142,30 +206,39 @@ export const playerAI8 = {
         variance: 0.1,        
     },
     weaponPrecisionHandicap: 28,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+}
+
+
+export const playerAI9 = {
+    id: 'playerAI9',
     weaponPrimaryKey: 'pistol',
     weaponSecondaryKey: 'ak47',
     abilityKey1: 'chargedArrow',
     abilityKey2: 'flame',
     abilityKey3: 'blink',
     abilityKey4: 'rootTip',
-}
-
-
-export const playerAI9 = {
-    id: 'playerAI9',
     wander: {
         radialMag: 1000,
         distanceExtension: 200,
         angle: 0,
         variance: 0.01,
     },
-    weaponPrecisionHandicap: 10,
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+    weaponPrecisionHandicap: 30,
+    fleeRatio: 0.3,
+    weaponPrimaryTriggerRange: [1, 5],
+    weaponSecondaryTriggerRange: [1, 5],
+    ability1TriggerRange: [1, 5],
+    ability2TriggerRange: [1, 5],
+    ability3TriggerRange: [1, 5],
+    ability4TriggerRange: [1, 5],
+    
 }
 
 export const playersAIConfig = [
@@ -179,5 +252,3 @@ export const playersAIConfig = [
     playerAI8,
     playerAI9,
 ]
-
-
