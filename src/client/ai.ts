@@ -80,17 +80,16 @@ export class PlayerAI {
                 }
                 return BehaviorTreeStatus.Failure
             })
-            .Do('playersInViewActionSeek', () => {
+            .Do('playersInViewRange', () => {
                 if (this.playersInViewRange.length > 0) {
-                    this.doFleeTarget()
-                    return BehaviorTreeStatus.Success                    
-                }
-                return BehaviorTreeStatus.Failure
-            })
-            .Do('playersInViewActionFlee', () => {
-                if (this.playersInViewRange.length > 0) {
-                    this.doFleeTarget()
-                    return BehaviorTreeStatus.Success                    
+                    const isLowHealth = (this.player.health / this.player.maxHealth) > this.fleeRatio
+                    if (isLowHealth) {
+                        this.doSeekTarget()
+                        return BehaviorTreeStatus.Success
+                    } else {
+                        this.doFleeTarget()
+                        return BehaviorTreeStatus.Success
+                    }
                 }
                 return BehaviorTreeStatus.Failure
             })

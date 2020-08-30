@@ -131,7 +131,6 @@ export class Player extends Phaser.GameObjects.Container {
         if (this.scene.game.debug) {
             window[`${this.id}`] = this
         }
-        
     }
 
 
