@@ -107,7 +107,8 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = this.maxHealth
+        // this.health = this.maxHealth
+        this.health = 100
         this.initPlayer()
         this.initHealthbar()
         this.setSize(PLAYER_SIZE, PLAYER_SIZE)
@@ -459,6 +460,7 @@ export class Player extends Phaser.GameObjects.Container {
             completeDelay: 0.6 * 1000,
         })
         this.healthBar.refresh(this.health)
+        this.scene.syncHealth(this)
     }
     
     public update(delta: number) {
@@ -477,5 +479,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.setPosition(x, y)
         this.health = this.maxHealth
         this.healthBar.refresh(this.health)
+        this.scene.syncHealth(this)
     }
 }

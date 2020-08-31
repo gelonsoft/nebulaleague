@@ -238,8 +238,6 @@ export class MainScene extends Phaser.Scene {
     public handlePlayerPlayerCollide(player1: Player , player2: Player): void {
         player1.health -= PLAYER_TO_PLAYER_DAMAGE
         player2.health -= PLAYER_TO_PLAYER_DAMAGE
-        this.syncHealth(player1)
-        this.syncHealth(player2)
     }
 
     public handleEnemyProjectileCollide(
@@ -248,7 +246,6 @@ export class MainScene extends Phaser.Scene {
     : void {
         if (hittedPlayer.id !== projectile.fromPlayerId) {
             projectile.actionOnCollision(hittedPlayer)
-            this.syncHealth(hittedPlayer)
         }
     }
 
