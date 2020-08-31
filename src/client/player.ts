@@ -84,6 +84,7 @@ export class Player extends Phaser.GameObjects.Container {
     public maxHealth: number
     public scene: MainScene
     public playerSprite: Phaser.GameObjects.Sprite
+    public playerHealthBar: HealthBar
     public playerState: Map<string, boolean | number>
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
@@ -101,15 +102,17 @@ export class Player extends Phaser.GameObjects.Container {
         super(scene)
         this.scene = scene
         this.playerState = new Map()
+        this.previousDirection = { x: 0, y: 0 }
+        this.id = playerConfig.id
+        this.x = playerConfig.x
+        this.y = playerConfig.y
+        this.maxHealth = PLAYER_DEFAULT_HEALTH
+        this.health = 100
         this.initPlayer(playerConfig)
+        this.initHealthbar()
         this.scene.add.existing(this)
         this.controlledByAI = null
-        const h = new HealthBar(
-            this.scene, 0, 0, 80, 10, 2, 1000,
-        )
-        h.refresh(this.health)
-        this.scene.add.existing(h)
-        
+
 
         this.actionTimes = {
             weaponPrimary: { cooldown: 0, ready: true },
@@ -141,13 +144,6 @@ export class Player extends Phaser.GameObjects.Container {
 
 
     public initPlayer(playerConfig: PlayerModel): void {
-        this.id = playerConfig.id
-        this.x = playerConfig.x
-        this.y = playerConfig.y
-        this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = 100
-        this.previousDirection = { x: 0, y: 0 }
-
         this.playerSprite = this.scene.add.sprite(
             0,
             0,
@@ -165,6 +161,15 @@ export class Player extends Phaser.GameObjects.Container {
         this.attachPhysics()
     }
 
+    public initHealthbar(): void {
+        this.playerHealthBar= new HealthBar(
+            this.scene, 0, 0, 80, 10, 2, 1000,
+        )
+        this.playerHealthBar.refresh(this.health)
+        this.scene.add.existing(this.playerHealthBar)
+        
+    }
+    
     private attachPhysics(): void {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.accelerationChange = PLAYER_ACCELERATION_CHANGE
