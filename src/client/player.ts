@@ -11,6 +11,7 @@ import {
 } from './config'
 import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
+import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 
 
@@ -38,7 +39,6 @@ export interface PlayerMoveNextForce {
     velocity: Phaser.Math.Vector2
     position: Phaser.Math.Vector2
 }
-
 
 export interface ActionTimeInterface {
     cooldown: number
@@ -76,6 +76,7 @@ export interface ActionInterface {
 }
 
 
+
 export class Player extends Phaser.GameObjects.Container {
     public body: Phaser.Physics.Arcade.Body
     public id: string
@@ -103,7 +104,12 @@ export class Player extends Phaser.GameObjects.Container {
         this.initPlayer(playerConfig)
         this.scene.add.existing(this)
         this.controlledByAI = null
-
+        const h = new HealthBar(
+            this.scene, 0, 0, 80, 10, 2, 1000,
+        )
+        h.refresh(this.health)
+        this.scene.add.existing(h)
+        
 
         this.actionTimes = {
             weaponPrimary: { cooldown: 0, ready: true },
@@ -139,7 +145,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = PLAYER_DEFAULT_HEALTH
+        this.health = 100
         this.previousDirection = { x: 0, y: 0 }
 
         this.playerSprite = this.scene.add.sprite(

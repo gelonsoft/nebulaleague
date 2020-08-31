@@ -3,18 +3,13 @@ import {
     HUD_HEIGHT,
     HUD_PADDING,
     HUD_PADDING_INNER,
-    HUD_BACKGROUND_ITEM,
-    HUD_HEALTH_BAR_COLOR_BACKGROUND,
     HUD_SLOT_COLOR_SELECTED,
     HUD_SLOT_COLOR_UNSELECTED,
-    HUD_HEALTH_BAR_COLOR_HIGH,
-    HUD_HEALTH_BAR_COLOR_LOW,
-    HUD_HEALTH_BAR_COLOR_MEDIUM,
     HUD_BACKGROUND,
 } from '../config'
 import { Player, ActionTimeInterface } from "../player"
 import { MainScene } from "./mainScene"
-
+import { HealthBar } from '../entities/healthbar'
 
 
 class SlotContainer extends Phaser.GameObjects.Container {
@@ -96,56 +91,6 @@ class SlotContainer extends Phaser.GameObjects.Container {
 }
 
 
-class HealthBar extends Phaser.GameObjects.Graphics {
-    public scene: HudScene
-    public maxHealth: number
-    public health: number
-    public x: number
-    public y: number
-
-    constructor(scene: HudScene, x: number, y: number, maxHealth: number) {
-        super(scene)
-        this.x = x
-        this.y = y
-        this.maxHealth = maxHealth
-        this.health = 0
-        this.create()
-    }
-
-    public create() {
-        const width = 240
-        const height = HUD_HEIGHT
-        const innerWidth = width - HUD_PADDING
-        const innerHeight = height - HUD_PADDING
-
-
-        this.fillStyle(HUD_BACKGROUND_ITEM)
-        this.fillRect(this.x, this.y, width, height)
-        this.fillStyle(HUD_HEALTH_BAR_COLOR_BACKGROUND)
-        this.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, innerWidth, innerHeight)
-    }
-
-    public refresh(health: number) {
-        const width = 240
-        const height = HUD_HEIGHT
-        const innerWidth = width - HUD_PADDING
-        const innerHeight = height - HUD_PADDING
-        this.fillStyle(HUD_HEALTH_BAR_COLOR_BACKGROUND)
-        this.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, innerWidth, innerHeight)
-        if (health <= this.maxHealth / 10) {
-            this.fillStyle(HUD_HEALTH_BAR_COLOR_LOW)
-        } else if (health <= this.maxHealth / 10 * 3) {
-            this.fillStyle(HUD_HEALTH_BAR_COLOR_MEDIUM)
-        } else {
-            this.fillStyle(HUD_HEALTH_BAR_COLOR_HIGH)
-        }
-        const percent = innerWidth / this.maxHealth
-        const widthHealth = Math.floor(percent * health)
-        this.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, widthHealth, innerHeight)
-    }
-}
-
-
 export class HudScene extends Phaser.Scene {
     public game: MyGame
     public player: Player
@@ -189,7 +134,7 @@ export class HudScene extends Phaser.Scene {
         background.fillStyle(HUD_BACKGROUND, 0.2)
         background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
 
-        this.healthBar = new HealthBar(this, 0, 0, this.player.maxHealth)
+        this.healthBar = new HealthBar(this, 0, 0, 240, HUD_HEIGHT, HUD_PADDING, this.player.maxHealth)
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.actions.weaponPrimary.frame)
         this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.actions.weaponSecondary.frame)
         this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.actions.ability1.frame)
