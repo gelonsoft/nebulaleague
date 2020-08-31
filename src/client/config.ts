@@ -25,6 +25,6 @@ export const HUD_BACKGROUND_ITEM = 0x000000
 export const HUD_SLOT_COLOR_SELECTED =  0x3366E5
 export const HUD_SLOT_COLOR_UNSELECTED = 0x5577d5 
 
-export const CONSUMABLE_WIDTH = 32
-export const CONSUMABLE_HEIGHT = 32
+export const CONSUMABLE_WIDTH = 24
+export const CONSUMABLE_HEIGHT = 24
 export const PARALAX_SCROLL_FACTOR = 0.05

@@ -14,7 +14,6 @@ import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 
-
 export enum EffectKeys {
     ChangeMaxSpeed = 'changeMaxSpeed',
     Paralyze = 'paralyze',
@@ -338,6 +337,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.syncSelectedWeapon(this, true)
         this.actions[this.selectedAbilityKey].clearDraw()
         this.selectedAbilityKey = null
+        this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
     }
 
 
@@ -348,6 +348,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, true)
                 this.actions[this.selectedAbilityKey].clearDraw()
                 this.selectedAbilityKey = null
+                this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
             } else {
                 if (this.selectedAbilityKey) {
                     this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
@@ -358,6 +359,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, false)
                 this.actions.weaponPrimary.laser.clear()
                 this.actions.weaponSecondary.laser.clear()
+                this.scene.input.setDefaultCursor('url(assets/cursors/SC2-target-none.cur), pointer')
             }
         }
     }
