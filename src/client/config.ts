@@ -1,8 +1,8 @@
-export const PLAYER_SIZE = 48
+export const PLAYER_SIZE = 52
 export const PLAYER_ACCELERATION_STEADY = 5000
 export const PLAYER_ACCELERATION_CHANGE = 1000
 export const PLAYER_DRAG = 400
-export const PLAYER_DEFAULT_VELOCITY = 360
+export const PLAYER_DEFAULT_VELOCITY = 400
 export const PLAYER_DEFAULT_HEALTH = 1000
 export const PLAYER_TO_PLAYER_DAMAGE = 100
 export const PLAYER_BLINK_DISTANCE = 500
@@ -24,6 +24,6 @@ export const HUD_HEALTH_BAR_COLOR_HIGH = 0x00ff00
 export const HUD_SLOT_COLOR_SELECTED =  0x3366E5
 export const HUD_SLOT_COLOR_UNSELECTED = 0x5577d5 
 
-export const CONSUMABLE_WIDTH = 14
-export const CONSUMABLE_HEIGHT = 14
+export const CONSUMABLE_WIDTH = 32
+export const CONSUMABLE_HEIGHT = 32
 export const PARALAX_SCROLL_FACTOR = 0.05

@@ -127,9 +127,9 @@ export class Weapon  {
         )
         
         if (isLaserReady) {
-            this.laser.alpha = 0.9
+            this.laser.alpha = 0.5
         } else {
-            this.laser.alpha = 0.3
+            this.laser.alpha = 0.1
         }
 
         const line = new Phaser.Geom.Line(

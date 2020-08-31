@@ -21,6 +21,21 @@
                 "type": "image",
                 "key": "backgroundGalaxy3",
                 "url": "assets/backgrounds/galaxy3.jpg"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy4",
+                "url": "assets/backgrounds/galaxy4.png"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy5",
+                "url": "assets/backgrounds/galaxy5.jpg"
+            },
+            {
+                "type": "image",
+                "key": "backgroundGalaxy6",
+                "url": "assets/backgrounds/galaxy6.jpg"
             }
             
         ]

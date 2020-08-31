@@ -10,7 +10,7 @@ const projectilesConfig = {
         damage: 80,
         speed: 1300,
         lifespan: 0.4,
-        radius: 14,
+        radius: 10,
     },
     ak47Bullet: {
         name: 'ak47Bullet',
@@ -18,7 +18,7 @@ const projectilesConfig = {
         damage: 70,
         speed: 1200,
         lifespan: 0.45,
-        radius: 12,
+        radius: 10,
     },
     p90Bullet: {
         name: 'p90Bullet',
@@ -26,7 +26,7 @@ const projectilesConfig = {
         damage: 40,
         speed: 1500,
         lifespan: 0.3,
-        radius: 12,
+        radius: 10,
     },
     revolverBullet: {
         name: 'revolverBullet',
@@ -34,15 +34,15 @@ const projectilesConfig = {
         damage: 450,
         speed: 1000,
         lifespan: 0.24,
-        radius: 12,
+        radius: 14,
     },
     thompsonBullet: {
         name: 'thompsonBullet',
         frame: 'laserRed03.png',
         damage: 200,
         speed: 1700,
-        lifespan: 0.35,
-        radius: 22,
+        lifespan: 0.45,
+        radius: 12,
     },
     chargedArrowProjectile: {
         name: 'chargedArrowProjectile',

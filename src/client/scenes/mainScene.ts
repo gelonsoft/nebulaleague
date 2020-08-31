@@ -72,20 +72,20 @@ export class MainScene extends Phaser.Scene {
     }
 
 
-
     public createBackground() :void {
-        this.add.image(
-            this.cameras.main.width - this.cameras.main.displayWidth,
-            this.cameras.main.height - this.cameras.main.displayHeight,
-            'backgroundGalaxy3'
-        )
+        this.add.image(0, 0, 'backgroundGalaxy3')
             .setScrollFactor(PARALAX_SCROLL_FACTOR, PARALAX_SCROLL_FACTOR)
-            .setOrigin(0, 0)
             .setDisplaySize(
-                this.cameras.main.displayWidth * 1 / this.mainCameraZoom + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
-                this.cameras.main.displayHeight * 1 / this.mainCameraZoom + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
-            .setAlpha(0.4)
+            .setOrigin(0.25, 0.25)
+            .setAlpha(0.7)
+        console.log({
+            dw: this.cameras.main.displayWidth,
+            dh: this.cameras.main.displayHeight,
+        })
+        
     }
     
 
@@ -188,13 +188,14 @@ export class MainScene extends Phaser.Scene {
     
     public create(): void {
         this.settingCamera()
+        this.createBackground()
         this.createConsumables()
         this.createProjectiles()
         this.createWeapons()
         this.createAbilities()
         this.createPlayers()
-        this.createBackground()
         this.cameras.main.startFollow(this.player, true)
+
 
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)

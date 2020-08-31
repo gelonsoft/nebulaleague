@@ -229,9 +229,6 @@ export class PlayerAI {
         const rondamFleeing = Phaser.Math.RND.realInRange(...this.fleeAfterSecondRange) * Math.random() * 2
             <= this.scene.game.loop.delta / 1000
 
-        console.log(rondamFleeing)
-        console.log(Math.random() / Phaser.Math.RND.realInRange(...this.fleeAfterSecondRange))
-        
         if(!this.isFleeingInCombat && actionsKeyRange.length === 0 || rondamFleeing) {
             this.isFleeingInCombat = true
             this.scene.time.addEvent({
