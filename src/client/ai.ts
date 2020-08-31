@@ -270,13 +270,6 @@ export class PlayerAI {
         const [start, end] = this.actionsTriggerSecondRange[actionKey]
         const randomRatio = (Phaser.Math.RND.realInRange(start, end)) * Math.random() * 2
         const randomTime = this.player.actions[actionKey].cooldownDelay * randomRatio
-        // console.log({
-        //     start, end,
-        //     rr: Phaser.Math.RND.between(start, end),
-        //     randomRatio: randomRatio,
-        //     randomTime: randomTime,
-        //     delay: this.player.actions[actionKey].cooldownDelay
-        // })
         return randomTime <= this.scene.game.loop.delta / 1000
     }
 

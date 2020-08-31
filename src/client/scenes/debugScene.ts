@@ -42,6 +42,7 @@ export class DebugScene extends Phaser.Scene {
 
 		const config = {
 			props: [
+                'id',
                 'x',
                 'y',
                 'angle',

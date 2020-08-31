@@ -2,15 +2,15 @@ export const PLAYER_SIZE = 48
 export const PLAYER_ACCELERATION_STEADY = 5000
 export const PLAYER_ACCELERATION_CHANGE = 1000
 export const PLAYER_DRAG = 400
-export const PLAYER_DEFAULT_VELOCITY = 320
+export const PLAYER_DEFAULT_VELOCITY = 360
 export const PLAYER_DEFAULT_HEALTH = 1000
 export const PLAYER_TO_PLAYER_DAMAGE = 100
 export const PLAYER_BLINK_DISTANCE = 500
 export const PLAYER_BLINK_TIMING = 10
 
-export const WORLD_WIDTH = 6000
-export const WORLD_HEIGHT = 6000
-export const MAX_PLAYER = 2
+export const WORLD_WIDTH = 8000
+export const WORLD_HEIGHT = 8000
+export const MAX_PLAYER = 4
 
 export const HUD_HEIGHT = 60
 export const HUD_PADDING = 4
