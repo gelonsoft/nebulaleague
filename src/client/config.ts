@@ -19,7 +19,7 @@ export const HEALTH_BAR_COLOR_HIGH = 0x00ff00
 
 export const HUD_HEIGHT = 60
 export const HUD_PADDING = 4
-export const HUD_PADDING_INNER = HUD_PADDING
+export const HUD_PADDING_INNER = HUD_PADDING / 2
 export const HUD_BACKGROUND = 0x1313a8
 export const HUD_BACKGROUND_ITEM = 0x000000
 export const HUD_SLOT_COLOR_SELECTED =  0x3366E5

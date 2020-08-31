@@ -32,7 +32,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.selected = false
         this.width = 60
         this.height = HUD_HEIGHT
-        this.innerWidth = this.width - HUD_PADDING
+        this.innerWidth = this.width - HUD_PADDING 
         this.innerHeight = this.height - HUD_PADDING
         this.graphic = new Phaser.GameObjects.Graphics(scene)
         this.image = new Phaser.GameObjects.Image(scene, 9, 9, 'atlas', frame)

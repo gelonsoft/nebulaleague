@@ -163,7 +163,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     public initHealthbar(): void {
         this.healthBar= new HealthBar(
-            this.scene, 0, 0, 80, 12, 4, this.maxHealth,
+            this.scene, 0, 0, 80, 14, 4, this.maxHealth,
         )
         this.healthBar.refresh(this.health)
         this.scene.add.existing(this.healthBar)
