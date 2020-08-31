@@ -84,7 +84,7 @@ export class Player extends Phaser.GameObjects.Container {
     public maxHealth: number
     public scene: MainScene
     public playerSprite: Phaser.GameObjects.Sprite
-    public playerHealthBar: HealthBar
+    public healthBar: HealthBar
     public playerState: Map<string, boolean | number>
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
@@ -107,9 +107,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = 100
-        this.initPlayer(playerConfig)
+        this.health = this.maxHealth
+        this.initPlayer()
         this.initHealthbar()
+        this.setSize(PLAYER_SIZE, PLAYER_SIZE)
+        this.attachPhysics()
         this.scene.add.existing(this)
         this.controlledByAI = null
 
@@ -143,7 +145,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
 
-    public initPlayer(playerConfig: PlayerModel): void {
+    public initPlayer(): void {
         this.playerSprite = this.scene.add.sprite(
             0,
             0,
@@ -157,16 +159,14 @@ export class Player extends Phaser.GameObjects.Container {
 
 
         this.add(this.playerSprite)
-        this.setSize(PLAYER_SIZE, PLAYER_SIZE)
-        this.attachPhysics()
     }
 
     public initHealthbar(): void {
-        this.playerHealthBar= new HealthBar(
-            this.scene, 0, 0, 80, 10, 2, 1000,
+        this.healthBar= new HealthBar(
+            this.scene, 0, 0, 80, 12, 4, this.maxHealth,
         )
-        this.playerHealthBar.refresh(this.health)
-        this.scene.add.existing(this.playerHealthBar)
+        this.healthBar.refresh(this.health)
+        this.scene.add.existing(this.healthBar)
         
     }
     
@@ -457,10 +457,13 @@ export class Player extends Phaser.GameObjects.Container {
             duration: 0.6 * 1000,
             ease: 'Power2',
             completeDelay: 0.6 * 1000,
-        });
+        })
+        this.healthBar.refresh(this.health)
     }
     
     public update(delta: number) {
+        this.healthBar.x = this.body.center.x - this.healthBar.width / 2
+        this.healthBar.y = this.body.top - this.healthBar.height
         if (this.health <= 0) {
             this.reset()
             this.scene.events.emit("healthChanged")
@@ -473,5 +476,6 @@ export class Player extends Phaser.GameObjects.Container {
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.setPosition(x, y)
         this.health = this.maxHealth
+        this.healthBar.refresh(this.health)
     }
 }
