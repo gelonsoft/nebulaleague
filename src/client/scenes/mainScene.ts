@@ -236,8 +236,8 @@ export class MainScene extends Phaser.Scene {
     }
     
     public handlePlayerPlayerCollide(player1: Player , player2: Player): void {
-        player1.health -= PLAYER_TO_PLAYER_DAMAGE
-        player2.health -= PLAYER_TO_PLAYER_DAMAGE
+        player2.body.velocity.scale(-1)
+        player2.hit(PLAYER_TO_PLAYER_DAMAGE)
     }
 
     public handleEnemyProjectileCollide(

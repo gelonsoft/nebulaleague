@@ -181,6 +181,68 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../../../Pictures/beams/beam-yellow1.png</key>
+            <key type="filename">../../../Pictures/beams/beams-cyan1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,5,9,9</rect>
+                <key>scale9Paddings</key>
+                <rect>5,5,9,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../Pictures/beams/beams-blue1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,5,11,9</rect>
+                <key>scale9Paddings</key>
+                <rect>5,5,11,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../Pictures/beams/beams-green1.png</key>
+            <key type="filename">../../../Pictures/beams/beams-purple1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,4,9,9</rect>
+                <key>scale9Paddings</key>
+                <rect>5,4,9,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../Pictures/beams/beams-red1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,5,10,9</rect>
+                <key>scale9Paddings</key>
+                <rect>5,5,10,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../../../Pictures/spacefighter/game-icons/ak47.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-ray.png</key>
@@ -930,6 +992,12 @@
             <filename>../../../Pictures/spacefighter/game-icons/ak47.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/p90.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/revolver.png</filename>
+            <filename>../../../Pictures/beams/beam-yellow1.png</filename>
+            <filename>../../../Pictures/beams/beams-green1.png</filename>
+            <filename>../../../Pictures/beams/beams-purple1.png</filename>
+            <filename>../../../Pictures/beams/beams-blue1.png</filename>
+            <filename>../../../Pictures/beams/beams-cyan1.png</filename>
+            <filename>../../../Pictures/beams/beams-red1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

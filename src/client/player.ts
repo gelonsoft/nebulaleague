@@ -107,8 +107,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        // this.health = this.maxHealth
-        this.health = 100
+        this.health = this.maxHealth
         this.initPlayer()
         this.initHealthbar()
         this.setSize(PLAYER_SIZE, PLAYER_SIZE)
@@ -157,14 +156,12 @@ export class Player extends Phaser.GameObjects.Container {
             .setOrigin(0.5, 0.5)
             .setDisplaySize(PLAYER_SIZE, PLAYER_SIZE)
             .setSize(PLAYER_SIZE, PLAYER_SIZE)
-
-
         this.add(this.playerSprite)
     }
 
     public initHealthbar(): void {
         this.healthBar= new HealthBar(
-            this.scene, 0, 0, 80, 14, 4, this.maxHealth,
+            this.scene, 0, 0, 100, 12, 0, this.maxHealth,
         )
         this.healthBar.refresh(this.health)
         this.scene.add.existing(this.healthBar)
@@ -306,9 +303,8 @@ export class Player extends Phaser.GameObjects.Container {
         const ability = this.actions[selectedAbilityKey]
         const actionTime = this.actionTimes[selectedAbilityKey]
         const sourceAbilityPosition = this.body.center
-        const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
         
-        if (actionTime.ready && isInRange) {
+        if (actionTime.ready) {
             actionTime.ready = false
             ability.trigger(this, sourceAbilityPosition, targetAbilityPosition)
             actionTime.cooldown = ability.cooldownDelay
@@ -449,9 +445,11 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public hit(damage:number, recieveEffects: Array<EffectInterface>) {
+    public hit(damage:number, recieveEffects?: Array<EffectInterface>) {
         this.health -= damage
-        this.addEffects(recieveEffects)
+        if(recieveEffects) {
+            this.addEffects(recieveEffects)
+        }
         this.scene.tweens.add({
             targets: this,
             alpha: { from: 0.3, to: 1 },
@@ -459,16 +457,15 @@ export class Player extends Phaser.GameObjects.Container {
             ease: 'Power2',
             completeDelay: 0.6 * 1000,
         })
-        this.healthBar.refresh(this.health)
         this.scene.syncHealth(this)
+        this.healthBar.refresh(this.health)
     }
     
     public update(delta: number) {
         this.healthBar.x = this.body.center.x - this.healthBar.width / 2
-        this.healthBar.y = this.body.top - this.healthBar.height
+        this.healthBar.y = this.body.top - this.healthBar.height - 6
         if (this.health <= 0) {
             this.reset()
-            this.scene.events.emit("healthChanged")
         }
     }
 
@@ -478,7 +475,7 @@ export class Player extends Phaser.GameObjects.Container {
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.setPosition(x, y)
         this.health = this.maxHealth
-        this.healthBar.refresh(this.health)
         this.scene.syncHealth(this)
+        this.healthBar.refresh(this.health)
     }
 }

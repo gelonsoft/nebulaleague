@@ -97,10 +97,10 @@ export const playerAI3 = {
     actionsTriggerSecondRange: {
         weaponPrimary: [0, 0],
         weaponSecondary: [0.1, 0.3],
-        ability1: [0.2, 1],
-        ability2: [0.1, 2],
-        ability3: [0.1, 2],
-        ability4: [0.1, 2],
+        ability1: [0, 0],
+        ability2: [0, 0],
+        ability3: [0, 0],
+        ability4: [0, 0.2],
     }
 }
 

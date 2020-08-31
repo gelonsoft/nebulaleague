@@ -39,20 +39,21 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         this.innerHeight = this.height - this.padding
         this.maxHealth = maxHealth
         this.health = 0
-        this.create()
     }
 
-    public create() {
-        this.fillStyle(0x000000)
-        this.fillRect(this.x, this.y, this.width, this.height)
-        this.fillStyle(HEALTH_BAR_COLOR_BACKGROUND)
-        this.fillRect(this.innerPadding, this.innerPadding, this.innerWidth, this.innerHeight)
-    }
 
     public refresh(health: number) {
         this.health = health
+        this.clear()
+        this.fillStyle(0x000000)
+        this.fillRect(0, 0, this.width, this.height)
         this.fillStyle(HEALTH_BAR_COLOR_BACKGROUND)
-        this.fillRect(this.innerPadding, this.innerPadding, this.innerWidth, this.innerHeight)
+        this.fillRect(
+            this.innerPadding,
+            this.innerPadding,
+            this.innerWidth,
+            this.innerHeight,
+        )
         if (health <= this.maxHealth / 10) {
             this.fillStyle(HEALTH_BAR_COLOR_LOW)
         } else if (health <= this.maxHealth / 10 * 3) {
@@ -62,6 +63,10 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         }
         const percent = this.innerWidth / this.maxHealth
         const widthHealth = Math.floor(percent * health)
-        this.fillRect(this.innerPadding, this.innerPadding, widthHealth, this.innerHeight)
+        this.fillRect(
+            this.innerPadding,
+            this.innerPadding,
+            widthHealth,
+            this.innerHeight)
     }
 }

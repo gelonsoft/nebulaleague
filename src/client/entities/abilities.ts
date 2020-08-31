@@ -91,31 +91,27 @@ export class Ability  {
 
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
-            if(this.isInRangeToTrigger(player.body.center, pointerPosition)) {
-                this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.8)
-                this.radiusGraphics.fillCircle(pointerPosition.x, pointerPosition.y, this.radiusDistance)
-                this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.8)
-                this.radiusGraphics.strokeCircle(pointerPosition.x, pointerPosition.y, this.radiusDistance)
-            } else {
-                this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.2)
-                this.radiusGraphics.fillCircle(pointerPosition.x, pointerPosition.y, this.radiusDistance)
-                this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
-                this.radiusGraphics.strokeCircle(pointerPosition.x, pointerPosition.y, this.radiusDistance)
-            }
+            const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition) ?
+                pointerPosition:
+                this.getMaxRadiusPosition(player)
+                
+
+            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.8)
+            this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
+            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.8)
+            this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
+
         }
 
        if (this.rayGraphics) {
            this.rayGraphics.clear()
-           const rayEndPosition = Phaser.Math.Vector2.ONE
-               .clone()
-               .setToPolar(player.rotation - Math.PI / 2)
-               .scale(this.rangeDistance)
+           const rayEndPosition = this.getMaxRadiusPosition(player)
            
            const line = new Phaser.Geom.Line(
                player.body.center.x,
                player.body.center.y,
-               player.body.center.x + rayEndPosition.x,
-               player.body.center.y + rayEndPosition.y,
+               rayEndPosition.x,
+               rayEndPosition.y,
            )
            
            this.rayGraphics.lineStyle(this.raySize, this.rayColor)
@@ -143,6 +139,14 @@ export class Ability  {
         return distance <= this.rangeDistance
     }
 
+    public getMaxRadiusPosition(player: Player): Phaser.Math.Vector2 {
+        return Phaser.Math.Vector2.ONE
+            .clone()
+            .setToPolar(player.rotation - Math.PI / 2)
+            .scale(this.rangeDistance)
+            .add(player.body.center)
+    }
+
 
     public triggerProjectile(
         player: Player,
@@ -167,15 +171,20 @@ export class Ability  {
         sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2
     ): void {
+        const targetPosition =
+            this.isInRangeToTrigger(player.body.center, pointerPosition) ?
+            pointerPosition:
+            this.getMaxRadiusPosition(player)
+        
         switch (this.action) {
             case Action.Blink:
-                player.body.reset(pointerPosition.x, pointerPosition.y)
+                player.body.reset(targetPosition.x, targetPosition.y)
                 break
             case Action.Projectile:
-                this.triggerProjectile(player, sourcePosition, pointerPosition)
+                this.triggerProjectile(player, sourcePosition, targetPosition)
                 break
             case Action.ProjectileWithRotation:
-                this.triggerProjectile(player, sourcePosition, pointerPosition, true)
+                this.triggerProjectile(player, sourcePosition, targetPosition, true)
                 break
         }
     }
