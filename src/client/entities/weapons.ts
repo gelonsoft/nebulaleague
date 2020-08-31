@@ -7,8 +7,7 @@ const weaponsConfig = {
     pistol: {
         name: 'pistol',
         frame: 'pistol-gun.png',
-        cooldownDelay: 0.8,
-        cooldown: 0,
+        cooldownDelay: 0.7,
         projectileKey: 'pistolBullet',
         laserConfig: {
             color: 0xff5252,
@@ -20,7 +19,6 @@ const weaponsConfig = {
         name: 'ak47',
         frame: 'ak47.png',
         cooldownDelay: 0.5,
-        cooldown: 0,
         projectileKey: 'ak47Bullet',
         laserConfig: {
             color: 0x00f8f8,
@@ -32,7 +30,6 @@ const weaponsConfig = {
         name: 'p90',
         frame: 'p90.png',
         cooldownDelay: 0.2,
-        cooldown: 0,
         projectileKey: 'p90Bullet',
         laserConfig: {
             color: 0x00ff00,
@@ -43,8 +40,7 @@ const weaponsConfig = {
     revolver: {
         name: 'revolver',
         frame: 'revolver.png',
-        cooldownDelay: 4,
-        cooldown: 0,
+        cooldownDelay: 10,
         projectileKey: 'revolverBullet',
         laserConfig: {
             color: 0x00ff00,
@@ -55,8 +51,7 @@ const weaponsConfig = {
     thompson: {
         name: 'thompson',
         frame: 'thompson-m1928.png',
-        cooldownDelay: 7,
-        cooldown: 0,
+        cooldownDelay: 5,
         projectileKey: 'thompsonBullet',
         laserConfig: {
             color: 0x00ff00,

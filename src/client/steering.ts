@@ -90,7 +90,7 @@ export function limit(vector: Vector2, max: number)
 {
     if(vector.length() > max)
     {
-        vector.normalize().scale(max)
+        return vector.clone().normalize().scale(max)
     }
     return vector
 }

@@ -27,13 +27,18 @@ export class PlayerAI {
     public steeringsBehaviour: Array<string>
     public wander: steering.Wander
     public weaponPrecisionHandicap: number
-    public fleeRatio: number
-    public weaponPrimaryTriggerRange: [number, number]
-    public weaponSecondaryTriggerRange: [number, number]
-    public ability1TriggerRange: [number, number]
-    public ability2TriggerRange: [number, number]
-    public ability3TriggerRange: [number, number]
-    public ability4TriggerRange: [number, number]
+    public fleeForSecondRange: [number, number]
+    public fleeAfterSecondRange: [number, number]
+    public isFleeingInCombat: boolean
+    public moveCombatAngleRange: [number, number]
+    public actionsTriggerSecondRange: {
+        weaponPrimary: [number, number],
+        weaponSecondary: [number, number],
+        ability1: [number, number],
+        ability2: [number, number],
+        ability3: [number, number],
+        ability4: [number, number],
+    }
     public tree: IBehaviorTreeNode
     
     
@@ -51,17 +56,13 @@ export class PlayerAI {
         this.playersInViewRange = []
         this.steeringsForce = []
         this.steeringsBehaviour = []
+        this.isFleeingInCombat = false
         this.wander = playerConfig.wander
         this.weaponPrecisionHandicap = playerConfig.weaponPrecisionHandicap
-        this.fleeRatio = playerConfig.fleeRatio
-        this.weaponPrimaryTriggerRange = playerConfig.weaponPrimaryTriggerRange
-        this.weaponSecondaryTriggerRange = playerConfig.weaponSecondaryTriggerRange
-        this.ability1TriggerRange = playerConfig.ability1TriggerRange
-        this.ability2TriggerRange = playerConfig.ability2TriggerRange
-        this.ability3TriggerRange = playerConfig.ability3TriggerRange
-        this.ability4TriggerRange = playerConfig.ability4TriggerRange
-
-        
+        this.fleeForSecondRange = playerConfig.fleeForSecondRange
+        this.fleeAfterSecondRange = playerConfig.fleeAfterSecondRange
+        this.moveCombatAngleRange = playerConfig.moveCombatAngleRange
+        this.actionsTriggerSecondRange = playerConfig.actionsTriggerSecondRange
         this.tree = this.buildTree()
         
         if (this.scene.game.debug) {
@@ -70,26 +71,24 @@ export class PlayerAI {
     }
 
     public buildTree(): IBehaviorTreeNode  {
+
         const builder = new BehaviorTreeBuilder()
             .Selector('attackingSelector')
             .Do('playersInHittableRange', () => {
                 if (this.playersInHittableRange.length > 0) {
-                    // this.doSeekTarget()
-                    this.doAttack()
-                    return BehaviorTreeStatus.Success
-                }
-                return BehaviorTreeStatus.Failure
-            })
-            .Do('playersInViewRange', () => {
-                if (this.playersInViewRange.length > 0) {
-                    const isLowHealth = (this.player.health / this.player.maxHealth) > this.fleeRatio
-                    if (isLowHealth) {
-                        this.doSeekTarget()
-                        return BehaviorTreeStatus.Success
-                    } else {
-                        this.doFleeTarget()
-                        return BehaviorTreeStatus.Success
+                    const choosenTarget = Phaser.Math.RND.pick(this.playersInHittableRange)
+                    const choosenActionKey = Phaser.Math.RND.pick(choosenTarget.actions)
+                    if (choosenActionKey === undefined) {
+                        this.doMoveInCombat(choosenTarget)
                     }
+                    else {
+                        if (this.shouldAttack(choosenActionKey)) {
+                            this.doAttack(choosenTarget, choosenActionKey)
+                        } else {
+                            this.doMoveInCombat(choosenTarget)
+                        }
+                    }
+                    return BehaviorTreeStatus.Success
                 }
                 return BehaviorTreeStatus.Failure
             })
@@ -106,17 +105,19 @@ export class PlayerAI {
     }
 
 
-    public update(deltaTime: number) {
+    public update() {
         this.steeringsForce = []
         this.steeringsBehaviour = []
         this.setPlayersInVisibleRange()
         this.setPlayersInHittableRange()
-        this.tree.Tick(new TimeData(deltaTime))
+        
+        this.tree.Tick(new TimeData(this.scene.game.loop.delta))
         if (this.player.isParalyzed || this.player.isStunned) {
             this.player.body.acceleration = Phaser.Math.Vector2.ZERO.clone()
             this.player.body.velocity = Phaser.Math.Vector2.ZERO.clone()
         } else {
             this.player.body.acceleration = this.sumSteeringsForce()
+            this.player.rotation = steering.facing(this.player.body.velocity)
         }
     }
 
@@ -138,7 +139,6 @@ export class PlayerAI {
     }
 
 
-
     public setPlayersInHittableRange(): void {
         const playersInRange = []
         const actionsKeysReady = Object.keys(this.player.actionTimes)
@@ -153,12 +153,10 @@ export class PlayerAI {
                         this.player.actions[key].rangeDistance
                     )
                 })
-                if (actionsInRange.length > 0) {
-                    playersInRange.push({
-                        player: playerInViewRange,
-                        actions: actionsInRange,
-                    })        
-                }
+                playersInRange.push({
+                    player: playerInViewRange,
+                    actions: actionsInRange,
+                })        
             }
         }
         this.playersInHittableRange = playersInRange
@@ -204,6 +202,52 @@ export class PlayerAI {
         this.steeringsBehaviour.push(FLEE_BEHAVIOUR)
         this.steeringsForce.push(newForce)
     }
+
+    public doMoveAroundTarget(choosenTarget: PlayerAIActionsInterface, closestActionDistance: number): void {
+        const sourcePosition = this.player.body.center.clone()
+        const targetPosition = choosenTarget.player.body.center.clone()
+        const randomAngle = Phaser.Math.RND.between(...this.moveCombatAngleRange)
+        const goalPosition = targetPosition
+            .subtract(sourcePosition)
+            .normalize()
+            .rotate(Phaser.Math.DegToRad(randomAngle) )
+            .scale(closestActionDistance)
+            
+        const newForce = steering.limit(
+            goalPosition,
+            this.player.body.maxSpeed,
+        )
+        this.steeringsForce.push(newForce)
+    }
+
+    public doMoveInCombat(choosenTarget: PlayerAIActionsInterface): void {
+        const actionsKeyRange = Object.keys(this.player.actionTimes)
+            .filter(key => this.player.actionTimes[key].ready)
+            .map(key => [key, this.player.actions[key].rangeDistance])
+            .sort((action1, action2) => action2[1] - action1[1])
+
+        const rondamFleeing = Phaser.Math.RND.realInRange(...this.fleeAfterSecondRange) * Math.random() * 2
+            <= this.scene.game.loop.delta / 1000
+
+        console.log(rondamFleeing)
+        console.log(Math.random() / Phaser.Math.RND.realInRange(...this.fleeAfterSecondRange))
+        
+        if(!this.isFleeingInCombat && actionsKeyRange.length === 0 || rondamFleeing) {
+            this.isFleeingInCombat = true
+            this.scene.time.addEvent({
+                delay: Phaser.Math.RND.realInRange(...this.fleeForSecondRange) * 1000,
+                callback: () => {
+                    this.isFleeingInCombat = false
+                }
+            })            
+        }
+
+        if(!this.isFleeingInCombat) {
+            this.doMoveAroundTarget(choosenTarget, actionsKeyRange[0][1])
+        } else {
+            this.doFleeTarget()
+        }
+    }
     
 
     public doObstacleAvoidance(): void {
@@ -212,17 +256,32 @@ export class PlayerAI {
 
 
     public doWander(): void {
-        const newForce = steering.limit(steering.wander(this.player.body, this.wander), 1000)
+        const newForce = steering.limit(
+            steering.wander(this.player.body, this.wander),
+            this.player.body.maxSpeed,
+        )
         this.steeringsBehaviour.push(WANDER_BEHAVIOUR)
         this.steeringsForce.push(newForce)
         this.wander.angle += Phaser.Math.Between(-this.wander.variance, this.wander.variance)
         this.player.rotation = steering.facing(this.player.body.velocity)
     }
 
+    public shouldAttack(actionKey: string): boolean {
+        const [start, end] = this.actionsTriggerSecondRange[actionKey]
+        const randomRatio = (Phaser.Math.RND.realInRange(start, end)) * Math.random() * 2
+        const randomTime = this.player.actions[actionKey].cooldownDelay * randomRatio
+        // console.log({
+        //     start, end,
+        //     rr: Phaser.Math.RND.between(start, end),
+        //     randomRatio: randomRatio,
+        //     randomTime: randomTime,
+        //     delay: this.player.actions[actionKey].cooldownDelay
+        // })
+        return randomTime <= this.scene.game.loop.delta / 1000
+    }
+
     
-    public doAttack(): void {
-        const choosenTarget: PlayerAIActionsInterface = Phaser.Math.RND.pick(this.playersInHittableRange)
-        const choosenActionKey: string = Phaser.Math.RND.pick(choosenTarget.actions)
+    public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: string): void {
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 
@@ -255,5 +314,6 @@ export class PlayerAI {
                 this.player.castAbility(choosenActionKey, predictedPosition)
             }
         }
+        
     }
 }

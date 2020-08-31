@@ -56,7 +56,6 @@ export class PlayerControl {
         this.canRightTrigger = true
         this.active = true
         this.controls = {
-            moveLeftDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
             moveRightDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
             moveUpDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA),
             moveDownDvorak: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
@@ -65,9 +64,7 @@ export class PlayerControl {
             moveUpQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
             moveDownQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             moveLeftAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-            moveRightAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
             moveUpAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
-            moveDownAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             skill1: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
             skill2: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
             skill3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
@@ -76,18 +73,15 @@ export class PlayerControl {
     }
 
     public handleMovement(): void {
-        const left = (this.controls.moveLeftDvorak.isDown ||
-            this.controls.moveLeftQwerty.isDown ||
+        const left = ( this.controls.moveLeftQwerty.isDown ||
             this.controls.moveLeftAzerty.isDown ) ? -1: 0
         const right = (this.controls.moveRightDvorak.isDown ||
-            this.controls.moveRightQwerty.isDown ||
-            this.controls.moveRightAzerty.isDown ) ? 1: 0
+            this.controls.moveRightQwerty.isDown ) ? 1: 0
         const up = (this.controls.moveUpDvorak.isDown ||
             this.controls.moveUpQwerty.isDown ||
             this.controls.moveUpAzerty.isDown ) ? -1: 0
         const down = (this.controls.moveDownDvorak.isDown ||
-            this.controls.moveDownQwerty.isDown ||
-            this.controls.moveDownAzerty.isDown ) ? 1: 0
+            this.controls.moveDownQwerty.isDown ) ? 1: 0
         const playerDirection: PlayerDirection = {
             x: left + right,
             y: up + down,
@@ -100,7 +94,6 @@ export class PlayerControl {
         const skill2 = this.scene.input.keyboard.checkDown(this.controls.skill2, 200)
         const skill3 = this.scene.input.keyboard.checkDown(this.controls.skill3, 200)
         const skill4 = this.scene.input.keyboard.checkDown(this.controls.skill4, 200)
-
 
         if (skill1) {
             this.player.selectAbility('ability1')

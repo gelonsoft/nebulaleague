@@ -294,8 +294,6 @@ export class Player extends Phaser.GameObjects.Container {
         const ability = this.actions[selectedAbilityKey]
         const actionTime = this.actionTimes[selectedAbilityKey]
         const sourceAbilityPosition = this.body.center
-
-        
         const isInRange = ability.isInRangeToTrigger(this.body.center, targetAbilityPosition)
         
         if (actionTime.ready && isInRange) {
@@ -444,12 +442,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.addEffects(recieveEffects)
         this.scene.tweens.add({
             targets: this,
-            alpha: { from: 0.4, to: 1 },
-            duration: 0.5 * 1000,
+            alpha: { from: 0.3, to: 1 },
+            duration: 0.6 * 1000,
             ease: 'Power2',
-            completeDelay: 0.5 * 1000,
+            completeDelay: 0.6 * 1000,
         });
-        
     }
     
     public update(delta: number) {
