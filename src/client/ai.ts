@@ -260,7 +260,22 @@ export class PlayerAI {
         this.steeringsBehaviour.push(WANDER_BEHAVIOUR)
         this.steeringsForce.push(newForce)
         this.wander.angle += Phaser.Math.Between(-this.wander.variance, this.wander.variance)
+        this.avoidBoundariesWander()
         this.player.rotation = steering.facing(this.player.body.velocity)
+    }
+
+    public avoidBoundariesWander(): void {
+        const left = this.scene.physics.world.bounds.left + 50
+        const right = this.scene.physics.world.bounds.right - 50
+        const top = this.scene.physics.world.bounds.top + 50
+        const bottom = this.scene.physics.world.bounds.bottom - 50
+        if(this.player.body.center.x <= left ||
+            this.player.body.center.x >= right ||
+            this.player.body.center.y <= top ||
+            this.player.body.center.y >= bottom
+          ) {
+            this.player.body.velocity.rotate(Math.PI)
+        } 
     }
 
     public shouldAttack(actionKey: string): boolean {
@@ -304,6 +319,5 @@ export class PlayerAI {
                 this.player.castAbility(choosenActionKey, predictedPosition)
             }
         }
-        
     }
 }

@@ -79,13 +79,8 @@ export class MainScene extends Phaser.Scene {
                 this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
                 this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
-            .setOrigin(0.25, 0.25)
+            .setOrigin(0.22, 0.22)
             .setAlpha(0.7)
-        console.log({
-            dw: this.cameras.main.displayWidth,
-            dh: this.cameras.main.displayHeight,
-        })
-        
     }
     
 
