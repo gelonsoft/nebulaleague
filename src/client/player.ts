@@ -200,8 +200,8 @@ export class Player extends Phaser.GameObjects.Container {
         const body = this.body as Phaser.Physics.Arcade.Body
         const isXChange = this.previousDirection.x !== playerDirection.x
         const isYChange = this.previousDirection.y !== playerDirection.y
-        const newAccelerationSpeedX = isXChange ? this.accelerationSteady : this.accelerationChange
-        const newAccelerationSpeedY = isYChange ? this.accelerationSteady : this.accelerationChange
+        const newAccelerationSpeedX = isXChange ? this.accelerationSteady: this.accelerationChange
+        const newAccelerationSpeedY = isYChange ? this.accelerationSteady: this.accelerationChange
         const newAcceleration = new Phaser.Math.Vector2(playerDirection.x, playerDirection.y)
             .normalize()
             .multiply(new Phaser.Math.Vector2(newAccelerationSpeedX, newAccelerationSpeedY))

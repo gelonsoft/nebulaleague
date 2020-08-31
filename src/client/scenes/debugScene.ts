@@ -1,7 +1,7 @@
 import { MainScene } from "./mainScene"
 import { MyGame } from "../phaserEngine"
 import { DebugControl } from "../controls"
-import { PlayerAI, WANDER_BEHAVIOUR } from "../ai"
+import { PlayerAI } from "../ai"
 import { Player } from "../player"
 
 
@@ -59,7 +59,7 @@ export class DebugScene extends Phaser.Scene {
         this.globalProps = config.props
 		
 		this.style = {
-			font: '16px Arial',
+			font: '18px Arial',
 			fill: config.color,
 			stroke: config.color,
 			strokeThickness: 1

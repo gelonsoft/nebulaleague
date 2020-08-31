@@ -1,4 +1,4 @@
-import { Player } from './player'
+import { Player, PlayerDirection } from './player'
 import { MainScene } from './scenes/mainScene'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import { PlayerAIConfig } from './playersAI'
@@ -9,6 +9,16 @@ import { Ability } from './entities/abilities'
 export const SEEK_BEHAVIOUR = 'seek'
 export const FLEE_BEHAVIOUR = 'flee'
 export const WANDER_BEHAVIOUR = 'wander'
+export const MOVE_AROUND_BEHAVIOUR = 'move_'
+
+enum Behaviour {
+    Default,
+    Seek,
+    Flee,
+    Wander,
+    MoveAround,
+    newMoveAroundAngle,
+}
 
 
 interface PlayerAIActionsInterface {
@@ -24,12 +34,16 @@ export class PlayerAI {
     public playersInHittableRange: Array<PlayerAIActionsInterface>
     public playersInViewRange: Array<Player>
     public steeringsForce: Array<Phaser.Math.Vector2>
-    public steeringsBehaviour: Array<string>
+    public previousDirection: PlayerDirection
+    public steeringBehaviour: Behaviour
+    public previousSteeringBehaviour: Behaviour
     public wander: steering.Wander
     public weaponPrecisionHandicap: number
     public fleeForSecondRange: [number, number]
     public fleeAfterSecondRange: [number, number]
     public isFleeingInCombat: boolean
+    public moveCombatRandomAngle: number
+    public moveCombatSecondRange: [number, number]
     public moveCombatAngleRange: [number, number]
     public actionsTriggerSecondRange: {
         weaponPrimary: [number, number],
@@ -40,8 +54,6 @@ export class PlayerAI {
         ability4: [number, number],
     }
     public tree: IBehaviorTreeNode
-    
-    
     constructor(
         scene: MainScene,
         player: Player,
@@ -55,15 +67,29 @@ export class PlayerAI {
         this.playersInHittableRange = []
         this.playersInViewRange = []
         this.steeringsForce = []
-        this.steeringsBehaviour = []
+        this.previousDirection = { x: 0, y: 0 }
+        this.steeringBehaviour = Behaviour.Default
+        this.previousSteeringBehaviour = Behaviour.Default
         this.isFleeingInCombat = false
         this.wander = playerConfig.wander
         this.weaponPrecisionHandicap = playerConfig.weaponPrecisionHandicap
         this.fleeForSecondRange = playerConfig.fleeForSecondRange
         this.fleeAfterSecondRange = playerConfig.fleeAfterSecondRange
         this.moveCombatAngleRange = playerConfig.moveCombatAngleRange
+        this.moveCombatSecondRange = playerConfig.moveCombatSecondRange
+        this.moveCombatRandomAngle = Phaser.Math.RND.between(...this.moveCombatAngleRange)
         this.actionsTriggerSecondRange = playerConfig.actionsTriggerSecondRange
         this.tree = this.buildTree()
+
+        // add random angle to choose moving target
+        this.scene.time.addEvent({
+            delay: Phaser.Math.RND.realInRange(...this.moveCombatSecondRange) * 1000,
+            callback: () => {
+                this.moveCombatRandomAngle = Phaser.Math.RND.between(...this.moveCombatAngleRange)
+                this.steeringBehaviour = Behaviour.newMoveAroundAngle
+            },
+            loop: true
+        })
         
         if (this.scene.game.debug) {
             window[`ia-${player.id}`] = this
@@ -71,7 +97,6 @@ export class PlayerAI {
     }
 
     public buildTree(): IBehaviorTreeNode  {
-
         const builder = new BehaviorTreeBuilder()
             .Selector('attackingSelector')
             .Do('playersInHittableRange', () => {
@@ -107,7 +132,7 @@ export class PlayerAI {
 
     public update() {
         this.steeringsForce = []
-        this.steeringsBehaviour = []
+        this.previousSteeringBehaviour = this.steeringBehaviour
         this.setPlayersInVisibleRange()
         this.setPlayersInHittableRange()
         
@@ -116,8 +141,12 @@ export class PlayerAI {
             this.player.body.acceleration = Phaser.Math.Vector2.ZERO.clone()
             this.player.body.velocity = Phaser.Math.Vector2.ZERO.clone()
         } else {
-            this.player.body.acceleration = this.sumSteeringsForce()
+            const netForce = this.sumSteeringsForce()
+            this.player.body.acceleration = netForce
             this.player.rotation = steering.facing(this.player.body.velocity)
+            if (this.steeringBehaviour !== this.previousSteeringBehaviour) {
+                this.player.body.velocity.set(0, 0)
+            }
         }
     }
 
@@ -138,6 +167,35 @@ export class PlayerAI {
         this.playersInViewRange = playersInRange
     }
 
+    public simulateDirection(velocity: Phaser.Math.Vector2): PlayerDirection {
+        const directions = [
+            [0, 0],
+            [1, 0],
+            [1, -1],
+            [0, -1],
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [0, 1],
+            [1, 1],
+        ]
+        let choosenDirectionIndex = 0
+        let angleStart = 0
+        for (const i of  [...Array(7).keys()]) {
+            const index = i + 1
+            const angleEnd: number = (index * Math.PI / 4) as number
+            if (velocity.angle() >= angleStart && velocity.angle() <= angleEnd) {
+                choosenDirectionIndex = index
+            }
+            angleStart = angleEnd
+        }
+        const choosenDirection = directions[choosenDirectionIndex]
+        return {
+            x: choosenDirection[0],
+            y: choosenDirection[1],
+        }
+    }
+    
 
     public setPlayersInHittableRange(): void {
         const playersInRange = []
@@ -192,25 +250,30 @@ export class PlayerAI {
     public doSeekTarget(): void {
         const target = this.playersInViewRange[0].body
         const newForce = steering.pursuit(this.player.body, target)
-        this.steeringsBehaviour.push(SEEK_BEHAVIOUR)
+        this.steeringBehaviour = Behaviour.Seek
         this.steeringsForce.push(newForce)
     }
 
     public doFleeTarget(): void {
         const target = this.playersInViewRange[0].body
         const newForce = steering.evade(this.player.body, target)
-        this.steeringsBehaviour.push(FLEE_BEHAVIOUR)
+        this.steeringBehaviour = Behaviour.Flee
         this.steeringsForce.push(newForce)
     }
 
-    public doMoveAroundTarget(choosenTarget: PlayerAIActionsInterface, closestActionDistance: number): void {
+    public doMoveAroundTarget(
+        choosenTarget: PlayerAIActionsInterface,
+        closestActionDistance: number,
+        randomAngle: number,
+        
+    ): void {
         const sourcePosition = this.player.body.center.clone()
         const targetPosition = choosenTarget.player.body.center.clone()
-        const randomAngle = Phaser.Math.RND.between(...this.moveCombatAngleRange)
+        
         const goalPosition = targetPosition
             .subtract(sourcePosition)
             .normalize()
-            .rotate(Phaser.Math.DegToRad(randomAngle) )
+            .rotate(Phaser.Math.DegToRad(randomAngle))
             .scale(closestActionDistance)
             
         const newForce = steering.limit(
@@ -218,6 +281,7 @@ export class PlayerAI {
             this.player.body.maxSpeed,
         )
         this.steeringsForce.push(newForce)
+        this.steeringBehaviour = Behaviour.MoveAround
     }
 
     public doMoveInCombat(choosenTarget: PlayerAIActionsInterface): void {
@@ -240,7 +304,7 @@ export class PlayerAI {
         }
 
         if(!this.isFleeingInCombat) {
-            this.doMoveAroundTarget(choosenTarget, actionsKeyRange[0][1])
+            this.doMoveAroundTarget(choosenTarget, actionsKeyRange[0][1], this.moveCombatRandomAngle)
         } else {
             this.doFleeTarget()
         }
@@ -257,11 +321,11 @@ export class PlayerAI {
             steering.wander(this.player.body, this.wander),
             this.player.body.maxSpeed,
         )
-        this.steeringsBehaviour.push(WANDER_BEHAVIOUR)
         this.steeringsForce.push(newForce)
         this.wander.angle += Phaser.Math.Between(-this.wander.variance, this.wander.variance)
         this.avoidBoundariesWander()
         this.player.rotation = steering.facing(this.player.body.velocity)
+        this.steeringBehaviour = Behaviour.Wander
     }
 
     public avoidBoundariesWander(): void {

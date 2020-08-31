@@ -258,6 +258,7 @@ export class MainScene extends Phaser.Scene {
         switch(consumable.name) {
             case 'pill':
                 this.syncHealth(player)
+                this.player.healthBar.refresh(this.player.health)
                 break
         }
     }

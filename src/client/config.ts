@@ -10,7 +10,7 @@ export const PLAYER_BLINK_TIMING = 10
 
 export const WORLD_WIDTH = 8000
 export const WORLD_HEIGHT = 8000
-export const MAX_PLAYER = 4
+export const MAX_PLAYER = 2
 
 export const HEALTH_BAR_COLOR_BACKGROUND = 0xffffff
 export const HEALTH_BAR_COLOR_LOW = 0xff0000
@@ -27,4 +27,4 @@ export const HUD_SLOT_COLOR_UNSELECTED = 0x5577d5
 
 export const CONSUMABLE_WIDTH = 24
 export const CONSUMABLE_HEIGHT = 24
-export const PARALAX_SCROLL_FACTOR = 0.05
+export const PARALAX_SCROLL_FACTOR = 0.04
