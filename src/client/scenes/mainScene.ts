@@ -34,22 +34,24 @@ export class MainScene extends Phaser.Scene {
     public isDebug: boolean
     public freeCamera: boolean
     public mainCameraZoom: number
+    public backgroundImage: Phaser.GameObjects.Image
 
     constructor() {
         super({
             key: "mainScene"
         })
-
+        window.addEventListener('resize', () => {
+            this.backgroundImage.setDisplaySize(
+                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+            )
+        }, false)
     }
 
     public init(): void {
         if (this.game.debug) {
             window['m'] = this
         }
-
-        window.addEventListener('resize', () => {
-            this.game.scale.resize(window.innerWidth, window.innerHeight)
-        })
         this.mainCameraZoom = 0.5
         this.playersAI = []
         this.players = this.physics.add.group({
@@ -73,7 +75,7 @@ export class MainScene extends Phaser.Scene {
 
 
     public createBackground() :void {
-        this.add.image(0, 0, 'backgroundGalaxy3')
+        this.backgroundImage = this.add.image(0, 0, 'backgroundGalaxy3')
             .setScrollFactor(PARALAX_SCROLL_FACTOR, PARALAX_SCROLL_FACTOR)
             .setDisplaySize(
                 this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,

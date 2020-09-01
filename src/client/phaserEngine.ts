@@ -28,7 +28,7 @@ export class PhaserSpaceGame {
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,
                 height: window.innerHeight * window.devicePixelRatio,
-                mode: Phaser.Scale.NONE,
+                autoCenter: Phaser.Scale.NONE,
                 parent: "nebulaleague",
             },
             parent: 'nebulaleague',
@@ -53,5 +53,11 @@ export class PhaserSpaceGame {
         this.game.scene.start('bootScene')
         window['a'] = this.game
 
+        window.addEventListener('resize', () => {
+            this.game.scale.resize(window.innerWidth, window.innerHeight)
+        })
+        
     }
 }
+
+

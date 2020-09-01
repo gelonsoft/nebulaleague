@@ -100,6 +100,7 @@ export class HudScene extends Phaser.Scene {
     public maxHealthPlayer: number
     public currentHealthPlayer: number
     public healthBar: HealthBar
+    public background: Phaser.GameObjects.Graphics
     public weaponPrimaryContainer: SlotContainer
     public weaponSecondaryContainer: SlotContainer
     public abilityContainer1: SlotContainer
@@ -112,9 +113,17 @@ export class HudScene extends Phaser.Scene {
     public mainScene: MainScene
 
     constructor() {
-        super({
-            key: "hudScene"
-        })
+        super({key: "hudScene"})
+
+        window.addEventListener('resize', () => {
+            const top = this.scale.height - HUD_HEIGHT
+            this.mainContainer.setX(0)
+            this.mainContainer.setY(top)
+            this.background.clear()
+            this.background.fillStyle(HUD_BACKGROUND, 0.2)
+            this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
+        }, false)
+        
     }
 
     public init(): void {
@@ -135,9 +144,9 @@ export class HudScene extends Phaser.Scene {
         this.mainScene.events.on('effectsChanged', this.updateEffectChanged, this)
 
         const top = this.scale.height - HUD_HEIGHT
-        const background = this.add.graphics()
-        background.fillStyle(HUD_BACKGROUND, 0.2)
-        background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
+        this.background = this.add.graphics()
+        this.background.fillStyle(HUD_BACKGROUND, 0.2)
+        this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
 
         this.healthBar = new HealthBar(this, 0, 0, 240, HUD_HEIGHT, HUD_PADDING, this.player.maxHealth)
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.actions.weaponPrimary.frame)
@@ -160,7 +169,7 @@ export class HudScene extends Phaser.Scene {
             0,
             top,
             [
-                background,
+                this.background,
                 this.healthBar,
                 this.weaponPrimaryContainer,
                 this.weaponSecondaryContainer,
