@@ -123,7 +123,6 @@ export class HudScene extends Phaser.Scene {
             this.background.fillStyle(HUD_BACKGROUND, 0.2)
             this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
         }, false)
-        
     }
 
     public init(): void {

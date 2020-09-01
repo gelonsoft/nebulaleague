@@ -73,15 +73,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     update(): void {
-        if (this.game.debug) {
-            this.scene.start('mainScene')
-            this.scene.start('hudScene')
-            if (this.game.debug) {
-                this.scene.start('debugScene',this.game.scene.getScene('mainScene'))            
-            }
-        } else {
-            this.scene.start('menuScene')
-        }
+        this.scene.start('menuScene')
     }
 
     private createLoadingGraphics(): void {
