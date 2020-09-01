@@ -60,9 +60,9 @@ const projectilesConfig = {
     flameProjectile: {
         name: 'flameProjectile',
         radius: 50,
-        lifespan: 3,
+        lifespan: 1,
         damage: 25,
-        tick: 0.5,
+        tick: 0.15,
         fillColor: 0xaa0000,
         strokeColor: 0xff0000,
         fillAlpha: 0.6,
@@ -251,8 +251,9 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
             alpha: { from: 0, to: 1 },
             duration: this.triggerAfter * 1000,
             ease: 'Cubic.easeIn',
-            completeDelay: this.triggerAfter * 1000
-        });
+            // completeDelay: this.triggerAfter * 1000
+            // completeDelay: this.triggerAfter * 1000
+        })
         
         this.scene.time.addEvent({
             delay: this.triggerAfter * 1000,

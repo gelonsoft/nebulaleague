@@ -25,13 +25,11 @@ export interface AbilityConfig {
     drawingStyle: DrawingStyles
     radiusDistance?: number
     rangeDistanceColor?: number
+    triggerAfter?: number
     radiusDistanceColor?: number
     raySize?: number
     rayColor?: number
 }
-
-
-
 
 
 
@@ -44,6 +42,7 @@ const abilitiesConfig = {
         cooldownDelay: 10,
         rangeDistance: 500,
         radiusDistance: 30,
+        triggerAfter: 0.05,
     },
     flame: {
         name: 'flame',
@@ -87,6 +86,7 @@ export class Ability  {
     public projectileKey?: string
     public rangeDistance: number
     public radiusDistance: number
+    public triggerAfter: number
     public rangeDistanceColor?: number
     public radiusDistanceColor?: number
     public raySize?: number
@@ -94,6 +94,7 @@ export class Ability  {
     public rangeGraphics?: Phaser.GameObjects.Graphics
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
+    
     
     constructor(scene: MainScene, config: AbilityConfig) {
         this.scene = scene
@@ -106,6 +107,7 @@ export class Ability  {
         this.cooldownDelay = config.cooldownDelay
         this.rangeDistance = config.rangeDistance || 0
         this.radiusDistance = config.radiusDistance || 0
+        this.triggerAfter = config.triggerAfter || 0
         this.raySize = config.raySize || 20
         this.rayColor = config.rayColor || 0xffffff
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
@@ -144,7 +146,6 @@ export class Ability  {
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
             this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.8)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
-
         }
 
        if (this.rayGraphics) {
@@ -222,7 +223,24 @@ export class Ability  {
         
         switch (this.action) {
             case Action.Blink:
-                player.body.reset(targetPosition.x, targetPosition.y)
+                this.scene.tweens.add({
+                    targets: player,
+                    alpha: { from: 1, to: 0 },
+                    duration: this.triggerAfter * 1000,
+                    ease: 'Cubic.easeIn',
+                    onComplete: () => {
+                        player.body.reset(targetPosition.x, targetPosition.y)
+                        this.scene.tweens.add({
+                            targets: player,
+                            alpha: { from: 0.2, to: 1 },
+                            duration: this.triggerAfter * 10 * 1000,
+                            ease: 'Cubic.easeOut',
+                        })
+                    },
+                })
+
+                
+                
                 break
             case Action.Projectile:
                 this.triggerProjectile(player, sourcePosition, targetPosition)
