@@ -10,6 +10,7 @@ import {
 import { Player, ActionTimeInterface, EffectInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'
+import { EffectIconContainer, createEffectIconsContainer } from '../entities/effects'
 
 export const effectIconsFrame = {
     slowed: 'snail.png',
@@ -102,58 +103,6 @@ class SlotContainer extends Phaser.GameObjects.Container {
 
 
 
-
-class EffectIconContainer extends Phaser.GameObjects.Container {
-    public scene: HudScene
-    public graphic: Phaser.GameObjects.Graphics
-    public image: Phaser.GameObjects.Image
-    public width: number
-    public height: number
-    public innerWidth: number
-    public innerHeight: number
-    public padding: number
-    public innerPadding: number
-
-    constructor(
-        scene: HudScene,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        padding: number,
-        frame: string) {
-        super(scene, x, y)
-        this.scene = scene
-        this.scene.add.existing(this)
-        this.width = width
-        this.height = height
-        this.padding = padding
-        this.innerPadding = this.padding / 2
-        this.innerWidth = this.width - this.padding
-        this.innerHeight = this.height - this.padding
-        this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(scene, this.innerPadding, this.innerPadding, 'atlas', frame)
-        this.add([this.graphic, this.image])
-        this.create()
-    }
-
-    public create() {
-        this.graphic.fillStyle(0xffffff)
-        this.graphic.fillRect(0, 0, this.width, this.height)
-        this.image.setDisplaySize(this.innerWidth, this.innerHeight)
-        this.image.setDisplayOrigin(0, 0)
-        this.image.setAlpha(0.8)
-        this.setAlpha(0)
-    }
-
-    public refresh(frame: string) {
-        this.image.setFrame(frame)
-        this.setAlpha(1)
-    }
-}
-
-
-
 export class HudScene extends Phaser.Scene {
     public game: MyGame
     public player: Player
@@ -215,7 +164,7 @@ export class HudScene extends Phaser.Scene {
         this.abilityContainer1.selected = true
 
 
-        this.effectIconsContainer = this.createEffectIconsContainer()
+        this.effectIconsContainer = createEffectIconsContainer(this, 4, 32, 2, -30, 20, 2)
         this.add.existing(this.effectIconsContainer)
 
 
@@ -238,28 +187,7 @@ export class HudScene extends Phaser.Scene {
         this.updateWeaponSelected(true)
     }
 
-    public createEffectIconsContainer(): Phaser.GameObjects.Container {
-        const offsetBetween = 32
-        const offsetLeft = 2
-        const offsetTop = -30
-        const size = 24
-        
-        this.effectIconsContainer = new Phaser.GameObjects.Container(this, 0, 0)
-        this.effectIconsContainer.add(
-            new EffectIconContainer(this, offsetBetween * 0 + offsetLeft, offsetTop, size, size, 2, 'flame.png')
-        )
-        this.effectIconsContainer.add(
-            new EffectIconContainer(this, offsetBetween * 1 + offsetLeft, offsetTop, size, size, 2, 'flame.png')
-        )
-        this.effectIconsContainer.add(
-            new EffectIconContainer(this, offsetBetween * 2 + offsetLeft, offsetTop, size, size, 2, 'flame.png')
-        )
-        this.effectIconsContainer.add(
-            new EffectIconContainer(this, offsetBetween * 3 + offsetLeft, offsetTop, size, size, 2, 'flame.png')
-        )
-        return this.effectIconsContainer
-    }
-    
+
     private updateHealth() {
         this.healthBar.refresh(this.player.health)
     }
