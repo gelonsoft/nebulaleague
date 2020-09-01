@@ -233,7 +233,7 @@ export class Ability  {
                         this.scene.tweens.add({
                             targets: player,
                             alpha: { from: 0.2, to: 1 },
-                            duration: this.triggerAfter * 10 * 1000,
+                            duration: this.triggerAfter * 20 * 1000,
                             ease: 'Cubic.easeOut',
                         })
                     },

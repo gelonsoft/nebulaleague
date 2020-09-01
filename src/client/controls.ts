@@ -10,22 +10,13 @@ export class MainControl {
     constructor (scene: MainScene) {
         this.scene = scene
         this.controls = {
-            fullscreen: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F),
-            toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H),
+            toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
         }
         this.isDebugSceneActive = true
     }
     
     public update(): void {
-        const fullscreen = this.scene.input.keyboard.checkDown(this.controls.fullscreen, 200)
         const toggleDebugScene = this.scene.input.keyboard.checkDown(this.controls.toggleDebugScene, 200)
-        if (fullscreen) {
-            if(this.scene.scale.isFullscreen) {
-                this.scene.scale.stopFullscreen()
-            } else {
-                this.scene.scale.startFullscreen()
-            }
-        }
         if (this.scene.game.debug && toggleDebugScene && this.isDebugSceneActive) {
             this.scene.scene.pause('debugScene')
             this.isDebugSceneActive = false
@@ -172,7 +163,8 @@ export class DebugControl {
             slowGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
             speedGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
             resetGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
-            toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
+            toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            fullscreen: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F),
         }
         this.cameraControls = settingCameraControl(this.scene.mainScene)
     }
@@ -184,7 +176,8 @@ export class DebugControl {
         const slowGameDown = this.scene.input.keyboard.checkDown(this.controls.slowGame, 200)
         const speedGameDown  = this.scene.input.keyboard.checkDown(this.controls.speedGame, 200)
         const resetGameSpeedDown  = this.scene.input.keyboard.checkDown(this.controls.resetGame, 200)
-
+        const fullscreen = this.scene.input.keyboard.checkDown(this.controls.fullscreen, 200)
+        
         if (toggleCameraDown) {
             if(this.isFreeCamera) {
                 this.scene.mainScene.cameras.main.stopFollow()
@@ -220,6 +213,17 @@ export class DebugControl {
         }
 
         this.cameraControls.update(delta)
+
+
+        if (fullscreen) {
+            if(this.scene.scale.isFullscreen) {
+                this.scene.scale.stopFullscreen()
+            } else {
+                this.scene.scale.startFullscreen()
+            }
+        }
+     
+        
     }
 }
 

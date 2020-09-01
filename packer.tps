@@ -249,12 +249,14 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/brandy-bottle.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/cannon-shot.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/cog.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/crossed-swords.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-ray.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-zone.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fishing-net.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/flame.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/focused-lightning.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/hamburger-menu.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/harpoon-chain.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/icebergs.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/lucifer-cannon.png</key>
@@ -1030,6 +1032,8 @@
             <filename>../../../Pictures/spacefighter/game-icons/stone-block.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/running-shoe.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/flame.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/cog.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/hamburger-menu.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
