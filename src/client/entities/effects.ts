@@ -51,7 +51,7 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
         this.image.setDisplaySize(this.innerWidth, this.innerHeight)
         this.image.setDisplayOrigin(0, 0)
         this.image.setAlpha(0.8)
-        this.setAlpha(1)
+        this.setAlpha(0)
     }
 
     public refresh(frame: string) {
@@ -87,17 +87,19 @@ export function createEffectIconsContainer(
 
 
 export function refreshEffectIcons(
-    icons: Set<EffectInterface>,
+    effects: Set<EffectInterface>,
     effectIconsContainer: Phaser.GameObjects.Container
 ) {
-    effectIconsContainer.getAll().forEach((obj: EffectIconContainer) => {
+
+    const effectIcons = effectIconsContainer.getAll()
+    effectIcons.forEach((obj: EffectIconContainer) => {
         obj.setAlpha(0)
     })
         
     let index = 0
-    for (const icon of icons) {
-        const frameName = effectIconsFrame[icon.name]
-        const obj = effectIconsContainer[index] as EffectIconContainer
+    for (const effect of effects) {
+        const frameName = effectIconsFrame[effect.name]
+        const obj = effectIcons[index] as EffectIconContainer
         obj.refresh(frameName)
         index += 1
     }
