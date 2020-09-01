@@ -10,16 +10,7 @@ import {
 import { Player, ActionTimeInterface, EffectInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'
-import { EffectIconContainer, createEffectIconsContainer } from '../entities/effects'
-
-export const effectIconsFrame = {
-    slowed: 'snail.png',
-    fastenned: 'running-shoe.png',
-    paralyzed: 'stone-block.png',
-    stunned: 'brain-freeze.png',
-    burned: 'flame.png',
-    freezed: 'frozen-block',
-}
+import { createEffectIconsContainer, refreshEffectIcons } from '../entities/effects'
 
 
 class SlotContainer extends Phaser.GameObjects.Container {
@@ -162,10 +153,7 @@ export class HudScene extends Phaser.Scene {
             'ability4': this.abilityContainer4,
         }
         this.abilityContainer1.selected = true
-
-
         this.effectIconsContainer = createEffectIconsContainer(this, 4, 32, 2, -30, 20, 2)
-        this.add.existing(this.effectIconsContainer)
 
 
         this.mainContainer = this.add.container(
@@ -220,17 +208,6 @@ export class HudScene extends Phaser.Scene {
     }
 
     private updateEffectChanged(icons: Set<EffectInterface>) {
-        const effectIconsContainer = this.effectIconsContainer.getAll()
-        effectIconsContainer.forEach((obj: EffectIconContainer) => {
-            obj.setAlpha(0)
-        })
-        
-        let index = 0
-        for (const icon of icons) {
-            const frameName = effectIconsFrame[icon.name]
-            const obj = effectIconsContainer[index] as EffectIconContainer
-            obj.refresh(frameName)
-            index += 1
-        }
+        refreshEffectIcons(icons, this.effectIconsContainer)
     }
 }

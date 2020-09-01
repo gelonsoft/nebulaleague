@@ -1,4 +1,15 @@
 import 'phaser'
+import {EffectInterface} from '../player'
+export const effectIconsFrame = {
+    slowed: 'snail.png',
+    fastenned: 'running-shoe.png',
+    paralyzed: 'stone-block.png',
+    stunned: 'brain-freeze.png',
+    burned: 'flame.png',
+    freezed: 'frozen-block',
+}
+
+
 
 export class EffectIconContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -40,7 +51,7 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
         this.image.setDisplaySize(this.innerWidth, this.innerHeight)
         this.image.setDisplayOrigin(0, 0)
         this.image.setAlpha(0.8)
-        this.setAlpha(0)
+        this.setAlpha(1)
     }
 
     public refresh(frame: string) {
@@ -48,8 +59,6 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
         this.setAlpha(1)
     }
 }
-
-
 
 export function createEffectIconsContainer(
     scene: Phaser.Scene,
@@ -61,7 +70,6 @@ export function createEffectIconsContainer(
     padding: number,
 ): Phaser.GameObjects.Container {
     const effectIconsContainer = new Phaser.GameObjects.Container(scene, 0, 0)
-    console.log(scene)
     Array.from(Array(length).keys()).forEach(index => {
         const effect = new EffectIconContainer(
             scene,
@@ -73,5 +81,24 @@ export function createEffectIconsContainer(
         )
         effectIconsContainer.add(effect)
     })
+    scene.add.existing(effectIconsContainer)
     return effectIconsContainer
+}
+
+
+export function refreshEffectIcons(
+    icons: Set<EffectInterface>,
+    effectIconsContainer: Phaser.GameObjects.Container
+) {
+    effectIconsContainer.getAll().forEach((obj: EffectIconContainer) => {
+        obj.setAlpha(0)
+    })
+        
+    let index = 0
+    for (const icon of icons) {
+        const frameName = effectIconsFrame[icon.name]
+        const obj = effectIconsContainer[index] as EffectIconContainer
+        obj.refresh(frameName)
+        index += 1
+    }
 }

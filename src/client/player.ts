@@ -13,6 +13,7 @@ import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
+import { createEffectIconsContainer } from './entities/effects'
 
 export enum EffectKeys {
     Slow = 'slowed',
@@ -90,6 +91,7 @@ export class Player extends Phaser.GameObjects.Container {
     public isStunned: boolean
     public playerSprite: Phaser.GameObjects.Sprite
     public healthBar: HealthBar
+    public effectIconsContainer: Phaser.GameObjects.Container
     public playerState: Map<string, boolean | number>
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
@@ -117,6 +119,7 @@ export class Player extends Phaser.GameObjects.Container {
 
         this.initPlayer()
         this.initHealthbar()
+        this.effectIconsContainer = createEffectIconsContainer(this.scene, 4, 28, 0, 0, 20, 2)
         this.setSize(PLAYER_SIZE, PLAYER_SIZE)
         this.attachPhysics()
         this.scene.add.existing(this)
@@ -169,7 +172,6 @@ export class Player extends Phaser.GameObjects.Container {
             this.scene, 0, 0, 100, 12, 0, this.maxHealth,
         )
         this.healthBar.refresh(this.health)
-        this.scene.add.existing(this.healthBar)
         
     }
     
