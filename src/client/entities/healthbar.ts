@@ -29,6 +29,7 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         maxHealth: number,
     ) {
         super(scene)
+        this.scene.add.existing(this)
         this.x = x
         this.y = y
         this.width = width

@@ -32,6 +32,50 @@ export interface AbilityConfig {
 
 
 
+
+
+
+const abilitiesConfig = {
+    blink: {
+        name: 'blink',
+        frame: 'teleport.png',
+        action: Action.Blink,
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 10,
+        rangeDistance: 500,
+        radiusDistance: 30,
+    },
+    flame: {
+        name: 'flame',
+        frame: 'fire-zone.png',
+        action: Action.Projectile,
+        projectileKey: 'flameProjectile',
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 20,
+        rangeDistance: 420,
+        radiusDistance: 50,
+    },
+    rootTip: {
+        name: 'rootTip',
+        frame: 'root-tip.png',
+        projectileKey: 'rootTipProjectile',
+        action: Action.Projectile,
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 15,
+        rangeDistance: 450,
+        radiusDistance: 50,
+    },
+    chargedArrow: {
+        name: 'chargedArrow',
+        frame: 'charged-arrow.png',
+        action: Action.ProjectileWithRotation,
+        projectileKey: 'chargedArrowProjectile',
+        drawingStyle: DrawingStyles.Ray,
+        cooldownDelay: 10,
+    },
+}
+
+
 export class Ability  {
     public scene: MainScene
     public projectiles: Projectiles
@@ -188,48 +232,6 @@ export class Ability  {
                 break
         }
     }
-}
-
-
-
-const abilitiesConfig = {
-    blink: {
-        name: 'blink',
-        frame: 'teleport.png',
-        action: Action.Blink,
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 10,
-        rangeDistance: 500,
-        radiusDistance: 30,
-    },
-    flame: {
-        name: 'flame',
-        frame: 'fire-zone.png',
-        action: Action.Projectile,
-        projectileKey: 'flameProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 20,
-        rangeDistance: 420,
-        radiusDistance: 50,
-    },
-    rootTip: {
-        name: 'rootTip',
-        frame: 'root-tip.png',
-        projectileKey: 'rootTipProjectile',
-        action: Action.Projectile,
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 15,
-        rangeDistance: 450,
-        radiusDistance: 50,
-    },
-    chargedArrow: {
-        name: 'chargedArrow',
-        frame: 'charged-arrow.png',
-        action: Action.ProjectileWithRotation,
-        projectileKey: 'chargedArrowProjectile',
-        drawingStyle: DrawingStyles.Ray,
-        cooldownDelay: 10,
-    },
 }
 
 

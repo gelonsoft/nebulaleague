@@ -52,7 +52,7 @@ const projectilesConfig = {
         lifespan: 0.5,
         radius: 25,
         effects: [{
-            name: EffectKeys.ChangeMaxSpeed,
+            name: EffectKeys.Slow,
             value: 0.8,
             duration: 2,
         }]

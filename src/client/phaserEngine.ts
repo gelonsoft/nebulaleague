@@ -23,7 +23,7 @@ export class PhaserSpaceGame {
     constructor() {
         const scenes = [BootScene, MenuScene, MainScene, HudScene, DebugScene]
         this.game = new MyGame({
-            type: Phaser.CANVAS,
+            type: Phaser.AUTO,
             title: 'nebulaleague',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,

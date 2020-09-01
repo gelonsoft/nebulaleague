@@ -5,7 +5,7 @@ import {
     PLAYER_ACCELERATION_CHANGE,
     PLAYER_ACCELERATION_STEADY,
     PLAYER_DRAG,
-    PLAYER_DEFAULT_VELOCITY,
+    PLAYER_DEFAULT_SPEED,
     PLAYER_DEFAULT_HEALTH,
     PLAYER_SIZE,
 } from './config'
@@ -15,14 +15,17 @@ import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 
 export enum EffectKeys {
-    ChangeMaxSpeed = 'changeMaxSpeed',
-    Paralyze = 'paralyze',
-    Stun = 'stun',
-    Burn = 'burn',
+    Slow = 'slowed',
+    Fast = 'fastenned',
+    Paralyze = 'paralyzed',
+    Stun = 'stunned',
+    Burn = 'burned',
+    Freeze = 'freezed',
 }
 
+
 export interface EffectInterface {
-    name: string
+    name: EffectKeys
     value: number
     duration: number
     tick?: number
@@ -78,10 +81,13 @@ export interface ActionInterface {
 
 export class Player extends Phaser.GameObjects.Container {
     public body: Phaser.Physics.Arcade.Body
+    public scene: MainScene
     public id: string
     public health: number
     public maxHealth: number
-    public scene: MainScene
+    public defaultSpeed: number
+    public isParalyzed: boolean
+    public isStunned: boolean
     public playerSprite: Phaser.GameObjects.Sprite
     public healthBar: HealthBar
     public playerState: Map<string, boolean | number>
@@ -93,8 +99,6 @@ export class Player extends Phaser.GameObjects.Container {
     public accelerationSteady: number
     public actionTimes: ActionTimesInterface
     public effects: Set<EffectInterface>
-    public isParalyzed: boolean
-    public isStunned: boolean
     public burningTime: Phaser.Time.TimerEvent | null
 
     constructor(scene: MainScene, playerConfig: PlayerModel) {
@@ -107,6 +111,10 @@ export class Player extends Phaser.GameObjects.Container {
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
         this.health = this.maxHealth
+        this.defaultSpeed = PLAYER_DEFAULT_SPEED
+        this.isParalyzed = false
+        this.isStunned = false
+
         this.initPlayer()
         this.initHealthbar()
         this.setSize(PLAYER_SIZE, PLAYER_SIZE)
@@ -134,8 +142,6 @@ export class Player extends Phaser.GameObjects.Container {
         }
         this.selectedAbilityKey = null
         this.effects = new Set()
-        this.isParalyzed = false
-        this.isStunned = false
         this.burningTime = null
 
         if (this.scene.game.debug) {
@@ -174,7 +180,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.body.setCircle(PLAYER_SIZE / 2)
         this.body.setAllowDrag(true)
         this.body.setDrag(PLAYER_DRAG, PLAYER_DRAG)
-        this.body.setMaxSpeed(PLAYER_DEFAULT_VELOCITY)
+        this.body.setMaxSpeed(PLAYER_DEFAULT_SPEED)
         this.body.immovable = true
     }
 
@@ -268,7 +274,6 @@ export class Player extends Phaser.GameObjects.Container {
         const weaponTime = this.actionTimes[selectedWeaponKey]
         const sourceFirePosition = selectedWeaponKey === 'weaponPrimary' ?
             this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
-
 
         if (weaponTime.ready) {
             weaponTime.ready = false
@@ -385,7 +390,7 @@ export class Player extends Phaser.GameObjects.Container {
         const offset = Phaser.Math.Vector2.ONE
             .clone()
             .setToPolar(this.rotation - Math.PI / 2 + Math.PI / 2)
-            .scale(this.displayWidth * 0.46)
+            .scale(this.displayWidth * 0.5)
         return positionCenter.clone().add(offset)
     }
 
@@ -398,8 +403,8 @@ export class Player extends Phaser.GameObjects.Container {
             this.scene.time.addEvent({
                 delay: effect.duration * 1000,
                 callback: () => {
-                    this.handleEffectRemoved(appliedEffect)
                     this.effects.delete(appliedEffect)
+                    this.handleEffectRemoved(appliedEffect)
                 }
             })
         }
@@ -408,11 +413,15 @@ export class Player extends Phaser.GameObjects.Container {
     public handleEffectCreated (effect: EffectInterface) {
         const value = effect.value
         switch(effect.name) {
-            case EffectKeys.ChangeMaxSpeed:
+            case EffectKeys.Slow:
+            case EffectKeys.Fast:
                 this.body.maxSpeed = this.body.maxSpeed * value
                 break
             case EffectKeys.Paralyze:
                 this.isParalyzed = true
+                break
+            case EffectKeys.Stun:
+                this.isStunned = true
                 break
             case EffectKeys.Burn:
                 if(!this.burningTime) {
@@ -427,16 +436,21 @@ export class Player extends Phaser.GameObjects.Container {
                 }
                 break
         }
+        this.scene.syncEffects(this)
     }
 
     public handleEffectRemoved(effect) {
         const value = effect.value
         switch(effect.name) {
-            case EffectKeys.ChangeMaxSpeed:
+            case EffectKeys.Slow:
+            case EffectKeys.Fast:
                 this.body.maxSpeed = this.body.maxSpeed / value
                 break
             case EffectKeys.Paralyze:
                 this.isParalyzed = false
+                break
+            case EffectKeys.Stun:
+                this.isStunned = true
                 break
             case EffectKeys.Burn:
                 if (this.burningTime) {
@@ -445,6 +459,7 @@ export class Player extends Phaser.GameObjects.Container {
                 }
                 break
         }
+        this.scene.syncEffects(this)
     }
 
     public hit(damage:number, recieveEffects?: Array<EffectInterface>) {
@@ -463,7 +478,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.healthBar.refresh(this.health)
     }
     
-    public update(delta: number) {
+    public update(delta:  number) {
         this.healthBar.x = this.body.center.x - this.healthBar.width / 2
         this.healthBar.y = this.body.top - this.healthBar.height - 6
         if (this.health <= 0) {

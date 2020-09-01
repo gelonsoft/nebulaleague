@@ -79,7 +79,7 @@ export class MainScene extends Phaser.Scene {
                 this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
                 this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
-            .setOrigin(0.22, 0.22)
+            .setOrigin(0.23, 0.23)
             .setAlpha(0.7)
     }
     
@@ -227,6 +227,12 @@ export class MainScene extends Phaser.Scene {
     public syncSelectedWeapon(player: Player, selected: boolean): void {
         if (player.id === this.player.id) {
             this.events.emit('weaponSelectedChanged',  selected)
+        }
+    }
+
+    public syncEffects(player: Player): void {
+        if (player.id === this.player.id) {
+            this.events.emit('effectsChanged', player.effects)
         }
     }
     
