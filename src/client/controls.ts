@@ -11,18 +11,29 @@ export class MainControl {
         this.scene = scene
         this.controls = {
             toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
+            toggleMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
         }
         this.isDebugSceneActive = true
     }
     
     public update(): void {
         const toggleDebugScene = this.scene.input.keyboard.checkDown(this.controls.toggleDebugScene, 200)
+        const toggleHelpMenuDown  = this.scene.input.keyboard.checkDown(this.controls.toggleMenu, 200)
+        
         if (this.scene.game.debug && toggleDebugScene && this.isDebugSceneActive) {
             this.scene.scene.pause('debugScene')
             this.isDebugSceneActive = false
         } else if (this.scene.game.debug && toggleDebugScene && !this.isDebugSceneActive) {
             this.scene.scene.resume('debugScene')
             this.isDebugSceneActive = true
+        }
+
+        if (toggleHelpMenuDown) {
+            if(this.scene.scene.isActive('mainMenuScene')) {
+                this.scene.scene.sleep('mainMenuScene')
+            } else {
+                this.scene.scene.launch('mainMenuScene')
+            }
         }
     }
 }
@@ -77,7 +88,11 @@ export class PlayerControl {
             x: left + right,
             y: up + down,
         }
+        if(left) {
+            console.log('hello')
+        }
         this.player.move(playerDirection)
+        
     }
 
     public handleSwitchWeapon(): void {
@@ -158,12 +173,12 @@ export class DebugControl {
     constructor (scene: DebugScene) {
         this.scene = scene
         this.controls = {
+            toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
             toggleCamera: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T),
             pause: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
             slowGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
             speedGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
-            resetGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
-            toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            resetGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
             fullscreen: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F),
         }
         this.cameraControls = settingCameraControl(this.scene.mainScene)
@@ -214,7 +229,6 @@ export class DebugControl {
 
         this.cameraControls.update(delta)
 
-
         if (fullscreen) {
             if(this.scene.scale.isFullscreen) {
                 this.scene.scale.stopFullscreen()
@@ -222,8 +236,6 @@ export class DebugControl {
                 this.scene.scale.startFullscreen()
             }
         }
-     
-        
     }
 }
 

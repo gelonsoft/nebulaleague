@@ -62,6 +62,7 @@ export class BootScene extends Phaser.Scene {
 
         // load templates
         this.load.html('mainMenuHTML', 'assets/html/mainMenu.html')
+        this.load.html('mainMenuSceneHTML', 'assets/html/mainMenuScene.html')
 
         // load our package
         this.load.pack("preload", "assets/pack.json", 'preload')
@@ -72,11 +73,14 @@ export class BootScene extends Phaser.Scene {
     }
 
     update(): void {
-        // this.scene.start('menuScene')
-        this.scene.start('mainScene')
-        this.scene.start('hudScene')
         if (this.game.debug) {
-            this.scene.start('debugScene',this.game.scene.getScene('mainScene'))            
+            this.scene.start('mainScene')
+            this.scene.start('hudScene')
+            if (this.game.debug) {
+                this.scene.start('debugScene',this.game.scene.getScene('mainScene'))            
+            }
+        } else {
+            this.scene.start('menuScene')
         }
     }
 

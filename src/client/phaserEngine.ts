@@ -4,6 +4,7 @@ import { HudScene } from "./scenes/hudScene"
 import { BootScene } from "./scenes/bootScene"
 import { DebugScene } from './scenes/debugScene'
 import { MenuScene } from './scenes/menuScene'
+import { MainMenuScene } from './scenes/mainMenuScene'
 import * as io from 'socket.io-client'
 
 
@@ -21,7 +22,14 @@ io.connect()
 export class PhaserSpaceGame {
     private game: MyGame
     constructor() {
-        const scenes = [BootScene, MenuScene, MainScene, HudScene, DebugScene]
+        const scenes = [
+            BootScene,
+            MenuScene,
+            MainScene,
+            HudScene,
+            DebugScene,
+            MainMenuScene
+        ]
         this.game = new MyGame({
             type: Phaser.AUTO,
             title: 'nebulaleague',

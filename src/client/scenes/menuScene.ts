@@ -3,12 +3,13 @@ import { htmlToElement } from '../ui/utils'
 
 export class MenuScene extends Phaser.Scene {
     public game: MyGame
-
+    public playerName: string
 
     constructor() {
         super({
             key: "menuScene"
         })
+        this.playerName = ''
     }
 
 
@@ -30,11 +31,13 @@ export class MenuScene extends Phaser.Scene {
 
     createMenu() {
         const element = this.add.dom(0, 0).createFromCache('mainMenuHTML')
-            // .setOrigin(0., 0)
             .setPosition(this.scale.width / 2, this.scale.height / 2)
 
-        // element.setPerspective(800);
+        element.getChildByID('playerNameInput').addEventListener('keyup', (event: any) => {
+            this.playerName = event.currentTarget.value
+        }, true)
         element.addListener('click')
+        element.addListener('keypress')
         element.on('click', event => {
             if (event.target.name === 'playButton') {
                 this.startMainScene()
@@ -48,10 +51,14 @@ export class MenuScene extends Phaser.Scene {
     }
 
     startMainScene() {
-        this.scene.start('mainScene')
-        this.scene.start('hudScene')
+        this.scene.get('mainScene').input.keyboard.enabled = true
+        // this.scene.get('mainScene').input.keyboard.preventDefault = true
+        
+        this.scene.get('mainScene').scene.restart()
+        this.scene.get('hudScene').scene.restart()
         if (this.game.debug) {
-            this.scene.start('debugScene',this.game.scene.getScene('mainScene'))            
-        }        
+            this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
+        }
+        this.scene.sleep()
     }
 }
