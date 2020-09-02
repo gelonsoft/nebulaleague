@@ -209,7 +209,6 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public getNextMove(playerDirection: PlayerDirection): PlayerMoveNextForce {
-        const body = this.body as Phaser.Physics.Arcade.Body
         const isXChange = this.previousDirection.x !== playerDirection.x
         const isYChange = this.previousDirection.y !== playerDirection.y
         const newAccelerationSpeedX = isXChange ? this.accelerationSteady: this.accelerationChange
@@ -218,7 +217,10 @@ export class Player extends Phaser.GameObjects.Container {
             .normalize()
             .multiply(new Phaser.Math.Vector2(newAccelerationSpeedX, newAccelerationSpeedY))
 
-        const newVelocity = body.velocity.clone()
+        if (this.body === undefined) {
+            // debugger
+        }
+        const newVelocity = this.body.velocity.clone()
         if (isXChange) {
             newVelocity.x = 0
         }
@@ -226,7 +228,7 @@ export class Player extends Phaser.GameObjects.Container {
             newVelocity.y = 0
         }
         const newPosition =
-            body.position.clone()
+            this.body.position.clone()
                 .add(newVelocity.clone()
                 .add(newAcceleration)
                 .scale(this.scene.game.loop.delta / 1000))
@@ -496,13 +498,15 @@ export class Player extends Phaser.GameObjects.Container {
             this.body.setEnable(false)
             this.setActive(false)
             this.setVisible(false)
+            this.visible = false
             this.healthBar.setVisible(false)
             this.effectIconsContainer.setVisible(false)
-            this.scene.triggerDeathTransition()
+            this.scene.startDeathTransition(this)
             this.scene.time.addEvent({
-                delay: 3 * 1000,
+                delay: 10 * 1000,
                 callback: () => {
                     this.reset()
+                    this.scene.stopDeathTransition(this)
                 },
                 callbackScope: this
             })
@@ -511,15 +515,16 @@ export class Player extends Phaser.GameObjects.Container {
 
     
     public reset(): void {
+        console.log('reactive')
         this.body.setEnable(true)
         this.setActive(true)
         this.setVisible(true)
-        this.healthBar.setVisible(false)
+        this.health = this.maxHealth
+        this.healthBar.setVisible(true)
         this.effectIconsContainer.setVisible(false)
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.body.reset(x, y)
-        this.health = this.maxHealth
         this.scene.syncHealth(this)
         this.healthBar.refresh(this.health)
     }

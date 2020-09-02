@@ -131,21 +131,23 @@ export class PlayerAI {
 
 
     public update() {
-        this.steeringsForce = []
-        this.previousSteeringBehaviour = this.steeringBehaviour
-        this.setPlayersInVisibleRange()
-        this.setPlayersInHittableRange()
+        if(this.player.active) {
+            this.steeringsForce = []
+            this.previousSteeringBehaviour = this.steeringBehaviour
+            this.setPlayersInVisibleRange()
+            this.setPlayersInHittableRange()
         
-        this.tree.Tick(new TimeData(this.scene.game.loop.delta))
-        if (this.player.isParalyzed || this.player.isStunned) {
-            this.player.body.acceleration = Phaser.Math.Vector2.ZERO.clone()
-            this.player.body.velocity = Phaser.Math.Vector2.ZERO.clone()
-        } else {
-            const netForce = this.sumSteeringsForce()
-            this.player.body.acceleration = netForce
-            this.player.rotation = steering.facing(this.player.body.velocity)
-            if (this.steeringBehaviour !== this.previousSteeringBehaviour) {
-                this.player.body.velocity.set(0, 0)
+            this.tree.Tick(new TimeData(this.scene.game.loop.delta))
+            if (this.player.isParalyzed || this.player.isStunned) {
+                this.player.body.acceleration = Phaser.Math.Vector2.ZERO.clone()
+                this.player.body.velocity = Phaser.Math.Vector2.ZERO.clone()
+            } else {
+                const netForce = this.sumSteeringsForce()
+                this.player.body.acceleration = netForce
+                this.player.rotation = steering.facing(this.player.body.velocity)
+                if (this.steeringBehaviour !== this.previousSteeringBehaviour) {
+                    this.player.body.velocity.set(0, 0)
+                }
             }
         }
     }

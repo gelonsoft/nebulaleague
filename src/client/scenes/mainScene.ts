@@ -238,11 +238,24 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public triggerDeathTransition() {
-        // console.log('hello')
-        // this.scene.start('deathScene')
-        this.scene.get('deathScene').scene.start()
+    public startDeathTransition(player: Player) {
+        if (player.id === this.player.id) {
+            this.playerControl.active = false
+            this.scene.run('deathScene', this)
+        }
     }
+
+    public stopDeathTransition(player: Player) {
+        if (player.id === this.player.id) {
+            this.scene.sleep('deathScene')
+            this.time.addEvent({
+                delay: 0.1 * 1000,
+                callback: () => this.playerControl.active = true,
+                callbackScope: this
+            })
+        }
+    }
+    
     
     get pointerPosition(): Phaser.Math.Vector2 {
         const pointer = this.input.activePointer
@@ -319,7 +332,9 @@ export class MainScene extends Phaser.Scene {
         this.player.draw()
         
         // update players
-        this.players.getChildren().forEach((player: Player) => {
+        this.players.getChildren()
+            .filter((player: Player) => player.active)
+            .forEach((player: Player) => {
             player.update(delta)
         })
     }

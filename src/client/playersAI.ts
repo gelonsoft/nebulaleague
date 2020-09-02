@@ -67,7 +67,7 @@ export const playerAI2 = {
     fleeAfterSecondRange: [1, 20],
     fleeForSecondRange: [0.5, 0.5],
     moveCombatAngleRange: [-60, 60],
-    moveCombatSecondRange: [1, 2],
+    moveCombatSecondRange: [1, 3],
     actionsTriggerSecondRange: {
         weaponPrimary: [0.3, 0.3],
         weaponSecondary: [0.3, 0.7],
@@ -128,7 +128,7 @@ export const playerAI4 = {
     fleeAfterSecondRange: [30, 50],
     fleeForSecondRange: [1, 2],
     moveCombatAngleRange: [-100, 100],
-    moveCombatSecondRange: [0.1, 2],
+    moveCombatSecondRange: [2, 2],
     actionsTriggerSecondRange: {
         weaponPrimary: [0.2, 0.3],
         weaponSecondary: [0.2, 0.3],
@@ -158,14 +158,14 @@ export const playerAI5 = {
     fleeAfterSecondRange: [30, 50],
     fleeForSecondRange: [1, 2],
     moveCombatAngleRange: [-35, 35],
-    moveCombatSecondRange: [0.2, 3],
+    moveCombatSecondRange: [1, 3],
     actionsTriggerSecondRange: {
-        weaponPrimary: [1, 1],
+        weaponPrimary: [0.1, 0.1],
         weaponSecondary: [1, 1],
-        ability1: [1, 1],
-        ability2: [1, 1],
-        ability3: [1, 1],
-        ability4: [1, 1],
+        ability1: [0.1, 1],
+        ability2: [0.2, 1],
+        ability3: [0.1, 1],
+        ability4: [0.1, 1],
     }
 }
 
@@ -190,12 +190,12 @@ export const playerAI6 = {
     moveCombatAngleRange: [-20, 20],
     moveCombatSecondRange: [1, 4],
     actionsTriggerSecondRange: {
-        weaponPrimary: [1, 1],
-        weaponSecondary: [1, 1],
-        ability1: [1, 1],
-        ability2: [1, 1],
-        ability3: [1, 1],
-        ability4: [1, 1],
+        weaponPrimary: [0.2, 0.7],
+        weaponSecondary: [0, 1],
+        ability1: [0.2, 0.8],
+        ability2: [0.2, 0.8],
+        ability3: [0.2, 0.8],
+        ability4: [0.2, 0.8],
     }
     
 }
@@ -219,14 +219,14 @@ export const playerAI7 = {
     fleeAfterSecondRange: [30, 50],
     fleeForSecondRange: [1, 2],
     moveCombatAngleRange: [-100, 100],
-    moveCombatSecondRange: [0.1, 0.3],
+    moveCombatSecondRange: [1, 3],
     actionsTriggerSecondRange: {
-        weaponPrimary: [1, 1],
+        weaponPrimary: [0.1, 0.8],
         weaponSecondary: [1, 1],
-        ability1: [1, 1],
-        ability2: [1, 1],
-        ability3: [1, 1],
-        ability4: [1, 1],
+        ability1: [0.1, 0.6],
+        ability2: [0.1, 0.6],
+        ability3: [0.1, 0.6],
+        ability4: [0.1, 0.6],
     }
 }
 
@@ -249,14 +249,14 @@ export const playerAI8 = {
     fleeAfterSecondRange: [30, 50],
     fleeForSecondRange: [1, 2],
     moveCombatAngleRange: [-55, 55],
-    moveCombatSecondRange: [0.3, 0.7],
+    moveCombatSecondRange: [1, 5],
     actionsTriggerSecondRange: {
-        weaponPrimary: [1, 1],
-        weaponSecondary: [1, 1],
-        ability1: [1, 1],
-        ability2: [1, 1],
-        ability3: [1, 1],
-        ability4: [1, 1],
+        weaponPrimary: [0.1, 0.3],
+        weaponSecondary: [0.1, 0.9],
+        ability1: [0.2, 0.9],
+        ability2: [0.2, 0.9],
+        ability3: [0.2, 0.9],
+        ability4: [0.2, 0.9],
     }
 }
 
@@ -279,14 +279,14 @@ export const playerAI9 = {
     fleeAfterSecondRange: [30, 50],
     fleeForSecondRange: [1, 2],
     moveCombatAngleRange: [-80, 80],
-    moveCombatSecondRange: [1, 1],
+    moveCombatSecondRange: [1, 6],
     actionsTriggerSecondRange: {
-        weaponPrimary: [1, 1],
-        weaponSecondary: [1, 1],
-        ability1: [1, 1],
-        ability2: [1, 1],
-        ability3: [1, 1],
-        ability4: [1, 1],
+        weaponPrimary: [0.1, 1],
+        weaponSecondary: [0.1, 1],
+        ability1: [0.3, 0.4],
+        ability2: [0.3, 0.4],
+        ability3: [0.3, 0.4],
+        ability4: [0.3, 0.4],
     }
     
 }
