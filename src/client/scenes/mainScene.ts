@@ -237,6 +237,12 @@ export class MainScene extends Phaser.Scene {
             this.events.emit('effectsChanged', player.effects)
         }
     }
+
+    public triggerDeathTransition() {
+        // console.log('hello')
+        // this.scene.start('deathScene')
+        this.scene.get('deathScene').scene.start()
+    }
     
     get pointerPosition(): Phaser.Math.Vector2 {
         const pointer = this.input.activePointer

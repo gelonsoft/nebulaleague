@@ -112,7 +112,8 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        this.health = this.maxHealth
+        // this.health = this.maxHealth
+        this.health = 20
         this.defaultSpeed = PLAYER_DEFAULT_SPEED
         this.isParalyzed = false
         this.isStunned = false
@@ -491,16 +492,33 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.x = this.body.center.x - this.healthBar.width / 2
         this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
         
-        if (this.health <= 0) {
-            this.reset()
+        if (this.health <= 0 && this.active) {
+            this.body.setEnable(false)
+            this.setActive(false)
+            this.setVisible(false)
+            this.healthBar.setVisible(false)
+            this.effectIconsContainer.setVisible(false)
+            this.scene.triggerDeathTransition()
+            this.scene.time.addEvent({
+                delay: 3 * 1000,
+                callback: () => {
+                    this.reset()
+                },
+                callbackScope: this
+            })
         }
     }
 
     
     public reset(): void {
+        this.body.setEnable(true)
+        this.setActive(true)
+        this.setVisible(true)
+        this.healthBar.setVisible(false)
+        this.effectIconsContainer.setVisible(false)
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
-        this.setPosition(x, y)
+        this.body.reset(x, y)
         this.health = this.maxHealth
         this.scene.syncHealth(this)
         this.healthBar.refresh(this.health)

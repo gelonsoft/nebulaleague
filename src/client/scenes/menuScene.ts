@@ -1,5 +1,4 @@
 import { MyGame } from "../phaserEngine"
-import { htmlToElement } from '../ui/utils'
 
 export class MenuScene extends Phaser.Scene {
     public game: MyGame
@@ -22,7 +21,7 @@ export class MenuScene extends Phaser.Scene {
     init(): void {
         if (this.game.debug) {
             window['menu'] = this
-            // this.startMainScene()
+            this.startMainScene()
         }
     }
 
@@ -58,9 +57,6 @@ export class MenuScene extends Phaser.Scene {
     }
 
     startMainScene() {
-        this.scene.get('mainScene').input.keyboard.enabled = true
-        // this.scene.get('mainScene').input.keyboard.preventDefault = true
-        
         this.scene.get('mainScene').scene.restart()
         this.scene.get('hudScene').scene.restart()
         if (this.game.debug) {

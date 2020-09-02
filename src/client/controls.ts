@@ -88,9 +88,6 @@ export class PlayerControl {
             x: left + right,
             y: up + down,
         }
-        if(left) {
-            console.log('hello')
-        }
         this.player.move(playerDirection)
         
     }
