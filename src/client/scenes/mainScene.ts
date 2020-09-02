@@ -238,21 +238,32 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public startDeathTransition(player: Player) {
+    public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
+            this.cameras.main.flash(1 * 1000, 125, 125, 125)
+            this.cameras.main.setAlpha(0.7)
+
             this.playerControl.active = false
             this.scene.run('deathScene', this)
         }
     }
 
-    public stopDeathTransition(player: Player) {
+    public stopDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
             this.scene.sleep('deathScene')
+            this.cameras.main.flash(1 * 1000, 125, 125, 125)
+            this.cameras.main.setAlpha(1)
             this.time.addEvent({
-                delay: 0.1 * 1000,
+                delay: 0.2 * 1000,
                 callback: () => this.playerControl.active = true,
                 callbackScope: this
             })
+        }
+    }
+
+    public syncDeathTextCooldown(player: Player, cooldown: number): void {
+        if (player.id === this.player.id) {
+            this.events.emit('deathCooldownChanged', cooldown)
         }
     }
     
@@ -335,8 +346,8 @@ export class MainScene extends Phaser.Scene {
         this.players.getChildren()
             .filter((player: Player) => player.active)
             .forEach((player: Player) => {
-            player.update(delta)
-        })
+                player.update()
+            })
     }
 
 }

@@ -2,10 +2,41 @@ import { MyGame } from "../phaserEngine"
 import { MainScene } from "./mainScene"
 import { Player } from "../player"
 
+
+class TextContainer extends Phaser.GameObjects.Container {
+    public scene: Phaser.Scene
+    public cooldown: number
+    public textCooldown: Phaser.GameObjects.Text
+
+
+    constructor(scene: Phaser.Scene, x: number, y: number) {
+        super(scene, x, y)
+        this.scene = scene
+        this.scene.add.existing(this)
+        this.textCooldown = new Phaser.GameObjects.Text(scene, 0, 0, '', {
+            fontSize: '80px'
+        })
+        this.add([this.textCooldown])
+        this.create()
+    }
+
+    public create() {
+        this.textCooldown.setOrigin(0.5, 0.5)
+        this.setPosition(this.scene.scale.width / 2, this.scene.scale.height / 8)
+    }
+
+    public refresh() {
+        this.textCooldown.setText(`${Math.round(this.cooldown * 10) / 10}`)
+    }
+}
+
+
+
 export class DeathScene extends Phaser.Scene {
     public game: MyGame
     public mainScene: MainScene
     public followedPlayer: Player
+    public textContainer: TextContainer
     
     constructor() {
         super({key: "deathScene"})
@@ -20,12 +51,14 @@ export class DeathScene extends Phaser.Scene {
 
         this.events.on('sleep', () => {
             this.stopFollowing()
-            console.log('sleep')
         })
     }
 
     public create() {
         this.followRandomPlayer()
+        this.mainScene.events.on("deathCooldownChanged", this.updateDeathCooldown, this)
+        this.textContainer = new TextContainer(this, 0, 0)
+        // this.cameras.main.alpha = 0.1
     }
 
     public followRandomPlayer() {
@@ -33,7 +66,6 @@ export class DeathScene extends Phaser.Scene {
             .filter((player: Player) => player.active)
         const randomIndex = Phaser.Math.RND.integerInRange(0, players.length - 1)
         this.followedPlayer = players[randomIndex]  as Player
-        console.log(this.followedPlayer)
         if (players.length > 0) {
             this.mainScene.cameras.main.startFollow(this.followedPlayer, true)
         }
@@ -46,12 +78,10 @@ export class DeathScene extends Phaser.Scene {
     public handleMouse(): void {
         const pointer = this.input.activePointer
         if (pointer.leftButtonDown()) {
-            this.stopFollowing()
             this.mainScene.player.reset()
             this.mainScene.stopDeathTransition(this.mainScene.player)
         }
     }
-
     
     public update(): void {
         this.handleMouse()
@@ -59,4 +89,12 @@ export class DeathScene extends Phaser.Scene {
             this.followRandomPlayer()
         }
     }
+
+
+    private updateDeathCooldown(cooldown: number) {
+        this.textContainer.cooldown = cooldown
+        this.textContainer.refresh()
+    }
+
+    
 }

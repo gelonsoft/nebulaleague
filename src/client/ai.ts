@@ -201,7 +201,7 @@ export class PlayerAI {
 
     public setPlayersInHittableRange(): void {
         const playersInRange = []
-        const actionsKeysReady = Object.keys(this.player.actionTimes)
+        const actionsKeysReady = Object.keys(this.player.actions)
             .filter(key => this.player.actionTimes[key].ready)
         
         for (const playerInViewRange of this.playersInViewRange ) {
@@ -287,7 +287,7 @@ export class PlayerAI {
     }
 
     public doMoveInCombat(choosenTarget: PlayerAIActionsInterface): void {
-        const actionsKeyRange = Object.keys(this.player.actionTimes)
+        const actionsKeyRange = Object.keys(this.player.actions)
             .filter(key => this.player.actionTimes[key].ready)
             .map(key => [key, this.player.actions[key].rangeDistance])
             .sort((action1, action2) => action2[1] - action1[1])

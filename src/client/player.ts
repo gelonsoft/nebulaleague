@@ -56,6 +56,7 @@ interface ActionTimesInterface {
     ability2: ActionTimeInterface
     ability3: ActionTimeInterface
     ability4: ActionTimeInterface
+    death: ActionTimeInterface
 }
 
 interface ActionsInterface {
@@ -102,6 +103,7 @@ export class Player extends Phaser.GameObjects.Container {
     public actionTimes: ActionTimesInterface
     public effects: Set<EffectInterface>
     public burningTime: Phaser.Time.TimerEvent | null
+    public deathCooldownDelay: number
 
     constructor(scene: MainScene, playerConfig: PlayerModel) {
         super(scene)
@@ -112,11 +114,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.x = playerConfig.x
         this.y = playerConfig.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
-        // this.health = this.maxHealth
-        this.health = 20
+        this.health = this.maxHealth
         this.defaultSpeed = PLAYER_DEFAULT_SPEED
         this.isParalyzed = false
         this.isStunned = false
+        this.deathCooldownDelay = 10
 
         this.initPlayer()
         this.initHealthbar()
@@ -134,6 +136,7 @@ export class Player extends Phaser.GameObjects.Container {
             ability2: { cooldown: 0, ready: true },
             ability3: { cooldown: 0, ready: true },
             ability4: { cooldown: 0, ready: true },
+            death: { cooldown: 0, ready: true },
         }
 
         this.actions = {
@@ -380,7 +383,7 @@ export class Player extends Phaser.GameObjects.Container {
     public getPrimaryWeaponPosition(): Phaser.Math.Vector2 {
         const positionCenter = new Phaser.Math.Vector2(
             this.body.x + this.displayWidth / 2,
-            this.body.y + this.displayWidth / 2
+            this.body.y + this.displayHeight / 2
         )
         const offset = Phaser.Math.Vector2.ONE
             .clone()
@@ -393,7 +396,7 @@ export class Player extends Phaser.GameObjects.Container {
     public getSecondaryWeaponPosition(): Phaser.Math.Vector2 {
         const positionCenter = new Phaser.Math.Vector2(
             this.body.x + this.displayWidth / 2,
-            this.body.y + this.displayWidth / 2
+            this.body.y + this.displayHeight / 2
         )
         const offset = Phaser.Math.Vector2.ONE
             .clone()
@@ -487,13 +490,8 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.syncHealth(this)
         this.healthBar.refresh(this.health)
     }
-    
-    public update(delta:  number) {
-        this.healthBar.x = this.body.center.x - this.healthBar.width / 2
-        this.healthBar.y = this.body.top - this.healthBar.height - 6
-        this.effectIconsContainer.x = this.body.center.x - this.healthBar.width / 2
-        this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
-        
+
+    public handleDeath() {
         if (this.health <= 0 && this.active) {
             this.body.setEnable(false)
             this.setActive(false)
@@ -502,9 +500,24 @@ export class Player extends Phaser.GameObjects.Container {
             this.healthBar.setVisible(false)
             this.effectIconsContainer.setVisible(false)
             this.scene.startDeathTransition(this)
-            this.scene.time.addEvent({
-                delay: 10 * 1000,
+
+            this.actionTimes.death.cooldown = this.deathCooldownDelay
+            this.actionTimes.death.timerEvent = this.scene.time.addEvent({
+                delay: 1 * 1000,
                 callback: () => {
+                    this.actionTimes.death.cooldown -= 1
+                    this.scene.syncDeathTextCooldown(this, this.actionTimes.death.cooldown)
+                },
+                callbackScope: this,
+                loop: true,
+            })
+            
+            this.scene.time.addEvent({
+                delay: this.deathCooldownDelay * 1000,
+                callback: () => {
+                    this.actionTimes.death.cooldown = 0
+                    this.actionTimes.death.timerEvent.remove(false)
+                    this.actionTimes.death.timerEvent = null
                     this.reset()
                     this.scene.stopDeathTransition(this)
                 },
@@ -512,10 +525,17 @@ export class Player extends Phaser.GameObjects.Container {
             })
         }
     }
+    
+    public update() {
+        this.healthBar.x = this.body.center.x - this.healthBar.width / 2
+        this.healthBar.y = this.body.top - this.healthBar.height - 6
+        this.effectIconsContainer.x = this.body.center.x - this.healthBar.width / 2
+        this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
+        this.handleDeath()
+    }
 
     
     public reset(): void {
-        console.log('reactive')
         this.body.setEnable(true)
         this.setActive(true)
         this.setVisible(true)
