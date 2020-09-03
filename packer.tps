@@ -279,6 +279,7 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/stone-block.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/teleport.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/thompson-m1928.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/uncertainty.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/vibrating-shield.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -1046,6 +1047,7 @@
             <filename>../../../Pictures/spacefighter/game-icons/burning-meteor.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/fire-wave.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/ak47.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/uncertainty.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
