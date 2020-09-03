@@ -119,7 +119,7 @@ const projectilesConfig = {
         name: 'psychicWaveProjectile',
         className: 'BlockWithDelay',
         radius: 230,
-        damage: 10,
+        damage: 0,
         lifespan: 0.6,
         triggerAfter: 0.2,
         fillColor: 0x800080,
@@ -148,8 +148,25 @@ const projectilesConfig = {
             value: 0.8,
             duration: 2.5,
         }]
+    },
+    fireWaveProjectile: {
+        name: 'fireWaveProjectile',
+        className: 'BlockWithDelay',
+        radius: 240,
+        damage: 30,
+        lifespan: 0.6,
+        triggerAfter: 0.2,
+        fillColor: 0xe25822,
+        strokeColor: 0xe37a33,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+        effects: [{
+            name: EffectKeys.Burn,
+            value: 10,
+            duration: 1,
+            tick: 0.5,
+        }]
     }
-    
 }
 
 
@@ -380,6 +397,7 @@ export class Projectiles
         this.addProjectile('frozenWaveProjectile', projectilesConfig.frozenWaveProjectile, 40)
         this.addProjectile('psychicWaveProjectile', projectilesConfig.psychicWaveProjectile, 40)
         this.addProjectile('lightningWaveProjectile', projectilesConfig.lightningWaveProjectile, 40)
+        this.addProjectile('fireWaveProjectile', projectilesConfig.fireWaveProjectile, 40)
     }
 
     

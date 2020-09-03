@@ -105,6 +105,16 @@ const abilitiesConfig = {
         radiusDistanceAlpha: 0.4,
         radiusDistance: 260,
     },
+    fireWave: {
+        name: 'fireWave',
+        frame: 'fire-wave.png',
+        action: Action.Projectile,
+        projectileKey: 'fireWaveProjectile',
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 3,
+        radiusDistanceAlpha: 0.4,
+        radiusDistance: 240,
+    },
 }
 
 

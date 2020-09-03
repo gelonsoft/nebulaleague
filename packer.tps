@@ -247,11 +247,13 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/blunderbuss.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/brain-freeze.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/brandy-bottle.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/burning-meteor.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/cannon-shot.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/cog.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/crossed-swords.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-ray.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/fire-wave.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fire-zone.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/fishing-net.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/flame.png</key>
@@ -1040,6 +1042,8 @@
             <filename>../../../Pictures/spacefighter/game-icons/lightning-shout.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/brain-freeze.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/frozen-block.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/burning-meteor.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/fire-wave.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
