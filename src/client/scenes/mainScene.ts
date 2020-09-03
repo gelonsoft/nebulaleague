@@ -113,7 +113,7 @@ export class MainScene extends Phaser.Scene {
             y: this.cameras.main.displayHeight / 2,
             weaponPrimaryKey: 'pistol',
             weaponSecondaryKey: 'thompson',
-            abilityKey1: 'blink',
+            abilityKey1: 'frozenBody',
             abilityKey2: 'chargedArrow',
             abilityKey3: 'rootTip',
             abilityKey4: 'flame',

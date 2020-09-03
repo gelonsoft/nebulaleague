@@ -243,7 +243,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../Pictures/spacefighter/game-icons/ak47.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/anchor.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/blunderbuss.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/brandy-bottle.png</key>
@@ -260,7 +259,6 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/frozen-body.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/hamburger-menu.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/harpoon-chain.png</key>
-            <key type="filename">../../../Pictures/spacefighter/game-icons/icebergs.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/lucifer-cannon.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/p90.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/pistol-gun.png</key>
@@ -275,7 +273,6 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/teleport.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/thompson-m1928.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/vibrating-shield.png</key>
-            <key type="filename">../../../Pictures/spacefighter/game-icons/wingfoot.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -891,7 +888,6 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_blue.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_green.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_orange.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_red.png</filename>
@@ -1009,7 +1005,6 @@
             <filename>../../../Pictures/spacefighter/my/charged_arrow_bullet.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/thompson-m1928.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/pistol-gun.png</filename>
-            <filename>../../../Pictures/spacefighter/game-icons/ak47.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/p90.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/revolver.png</filename>
             <filename>../../../Pictures/beams/beam-yellow1.png</filename>
@@ -1021,14 +1016,12 @@
             <filename>../../../Pictures/spacefighter/game-icons/crossed-swords.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/rune-sword.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/vibrating-shield.png</filename>
-            <filename>../../../Pictures/spacefighter/game-icons/wingfoot.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/anchor.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/blunderbuss.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/brandy-bottle.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/cannon-shot.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/fishing-net.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/harpoon-chain.png</filename>
-            <filename>../../../Pictures/spacefighter/game-icons/icebergs.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/lucifer-cannon.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/spiked-mace.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/stone-block.png</filename>
@@ -1038,6 +1031,7 @@
             <filename>../../../Pictures/spacefighter/game-icons/hamburger-menu.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/frostfire.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/frozen-body.png</filename>
+            <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_blue.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

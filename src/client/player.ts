@@ -179,7 +179,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public initEffectsContainer(): void {
-        this.effectIconsContainer = createEffectIconsContainer(this.scene, 4, 32, 0, 0, 24, 4)
+        this.effectIconsContainer = createEffectIconsContainer(this.scene, 4, 32, 0, -4, 26, 0)
     }
     
     private attachPhysics(): void {
@@ -243,6 +243,11 @@ export class Player extends Phaser.GameObjects.Container {
     public move(playerDirection: PlayerDirection): void {
         if (!this.isParalyzed) {
             const playerMoveNextForce = this.getNextMove(playerDirection)
+            this.body.acceleration = playerMoveNextForce.acceleration
+            this.body.velocity = playerMoveNextForce.velocity
+        } else {
+            this.getNextMove({x:0, y:0})
+            const playerMoveNextForce = this.getNextMove({x:0, y:0})
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity
         }
@@ -372,7 +377,9 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, false)
                 this.actions.weaponPrimary.laser.clear()
                 this.actions.weaponSecondary.laser.clear()
-                this.scene.input.setDefaultCursor('url(assets/cursors/SC2-target-none.cur), pointer')
+                this.scene.input.setDefaultCursor('url(assets/cursors/SC2-cursor.cur), pointer')
+                // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-target-none.cur), pointer')
+                // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-select-none.cur), pointer')
             }
         }
     }

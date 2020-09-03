@@ -97,6 +97,24 @@ const projectilesConfig = {
             value: 0.8,
             duration: 3,
         }]
+    },
+
+    frozenBodyProjectile: {
+        name: 'frozenBodyProjectile',
+        className: 'BlockWithDelay',
+        radius: 300,
+        damage: 10,
+        lifespan: 0.6,
+        triggerAfter: 0.2,
+        fillColor: 0x00aaff,
+        strokeColor: 0x00aaff,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+        effects: [{
+            name: EffectKeys.Paralyze,
+            value: 0.8,
+            duration: 3,
+        }]
     }
 }
 
@@ -321,7 +339,7 @@ export class Projectiles
         this.addProjectile('chargedArrowProjectile', projectilesConfig.chargedArrowProjectile, 20)
         this.addProjectile('flameProjectile', projectilesConfig.flameProjectile, 20)
         this.addProjectile('rootTipProjectile', projectilesConfig.rootTipProjectile, 20)
-        
+        this.addProjectile('frozenBodyProjectile', projectilesConfig.frozenBodyProjectile, 40)
     }
 
     

@@ -29,6 +29,9 @@ export interface AbilityConfig {
     radiusDistanceColor?: number
     raySize?: number
     rayColor?: number
+    rangeDistanceAlpha?: number
+    radiusDistanceAlpha?: number
+    rayDistanceAlpha?: number
 }
 
 
@@ -74,11 +77,13 @@ const abilitiesConfig = {
     },
     frozenBody: {
         name: 'frozenBody',
-        frame: 'frozenBody.png',
-        action: Action.ProjectileWithRotation,
-        projectileKey: 'chargedArrowProjectile',
-        drawingStyle: DrawingStyles.Ray,
+        frame: 'frozen-body.png',
+        action: Action.Projectile,
+        projectileKey: 'frozenBodyProjectile',
+        drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 5,
+        radiusDistanceAlpha: 0.4,
+        radiusDistance: 300,
     },
 }
 
@@ -95,10 +100,13 @@ export class Ability  {
     public rangeDistance: number
     public radiusDistance: number
     public triggerAfter: number
-    public rangeDistanceColor?: number
-    public radiusDistanceColor?: number
-    public raySize?: number
+    public raySize: number
     public rayColor?: number
+    public rangeDistanceColor: number
+    public radiusDistanceColor: number
+    public rangeDistanceAlpha: number
+    public radiusDistanceAlpha: number
+    public rayDistanceAlpha: number
     public rangeGraphics?: Phaser.GameObjects.Graphics
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
@@ -120,6 +128,10 @@ export class Ability  {
         this.rayColor = config.rayColor || 0xffffff
         this.rangeDistanceColor = config.rangeDistanceColor || 0xffffff
         this.radiusDistanceColor = config.radiusDistanceColor || 0xffffff
+        this.rangeDistanceAlpha = config.rangeDistanceAlpha || 0.2
+        this.radiusDistanceAlpha = config.radiusDistanceAlpha || 0.8
+        this.rayDistanceAlpha = config.radiusDistanceAlpha || 1
+        
 
         switch(config.drawingStyle) {
             case DrawingStyles.Zone:
@@ -137,9 +149,9 @@ export class Ability  {
    public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
-            this.rangeGraphics.fillStyle(this.rangeDistanceColor, 0.2)
+            this.rangeGraphics.fillStyle(this.rangeDistanceColor, this.rangeDistanceAlpha)
             this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
-            this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, 0.2)
+            this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, this.rangeDistanceAlpha)
             this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
         }
 
@@ -150,9 +162,9 @@ export class Ability  {
                 this.getMaxRadiusPosition(player)
                 
 
-            this.radiusGraphics.fillStyle(this.rangeDistanceColor, 0.8)
+            this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
-            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, 0.8)
+            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
         }
 
@@ -167,7 +179,7 @@ export class Ability  {
                rayEndPosition.y,
            )
            
-           this.rayGraphics.lineStyle(this.raySize, this.rayColor)
+           this.rayGraphics.lineStyle(this.raySize, this.rayColor, this.rayDistanceAlpha)
            this.rayGraphics.strokeLineShape(line)
        }
     }

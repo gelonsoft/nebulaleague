@@ -46,11 +46,12 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
     }
 
     public create() {
-        this.graphic.fillStyle(0xffffff)
-        this.graphic.fillRect(0, 0, this.width, this.height)
+        // this.graphic.fillStyle(0xffffff)
+        // this.graphic.fillRect(0, 0, this.width, this.height)
         this.image.setDisplaySize(this.innerWidth, this.innerHeight)
         this.image.setDisplayOrigin(0, 0)
-        this.image.setAlpha(0.8)
+        this.image.setTint(0xffffff)
+        this.image.setAlpha(0.7)
         this.setAlpha(0)
     }
 
