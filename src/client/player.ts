@@ -499,6 +499,15 @@ export class Player extends Phaser.GameObjects.Container {
             this.visible = false
             this.healthBar.setVisible(false)
             this.effectIconsContainer.setVisible(false)
+
+            this.health = this.maxHealth
+            this.scene.syncHealth(this)
+            this.healthBar.refresh(this.health)
+            for (const actionTime of Object.values(this.actionTimes)) {
+                actionTime.cooldown = 0
+            }
+            
+            
             this.scene.startDeathTransition(this)
 
             this.actionTimes.death.cooldown = this.deathCooldownDelay
@@ -539,13 +548,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.body.setEnable(true)
         this.setActive(true)
         this.setVisible(true)
-        this.health = this.maxHealth
+
         this.healthBar.setVisible(true)
         this.effectIconsContainer.setVisible(false)
         const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
         const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
         this.body.reset(x, y)
-        this.scene.syncHealth(this)
-        this.healthBar.refresh(this.health)
     }
 }
