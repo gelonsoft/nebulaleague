@@ -55,7 +55,7 @@ const abilitiesConfig = {
         drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 20,
         rangeDistance: 420,
-        radiusDistance: 50,
+        radiusDistance: 60,
     },
     rootTip: {
         name: 'rootTip',
@@ -65,7 +65,7 @@ const abilitiesConfig = {
         drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 15,
         rangeDistance: 450,
-        radiusDistance: 50,
+        radiusDistance: 60,
     },
     chargedArrow: {
         name: 'chargedArrow',
@@ -75,15 +75,35 @@ const abilitiesConfig = {
         drawingStyle: DrawingStyles.Ray,
         cooldownDelay: 10,
     },
-    frozenBody: {
-        name: 'frozenBody',
+    frozenWave: {
+        name: 'frozenWave',
         frame: 'frozen-body.png',
         action: Action.Projectile,
-        projectileKey: 'frozenBodyProjectile',
+        projectileKey: 'frozenWaveProjectile',
         drawingStyle: DrawingStyles.Zone,
         cooldownDelay: 5,
         radiusDistanceAlpha: 0.4,
-        radiusDistance: 300,
+        radiusDistance: 320,
+    },
+    psychicWave: {
+        name: 'psychicWave',
+        frame: 'psychic-waves.png',
+        action: Action.Projectile,
+        projectileKey: 'psychicWaveProjectile',
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 10,
+        radiusDistanceAlpha: 0.4,
+        radiusDistance: 230,
+    },
+    lightningWave: {
+        name: 'lightningWave',
+        frame: 'lightning-shout.png',
+        action: Action.Projectile,
+        projectileKey: 'lightningWaveProjectile',
+        drawingStyle: DrawingStyles.Zone,
+        cooldownDelay: 8,
+        radiusDistanceAlpha: 0.4,
+        radiusDistance: 260,
     },
 }
 
@@ -161,7 +181,6 @@ export class Ability  {
                 pointerPosition:
                 this.getMaxRadiusPosition(player)
                 
-
             this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
             this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
@@ -196,7 +215,10 @@ export class Ability  {
         }
     }
 
-    public isInRangeToTrigger(sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2): boolean {
+    public isInRangeToTrigger(
+       sourcePosition: Phaser.Math.Vector2,
+       pointerPosition: Phaser.Math.Vector2
+   ): boolean {
        const distance = Phaser.Math.Distance.Between(
            sourcePosition.x, sourcePosition.y,
            pointerPosition.x, pointerPosition.y
@@ -258,7 +280,6 @@ export class Ability  {
                         })
                     },
                 })
-                
                 break
             case Action.Projectile:
                 this.triggerProjectile(player, sourcePosition, targetPosition)

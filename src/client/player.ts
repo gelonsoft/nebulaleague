@@ -530,8 +530,10 @@ export class Player extends Phaser.GameObjects.Container {
                     this.actionTimes.death.cooldown = 0
                     this.actionTimes.death.timerEvent.remove(false)
                     this.actionTimes.death.timerEvent = null
-                    this.reset()
-                    this.scene.stopDeathTransition(this)
+                    if(!this.active) {
+                        this.reset()
+                        this.scene.stopDeathTransition(this)
+                    }
                 },
                 callbackScope: this
             })

@@ -8,7 +8,6 @@ class TextContainer extends Phaser.GameObjects.Container {
     public cooldown: number
     public textCooldown: Phaser.GameObjects.Text
 
-
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y)
         this.scene = scene
@@ -37,6 +36,8 @@ export class DeathScene extends Phaser.Scene {
     public mainScene: MainScene
     public followedPlayer: Player
     public textContainer: TextContainer
+    public canResetAfterDelay: number
+    public canResetAfterElapsed: number
     
     constructor() {
         super({key: "deathScene"})
@@ -45,8 +46,12 @@ export class DeathScene extends Phaser.Scene {
 
     public init(mainScene): void {
         this.mainScene = mainScene
+        this.canResetAfterDelay = 1
+        this.canResetAfterElapsed = 0
+        
         this.events.on('wake', () => {
             this.followRandomPlayer()
+            this.canResetAfterElapsed = 0
         })
 
         this.events.on('sleep', () => {
@@ -58,7 +63,6 @@ export class DeathScene extends Phaser.Scene {
         this.followRandomPlayer()
         this.mainScene.events.on("deathCooldownChanged", this.updateDeathCooldown, this)
         this.textContainer = new TextContainer(this, 0, 0)
-        // this.cameras.main.alpha = 0.1
     }
 
     public followRandomPlayer() {
@@ -84,17 +88,17 @@ export class DeathScene extends Phaser.Scene {
     }
     
     public update(): void {
-        this.handleMouse()
+        this.canResetAfterElapsed +=  this.game.loop.delta / 1000
+        if (this.canResetAfterElapsed >= this.canResetAfterDelay) {
+            this.handleMouse()
+        }
         if (!this.followedPlayer.active) {
             this.followRandomPlayer()
         }
     }
 
-
     private updateDeathCooldown(cooldown: number) {
         this.textContainer.cooldown = cooldown
         this.textContainer.refresh()
     }
-
-    
 }

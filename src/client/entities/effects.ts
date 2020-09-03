@@ -6,7 +6,7 @@ export const effectIconsFrame = {
     paralyzed: 'stone-block.png',
     stunned: 'brain-freeze.png',
     burned: 'flame.png',
-    freezed: 'frozen-block',
+    freezed: 'frozen-block.png',
 }
 
 

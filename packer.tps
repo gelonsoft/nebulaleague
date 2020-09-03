@@ -245,6 +245,7 @@
             </struct>
             <key type="filename">../../../Pictures/spacefighter/game-icons/anchor.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/blunderbuss.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/brain-freeze.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/brandy-bottle.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/cannon-shot.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/charged-arrow.png</key>
@@ -256,12 +257,15 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/flame.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/focused-lightning.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/frostfire.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/frozen-block.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/frozen-body.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/hamburger-menu.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/harpoon-chain.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/lightning-shout.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/lucifer-cannon.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/p90.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/pistol-gun.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/psychic-waves.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/revolver.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/rolling-bomb.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/root-tip.png</key>
@@ -1032,6 +1036,10 @@
             <filename>../../../Pictures/spacefighter/game-icons/frostfire.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/frozen-body.png</filename>
             <filename>../../../Pictures/spacefighter/kenny_spaceshooter1/PNG/playerShip1_blue.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/psychic-waves.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/lightning-shout.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/brain-freeze.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/frozen-block.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

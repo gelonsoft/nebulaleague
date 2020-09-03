@@ -98,11 +98,10 @@ const projectilesConfig = {
             duration: 3,
         }]
     },
-
-    frozenBodyProjectile: {
-        name: 'frozenBodyProjectile',
+    frozenWaveProjectile: {
+        name: 'frozenWaveProjectile',
         className: 'BlockWithDelay',
-        radius: 300,
+        radius: 320,
         damage: 10,
         lifespan: 0.6,
         triggerAfter: 0.2,
@@ -111,11 +110,46 @@ const projectilesConfig = {
         fillAlpha: 0.6,
         strokeAlpha: 0.8,
         effects: [{
+            name: EffectKeys.Freeze,
+            value: 0.8,
+            duration: 4,
+        }]
+    },
+    psychicWaveProjectile: {
+        name: 'psychicWaveProjectile',
+        className: 'BlockWithDelay',
+        radius: 230,
+        damage: 10,
+        lifespan: 0.6,
+        triggerAfter: 0.2,
+        fillColor: 0x800080,
+        strokeColor: 0xa000a0,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+        effects: [{
+            name: EffectKeys.Stun,
+            value: 0.8,
+            duration: 1.5,
+        }]
+    },
+    lightningWaveProjectile: {
+        name: 'lightningWaveProjectile',
+        className: 'BlockWithDelay',
+        radius: 260,
+        damage: 10,
+        lifespan: 0.6,
+        triggerAfter: 0.2,
+        fillColor: 0xfdd023,
+        strokeColor: 0xfee034,
+        fillAlpha: 0.6,
+        strokeAlpha: 0.8,
+        effects: [{
             name: EffectKeys.Paralyze,
             value: 0.8,
-            duration: 3,
+            duration: 2.5,
         }]
     }
+    
 }
 
 
@@ -200,7 +234,9 @@ export class Block extends Phaser.GameObjects.Graphics {
     public strokeColor: number
     public fillAlpha: number
     public strokeAlpha: number
-
+    public hittedPlayerIds: Set<string>
+    public killedOnHit: boolean
+    
     
     public constructor(scene: MainScene, blockConfig: BlockModel) {
         super(scene)
@@ -218,6 +254,8 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.body.reset(-10000, -10000)
         this.setActive(false)
         this.setVisible(false)
+        this.hittedPlayerIds = new Set()
+        this.killedOnHit = false
     }
 
     public draw() {
@@ -247,7 +285,10 @@ export class Block extends Phaser.GameObjects.Graphics {
     }
 
     public actionOnCollision(hittedPlayer: Player) {
-        hittedPlayer.hit(this.damage, this.effects)
+        if (!this.hittedPlayerIds.has(hittedPlayer.id)) {
+            hittedPlayer.hit(this.damage, this.effects)
+            this.hittedPlayerIds.add(hittedPlayer.id)
+        }
     }
     
     
@@ -274,11 +315,9 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
 
         this.scene.tweens.add({
             targets: this,
-            alpha: { from: 0, to: 1 },
+            alpha: { from: 0.2, to: 1 },
             duration: this.triggerAfter * 1000,
             ease: 'Cubic.easeIn',
-            // completeDelay: this.triggerAfter * 1000
-            // completeDelay: this.triggerAfter * 1000
         })
         
         this.scene.time.addEvent({
@@ -292,7 +331,6 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
     public actionOnCollision(hittedPlayer: Player) {
         if (this.active) {
             super.actionOnCollision(hittedPlayer)
-            this.kill()            
         }
     }
 }
@@ -339,7 +377,9 @@ export class Projectiles
         this.addProjectile('chargedArrowProjectile', projectilesConfig.chargedArrowProjectile, 20)
         this.addProjectile('flameProjectile', projectilesConfig.flameProjectile, 20)
         this.addProjectile('rootTipProjectile', projectilesConfig.rootTipProjectile, 20)
-        this.addProjectile('frozenBodyProjectile', projectilesConfig.frozenBodyProjectile, 40)
+        this.addProjectile('frozenWaveProjectile', projectilesConfig.frozenWaveProjectile, 40)
+        this.addProjectile('psychicWaveProjectile', projectilesConfig.psychicWaveProjectile, 40)
+        this.addProjectile('lightningWaveProjectile', projectilesConfig.lightningWaveProjectile, 40)
     }
 
     
