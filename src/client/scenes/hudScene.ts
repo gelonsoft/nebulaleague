@@ -114,7 +114,12 @@ export class HudScene extends Phaser.Scene {
 
     constructor() {
         super({key: "hudScene"})
+    }
 
+    public init(): void {        
+        if (this.game.debug) {
+            window['h'] = this
+        }
         window.addEventListener('resize', () => {
             const top = this.scale.height - HUD_HEIGHT
             this.mainContainer.setX(0)
@@ -123,12 +128,6 @@ export class HudScene extends Phaser.Scene {
             this.background.fillStyle(HUD_BACKGROUND, 0.2)
             this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
         }, false)
-    }
-
-    public init(): void {
-        if (this.game.debug) {
-            window['h'] = this
-        }
     }
 
 

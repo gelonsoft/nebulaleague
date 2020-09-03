@@ -22,7 +22,7 @@ export const HUD_PADDING = 4
 export const HUD_PADDING_INNER = HUD_PADDING / 2
 export const HUD_BACKGROUND = 0x1313a8
 export const HUD_BACKGROUND_ITEM = 0x000000
-export const HUD_SLOT_COLOR_SELECTED =  0x3366E5
+export const HUD_SLOT_COLOR_SELECTED = 0x3366E5
 export const HUD_SLOT_COLOR_UNSELECTED = 0x5577d5 
 
 export const CONSUMABLE_WIDTH = 24

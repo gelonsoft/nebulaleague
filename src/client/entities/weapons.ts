@@ -3,7 +3,7 @@ import { Player } from '../player'
 import { Projectiles } from './projectiles'
 
 
-const weaponsConfig = {
+export const weaponsConfig = {
     pistol: {
         name: 'pistol',
         frame: 'pistol-gun.png',

@@ -36,7 +36,7 @@ export interface AbilityConfig {
 
 
 
-const abilitiesConfig = {
+export const abilitiesConfig = {
     blink: {
         name: 'blink',
         frame: 'teleport.png',

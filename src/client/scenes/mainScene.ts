@@ -40,18 +40,18 @@ export class MainScene extends Phaser.Scene {
         super({
             key: "mainScene"
         })
-        window.addEventListener('resize', () => {
-            this.backgroundImage.setDisplaySize(
-                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
-                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
-            )
-        }, false)
     }
 
     public init(): void {
         if (this.game.debug) {
             window['m'] = this
         }
+        window.addEventListener('resize', () => {
+            this.backgroundImage.setDisplaySize(
+                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+            )
+        }, false)
         this.mainCameraZoom = 0.5
         this.playersAI = []
         this.players = this.physics.add.group({

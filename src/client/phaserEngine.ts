@@ -6,6 +6,7 @@ import { DebugScene } from './scenes/debugScene'
 import { MenuScene } from './scenes/menuScene'
 import { MainMenuScene } from './scenes/mainMenuScene'
 import { DeathScene } from './scenes/deathScene'
+import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import * as io from 'socket.io-client'
 
 
@@ -31,6 +32,7 @@ export class PhaserSpaceGame {
             DebugScene,
             MainMenuScene,
             DeathScene,
+            PlayerSelectionScene,
         ]
         this.game = new MyGame({
             type: Phaser.AUTO,

@@ -65,7 +65,6 @@ export class DebugScene extends Phaser.Scene {
 			strokeThickness: 1
 		}
 		
-		
 		this.showCornerCoords = config.showCornerCoords
 		this.showDirectionAngles = config.showDirectionAngles
 		this.gameDelay = 0

@@ -243,6 +243,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/ak47.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/anchor.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/blunderbuss.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/brain-freeze.png</key>
@@ -1044,6 +1045,7 @@
             <filename>../../../Pictures/spacefighter/game-icons/frozen-block.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/burning-meteor.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/fire-wave.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/ak47.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

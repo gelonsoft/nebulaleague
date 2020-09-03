@@ -21,7 +21,8 @@ export class MenuScene extends Phaser.Scene {
     init(): void {
         if (this.game.debug) {
             window['menu'] = this
-            this.startMainScene()
+            this.scene.start('playerSelectionScene')
+            // this.startMainScene()
         }
     }
 
