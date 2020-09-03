@@ -84,10 +84,13 @@ export class PlayerControl {
             this.controls.moveUpAzerty.isDown ) ? -1: 0
         const down = (this.controls.moveDownDvorak.isDown ||
             this.controls.moveDownQwerty.isDown ) ? 1: 0
+
+
         const playerDirection: PlayerDirection = {
             x: left + right,
             y: up + down,
         }
+        console.log(playerDirection)
         this.player.move(playerDirection)
         
     }

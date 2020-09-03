@@ -10,7 +10,7 @@ export const PLAYER_BLINK_TIMING = 10
 
 export const WORLD_WIDTH = 8000
 export const WORLD_HEIGHT = 8000
-export const MAX_PLAYER = 2
+export const MAX_PLAYER = 10
 
 export const HEALTH_BAR_COLOR_BACKGROUND = 0xffffff
 export const HEALTH_BAR_COLOR_LOW = 0xff0000

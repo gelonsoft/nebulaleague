@@ -220,9 +220,7 @@ export class Player extends Phaser.GameObjects.Container {
             .normalize()
             .multiply(new Phaser.Math.Vector2(newAccelerationSpeedX, newAccelerationSpeedY))
 
-        if (this.body === undefined) {
-            // debugger
-        }
+
         const newVelocity = this.body.velocity.clone()
         if (isXChange) {
             newVelocity.x = 0
@@ -232,8 +230,7 @@ export class Player extends Phaser.GameObjects.Container {
         }
         const newPosition =
             this.body.position.clone()
-                .add(newVelocity.clone()
-                .add(newAcceleration)
+                .add(newVelocity.clone().add(newAcceleration)
                 .scale(this.scene.game.loop.delta / 1000))
 
         return {
@@ -248,8 +245,8 @@ export class Player extends Phaser.GameObjects.Container {
             const playerMoveNextForce = this.getNextMove(playerDirection)
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity
-            this.previousDirection = playerDirection
         }
+        this.previousDirection = playerDirection
     }
 
 
@@ -506,7 +503,6 @@ export class Player extends Phaser.GameObjects.Container {
             for (const actionTime of Object.values(this.actionTimes)) {
                 actionTime.cooldown = 0
             }
-            
             
             this.scene.startDeathTransition(this)
 
