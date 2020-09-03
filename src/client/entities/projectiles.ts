@@ -6,6 +6,7 @@ import { Player, EffectKeys, EffectInterface } from "../player"
 const projectilesConfig = {
     pistolBullet: {
         name: 'pistolBullet',
+        className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 80,
         speed: 1300,
@@ -14,6 +15,7 @@ const projectilesConfig = {
     },
     ak47Bullet: {
         name: 'ak47Bullet',
+        className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 70,
         speed: 1200,
@@ -22,6 +24,7 @@ const projectilesConfig = {
     },
     p90Bullet: {
         name: 'p90Bullet',
+        className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 40,
         speed: 1500,
@@ -30,6 +33,7 @@ const projectilesConfig = {
     },
     revolverBullet: {
         name: 'revolverBullet',
+        className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 450,
         speed: 1000,
@@ -38,6 +42,7 @@ const projectilesConfig = {
     },
     thompsonBullet: {
         name: 'thompsonBullet',
+        className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 200,
         speed: 1700,
@@ -46,6 +51,7 @@ const projectilesConfig = {
     },
     chargedArrowProjectile: {
         name: 'chargedArrowProjectile',
+        className: 'Bullet',
         frame: 'charged_arrow_bullet.png',
         damage: 80,
         speed: 1200,
@@ -59,6 +65,7 @@ const projectilesConfig = {
     },
     flameProjectile: {
         name: 'flameProjectile',
+        className: 'BlockWithTick',
         radius: 50,
         lifespan: 1,
         damage: 25,
@@ -76,6 +83,7 @@ const projectilesConfig = {
     },
     rootTipProjectile: {
         name: 'rootTipProjectile',
+        className: 'BlockWithDelay',
         radius: 60,
         damage: 30,
         lifespan: 0.6,
@@ -305,27 +313,38 @@ export class Projectiles
         this.projectiles = new Map()
         this.scene = scene
         
-        this.addProjectile('pistolBullet', Bullet, projectilesConfig.pistolBullet, 200)
-        this.addProjectile('ak47Bullet', Bullet, projectilesConfig.ak47Bullet, 200)
-        this.addProjectile('p90Bullet', Bullet, projectilesConfig.p90Bullet, 200)
-        this.addProjectile('revolverBullet', Bullet, projectilesConfig.revolverBullet, 200)
-        this.addProjectile('thompsonBullet', Bullet, projectilesConfig.thompsonBullet, 200)
-        this.addProjectile('chargedArrowProjectile', Bullet, projectilesConfig.chargedArrowProjectile, 20)
-        this.addProjectile('flameProjectile', BlockWithTick, projectilesConfig.flameProjectile, 20)
-        this.addProjectile('rootTipProjectile', BlockWithDelay, projectilesConfig.rootTipProjectile, 20)
+        this.addProjectile('pistolBullet', projectilesConfig.pistolBullet, 200)
+        this.addProjectile('ak47Bullet', projectilesConfig.ak47Bullet, 200)
+        this.addProjectile('p90Bullet', projectilesConfig.p90Bullet, 200)
+        this.addProjectile('revolverBullet', projectilesConfig.revolverBullet, 200)
+        this.addProjectile('thompsonBullet', projectilesConfig.thompsonBullet, 200)
+        this.addProjectile('chargedArrowProjectile', projectilesConfig.chargedArrowProjectile, 20)
+        this.addProjectile('flameProjectile', projectilesConfig.flameProjectile, 20)
+        this.addProjectile('rootTipProjectile', projectilesConfig.rootTipProjectile, 20)
+        
     }
+
+    
 
     public addProjectile(
         key: string,
-        ProjectileClass: new (scene: MainScene, projectileConfig: any) => any,
         projectileConfig: any,
         length: number): void {
         const projectiles = Array.from({length: length}, () => {
-            return new ProjectileClass(this.scene, projectileConfig)
+            const ClassName = this.getProjectileByClassName(projectileConfig.className)
+            return new ClassName(this.scene, projectileConfig)
         })
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
             .addMultiple(projectiles)
         this.projectiles.set(key, group)
+    }
+
+    public getProjectileByClassName(projectileKeyName: string) {
+        return {
+            'Bullet': Bullet,
+            'BlockWithTick': BlockWithTick,
+            'BlockWithDelay': BlockWithDelay,
+        }[projectileKeyName]
     }
 
     

@@ -340,7 +340,7 @@ export class MainScene extends Phaser.Scene {
         )
         
         // draw weapon and skills
-        if (this.players.active) {
+        if (this.player.active) {
             this.player.draw()
         }
         

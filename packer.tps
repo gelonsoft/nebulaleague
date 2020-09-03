@@ -256,6 +256,8 @@
             <key type="filename">../../../Pictures/spacefighter/game-icons/fishing-net.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/flame.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/focused-lightning.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/frostfire.png</key>
+            <key type="filename">../../../Pictures/spacefighter/game-icons/frozen-body.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/hamburger-menu.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/harpoon-chain.png</key>
             <key type="filename">../../../Pictures/spacefighter/game-icons/icebergs.png</key>
@@ -1034,6 +1036,8 @@
             <filename>../../../Pictures/spacefighter/game-icons/flame.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/cog.png</filename>
             <filename>../../../Pictures/spacefighter/game-icons/hamburger-menu.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/frostfire.png</filename>
+            <filename>../../../Pictures/spacefighter/game-icons/frozen-body.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -72,6 +72,14 @@ const abilitiesConfig = {
         drawingStyle: DrawingStyles.Ray,
         cooldownDelay: 10,
     },
+    frozenBody: {
+        name: 'frozenBody',
+        frame: 'frozenBody.png',
+        action: Action.ProjectileWithRotation,
+        projectileKey: 'chargedArrowProjectile',
+        drawingStyle: DrawingStyles.Ray,
+        cooldownDelay: 5,
+    },
 }
 
 
@@ -238,8 +246,6 @@ export class Ability  {
                         })
                     },
                 })
-
-                
                 
                 break
             case Action.Projectile:
