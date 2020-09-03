@@ -90,7 +90,6 @@ export class PlayerControl {
             x: left + right,
             y: up + down,
         }
-        console.log(playerDirection)
         this.player.move(playerDirection)
         
     }

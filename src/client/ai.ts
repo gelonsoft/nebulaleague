@@ -366,7 +366,6 @@ export class PlayerAI {
         
         const handicapPrecisionAngle = Phaser.Math.RND.normal()
             * Math.PI * (this.weaponPrecisionHandicap / 360)
-        // console.log(handicapPrecisionAngle)
         
         const predictedPosition = playerToTarget.clone()
             .rotate(handicapPrecisionAngle)
