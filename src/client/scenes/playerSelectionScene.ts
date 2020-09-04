@@ -172,7 +172,8 @@ class SelectedSlotContainer extends SlotBaseContainer {
     ) {
         super(scene, x, y, item, size, padding)
         this.slotTarget = slotTarget
-        const zone = this.scene.add.zone(0, 0, this.size, this.size).setRectangleDropZone(60, 60)
+        const zone = this.scene.add.zone(-this.size / 2, -this.size / 2, this.size, this.size)
+            .setRectangleDropZone(this.size * 2, this.size * 2)
         this.add(zone)
     }
 
