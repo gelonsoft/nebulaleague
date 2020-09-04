@@ -20,7 +20,7 @@ interface Item {
 }
 
 class SlotBaseContainer extends Phaser.GameObjects.Container {
-    public scene: Phaser.Scene
+    public scene: PlayerSelectionScene
     public item: Item
     public graphic: Phaser.GameObjects.Graphics
     public image: Phaser.GameObjects.Image
@@ -31,7 +31,7 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
     public initialY: number
 
     constructor(
-        scene: Phaser.Scene,
+        scene: PlayerSelectionScene,
         x: number,
         y: number,
         item: Item,
@@ -82,15 +82,12 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
 
     public drawDisable() {
         this.graphic.clear()
-        this.graphic.fillStyle(0x777777)
+        this.graphic.fillStyle(0x444444)
         this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0x777777)
+        this.graphic.lineStyle(2, 0x888888)
         this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.image.setTintFill(0x777777)
+        this.image.setTintFill(0x888888)
     }
-    
-    
-    
 }
 
 
@@ -98,7 +95,7 @@ class SlotContainer extends SlotBaseContainer {
     public isDisabled: boolean
     
     constructor(
-        scene: Phaser.Scene,
+        scene: PlayerSelectionScene,
         x: number,
         y: number,
         item: Item,
@@ -118,11 +115,29 @@ class SlotContainer extends SlotBaseContainer {
         this.on('pointerover', () =>  {
             if(!this.isDisabled) {
                 this.drawFocus()
+                this.scene.setActivePickedSlot(this)
+                for (const slot of this.scene.activatedPickedSlot) {
+                    slot.handleDragOn()
+                }
             }
         })
+
+        this.on('pointerdown', () =>  {
+            if(!this.isDisabled) {
+                this.drawFocus()
+                this.scene.setActivePickedSlot(this)
+                for (const slot of this.scene.activatedPickedSlot) {
+                    slot.handleDragOn()
+                }
+            }
+        })
+        
         this.on('pointerout', () => {
             if(!this.isDisabled) {
                 this.draw()
+                for (const slot of this.scene.activatedPickedSlot) {
+                    slot.handleDragOff()
+                }
             } 
         })
     }
@@ -147,7 +162,7 @@ class SlotContainer extends SlotBaseContainer {
 class SelectedSlotContainer extends SlotBaseContainer {
     public slotTarget? : SlotContainer
     constructor(
-        scene: Phaser.Scene,
+        scene: PlayerSelectionScene,
         x: number,
         y: number,
         item: Item,
@@ -161,23 +176,41 @@ class SelectedSlotContainer extends SlotBaseContainer {
         this.add(zone)
     }
 
-    public handleDragOn() {
+    public drawOnDragOn() {
         this.graphic.clear()
         this.graphic.fillStyle(0x00000)
         this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0xff0000)
+        this.graphic.lineStyle(4, 0xffffff)
+        this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)        
+    }
+
+    public drawOnDragOff() {
+        this.graphic.clear()
+        this.graphic.fillStyle(0x00000)
+        this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
+        this.graphic.lineStyle(2, 0xffffff)
         this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
+        this.image.setTintFill(0xffffff)
+    }
+    
+
+    public handleDragOn() {
+        this.drawOnDragOn()
     }
 
     public handleDragOff() {
-        this.draw()
+        if(this.slotTarget) {
+            this.drawOnDragOff()
+        } else {
+            this.draw()
+        }
     }
     
 }
 
 
 export function createSlotsContainer(
-    scene: Phaser.Scene,
+    scene: PlayerSelectionScene,
     itemsConfig: Record<string, any>,
     itemType: ItemType,
     size: number,
@@ -212,8 +245,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
     public gameContainer: Phaser.GameObjects.Container
     public activatedPickedSlot: Array<SelectedSlotContainer>
     public draggedSlot: SelectedSlotContainer
-    
-    
     public gameContainerWidth: number
     public gameContainerHeight: number
     constructor() {
@@ -240,27 +271,14 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.input.on('drag',  (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {
             gameObject.x = dragX
             gameObject.y = dragY
-            
-            const [activatedSlotContainer, slotContainer] = this.gameContainer.list as Array<Phaser.GameObjects.Container>
-            const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
-            const [weaponSlotContainer, abilitySlotContainer] = slotContainer.list as Array<Phaser.GameObjects.Container>
-
-            this.activatedPickedSlot = gameObject.item.type === ItemType.Weapon
-                ? activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>
-                : activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>
-
+            this.setActivePickedSlot(gameObject)
             for (const slot of this.activatedPickedSlot) {
                 slot.handleDragOn()
             }
         })
 
         this.input.on('dragend', (pointer, gameObject: SlotContainer, dropped) => {
-            
-            for (const slot of this.activatedPickedSlot) {
-                slot.handleDragOff()
-            }
-            
-            if (!dropped)
+            if (!dropped || this.draggedSlot.item.type !== gameObject.item.type)
             {
                 gameObject.x = gameObject.input.dragStartX
                 gameObject.y = gameObject.input.dragStartY
@@ -272,14 +290,13 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 gameObject.x = gameObject.initialX
                 gameObject.y = gameObject.initialY
                 gameObject.disable()
-                // gameObject.drawDisable()
 
                 this.draggedSlot.slotTarget = gameObject
                 this.draggedSlot.image.setFrame(gameObject.item.frame)
-
-
-                // debugger
             }
+            for (const slot of this.activatedPickedSlot) {
+                slot.handleDragOff()
+            } 
         })
         
         this.input.on('dragenter', (pointer, gameObject, dropZone: Phaser.GameObjects.Zone) => {
@@ -287,14 +304,17 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         })
 
-        this.input.on('dragleave', () => {
-            this.draggedSlot.slotTarget = undefined
-            this.draggedSlot = null
-
-        })
-
+        this.input.on('dragleave', () => {})
     }
 
+    public setActivePickedSlot(gameObject: SlotBaseContainer) {
+        const [activatedSlotContainer] = this.gameContainer.list as Array<Phaser.GameObjects.Container>
+        const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+        this.activatedPickedSlot = gameObject.item.type === ItemType.Weapon
+            ? activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>
+            : activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>
+    }
+    
     createBackground() {
         this.background = this.add.image(0, 0, 'backgroundGalaxy5')
             .setOrigin(0)
@@ -316,7 +336,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
         const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2 + slotSize / 2
         const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2 + slotSize / 2
         
-
         const weaponContainerWidth = slotColumnCount * (slotSize + slotOffsetBetween)
         const weaponContainerHeight =
             (Object.values(weaponsConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
@@ -350,7 +369,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 abilitiesContainer
             ]
         )
-
 
         const weaponPrimaryContainer = new SelectedSlotContainer(
             this, 0, 0,
@@ -400,14 +418,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 ability4Container,
             ]
         )
-        
-        
 
         const activatedSlotContainer = this.add.container(
             0, 0,
             [activatedWeaponContainer, activatedAbilitiesContainer]
         )
-
         
         this.gameContainer = this.add.container(
             0, 0,
@@ -418,9 +433,5 @@ export class PlayerSelectionScene extends Phaser.Scene {
         )
             .setSize(this.gameContainerWidth, this.gameContainerHeight)
             .setPosition(gameContainerX, gameContainerY)
-
-        
     }
-
-
 }
