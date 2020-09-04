@@ -118,12 +118,21 @@ class SelectedSlotContainer extends SlotBaseContainer {
         padding: number,
     ) {
         super(scene, x, y, item, size, padding)
-        this.setInteractive({cursor: 'pointer'})
-        this.scene.input.setDraggable(this)
+        // const zone = this.scene.add.zone(this.x, this.y, this.size, this.size).setRectangleDropZone(20, 20)
     }
 
     public create() {
         super.create()
+        // console.log(this.x)
+        // console.log(this.y)
+        // const zone = new Phaser.GameObjects.Zone(this.scene)
+        // this.add(zone)
+        const zone = this.scene.add.zone(0, 0, this.size, this.size).setRectangleDropZone(60, 60)
+        const graphics = this.scene.add.graphics()
+        this.add([graphics, zone])
+        // graphics.lineStyle(2, 0xffff00)
+        // graphics.strokeRect(zone.x - zone.input.hitArea.width / 2, zone.y - zone.input.hitArea.height / 2, zone.input.hitArea.width, zone.input.hitArea.height)
+        
     }
 }
 
@@ -165,6 +174,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
     public background: Phaser.GameObjects.Image
     public gameContainer: Phaser.GameObjects.Container
+    
     public gameContainerWidth: number
     public gameContainerHeight: number
     constructor() {
@@ -184,10 +194,42 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 gameContainerY,
             )
         }, false)
-        
-        this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+        this.initDrag()
+    }
+
+    initDrag() {
+        this.input.on('drag',  (pointer, gameObject, dragX, dragY) => {
+            console.log(this)
+            
             gameObject.x = dragX
             gameObject.y = dragY
+        })
+        
+        this.input.on('dragenter', (pointer, gameObject, dropZone) => {
+            console.log(gameObject)
+            // graphics.clear();
+            // graphics.lineStyle(2, 0x00ffff)
+            // graphics.strokeRect(
+            //     zone.x - zone.input.hitArea.width / 2,
+            //     zone.y - zone.input.hitArea.height / 2,
+            //     zone.input.hitArea.width,
+            //     zone.input.hitArea.height
+            // )
+        })
+
+        this.input.on('dragleave', (pointer, gameObject, dropZone) => {
+            console.log(gameObject)
+            // graphics.clear()
+            // graphics.lineStyle(2, 0xffff00)
+            // graphics.strokeRect(zone.x - zone.input.hitArea.width / 2, zone.y - zone.input.hitArea.height / 2, zone.input.hitArea.width, zone.input.hitArea.height)
+        })
+
+        this.input.on('dragend', (pointer, gameObject, dropped) => {
+            if (!dropped)
+            {
+                gameObject.x = gameObject.input.dragStartX
+                gameObject.y = gameObject.input.dragStartY
+            }
         })
     }
 
@@ -302,7 +344,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
         )
             .setSize(this.gameContainerWidth, this.gameContainerHeight)
             .setPosition(gameContainerX, gameContainerY)
-
 
         
     }
