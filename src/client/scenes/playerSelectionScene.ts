@@ -2,10 +2,13 @@ import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
 
-const SLOT_WIDTH = 30
-const SLOT_HEIGHT = 30
-// const SLOT_BACKGROUND_COLOR = 0x1313a8
-const SLOT_BACKGROUND_COLOR = 0x1313a8
+const COLOR_BACKGROUND = 0x000000
+const COLOR_BACKGROUND_DISABLED = 0x444444
+const COLOR_UNSELECTED = 0xbbbbbb
+const COLOR_SELECTED = 0xffffff
+const COLOR_DISABLED = 0x888888
+
+
 
 
 enum ItemType {
@@ -59,34 +62,33 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
         ).setDisplaySize(this.innerSize, this.innerSize)
         this.add([this.graphic, this.image])
         this.setSize(this.size, this.size)
-        this.draw()
     }
 
     public draw() {
         this.graphic.clear()
-        this.graphic.fillStyle(0x000000)
+        this.graphic.fillStyle(COLOR_BACKGROUND)
         this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0xbbbbbb)
+        this.graphic.lineStyle(2, COLOR_UNSELECTED)
         this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.image.setTintFill(0xbbbbbb)
+        this.image.setTintFill(COLOR_UNSELECTED)
     }
 
     public drawFocus() {
         this.graphic.clear()
-        this.graphic.fillStyle(0x000000)
+        this.graphic.fillStyle(COLOR_BACKGROUND)
         this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0xffffff)
+        this.graphic.lineStyle(2, COLOR_SELECTED)
         this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.image.setTintFill(0xffffff)
+        this.image.setTintFill(COLOR_SELECTED)
     }
 
     public drawDisable() {
         this.graphic.clear()
-        this.graphic.fillStyle(0x444444)
+        this.graphic.fillStyle(COLOR_BACKGROUND_DISABLED)
         this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0x888888)
+        this.graphic.lineStyle(2, COLOR_DISABLED)
         this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.image.setTintFill(0x888888)
+        this.image.setTintFill(COLOR_DISABLED)
     }
 }
 
@@ -111,13 +113,14 @@ class SlotContainer extends SlotBaseContainer {
             this.disable()
         }
 
+        this.draw()
         
         this.on('pointerover', () =>  {
             if(!this.isDisabled) {
                 this.drawFocus()
                 this.scene.setActivePickedSlot(this)
                 for (const slot of this.scene.activatedPickedSlot) {
-                    slot.handleDragOn()
+                    slot.drawFocus()
                 }
             }
         })
@@ -127,7 +130,7 @@ class SlotContainer extends SlotBaseContainer {
                 this.drawFocus()
                 this.scene.setActivePickedSlot(this)
                 for (const slot of this.scene.activatedPickedSlot) {
-                    slot.handleDragOn()
+                    slot.drawFocus()
                 }
             }
         })
@@ -136,7 +139,7 @@ class SlotContainer extends SlotBaseContainer {
             if(!this.isDisabled) {
                 this.draw()
                 for (const slot of this.scene.activatedPickedSlot) {
-                    slot.handleDragOff()
+                    slot.drawDefault()
                 }
             } 
         })
@@ -175,36 +178,39 @@ class SelectedSlotContainer extends SlotBaseContainer {
         const zone = this.scene.add.zone(-this.size / 2, -this.size / 2, this.size, this.size)
             .setRectangleDropZone(this.size * 2, this.size * 2)
         this.add(zone)
+        this.drawDefault()
     }
 
-    public drawOnDragOn() {
-        this.graphic.clear()
-        this.graphic.fillStyle(0x00000)
-        this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(4, 0xffffff)
-        this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)        
+    public syncTarget(slot: SlotContainer) {
+        this.item = slot.item
+        this.slotTarget = slot
+        this.image.setFrame(this.item.frame)
     }
 
-    public drawOnDragOff() {
-        this.graphic.clear()
-        this.graphic.fillStyle(0x00000)
-        this.graphic.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.graphic.lineStyle(2, 0xffffff)
-        this.graphic.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        this.image.setTintFill(0xffffff)
+    get isEmpty(): boolean {
+        return this.item.key === 'uncertainity'
     }
-    
 
     public handleDragOn() {
-        this.drawOnDragOn()
+        this.drawFocus()
     }
 
-    public handleDragOff() {
-        if(this.slotTarget) {
-            this.drawOnDragOff()
+    public drawDefault() {
+        if(this.isEmpty) {
+            this.drawDisable()
         } else {
             this.draw()
         }
+    }
+    
+    public handleDragOff() {
+        if(this.isEmpty) {
+            this.drawDisable()
+        } else {
+            this.draw()
+        }
+        
+        // this.draw()
     }
     
 }
@@ -243,9 +249,12 @@ export function createSlotsContainer(
 export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
     public background: Phaser.GameObjects.Image
+    public slotContainer: Phaser.GameObjects.Container
     public gameContainer: Phaser.GameObjects.Container
+    public playButtonDOM: Phaser.GameObjects.DOMElement
     public activatedPickedSlot: Array<SelectedSlotContainer>
     public draggedSlot: SelectedSlotContainer
+
     public gameContainerWidth: number
     public gameContainerHeight: number
     constructor() {
@@ -257,8 +266,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     init(): void {
         window.addEventListener('resize', () => {
-            const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2 + 40 / 2
-            const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2 + 40 / 2
+            const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
+            const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
             
             this.gameContainer.setPosition(
                 gameContainerX,
@@ -292,24 +301,23 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 gameObject.y = gameObject.initialY
                 gameObject.disable()
 
-                this.draggedSlot.slotTarget = gameObject
-                this.draggedSlot.image.setFrame(gameObject.item.frame)
+                this.draggedSlot.syncTarget(gameObject)
             }
             for (const slot of this.activatedPickedSlot) {
                 slot.handleDragOff()
-            } 
+            }
+            this.setReadyButton()
         })
         
         this.input.on('dragenter', (pointer, gameObject, dropZone: Phaser.GameObjects.Zone) => {
             this.draggedSlot = dropZone.parentContainer as SelectedSlotContainer
-
         })
 
         this.input.on('dragleave', () => {})
     }
 
     public setActivePickedSlot(gameObject: SlotBaseContainer) {
-        const [activatedSlotContainer] = this.gameContainer.list as Array<Phaser.GameObjects.Container>
+        const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
         const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
         this.activatedPickedSlot = gameObject.item.type === ItemType.Weapon
             ? activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>
@@ -322,25 +330,28 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .setAlpha(1)
     }
 
-
-    create(): void {
-        this.createBackground()
+    createSlots(): void {
         const slotSize = 40
         const slotPadding = 4
         const slotOffsetBetween = 14
         const slotColumnCount = 8
-        const abilitiesMarginTop = 100
-        const abilitiesMarginLeft = 80
+        const slotMarginLeft = 80
+        const abilitiesMarginTop = 20
 
-        this.gameContainerWidth = (slotSize + slotOffsetBetween) * slotColumnCount + abilitiesMarginLeft
-        this.gameContainerHeight = (slotSize + slotOffsetBetween) * 6 + abilitiesMarginTop
-        const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2 + slotSize / 2
-        const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2 + slotSize / 2
         
-        const weaponContainerWidth = slotColumnCount * (slotSize + slotOffsetBetween)
-        const weaponContainerHeight =
+        const weaponContainerHeight = Math.max(
+            2 * (slotSize + slotOffsetBetween),
             (Object.values(weaponsConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
+        )
 
+        const abilitiesContainerHeight = Math.max(
+            4 * (slotSize + slotOffsetBetween),
+            (Object.values(abilitiesConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
+        )
+
+        const slotContainerWidth = (slotSize + slotOffsetBetween) * slotColumnCount + slotMarginLeft
+        const slotContainerHeight = weaponContainerHeight + abilitiesContainerHeight + abilitiesMarginTop  
+        
         const weaponsContainer = createSlotsContainer(
             this,
             weaponsConfig,
@@ -351,7 +362,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             slotColumnCount,
         )
             .setPosition(0, 0)
-            .setSize(weaponContainerWidth, weaponContainerHeight)
         const abilitiesContainer = createSlotsContainer(
             this,
             abilitiesConfig,
@@ -364,7 +374,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .setPosition(0, weaponContainerHeight + abilitiesMarginTop)
         
         const slotContainer = this.add.container(
-            abilitiesMarginLeft, 0,
+            slotMarginLeft, 0,
             [
                 weaponsContainer,
                 abilitiesContainer
@@ -392,7 +402,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             slotSize, slotPadding, 
         )
         const ability3Container = new SelectedSlotContainer(
-            this, 0, (weaponContainerHeight + abilitiesMarginTop) + 2 * (slotSize + slotOffsetBetween),
+            this, 0, (weaponContainerHeight + abilitiesMarginTop ) + 2 * (slotSize + slotOffsetBetween),
             { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability},
             slotSize, slotPadding, 
         )
@@ -425,14 +435,68 @@ export class PlayerSelectionScene extends Phaser.Scene {
             [activatedWeaponContainer, activatedAbilitiesContainer]
         )
         
-        this.gameContainer = this.add.container(
+        this.slotContainer = this.add.container(
             0, 0,
             [
                 activatedSlotContainer,
                 slotContainer,
             ]
         )
-            .setSize(this.gameContainerWidth, this.gameContainerHeight)
+            .setSize(slotContainerWidth, slotContainerHeight)
+    }
+
+    
+    createPlayButton(): void {
+        const buttonTemplate = `
+<button disabled class="button is-dark is-large">
+  Enter The Arena
+</button>
+`
+        this.playButtonDOM = this.add.dom(0, 0).createFromHTML(buttonTemplate)
+            .setPosition(this.slotContainer.width / 2, this.slotContainer.height + 20)
+
+        this.playButtonDOM.addListener('click')
+        this.playButtonDOM.on('click', (event) => {
+            console.log('hello')
+        })
+    }
+
+    setReadyButton(): void {
+        const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
+        const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+        
+        const selectedWeaponCount =
+            activatedWeaponSlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
+        const selectedAbilityCount =
+            activatedAbilitySlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
+        if((selectedWeaponCount + selectedAbilityCount) < 6) {
+            // @ts-ignore
+            this.playButtonDOM.node.children[0].disabled = true
+        } else {
+            // @ts-ignore
+            this.playButtonDOM.node.children[0].disabled = false
+        }
+    }
+
+    create(): void {
+        this.createBackground()
+        this.createSlots()
+        this.createPlayButton()
+
+        this.gameContainerWidth = this.slotContainer.width
+        this.gameContainerHeight = this.slotContainer.height + this.playButtonDOM.height
+        const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
+        const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
+        
+        // debugger
+        this.gameContainer = this.add.container(
+            0, 0,
+            [ this.slotContainer, this.playButtonDOM ]
+        ).setSize(
+            this.slotContainer.width,
+            this.playButtonDOM.height + this.playButtonDOM.height
+        )
             .setPosition(gameContainerX, gameContainerY)
+        
     }
 }
