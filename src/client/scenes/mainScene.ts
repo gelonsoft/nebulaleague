@@ -17,6 +17,7 @@ import { MyGame } from '../phaserEngine'
 import { playersAIConfig }  from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
+import { PlayerConfig } from './playerSelectionScene'
 
 
 export class MainScene extends Phaser.Scene {
@@ -35,6 +36,7 @@ export class MainScene extends Phaser.Scene {
     public freeCamera: boolean
     public mainCameraZoom: number
     public backgroundImage: Phaser.GameObjects.Image
+    public playerConfig: PlayerConfig
 
     constructor() {
         super({
@@ -42,8 +44,7 @@ export class MainScene extends Phaser.Scene {
         })
     }
 
-    public init(t: any): void {
-        console.log(t)
+    public init(playerConfig: PlayerConfig): void {
         if (this.game.debug) {
             window['m'] = this
         }
@@ -53,6 +54,7 @@ export class MainScene extends Phaser.Scene {
                 this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
         }, false)
+        this.playerConfig = playerConfig
         this.mainCameraZoom = 0.5
         this.playersAI = []
         this.players = this.physics.add.group({
