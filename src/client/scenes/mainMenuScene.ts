@@ -21,15 +21,14 @@ export class MainMenuScene extends Phaser.Scene {
                 this.scene.sleep('mainMenuScene')
             }
             if (event.target.name === 'exitButton') {
-                this.scene.sleep('mainScene')
-                this.scene.sleep('hudScene')
+                this.scene.stop('mainScene')
+                this.scene.stop('hudScene')
+                this.scene.stop('playerSelectionScene')
+                this.scene.stop()
                 if (this.game.debug) {
                     this.scene.sleep('debugScene')
                 }
-                this.scene.sleep()
-
-                // this.scene.get('mainScene').input.keyboard.enabled = false
-                this.scene.wake('menuScene')
+                this.scene.start('menuScene')
             }
         })
     }

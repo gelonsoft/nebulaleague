@@ -22,7 +22,6 @@ export class MenuScene extends Phaser.Scene {
         if (this.game.debug) {
             window['menu'] = this
             this.scene.start('playerSelectionScene')
-            // this.startMainScene()
         }
     }
 
@@ -47,7 +46,7 @@ export class MenuScene extends Phaser.Scene {
         this.menuHTML.addListener('keypress')
         this.menuHTML.on('click', event => {
             if (event.target.name === 'playButton') {
-                this.startMainScene()
+                this.startPlayerSelectionScene()
             }
         })
     }
@@ -57,12 +56,7 @@ export class MenuScene extends Phaser.Scene {
         this.createMenu()
     }
 
-    startMainScene() {
-        this.scene.get('mainScene').scene.restart()
-        this.scene.get('hudScene').scene.restart()
-        if (this.game.debug) {
-            this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
-        }
-        this.scene.sleep()
+    startPlayerSelectionScene() {
+        this.scene.start('playerSelectionScene')
     }
 }

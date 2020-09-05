@@ -316,7 +316,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.input.on('dragleave', () => {})
     }
 
-    public setActivePickedSlot(gameObject: SlotBaseContainer) {
+    setActivePickedSlot(gameObject: SlotBaseContainer) {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
         const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
         this.activatedPickedSlot = gameObject.item.type === ItemType.Weapon
@@ -337,7 +337,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
         const slotColumnCount = 8
         const slotMarginLeft = 80
         const abilitiesMarginTop = 20
-
         
         const weaponContainerHeight = Math.max(
             2 * (slotSize + slotOffsetBetween),
@@ -349,7 +348,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
             (Object.values(abilitiesConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
         )
 
-        const slotContainerWidth = (slotSize + slotOffsetBetween) * slotColumnCount + slotMarginLeft
+        const slotContainerWidth =
+            (slotSize + slotOffsetBetween + slotMarginLeft) + (slotSize * slotColumnCount)
         const slotContainerHeight = weaponContainerHeight + abilitiesContainerHeight + abilitiesMarginTop  
         
         const weaponsContainer = createSlotsContainer(
@@ -448,7 +448,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     
     createPlayButton(): void {
         const buttonTemplate = `
-<button disabled class="button is-dark is-large">
+<button title="Drag And Drop slots" disabled class="button is-dark is-large">
   Enter The Arena
 </button>
 `
@@ -457,7 +457,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         this.playButtonDOM.addListener('click')
         this.playButtonDOM.on('click', (event) => {
-            console.log('hello')
+            this.startMainScene()
         })
     }
 
@@ -469,12 +469,14 @@ export class PlayerSelectionScene extends Phaser.Scene {
             activatedWeaponSlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
         const selectedAbilityCount =
             activatedAbilitySlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
+
+        const el: any = this.playButtonDOM.node.children[0]
         if((selectedWeaponCount + selectedAbilityCount) < 6) {
-            // @ts-ignore
-            this.playButtonDOM.node.children[0].disabled = true
+            el.disabled = true
+            el.title='Drag And Drop slots'
         } else {
-            // @ts-ignore
-            this.playButtonDOM.node.children[0].disabled = false
+            el.disabled = false
+            el.title=''
         }
     }
 
@@ -488,15 +490,24 @@ export class PlayerSelectionScene extends Phaser.Scene {
         const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
         const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
         
-        // debugger
         this.gameContainer = this.add.container(
             0, 0,
             [ this.slotContainer, this.playButtonDOM ]
         ).setSize(
             this.slotContainer.width,
             this.playButtonDOM.height + this.playButtonDOM.height
-        )
-            .setPosition(gameContainerX, gameContainerY)
-        
+        ).setPosition(gameContainerX, gameContainerY)
     }
+
+    startMainScene() {
+        this.scene.get('mainScene').scene.restart({
+            'hello': 'world',
+        })
+        this.scene.get('hudScene').scene.restart()
+        if (this.game.debug) {
+            this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
+        }
+        this.scene.sleep()
+    }
+    
 }

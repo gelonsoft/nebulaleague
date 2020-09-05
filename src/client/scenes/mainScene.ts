@@ -42,7 +42,8 @@ export class MainScene extends Phaser.Scene {
         })
     }
 
-    public init(): void {
+    public init(t: any): void {
+        console.log(t)
         if (this.game.debug) {
             window['m'] = this
         }
