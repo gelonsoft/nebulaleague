@@ -37,7 +37,7 @@ const projectilesConfig = {
         frame: 'beams-purple1.png',
         damage: 450,
         speed: 1000,
-        lifespan: 0.24,
+        lifespan: 0.3,
         radius: 16,
     },
     thompsonBullet: {

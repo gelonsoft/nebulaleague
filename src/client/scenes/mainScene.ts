@@ -1,4 +1,4 @@
-import { Player, ActionTimeInterface } from '../player'
+import { Player, ActionTimeInterface, ControlledBy, PlayerConfig } from '../player'
 import { MainControl, PlayerControl } from '../controls'
 import { Consumable, RandomItem } from '../entities/consumables'
 import { Projectiles, ProjectileInterface } from '../entities/projectiles'
@@ -17,7 +17,7 @@ import { MyGame } from '../phaserEngine'
 import { playersAIConfig }  from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerConfig } from './playerSelectionScene'
+
 
 
 export class MainScene extends Phaser.Scene {
@@ -68,7 +68,6 @@ export class MainScene extends Phaser.Scene {
         this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
     }
 
-
     
     public settingCamera(): void {
         this.cameras.main.setZoom(this.mainCameraZoom)
@@ -108,69 +107,40 @@ export class MainScene extends Phaser.Scene {
     }
     
 
-    public createPlayers(): void {
-        // should recieve something in parametres to choosee between mainPlayer Otherplayers and AIPlayiers
-        const mainPlayerConfig = {
-            id: 'mainPlayer',
-            x: this.cameras.main.displayWidth / 2,
-            y: this.cameras.main.displayHeight / 2,
-            weaponPrimaryKey: 'pistol',
-            weaponSecondaryKey: 'thompson',
-            abilityKey1: 'frozenWave',
-            abilityKey2: 'psychicWave',
-            abilityKey3: 'lightningWave',
-            abilityKey4: 'fireWave',
-        }
-        this.createPlayer(mainPlayerConfig, 'mainPlayer')
-
-        // create ai players
+    public createAIPlayers(): void {
         let index = 0
         while (this.players.getLength() < MAX_PLAYER) {
             const playerAIConfig = playersAIConfig[index]
-            const x = Phaser.Math.Between(PLAYER_SIZE / 2, WORLD_WIDTH - PLAYER_SIZE / 2)
-            const y = Phaser.Math.Between(PLAYER_SIZE / 2, WORLD_HEIGHT - PLAYER_SIZE / 2)
-            
-            const circle = new Phaser.Geom.Circle(x, y, PLAYER_SIZE / 2)
-            let overlaping = false
-            this.players.getChildren().forEach((player: Player) => {
-                if (circle.contains(player.x, player.y )) {
-                    overlaping = true
-                }
-            })
-            
-            if(!overlaping) {
-                const playerConfig = {
-                    id: playerAIConfig.id,
-                    x: x,
-                    y: y,
-                    weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
-                    weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
-                    abilityKey1: playerAIConfig.abilityKey1,
-                    abilityKey2: playerAIConfig.abilityKey2,
-                    abilityKey3: playerAIConfig.abilityKey3,
-                    abilityKey4: playerAIConfig.abilityKey4,
-                }
-                this.createPlayer(playerConfig, 'aiPlayer', playerAIConfig)
-                index += 1
+            const playerConfig = {
+                id: playerAIConfig.id,
+                controlledBy: ControlledBy.AIPlayer,
+                x: 0,
+                y: 0,
+                weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
+                weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
+                abilityKey1: playerAIConfig.abilityKey1,
+                abilityKey2: playerAIConfig.abilityKey2,
+                abilityKey3: playerAIConfig.abilityKey3,
+                abilityKey4: playerAIConfig.abilityKey4,
             }
+            this.createPlayer(playerConfig, playerAIConfig)
+            index += 1
         }
         const pt: Player = this.players.getChildren()[1] as Player
         pt.x = 500
         pt.y = 500
     }
-    
 
-    public createPlayer(playerConfig, associateBehavior: string, playerConfigAI?: any): void {
+
+    public createPlayer(playerConfig: PlayerConfig, playerConfigAI?: any): void {
         const newPlayer = new Player(this, playerConfig)
-        if (associateBehavior === 'mainPlayer') {
+        this.players.add(newPlayer)
+        if (playerConfig.controlledBy === ControlledBy.MainPlayer) {
             this.player = newPlayer
             this.players.add(newPlayer)
             window['p'] = newPlayer
         }
-        else if (associateBehavior === 'otherPlayer') {
-            this.players.add(newPlayer)
-        }
-        else if (associateBehavior === 'aiPlayer') {
+        else if (playerConfig.controlledBy === ControlledBy.AIPlayer) {
             const playersChildren = this.players.getChildren() as Player[]
             
             this.players.add(newPlayer)
@@ -185,6 +155,11 @@ export class MainScene extends Phaser.Scene {
     }
 
     
+    public initResetPlayersPosition():void {
+        this.players.getChildren().forEach((player: Player) => {
+            player.reset(this.players)
+        })
+    }
     
     public create(): void {
         this.settingCamera()
@@ -193,10 +168,11 @@ export class MainScene extends Phaser.Scene {
         this.createProjectiles()
         this.createWeapons()
         this.createAbilities()
-        this.createPlayers()
+        this.createPlayer(this.playerConfig)
+        this.createAIPlayers()
+        this.initResetPlayersPosition()
+        
         this.cameras.main.startFollow(this.player, true)
-
-
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
 

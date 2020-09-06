@@ -1,6 +1,7 @@
 import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
+import { ControlledBy, PlayerConfig } from "../player"
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
@@ -9,17 +10,14 @@ const COLOR_SELECTED = 0xffffff
 const COLOR_DISABLED = 0x888888
 
 
-export interface PlayerConfig {
-    weaponPrimaryKey: string
-    weaponSecondaryKey:string
-    abilityKey1: string
-    abilityKey2: string
-    abilityKey3: string
-    abilityKey4: string
-}
 
 
-const DEFAULT_PLAYER_CONFIG = {
+
+const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
+    id: 'mainPlayer',
+    x: 0,
+    y: 0,
+    controlledBy: ControlledBy.MainPlayer,
     weaponPrimaryKey: 'uncertainity',
     weaponSecondaryKey:'uncertainity',
     abilityKey1: 'uncertainity',
@@ -313,7 +311,10 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 gameContainerY,
             )
         }, false)
-        this.playerConfig = JSON.parse(window.localStorage.getItem('playerConfig')) || DEFAULT_PLAYER_CONFIG
+        this.playerConfig = {
+            ...DEFAULT_PLAYER_CONFIG,
+            ...JSON.parse(window.localStorage.getItem('playerConfig'))
+        }
         this.initDrag()
     }
 
@@ -552,7 +553,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
             activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
         ]
         
-        const playerConf = {
+        const playerConfUpdated = {
+            ...this.playerConfig,
             weaponPrimaryKey: weapons[0].item.key,
             weaponSecondaryKey: weapons[1].item.key,
             abilityKey1: abilities[0].item.key,
@@ -562,10 +564,10 @@ export class PlayerSelectionScene extends Phaser.Scene {
         }
 
         // save config
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerConf))
+        window.localStorage.setItem('playerConfig', JSON.stringify(playerConfUpdated))
 
         
-        this.scene.get('mainScene').scene.restart(playerConf)
+        this.scene.get('mainScene').scene.restart(playerConfUpdated)
         this.scene.get('hudScene').scene.restart()
         if (this.game.debug) {
             this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))

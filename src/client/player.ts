@@ -1,6 +1,5 @@
 import 'phaser'
 import { MainScene } from './scenes/mainScene'
-import { PlayerModel } from '../shared/models'
 import {
     PLAYER_ACCELERATION_CHANGE,
     PLAYER_ACCELERATION_STEADY,
@@ -14,6 +13,26 @@ import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 import { createEffectIconsContainer, refreshEffectIcons } from './entities/effects'
+
+
+export enum ControlledBy {
+    MainPlayer,
+    OtherPlayer,
+    AIPlayer,
+}
+
+export interface PlayerConfig {
+    id: string
+    controlledBy: ControlledBy
+    x: number
+    y: number
+    weaponPrimaryKey: string
+    weaponSecondaryKey:string
+    abilityKey1: string
+    abilityKey2: string
+    abilityKey3: string
+    abilityKey4: string
+}
 
 export enum EffectKeys {
     Slow = 'slowed',
@@ -94,6 +113,7 @@ export class Player extends Phaser.GameObjects.Container {
     public healthBar: HealthBar
     public effectIconsContainer: Phaser.GameObjects.Container
     public playerState: Map<string, boolean | number>
+    public controlledBy: ControlledBy
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
     public actions: ActionsInterface
@@ -105,7 +125,7 @@ export class Player extends Phaser.GameObjects.Container {
     public burningTime: Phaser.Time.TimerEvent | null
     public deathCooldownDelay: number
 
-    constructor(scene: MainScene, playerConfig: PlayerModel) {
+    constructor(scene: MainScene, playerConfig: PlayerConfig) {
         super(scene)
         this.scene = scene
         this.playerState = new Map()
@@ -113,6 +133,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.id = playerConfig.id
         this.x = playerConfig.x
         this.y = playerConfig.y
+        this.controlledBy = playerConfig.controlledBy
         this.maxHealth = PLAYER_DEFAULT_HEALTH
         this.health = this.maxHealth
         this.defaultSpeed = PLAYER_DEFAULT_SPEED
@@ -531,7 +552,7 @@ export class Player extends Phaser.GameObjects.Container {
                     this.actionTimes.death.timerEvent.remove(false)
                     this.actionTimes.death.timerEvent = null
                     if(!this.active) {
-                        this.reset()
+                        this.reset(this.scene.players)
                         this.scene.stopDeathTransition(this)
                     }
                 },
@@ -549,15 +570,28 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     
-    public reset(): void {
+    public reset(otherPlayers: Phaser.Physics.Arcade.Group): void {
+        let overlaping = true
+        let x = 0
+        let y = 0
+        
+        while (overlaping) {
+            overlaping= false
+            const circle = new Phaser.Geom.Circle(x, y, PLAYER_SIZE / 2)
+            x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
+            y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
+            
+            otherPlayers.getChildren().forEach((player: Player) => {
+                if (circle.contains(player.x, player.y )) {
+                    overlaping = true
+                }
+            })
+        }
         this.body.setEnable(true)
+        this.body.reset(x, y)
         this.setActive(true)
         this.setVisible(true)
-
         this.healthBar.setVisible(true)
         this.effectIconsContainer.setVisible(false)
-        const x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
-        const y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
-        this.body.reset(x, y)
     }
 }

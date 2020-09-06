@@ -54,7 +54,7 @@ export const weaponsConfig = {
         cooldownDelay: 5,
         projectileKey: 'thompsonBullet',
         laserConfig: {
-            color: 0x00ff00,
+            color: 0x0000ff,
             width: 3,
             alpha: 0.9,
         }

@@ -1,8 +1,6 @@
 export interface PlayerModel {
     id: string
-    // uuid?: string
-    // ammo: number
-    // name: string
+    controlledBy: number
     x: number
     y: number
     weaponPrimaryKey: string
