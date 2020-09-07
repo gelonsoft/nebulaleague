@@ -1,5 +1,13 @@
+import { Socket } from "socket.io";
+
+export interface CoordinatesModel {
+    x: number
+    y: number
+}
+
 export interface PlayerModel {
     id: string
+    name: string
     controlledBy: number
     x: number
     y: number
@@ -55,3 +63,7 @@ export interface BlockModelMultiple extends BlockModel {
     triggerAfter?: number
 }
 
+
+export interface DomainSocket extends Socket {
+    player: PlayerModel
+}

@@ -1,7 +1,24 @@
 import * as express from "express"
 import * as path from "path"
 import * as socketIO from "socket.io"
+import { Socket } from "socket.io"
+import { v4 as uuidv4 } from 'uuid'
+
 require('dotenv-flow').config()
+
+
+import {
+    PlayerModel,
+    CoordinatesModel,
+    DomainSocket,
+}
+from "../shared/models"
+
+import {
+    ServerEvent,
+    GameEvent,
+    PlayerEvent,
+} from "../shared/events.model"
 
 
 const app = express()
@@ -18,8 +35,8 @@ if (app.get('debug')) {
     const webpackDevMiddleware = require('webpack-dev-middleware')
     const hotMiddleware = require('webpack-hot-middleware')
     const config = require(path.resolve('./webpack.dev.config.js'))
-    config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000');
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000')
+    config.plugins.push(new webpack.HotModuleReplacementPlugin())
 
     const compiler = webpack(config)
     
@@ -38,15 +55,129 @@ app.use('/css', express.static(path.resolve("./public/css")))
 
 
 app.get("/", (req: any, res: any) => {
-    console.log('index.html is served by express')
     res.sendFile(path.resolve("./public/index.html"))
 })
 
-io.on("connection", function(socket: any) {
-    socket.send('Hello!');
-    console.log("Client connected!")
-})
+// io.on("connection", function(socket: any) {
+//     socket.send('Hello!')
+// })
 
-http.listen(app.get('port'), function() {
-    console.log(`Server running at http://127.0.0.1:${app.get('port')}`)
-})
+
+
+
+
+class GameServer {
+    private gameHasStarted = false
+    private hasComet = false
+
+    constructor() {
+        this.socketEvents()
+    }
+
+    public connect(port: number): void {
+        http.listen(port, () => {
+            console.info(`Listening on port ${port}`)
+        })
+    }
+
+    private socketEvents(): void {
+        io.on(ServerEvent.connected, (socket: DomainSocket) => {
+            this.attachListeners(socket)
+        })
+    }
+
+    private attachListeners(socket: DomainSocket): void {
+        this.addSignOnListener(socket)
+        this.addMovementListener(socket)
+        this.addSignOutListener(socket)
+    }
+
+
+    private gameInitialised(socket: DomainSocket): void {
+        if (!this.gameHasStarted) {
+            this.gameHasStarted = true
+        }
+    }
+
+
+    private addMovementListener(socket: DomainSocket): void {
+        socket.on(PlayerEvent.coordinates, (coors: Coordinates) => {
+            socket.broadcast.emit(PlayerEvent.coordinates, {
+                coors: coors,
+                player: socket.player,
+            })
+        })
+    }
+
+    private addSignOutListener(socket: DomainSocket): void {
+        socket.on(ServerEvent.disconnected, () => {
+            if (socket.player) {
+                socket.broadcast.emit(PlayerEvent.quit, socket.player.id)
+            }
+        })
+    }
+
+    private addSignOnListener(socket: DomainSocket): void {
+        socket.on(
+            GameEvent.authentication,
+            (player: PlayerModel, gameSize: CoordinatesModel) => {
+                socket.emit(PlayerEvent.players, this.getAllPlayers())
+                this.createPlayer(socket, player, gameSize)
+                socket.emit(PlayerEvent.protagonist, socket.player)
+                socket.broadcast.emit(PlayerEvent.joined, socket.player)
+                this.gameInitialised(socket)
+            }
+        )
+    }
+
+    private createPlayer(
+        socket: DomainSocket,
+        player: PlayerModel,
+        windowSize: CoordinatesModel
+    ): void {
+        socket.player = {
+            name: player.name,
+            id: uuidv4(),
+            x: this.randomInt(0, windowSize.x),
+            y: this.randomInt(0, windowSize.y),
+            abilityKey1: '',
+            abilityKey2: '',
+            abilityKey3: '',
+            abilityKey4: '',
+            controlledBy: 0,
+            weaponPrimaryKey: '',
+            weaponSecondaryKey: '',
+        }
+    }
+
+    private getAllPlayers(): Array<PlayerModel> {
+        return Object.keys(io.sockets.connected).reduce((acc, socketID) => {
+            const player = (io.sockets.connected[socketID] as DomainSocket).player
+            if (player) {
+                acc.push(player)
+            }
+            return acc
+        }, [])
+    }
+
+    private generateRandomCoordinates(): { x: number, y: number } {
+        return {
+            x: Math.floor(Math.random() * 1024) + 1,
+            y: Math.floor(Math.random() * 768) + 1,
+        }
+    }
+
+    private randomInt(low: number, high: number): number {
+        return Math.floor(Math.random() * (high - low) + low)
+    }
+}
+
+const gameSession = new GameServer()
+
+
+gameSession.connect(3000)
+
+
+// http.listen(app.get('port'), function() {
+//     console.log(`Server running at http://127.0.0.1:${app.get('port')}`)
+// })

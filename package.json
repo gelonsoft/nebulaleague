@@ -21,6 +21,8 @@
     "author": "edil3ra",
     "license": "MIT",
     "dependencies": {
+        "bulma": "^0.9.0",
+        "dotenv-flow": "^3.2.0",
         "express": "^4.17.1",
         "fluent-behavior-tree": "^1.2.6",
         "html-webpack-plugin": "^4.0.0-beta.14",
@@ -28,9 +30,7 @@
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",
         "ts-behavior-tree": "^1.2.0",
-        "uuid": "^8.2.0",
-        "dotenv-flow": "^3.2.0",
-        "bulma": "^0.9.0"
+        "uuid": "^8.3.0"
     },
     "devDependencies": {
         "@types/express": "^4.17.7",

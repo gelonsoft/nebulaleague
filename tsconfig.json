@@ -6,8 +6,7 @@
         "sourceMap": true,
         "noImplicitAny": false,
         "allowJs": true,
-        "strict": false,
-        "rootDir": "src/server"
+        "strict": false
     },
     "include": [
         "./src/server/**/*"

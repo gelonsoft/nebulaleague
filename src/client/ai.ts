@@ -20,7 +20,6 @@ enum Behaviour {
     newMoveAroundAngle,
 }
 
-
 interface PlayerAIActionsInterface {
     player: Player
     actions: Array<string>
