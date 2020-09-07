@@ -7,7 +7,6 @@ import { MenuScene } from './scenes/menuScene'
 import { MainMenuScene } from './scenes/mainMenuScene'
 import { DeathScene } from './scenes/deathScene'
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
-import * as io from 'socket.io-client'
 
 
 const isDebug = process.env.DEBUG === 'true' || false
@@ -18,8 +17,6 @@ export class MyGame extends Phaser.Game {
         this.debug = isDebug
     }
 }
-
-io.connect()
 
 export class PhaserSpaceGame {
     private game: MyGame

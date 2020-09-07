@@ -1,5 +1,9 @@
 import { MyGame } from "../phaserEngine"
 
+export interface MenuSceneConfig {
+    playerName: string,
+}
+
 export class MenuScene extends Phaser.Scene {
     public game: MyGame
     public playerName: string
@@ -21,7 +25,9 @@ export class MenuScene extends Phaser.Scene {
     init(): void {
         if (this.game.debug) {
             window['menu'] = this
-            this.scene.start('playerSelectionScene')
+            this.scene.start('playerSelectionScene', {
+                playerName: 'defaultName',
+            })
         }
     }
 
@@ -57,6 +63,8 @@ export class MenuScene extends Phaser.Scene {
     }
 
     startPlayerSelectionScene() {
-        this.scene.start('playerSelectionScene')
+        this.scene.start('playerSelectionScene', {
+            name: this.playerName
+        })
     }
 }

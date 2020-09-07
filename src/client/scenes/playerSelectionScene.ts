@@ -2,6 +2,7 @@ import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
 import { ControlledBy, PlayerConfig } from "../player"
+import { MenuSceneConfig } from "./menuScene"
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
@@ -11,10 +12,9 @@ const COLOR_DISABLED = 0x888888
 
 
 
-
-
 const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
     id: 'mainPlayer',
+    name: 'default',
     x: 0,
     y: 0,
     controlledBy: ControlledBy.MainPlayer,
@@ -301,7 +301,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     }
     
 
-    init(): void {
+    init(menuSceneConfig: MenuSceneConfig): void {
         window.addEventListener('resize', () => {
             const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
             const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
@@ -313,7 +313,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
         }, false)
         this.playerConfig = {
             ...DEFAULT_PLAYER_CONFIG,
-            ...JSON.parse(window.localStorage.getItem('playerConfig'))
+            ...JSON.parse(window.localStorage.getItem('playerConfig')),
+            name: menuSceneConfig.playerName
         }
         this.initDrag()
     }
@@ -568,9 +569,9 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         
         this.scene.get('mainScene').scene.restart(playerConfUpdated)
-        this.scene.get('hudScene').scene.restart()
+        // this.scene.get('hudScene').scene.restart()
         if (this.game.debug) {
-            this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
+            // this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
         }
         this.scene.sleep()
     }

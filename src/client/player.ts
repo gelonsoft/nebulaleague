@@ -23,6 +23,7 @@ export enum ControlledBy {
 
 export interface PlayerConfig {
     id: string
+    name: string
     controlledBy: ControlledBy
     x: number
     y: number

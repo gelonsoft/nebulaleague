@@ -58,13 +58,6 @@ app.get("/", (req: any, res: any) => {
     res.sendFile(path.resolve("./public/index.html"))
 })
 
-// io.on("connection", function(socket: any) {
-//     socket.send('Hello!')
-// })
-
-
-
-
 
 class GameServer {
     private gameHasStarted = false
@@ -76,7 +69,7 @@ class GameServer {
 
     public connect(port: number): void {
         http.listen(port, () => {
-            console.info(`Listening on port ${port}`)
+            console.log(`Server running at http://127.0.0.1:${app.get('port')}`)
         })
     }
 
@@ -120,9 +113,9 @@ class GameServer {
     private addSignOnListener(socket: DomainSocket): void {
         socket.on(
             GameEvent.authentication,
-            (player: PlayerModel, gameSize: CoordinatesModel) => {
+            (player: PlayerModel) => {
                 socket.emit(PlayerEvent.players, this.getAllPlayers())
-                this.createPlayer(socket, player, gameSize)
+                this.createPlayer(socket, player)
                 socket.emit(PlayerEvent.protagonist, socket.player)
                 socket.broadcast.emit(PlayerEvent.joined, socket.player)
                 this.gameInitialised(socket)
@@ -133,20 +126,22 @@ class GameServer {
     private createPlayer(
         socket: DomainSocket,
         player: PlayerModel,
-        windowSize: CoordinatesModel
     ): void {
         socket.player = {
             name: player.name,
             id: uuidv4(),
-            x: this.randomInt(0, windowSize.x),
-            y: this.randomInt(0, windowSize.y),
-            abilityKey1: '',
-            abilityKey2: '',
-            abilityKey3: '',
-            abilityKey4: '',
+            // x: player.x,
+            // y: player.y,
+            x: this.randomInt(0, 500),
+            y: this.randomInt(0, 500),
+            
+            abilityKey1: player.abilityKey1,
+            abilityKey2: player.abilityKey2,
+            abilityKey3: player.abilityKey3,
+            abilityKey4: player.abilityKey4,
             controlledBy: 0,
-            weaponPrimaryKey: '',
-            weaponSecondaryKey: '',
+            weaponPrimaryKey: player.weaponPrimaryKey,
+            weaponSecondaryKey: player.weaponSecondaryKey,
         }
     }
 
@@ -160,13 +155,6 @@ class GameServer {
         }, [])
     }
 
-    private generateRandomCoordinates(): { x: number, y: number } {
-        return {
-            x: Math.floor(Math.random() * 1024) + 1,
-            y: Math.floor(Math.random() * 768) + 1,
-        }
-    }
-
     private randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }
@@ -175,7 +163,7 @@ class GameServer {
 const gameSession = new GameServer()
 
 
-gameSession.connect(3000)
+gameSession.connect(app.get('port'))
 
 
 // http.listen(app.get('port'), function() {

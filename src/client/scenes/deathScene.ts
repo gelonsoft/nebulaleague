@@ -93,7 +93,7 @@ export class DeathScene extends Phaser.Scene {
         if (this.canResetAfterElapsed >= this.canResetAfterDelay) {
             this.handleMouse()
         }
-        if (!this.followedPlayer.active) {
+        if (!this.followedPlayer?.active) {
             this.followRandomPlayer()
         }
     }
