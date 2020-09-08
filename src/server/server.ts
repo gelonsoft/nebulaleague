@@ -11,6 +11,7 @@ import {
     PlayerModel,
     CoordinatesModel,
     DomainSocket,
+    PlayerChanged,
 }
 from "../shared/models"
 
@@ -61,7 +62,6 @@ app.get("/", (req: any, res: any) => {
 
 class GameServer {
     private gameHasStarted = false
-    private hasComet = false
 
     constructor() {
         this.socketEvents()
@@ -92,16 +92,6 @@ class GameServer {
         }
     }
 
-
-    private addMovementListener(socket: DomainSocket): void {
-        socket.on(PlayerEvent.coordinates, (coors: Coordinates) => {
-            socket.broadcast.emit(PlayerEvent.coordinates, {
-                coors: coors,
-                player: socket.player,
-            })
-        })
-    }
-
     private addSignOutListener(socket: DomainSocket): void {
         socket.on(ServerEvent.disconnected, () => {
             if (socket.player) {
@@ -123,6 +113,21 @@ class GameServer {
         )
     }
 
+
+    private addMovementListener(socket: DomainSocket): void {
+        socket.on(PlayerEvent.coordinates, (playerChanged: PlayerChanged) => {
+            socket.player = {
+                ...socket.player,
+                x: playerChanged.x,
+                y: playerChanged.y,
+                rotation: playerChanged.rotation,
+            }
+            // socket.player.x = playerChanged.x
+            // socket.player.y = playerChanged.y
+            socket.broadcast.emit(PlayerEvent.coordinates, socket.player)
+        })
+    }
+    
     private createPlayer(
         socket: DomainSocket,
         player: PlayerModel,

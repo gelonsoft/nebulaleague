@@ -16,7 +16,7 @@ class PlayerEvent {
 exports.PlayerEvent = PlayerEvent;
 PlayerEvent.joined = "player:joined";
 PlayerEvent.protagonist = "player:protagonist";
-PlayerEvent.players = "actors:collection";
+PlayerEvent.players = "players:collection";
 PlayerEvent.quit = "player:left";
 PlayerEvent.pickup = "player:pickup";
 PlayerEvent.hit = "player:hit";

@@ -9,14 +9,24 @@ export interface PlayerModel {
     id: string
     name: string
     controlledBy: number
-    x: number
-    y: number
     weaponPrimaryKey: string
     weaponSecondaryKey: string
     abilityKey1: string
     abilityKey2: string
     abilityKey3: string
     abilityKey4: string
+    x: number
+    y: number
+    rotation?: number
+    
+}
+
+
+export interface PlayerChanged {
+    id: number
+    x?: number
+    y?: number
+    rotation?: number
 }
 
 

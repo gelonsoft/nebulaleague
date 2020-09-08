@@ -543,6 +543,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
             this.slotContainer.width,
             this.playButtonDOM.height + this.playButtonDOM.height
         ).setPosition(gameContainerX, gameContainerY)
+
+        if (this.game.debug) {
+            window['menu'] = this
+            this.startMainScene()
+        }
     }
 
     startMainScene() {
@@ -571,6 +576,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.scene.get('mainScene').scene.restart(playerConfUpdated)
         // this.scene.get('hudScene').scene.restart()
         if (this.game.debug) {
+            
             // this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
         }
         this.scene.sleep()

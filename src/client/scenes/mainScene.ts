@@ -192,10 +192,9 @@ export class MainScene extends Phaser.Scene {
         this.scene.get('hudScene').scene.restart()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
-
     }
 
-    handleSocket() :void {
+    public handleSocket() :void {
         this.socket.emit(GameEvent.authentication, this.playerConfig)
 
         this.socket.on(PlayerEvent.joined, (playerModel: PlayerModel) => {
@@ -218,11 +217,30 @@ export class MainScene extends Phaser.Scene {
         })
         
         this.socket.on(PlayerEvent.quit, (playerId: string) => {
-            this.players.getChildren().forEach(function (player: Player) {
+            this.players.getChildren().forEach((player: Player) => {
                 if (playerId === player.id) {
                     player.destroy()
                 }
             })
+        })
+
+        this.socket.on(PlayerEvent.coordinates, (playerModel: PlayerModel) => {
+            // this.players.filter((player: Player) => {
+            //     if (playerModel.id === player.id) {
+            //         player.x = playerChanged.x
+            //         player.y = playerChanged.y
+            //     }
+            // })
+            
+            this.players.children.getArray().filter((player: Player) => {
+                if (playerModel.id === player.id) {
+                    player.x = playerModel.x
+                    player.y = playerModel.y
+                    player.rotation = playerModel.rotation
+                }
+            })
+
+            
         })
     }
     
@@ -338,6 +356,16 @@ export class MainScene extends Phaser.Scene {
             this.playerControl.update()
             // this.playersAIUpdate()
 
+            
+            // socket
+            this.socket.emit(PlayerEvent.coordinates, {
+                x: this.player.x,
+                y: this.player.y,
+                rotation: this.player.rotation,
+            })
+            
+
+            
             // collide with other players
             this.physics.overlap(
                 this.players,
