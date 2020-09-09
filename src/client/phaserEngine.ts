@@ -53,8 +53,14 @@ export class PhaserSpaceGame {
                 default: 'arcade',
                 arcade: {
                     gravity: { x: 0, y: 0 },
+                    fps: 1,
                     debug: isDebug,
                 }
+            },
+            fps: {
+                min: 1,
+                target: 1,
+                forceSetTimeOut: true,
             },
             scene: scenes,
         })
