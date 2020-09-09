@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayerEvent = exports.ServerEvent = exports.GameEvent = void 0;
+exports.ProjectileEvent = exports.PlayerEvent = exports.ServerEvent = exports.GameEvent = void 0;
 class GameEvent {
 }
 exports.GameEvent = GameEvent;
 GameEvent.authentication = "authentication:successful";
-GameEvent.drop = "drop";
 class ServerEvent {
 }
 exports.ServerEvent = ServerEvent;
@@ -21,4 +20,9 @@ PlayerEvent.quit = "player:left";
 PlayerEvent.pickup = "player:pickup";
 PlayerEvent.hit = "player:hit";
 PlayerEvent.coordinates = "player:coordinates";
+class ProjectileEvent {
+}
+exports.ProjectileEvent = ProjectileEvent;
+ProjectileEvent.fire = "projectile:fire";
+ProjectileEvent.kill = "projectile:kill";
 //# sourceMappingURL=events.model.js.map

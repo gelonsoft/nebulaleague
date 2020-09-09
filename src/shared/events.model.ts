@@ -2,7 +2,6 @@ export class GameEvent {
     public static readonly authentication: string = "authentication:successful";
     public static readonly end: "game:over";
     public static readonly start: "game:start";
-    public static readonly drop: string = "drop";
 }
 
 
@@ -19,4 +18,10 @@ export class PlayerEvent {
     public static readonly pickup: string = "player:pickup";
     public static readonly hit: string = "player:hit";
     public static readonly coordinates: string = "player:coordinates";
+}
+
+
+export class ProjectileEvent {
+    public static readonly fire: string = "projectile:fire"
+    public static readonly kill: string = "projectile:kill"
 }

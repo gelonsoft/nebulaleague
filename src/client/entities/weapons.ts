@@ -40,7 +40,7 @@ export const weaponsConfig = {
     revolver: {
         name: 'revolver',
         frame: 'revolver.png',
-        cooldownDelay: 10,
+        cooldownDelay: 0.2,
         projectileKey: 'revolverBullet',
         laserConfig: {
             color: 0x00ff00,
@@ -112,7 +112,7 @@ export class Weapon  {
             sourcePosition.x, sourcePosition.y,
             pointerPosition.x, pointerPosition.y,
         )
-        this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
+        this.projectiles.syncFire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
     }
 
     

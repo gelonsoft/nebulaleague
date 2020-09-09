@@ -18,12 +18,11 @@ export interface PlayerModel {
     x: number
     y: number
     rotation?: number
-    
 }
 
 
 export interface PlayerChanged {
-    id: number
+    id: string
     x?: number
     y?: number
     rotation?: number
@@ -46,31 +45,11 @@ export interface WeaponModel {
 
 
 export interface ProjectileModel {
-    name: string
-    frame: string
-    speed: number
-    damage: number
-    lifespan: number
-    effects?: Array<any>
-    radius: number
-}
-
-
-export interface BlockModel {
-    name: string
-    radius: number
-    lifespan: number
-    damage: number
-    effects?: Array<any>
-    fillColor?: number
-    strokeColor?: number
-    fillAlpha?: number
-    strokeAlpha?: number
-}
-
-export interface BlockModelMultiple extends BlockModel {
-    tick?: number
-    triggerAfter?: number
+    key: string
+    fromPlayerId: string
+    x: number
+    y: number
+    rotation?: number
 }
 
 

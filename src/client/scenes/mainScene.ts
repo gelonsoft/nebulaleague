@@ -17,8 +17,8 @@ import { MyGame } from '../phaserEngine'
 import { playersAIConfig } from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { GameEvent, PlayerEvent, ServerEvent } from '../../shared/events.model'
-import { PlayerModel } from '../../shared/models'
+import { GameEvent, PlayerEvent, ProjectileEvent } from '../../shared/events.model'
+import { PlayerModel, ProjectileModel } from '../../shared/models'
 
 
 export class MainScene extends Phaser.Scene {
@@ -222,13 +222,6 @@ export class MainScene extends Phaser.Scene {
         })
 
         this.socket.on(PlayerEvent.coordinates, (playerModel: PlayerModel) => {
-            // this.players.filter((player: Player) => {
-            //     if (playerModel.id === player.id) {
-            //         player.x = playerChanged.x
-            //         player.y = playerChanged.y
-            //     }
-            // })
-            
             this.players.children.getArray().filter((player: Player) => {
                 if (playerModel.id === player.id) {
                     player.x = playerModel.x
@@ -236,9 +229,21 @@ export class MainScene extends Phaser.Scene {
                     player.rotation = playerModel.rotation
                 }
             })
-
-            
         })
+
+        this.socket.on(ProjectileEvent.fire, (projectileModel: ProjectileModel) => {
+            this.projectiles.fire(
+                projectileModel.key,
+                projectileModel.fromPlayerId,
+                new Phaser.Math.Vector2(projectileModel.x, projectileModel.y),
+                projectileModel.rotation
+            )
+        })
+
+        // this.socket.on(ProjectileEvent.kill, (projectileModel: ProjectileModel) => {
+        //     const projectile = this.projectiles.projectileByIds[projectileModel.name] as ProjectileInterface
+        //     projectile.kill()
+        // })
     }
     
     
@@ -278,6 +283,43 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    public syncDeathTextCooldown(player: Player, cooldown: number): void {
+        if (player.id === this.player.id) {
+            this.events.emit('deathCooldownChanged', cooldown)
+        }
+    }
+    
+    public syncProjectileFire(
+        projectileKey: string,
+        fromPlayerId: string,
+        position: Phaser.Math.Vector2,
+        rotation: number
+    ): void {
+        if (fromPlayerId === this.player.id) {
+            this.socket.emit(ProjectileEvent.fire , {
+                key: projectileKey,
+                fromPlayerId: fromPlayerId,
+                x: position.x,
+                y: position.y,
+                rotation: rotation,
+            })
+        }
+    }
+
+    // public syncProjectileKill(projectile: ProjectileInterface): void {
+    //     if (projectile.fromPlayerId === this.player.id) {
+    //         this.socket.emit(ProjectileEvent.kill , {
+    //             name: projectile.name,
+    //             fromPlayerId: projectile.fromPlayerId,
+    //             x: projectile.x,
+    //             y: projectile.y,
+    //             rotation: projectile.rotation,
+    //         })
+    //     }
+    // }
+    
+    
+
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
             this.cameras.main.flash(1 * 1000, 125, 125, 125)
@@ -300,13 +342,6 @@ export class MainScene extends Phaser.Scene {
             })
         }
     }
-
-    public syncDeathTextCooldown(player: Player, cooldown: number): void {
-        if (player.id === this.player.id) {
-            this.events.emit('deathCooldownChanged', cooldown)
-        }
-    }
-
 
     get pointerPosition(): Phaser.Math.Vector2 {
         const pointer = this.input.activePointer
@@ -360,7 +395,6 @@ export class MainScene extends Phaser.Scene {
                 y: this.player.y,
                 rotation: this.player.rotation,
             })
-            
 
             
             // collide with other players

@@ -6,6 +6,7 @@ import {
     PlayerModel,
     CoordinatesModel,
     PlayerChanged,
+    ProjectileModel,
 }
 from "../shared/models"
 
@@ -13,6 +14,7 @@ import {
     ServerEvent,
     GameEvent,
     PlayerEvent,
+    ProjectileEvent,
 } from "../shared/events.model"
 
 
@@ -20,10 +22,12 @@ import {
 export class GameServer {
     private io: SocketIO.Server
     private gameHasStarted = false
+    private projectiles: Map<string, ProjectileModel>
 
     constructor(io: SocketIO.Server) {
         this.io = io
         this.socketEvents()
+        this.projectiles = new Map()
     }
 
 
@@ -35,8 +39,10 @@ export class GameServer {
 
     private attachListeners(socket: DomainSocket): void {
         this.addSignOnListener(socket)
-        this.addMovementListener(socket)
         this.addSignOutListener(socket)
+        this.addMovementListener(socket)
+        this.addProjectileCreateListener(socket)
+        this.addProjectileDestroyListener(socket)
     }
 
 
@@ -67,6 +73,25 @@ export class GameServer {
         )
     }
 
+    private addProjectileCreateListener(socket: DomainSocket): void {
+        socket.on(
+            ProjectileEvent.fire,
+            (projectile: ProjectileModel) => {
+                this.io.emit(ProjectileEvent.fire, projectile)
+            }
+        )
+    }
+
+
+    private addProjectileDestroyListener(socket: DomainSocket): void {
+        socket.on(
+            ProjectileEvent.kill,
+            (projectile: ProjectileModel) => {
+                // this.projectiles.delete(projectile.name)
+                socket.broadcast.emit(ProjectileEvent.kill, projectile)
+            }
+        )
+    }
 
     private addMovementListener(socket: DomainSocket): void {
         socket.on(PlayerEvent.coordinates, (playerChanged: PlayerChanged) => {

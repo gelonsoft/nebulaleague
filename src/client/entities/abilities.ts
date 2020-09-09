@@ -256,9 +256,9 @@ export class Ability  {
                 sourcePosition.x, sourcePosition.y,
                 pointerPosition.x, pointerPosition.y,
             )
-            this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
+            this.projectiles.syncFire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
         } else {
-            this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
+            this.projectiles.syncFire(this.projectileKey, player.id, pointerPosition)
         }
     }
 
