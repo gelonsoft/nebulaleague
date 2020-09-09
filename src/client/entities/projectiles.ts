@@ -1,6 +1,7 @@
 import { MainScene } from "../scenes/mainScene"
 import { ProjectileModel, BlockModel, BlockModelMultiple } from "../../shared/models"
 import { Player, EffectKeys, EffectInterface } from "../player"
+import { GameObjects } from "phaser"
 
 
 const projectilesConfig = {
@@ -167,6 +168,12 @@ const projectilesConfig = {
             tick: 0.5,
         }]
     }
+}
+
+
+export function getDistanceProjectile(key): number {
+    const projectileConfig = projectilesConfig[key]
+    return projectileConfig.speed * projectileConfig.lifespan
 }
 
 
@@ -380,10 +387,12 @@ export class BlockWithTick extends Block implements ProjectileInterface {
 export class Projectiles
 {
     public projectiles: Map<string, Phaser.Physics.Arcade.Group>
+    public projectileByIds: Map<string, Phaser.GameObjects.GameObject>
     public scene: MainScene
     constructor (scene: MainScene)
     {
         this.projectiles = new Map()
+        this.projectileByIds = new Map()
         this.scene = scene
         
         this.addProjectile('pistolBullet', projectilesConfig.pistolBullet, 200)
@@ -400,18 +409,24 @@ export class Projectiles
         this.addProjectile('fireWaveProjectile', projectilesConfig.fireWaveProjectile, 40)
     }
 
-    
+    public addProjectilesIfExist(projectileKeys: Array<string>) {
+        
+        
+    }
 
     public addProjectile(
         key: string,
         projectileConfig: any,
         length: number): void {
-        const projectiles = Array.from({length: length}, () => {
-            const ClassName = this.getProjectileByClassName(projectileConfig.className)
-            return new ClassName(this.scene, projectileConfig)
-        })
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
-            .addMultiple(projectiles)
+        const keys = [...Array(length).keys()]
+        keys.forEach((index) => {
+            const ClassName = this.getProjectileByClassName(projectileConfig.className)
+            const projectile = new ClassName(this.scene, projectileConfig) as GameObjects.GameObject
+            projectile.setName(`${key}-${index}`)
+            this.projectileByIds.set(projectile.name, projectile)
+            group.add(projectile)
+        })
         this.projectiles.set(key, group)
     }
 
@@ -435,11 +450,6 @@ export class Projectiles
         projectile.fire(position, rotation)
     }
 
-
-    public getDistance(key): number {
-        const projectileConfig = projectilesConfig[key]
-        return projectileConfig.speed * projectileConfig.lifespan
-    }
 
     public getTimeToReachTarget(key: string, targetDistance: number) {
         if (projectilesConfig[key]?.speed) {

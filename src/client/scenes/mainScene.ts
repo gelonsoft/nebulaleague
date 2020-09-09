@@ -170,17 +170,14 @@ export class MainScene extends Phaser.Scene {
     }
 
     public create(): void {
+        this.handleSocket()
         this.settingCamera()
         this.createBackground()
         this.createConsumables()
         this.createProjectiles()
         this.createWeapons()
         this.createAbilities()
-        this.handleSocket()
 
-
-
-        // this.createPlayer(this.playerConfig)
         // this.createAIPlayers()
         // this.initResetPlayersPosition()
 

@@ -76,8 +76,6 @@ export class GameServer {
                 y: playerChanged.y,
                 rotation: playerChanged.rotation,
             }
-            // socket.player.x = playerChanged.x
-            // socket.player.y = playerChanged.y
             socket.broadcast.emit(PlayerEvent.coordinates, socket.player)
         })
     }
