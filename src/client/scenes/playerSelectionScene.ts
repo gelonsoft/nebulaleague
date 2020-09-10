@@ -3,6 +3,7 @@ import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
 import { ControlledBy, PlayerConfig } from "../player"
 import { MenuSceneConfig } from "./menuScene"
+import { Client, GameInitConfig } from "../client"
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
@@ -47,7 +48,7 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
     public padding: number
     public initialX: number
     public initialY: number
-
+    
     constructor(
         scene: PlayerSelectionScene,
         x: number,
@@ -285,6 +286,7 @@ export function createSlotsContainer(
 
 export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
+    public client: Client
     public playerConfig: PlayerConfig
     public background: Phaser.GameObjects.Image
     public slotContainer: Phaser.GameObjects.Container
@@ -311,14 +313,25 @@ export class PlayerSelectionScene extends Phaser.Scene {
                 gameContainerY,
             )
         }, false)
+        this.client = this.game.registry.get('client')
         this.playerConfig = {
             ...DEFAULT_PLAYER_CONFIG,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
             name: menuSceneConfig.playerName
         }
+
+        this.game.events.once('gameReady', (gameInitConfig: GameInitConfig) => {
+            this.scene.get('mainScene').scene.restart(gameInitConfig)
+            this.scene.get('hudScene').scene.restart()
+            this.scene.sleep()
+        })
         this.initDrag()
     }
 
+    initEventPlayer() {
+        
+    }
+    
     initDrag() {
         this.input.on('drag',  (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {
             gameObject.x = dragX
@@ -546,7 +559,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         if (this.game.debug) {
             window['menu'] = this
-            this.startMainScene()
+            // this.startMainScene()
         }
     }
 
@@ -568,18 +581,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
             abilityKey3: abilities[2].item.key,
             abilityKey4: abilities[3].item.key,
         }
-
-        // save config
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerConfUpdated))
-
         
-        this.scene.get('mainScene').scene.restart(playerConfUpdated)
-        // this.scene.get('hudScene').scene.restart()
-        if (this.game.debug) {
-            
-            // this.scene.get('debugScene').scene.restart(this.game.scene.getScene('mainScene'))
-        }
-        this.scene.sleep()
+        this.client.emitAuthenticate(playerConfUpdated)
     }
     
 }

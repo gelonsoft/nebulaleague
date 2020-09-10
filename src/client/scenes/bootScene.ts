@@ -1,7 +1,7 @@
 import { AnimationHelper } from "../helpers/animationHelper"
 import { MyGame } from "../phaserEngine"
 import * as io from 'socket.io-client'
-
+import { Client } from '../client'
 
 export class BootScene extends Phaser.Scene {
     public game: MyGame
@@ -25,9 +25,8 @@ export class BootScene extends Phaser.Scene {
             e.preventDefault();
         }
 
-        const socket = io.connect()
-        this.registry.set('socket', socket)
-        
+        const client = new Client(this.game)
+        this.registry.set('client', client)
     }
     
     preload(): void {

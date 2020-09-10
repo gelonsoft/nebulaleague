@@ -29,6 +29,14 @@ export interface PlayerChanged {
 }
 
 
+export interface PlayerMovement {
+    id: string
+    x: number
+    y: number
+    rotation: number
+}
+
+
 export interface LaserModel {
     width: number
     color: number

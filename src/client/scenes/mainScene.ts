@@ -1,4 +1,4 @@
-import { Player, ActionTimeInterface, ControlledBy, PlayerConfig } from '../player'
+import { Player, ActionTimeInterface, PlayerConfig } from '../player'
 import { MainControl, PlayerControl } from '../controls'
 import { Consumable, RandomItem } from '../entities/consumables'
 import { Projectiles, ProjectileInterface } from '../entities/projectiles'
@@ -7,7 +7,6 @@ import {
     WORLD_HEIGHT,
     PLAYER_TO_PLAYER_DAMAGE,
     PLAYER_SIZE,
-    MAX_PLAYER,
     HUD_HEIGHT,
     PARALAX_SCROLL_FACTOR,
 
@@ -17,12 +16,14 @@ import { MyGame } from '../phaserEngine'
 import { playersAIConfig } from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { GameEvent, PlayerEvent, ProjectileEvent } from '../../shared/events.model'
-import { PlayerModel, ProjectileModel } from '../../shared/models'
+import { PlayerEvent, ProjectileEvent } from '../../shared/events.model'
+import { PlayerModel, ProjectileModel, PlayerMovement } from '../../shared/models'
+import { GameInitConfig, Client } from '../client'
 
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
+    public client: Client
     public player: Player
     public players: Phaser.Physics.Arcade.Group
     public playersAI: Array<PlayerAI>
@@ -46,40 +47,60 @@ export class MainScene extends Phaser.Scene {
         })
     }
 
-    public init(playerConfig: PlayerConfig): void {
-        this.socket = this.registry.get('socket')
-        if (this.game.debug) {
-            window['m'] = this
-        }
+    public init(): void {
         window.addEventListener('resize', () => {
             this.backgroundImage.setDisplaySize(
                 this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
                 this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
             )
         }, false)
-        this.playerConfig = playerConfig
-        this.mainCameraZoom = 0.5
-        this.playersAI = []
-        this.players = this.physics.add.group({
-            collideWorldBounds: true,
-            classType: Player,
-        })
-        this.freeCamera = false
+        this.client = this.game.registry.get('client')
+       
+        
         this.randomTable = new RandomItem()
         this.randomTable
             .add('pill', 20)
         this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
+        this.registerEvent()
 
         if (this.game.debug) {
+            window['p'] = this.player
             window['m'] = this
         }
+        
     }
 
+    public create(gameInitConfig: GameInitConfig): void {
+        this.projectiles = new Projectiles(this)
+        this.weapons = buildWeapons(this)
+        this.abilities = buildAbilities(this)
+        this.playersAI = []
+        this.players = this.physics.add.group({
+            collideWorldBounds: true,
+            classType: Player,
+        }).addMultiple(gameInitConfig.players.map((playerModel) => {
+            return new Player(this, playerModel)
+        }))
+        this.player = this.players.children.getArray()
+            .find((player: Player) => player.id === gameInitConfig.player.id) as Player
+
+        this.settingCamera()
+        this.createBackground()
+        // this.createConsumables()
+        
+        this.playerControl = new PlayerControl(this, this.player)
+        this.mainControl = new MainControl(this)
+
+    }
+    
 
     public settingCamera(): void {
+        this.mainCameraZoom = 0.5
+        this.freeCamera = false
         this.cameras.main.setZoom(this.mainCameraZoom)
         this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
         this.physics.world.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT - HUD_HEIGHT - PLAYER_SIZE / 2)
+        this.cameras.main.startFollow(this.player, true)
     }
 
 
@@ -92,6 +113,7 @@ export class MainScene extends Phaser.Scene {
             )
             .setOrigin(0.23, 0.23)
             .setAlpha(0.7)
+            .setDepth(-1)
     }
 
 
@@ -101,119 +123,71 @@ export class MainScene extends Phaser.Scene {
     }
 
 
-    public createProjectiles(): void {
-        this.projectiles = new Projectiles(this)
-    }
-
-    public createWeapons(): void {
-        this.weapons = buildWeapons(this)
-    }
-
-    public createAbilities(): void {
-        this.abilities = buildAbilities(this)
-    }
-
-
-    public createAIPlayers(): void {
-        let index = 0
-        while (this.players.getLength() < MAX_PLAYER) {
-            const playerAIConfig = playersAIConfig[index]
-            const playerConfig = {
-                id: playerAIConfig.id,
-                name: 'bot',
-                controlledBy: ControlledBy.AIPlayer,
-                x: 0,
-                y: 0,
-                weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
-                weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
-                abilityKey1: playerAIConfig.abilityKey1,
-                abilityKey2: playerAIConfig.abilityKey2,
-                abilityKey3: playerAIConfig.abilityKey3,
-                abilityKey4: playerAIConfig.abilityKey4,
-            }
-            this.createPlayer(playerConfig, playerAIConfig)
-            index += 1
-        }
-        const pt: Player = this.players.getChildren()[1] as Player
-        pt.x = 500
-        pt.y = 500
-    }
+    // public createAIPlayers(): void {
+    //     let index = 0
+    //     while (this.players.getLength() < MAX_PLAYER) {
+    //         const playerAIConfig = playersAIConfig[index]
+    //         const playerConfig = {
+    //             id: playerAIConfig.id,
+    //             name: 'bot',
+    //             controlledBy: ControlledBy.AIPlayer,
+    //             x: 0,
+    //             y: 0,
+    //             weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
+    //             weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
+    //             abilityKey1: playerAIConfig.abilityKey1,
+    //             abilityKey2: playerAIConfig.abilityKey2,
+    //             abilityKey3: playerAIConfig.abilityKey3,
+    //             abilityKey4: playerAIConfig.abilityKey4,
+    //         }
+    //         this.createPlayer(playerConfig, playerAIConfig)
+    //         index += 1
+    //     }
+    //     const pt: Player = this.players.getChildren()[1] as Player
+    //     pt.x = 500
+    //     pt.y = 500
+    // }
 
 
-    public createPlayer(playerConfig: PlayerConfig, playerConfigAI?: any): void {
-        const newPlayer = new Player(this, playerConfig)
-        this.players.add(newPlayer)
-        if (playerConfig.controlledBy === ControlledBy.MainPlayer) {
-            this.player = newPlayer
-            this.players.add(newPlayer)
-            window['p'] = newPlayer
-        }
-        else if (playerConfig.controlledBy === ControlledBy.AIPlayer) {
-            const playersChildren = this.players.getChildren() as Player[]
+    // public createPlayer(playerConfig: PlayerConfig, playerConfigAI?: any): void {
+    //     const newPlayer = new Player(this, playerConfig)
+    //     this.players.add(newPlayer)
+    //     if (playerConfig.controlledBy === ControlledBy.MainPlayer) {
+    //         this.player = newPlayer
+    //         this.players.add(newPlayer)
+    //         window['p'] = newPlayer
+    //     }
+    //     else if (playerConfig.controlledBy === ControlledBy.AIPlayer) {
+    //         const playersChildren = this.players.getChildren() as Player[]
 
-            this.players.add(newPlayer)
-            const playerAI = new PlayerAI(
-                this,
-                newPlayer,
-                playersChildren.filter((player) => player.id !== newPlayer.id),
-                playerConfigAI
-            )
-            this.playersAI.push(playerAI)
-        }
-    }
-
-
-    public initResetPlayersPosition(): void {
-        this.players.getChildren().forEach((player: Player) => {
-            player.reset(this.players)
-        })
-    }
-
-    public create(): void {
-        this.handleSocket()
-        this.settingCamera()
-        this.createBackground()
-        this.createConsumables()
-        this.createProjectiles()
-        this.createWeapons()
-        this.createAbilities()
-
-        // this.createAIPlayers()
-        // this.initResetPlayersPosition()
+    //         this.players.add(newPlayer)
+    //         const playerAI = new PlayerAI(
+    //             this,
+    //             newPlayer,
+    //             playersChildren.filter((player) => player.id !== newPlayer.id),
+    //             playerConfigAI
+    //         )
+    //         this.playersAI.push(playerAI)
+    //     }
+    // }
 
 
-    }
+    // public initResetPlayersPosition(): void {
+    //     this.players.getChildren().forEach((player: Player) => {
+    //         player.reset(this.players)
+    //     })
+    // }
 
-    public initAfterPlayerReady() {
-        this.cameras.main.startFollow(this.player, true)
-        this.scene.get('hudScene').scene.restart()
-        this.playerControl = new PlayerControl(this, this.player)
-        this.mainControl = new MainControl(this)
-    }
 
-    public handleSocket() :void {
-        this.socket.emit(GameEvent.authentication, this.playerConfig)
-
-        this.socket.on(PlayerEvent.joined, (playerModel: PlayerModel) => {
+    public registerEvent() :void {
+        this.game.events.on(PlayerEvent.joined, (playerModel: PlayerModel) => {
+            console.log('joined')
             const otherPlayer = new Player(this, playerModel)
             this.players.add(otherPlayer)
         })
 
-        this.socket.on(PlayerEvent.protagonist, (playerModel: PlayerModel) => {
-            const mainPlayer = new Player(this, playerModel)
-            this.player = mainPlayer
-            this.players.add(this.player)
-            this.initAfterPlayerReady()
-        })
-
-        this.socket.on(PlayerEvent.players, (players: PlayerModel[]) => {
-            players.map(player => {
-                const otherPlayer = new Player(this, player)
-                this.players.add(otherPlayer)
-            })
-        })
-        
-        this.socket.on(PlayerEvent.quit, (playerId: string) => {
+        this.game.events.on(PlayerEvent.quit, (playerId: string) => {
+            console.log('quit')
             this.players.getChildren().forEach((player: Player) => {
                 if (playerId === player.id) {
                     player.destroy()
@@ -221,17 +195,17 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.socket.on(PlayerEvent.coordinates, (playerModel: PlayerModel) => {
+        this.game.events.on(PlayerEvent.coordinates, (playerMovement: PlayerMovement) => {
             this.players.children.getArray().filter((player: Player) => {
-                if (playerModel.id === player.id) {
-                    player.x = playerModel.x
-                    player.y = playerModel.y
-                    player.rotation = playerModel.rotation
+                if (player.id === playerMovement.id ) {
+                    player.x = playerMovement.x
+                    player.y = playerMovement.y
+                    player.rotation = playerMovement.rotation
                 }
             })
         })
 
-        this.socket.on(ProjectileEvent.fire, (projectileModel: ProjectileModel) => {
+        this.game.events.on(ProjectileEvent.fire, (projectileModel: ProjectileModel) => {
             this.projectiles.fire(
                 projectileModel.key,
                 projectileModel.fromPlayerId,
@@ -239,11 +213,6 @@ export class MainScene extends Phaser.Scene {
                 projectileModel.rotation
             )
         })
-
-        // this.socket.on(ProjectileEvent.kill, (projectileModel: ProjectileModel) => {
-        //     const projectile = this.projectiles.projectileByIds[projectileModel.name] as ProjectileInterface
-        //     projectile.kill()
-        // })
     }
     
     
@@ -296,7 +265,7 @@ export class MainScene extends Phaser.Scene {
         rotation: number
     ): void {
         if (fromPlayerId === this.player.id) {
-            this.socket.emit(ProjectileEvent.fire , {
+            this.client.emitProjectileFire({
                 key: projectileKey,
                 fromPlayerId: fromPlayerId,
                 x: position.x,
@@ -305,20 +274,6 @@ export class MainScene extends Phaser.Scene {
             })
         }
     }
-
-    // public syncProjectileKill(projectile: ProjectileInterface): void {
-    //     if (projectile.fromPlayerId === this.player.id) {
-    //         this.socket.emit(ProjectileEvent.kill , {
-    //             name: projectile.name,
-    //             fromPlayerId: projectile.fromPlayerId,
-    //             x: projectile.x,
-    //             y: projectile.y,
-    //             rotation: projectile.rotation,
-    //         })
-    //     }
-    // }
-    
-    
 
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
@@ -389,8 +344,8 @@ export class MainScene extends Phaser.Scene {
             // this.playersAIUpdate()
 
             
-            // socket
-            this.socket.emit(PlayerEvent.coordinates, {
+            this.client.emitPlayerMove({
+                id: this.player.id,
                 x: this.player.x,
                 y: this.player.y,
                 rotation: this.player.rotation,
@@ -415,14 +370,14 @@ export class MainScene extends Phaser.Scene {
                 this
             )
 
-            // collide with consumables
-            this.physics.overlap(
-                this.consumables,
-                this.players,
-                this.handlePlayerConsumableOverlap,
-                null,
-                this
-            )
+            // // collide with consumables
+            // this.physics.overlap(
+            //     this.consumables,
+            //     this.players,
+            //     this.handlePlayerConsumableOverlap,
+            //     null,
+            //     this
+            // )
 
             // draw weapon and skills
             if (this.player.active) {
