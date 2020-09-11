@@ -1,34 +1,42 @@
 import { MyGame } from "../phaserEngine"
+import { Client, GameInitConfig } from "../client"
+import { Event } from "../events"
 
-export interface MenuSceneConfig {
+export interface LobySceneConfig {
     playerName: string,
 }
 
-export class MenuScene extends Phaser.Scene {
+export class LobyScene extends Phaser.Scene {
     public game: MyGame
     public playerName: string
+    public client: Client
     public background: Phaser.GameObjects.Image
     public menuHTML: Phaser.GameObjects.DOMElement
     constructor() {
         super({
-            key: "menuScene"
+            key: "lobyScene"
         })
         this.playerName = ''
-        
-        window.addEventListener('resize', () => {
-            this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
-        }, false)
-        
     }
 
 
     init(): void {
+        window.addEventListener('resize', () => {
+            this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
+        }, false)
+        
+        this.client = this.game.registry.get('client')
+        this.client.emitLobyInit()
+        this.game.events.on(Event.lobyReady, (gameInitConfig: GameInitConfig) => {
+            this.scene.start('playerSelectionScene')
+        })
+        
         if (this.game.debug) {
             window['menu'] = this
-            this.scene.start('playerSelectionScene', {
-                playerName: 'defaultName',
-            })
-        }
+            // this.scene.start('playerSelectionScene', {
+            //     playerName: 'defaultName',
+            // })
+        }        
     }
 
     createBackground() {
@@ -52,7 +60,10 @@ export class MenuScene extends Phaser.Scene {
         this.menuHTML.addListener('keypress')
         this.menuHTML.on('click', event => {
             if (event.target.name === 'playButton') {
-                this.startPlayerSelectionScene()
+                this.client.emitLobyStart({
+                    name: this.playerName,
+                    gameMode: 'ffa',
+                })
             }
         })
     }
@@ -62,9 +73,4 @@ export class MenuScene extends Phaser.Scene {
         this.createMenu()
     }
 
-    startPlayerSelectionScene() {
-        this.scene.start('playerSelectionScene', {
-            name: this.playerName
-        })
-    }
 }

@@ -65,15 +65,21 @@ export interface DomainSocket extends Socket {
     player: PlayerModel
 }
 
-export interface Loby {
-    id: string
+export interface LobyState {
+    name: string
+    gameMode: string
 }
 
-export interface Game {
+export interface PlayerSelectionState {
+    name: string
+    gameMode: string
+    player: PlayerModel
+}
+
+export interface GameState {
     id: string
     gameMode: string
-    players: Array<string>
+    players: Array<PlayerModel>
+    player: PlayerModel
+    maxPlayer: number
 }
-
-
-

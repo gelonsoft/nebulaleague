@@ -1,10 +1,10 @@
 import * as io from 'socket.io-client'
 import { MyGame } from "./phaserEngine"
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
-import { MenuScene } from './scenes/menuScene'
+import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
-import { PlayerModel, ProjectileModel, PlayerMovement } from '../shared/models'
-import { GameEvent } from '../shared/events'
+import { PlayerModel, ProjectileModel, PlayerMovement, LobyState } from '../shared/models'
+import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
 import { PlayerConfig } from './player'
 
@@ -18,17 +18,19 @@ export class Client {
     public game: MyGame
     public mainScene: MainScene
     public playerSelectionScene: PlayerSelectionScene
-    public menuScene: MenuScene
+    public lobyScene: LobyScene
     public player: PlayerModel
     public players: PlayerModel[]
+    public lobyState: LobyState
     public isProtagonistReady: boolean
     public isOtherPlayersReady: boolean
+    
     
     constructor(game: MyGame) {
         this.game = game
         this.socket = io.connect()
         this.mainScene = this.game.scene.getScene('mainScene') as MainScene
-        this.menuScene = this.game.scene.getScene('menuScene') as MenuScene
+        this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.player = null
         this.players = []
@@ -38,9 +40,40 @@ export class Client {
     }
 
 
-    public emitGameStart(playerConfig: PlayerConfig) {
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
-        this.socket.emit(GameEvent.start, playerConfig)
+    get isGameReady(): boolean {
+        return this.isProtagonistReady && this.isOtherPlayersReady
+    }
+
+
+    public emitLobyInit(): void {
+        this.socket.emit(LobyEvent.init)
+    }
+    
+    public emitLobyEnd(): void {
+        this.socket.emit(LobyEvent.end)
+    }
+
+    public emitLobyStart(lobyState: LobyState):void {
+        this.socket.emit(LobyEvent.start, lobyState)
+    }
+
+
+    public emitPlayerSelectionInit():void {
+        this.socket.emit(PlayerSelectionEvent.init)
+    }
+
+    public emitPlayerSelectionEnd():void {
+        this.socket.emit(PlayerSelectionEvent.end)
+    }
+    
+    public emitPlayerSelectionStart():void {
+        this.socket.emit(PlayerSelectionEvent.start)
+    }
+    
+
+    public emitGameStart(playerModel: PlayerModel) {
+        window.localStorage.setItem('playerConfig', JSON.stringify(playerModel))
+        this.socket.emit(GameEvent.start, playerModel)
     }
 
     public emitGameFire(projectileModel: ProjectileModel) {
@@ -49,10 +82,6 @@ export class Client {
 
     public emitGameMove(playerMovement: PlayerMovement) {
         this.socket.emit(GameEvent.move, playerMovement)
-    }
-
-    get isGameReady(): boolean {
-        return this.isProtagonistReady && this.isOtherPlayersReady
     }
 
     public launchGameIfReady(): void{
@@ -66,6 +95,22 @@ export class Client {
     
     
     public listenEvents(): void {
+        this.socket.on(LobyEvent.init, () => {
+            console.log('recieve loby init')
+        })
+
+        this.socket.on(LobyEvent.start, (lobyState: LobyState) => {
+            this.lobyState = lobyState
+            this.game.events.emit(ClientEvent.lobyReady, this.lobyState)
+        })
+        
+
+        this.socket.on(LobyEvent.end, () => {
+            console.log('recieve loby end')
+        })
+        
+
+        
         this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
             this.player = playerModel
             this.players.push(this.player)

@@ -78,7 +78,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     update(): void {
-        this.scene.start('menuScene')
+        this.scene.start('lobyScene')
     }
 
     private createLoadingGraphics(): void {

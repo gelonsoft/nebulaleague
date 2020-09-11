@@ -2,8 +2,9 @@ import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
 import { ControlledBy, PlayerConfig } from "../player"
-import { MenuSceneConfig } from "./menuScene"
+import { LobySceneConfig } from "./lobyScene"
 import { Client, GameInitConfig } from "../client"
+import { Event } from "../events"
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
@@ -303,7 +304,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     }
     
 
-    init(menuSceneConfig: MenuSceneConfig): void {
+    init(menuSceneConfig: LobySceneConfig): void {
         window.addEventListener('resize', () => {
             const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
             const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
@@ -314,23 +315,26 @@ export class PlayerSelectionScene extends Phaser.Scene {
             )
         }, false)
         this.client = this.game.registry.get('client')
+
         this.playerConfig = {
             ...DEFAULT_PLAYER_CONFIG,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
-            name: menuSceneConfig.playerName
+            name: this.client.lobyState.name
         }
 
-        this.game.events.once('gameReady', (gameInitConfig: GameInitConfig) => {
+        this.game.events.on(Event.gameReady, (gameInitConfig: GameInitConfig) => {
             this.scene.get('mainScene').scene.restart(gameInitConfig)
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()
         })
         this.initDrag()
-    }
 
-    initEventPlayer() {
+        if (this.game.debug) {
+            window['playerSelectionMenu'] = this
+        }        
         
     }
+
     
     initDrag() {
         this.input.on('drag',  (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {

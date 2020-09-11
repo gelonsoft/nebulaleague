@@ -6,23 +6,32 @@ import {
     PlayerModel,
     PlayerChanged,
     ProjectileModel,
+    GameState,
+    LobyState,
+    PlayerSelectionState,
 }
 from "../shared/models"
 
 import {
     ServerEvent,
     GameEvent,
+    LobyEvent,
+    PlayerSelectionEvent,
 } from "../shared/events"
 
 
 export class GameServer {
     public io: SocketIO.Server
-    public state: Map<string, any>
-    public clientRooms: Map<string, any>
+    public lobyState: Map<string, LobyState>
+    public playerSelectionState: Map<string, PlayerSelectionState>
+    public gameState: Map<string, GameState>
+    public clientRooms: Map<string, string>
     
     constructor(io: SocketIO.Server) {
         this.io = io
-        this.state = new Map()
+        this.lobyState = new Map()
+        this.gameState = new Map()
+        this.playerSelectionState = new Map()
         this.clientRooms = new Map()
         
         this.socketEvents()
@@ -39,6 +48,7 @@ export class GameServer {
         })
     }
 
+
     public attachListeners(socket: DomainSocket): void {
         this.addLobyListener(socket)
         this.addPlayerSelectionListener(socket)
@@ -47,12 +57,60 @@ export class GameServer {
 
 
     public addLobyListener(socket: DomainSocket): void {
-        console.log('listener logic')
+        socket.on(
+            LobyEvent.init,
+            () => {
+                socket.join('loby')
+                this.clientRooms.set(socket.id, 'loby')
+                this.io.to('loby').emit(LobyEvent.init)
+            }
+        )
+
+        socket.on(
+            LobyEvent.start,
+            (lobyState: LobyState) => {
+                this.lobyState.set(socket.id, lobyState)
+                socket.emit(LobyEvent.start, lobyState)
+            }
+        )
+        
+        socket.on(
+            LobyEvent.end,
+            () => {
+                this.io.to('loby').emit(LobyEvent.end)
+                socket.leave('loby')
+                this.clientRooms.delete(socket.id)
+            }
+        )
     }
+    
 
 
     public addPlayerSelectionListener(socket: DomainSocket): void {
-        console.log('player selection logic')
+        socket.on(
+            PlayerSelectionEvent.init,
+            () => {
+                socket.emit(
+                    PlayerSelectionEvent.init,
+                    this.lobyState.get(socket.id)
+                )
+            }
+        )
+
+        socket.on(
+            PlayerSelectionEvent.start,
+            (playerSelectionState: PlayerSelectionState) => {
+                this.playerSelectionState.set(socket.id, playerSelectionState)
+                socket.emit(PlayerSelectionEvent.start, playerSelectionState)
+            }
+        )
+        
+        socket.on(
+            PlayerSelectionEvent.end, 
+            () => {
+                this.clientRooms.delete(socket.id)
+            }
+        )
     }
 
     public addGameEventListener(socket: DomainSocket): void {
@@ -86,6 +144,26 @@ export class GameServer {
             socket.broadcast.emit(GameEvent.move, socket.player)
         })
     }
+    
+
+    public newGameRoom(
+        socket: Socket,
+        gameMode: string
+    ): void {
+        
+    }
+
+    public startGameRoom(socket: Socket, gameMode: string): void {
+        
+        
+        
+    }
+
+    public associateGameRoom(): void {
+        
+    }
+
+
     
     
     public createPlayer(
