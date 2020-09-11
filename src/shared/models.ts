@@ -71,15 +71,12 @@ export interface LobyState {
 }
 
 export interface PlayerSelectionState {
-    name: string
     gameMode: string
     player: PlayerModel
 }
 
 export interface GameState {
-    id: string
     gameMode: string
     players: Array<PlayerModel>
     player: PlayerModel
-    maxPlayer: number
 }

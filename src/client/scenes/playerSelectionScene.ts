@@ -319,11 +319,18 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.playerConfig = {
             ...DEFAULT_PLAYER_CONFIG,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
-            name: this.client.lobyState.name
+            name: this.client.lobyState.name,
+            gameMode: this.client.lobyState.gameMode,
         }
 
-        this.game.events.on(Event.gameReady, (gameInitConfig: GameInitConfig) => {
-            this.scene.get('mainScene').scene.restart(gameInitConfig)
+
+        this.game.events.on(Event.playerSelectionStart, () => {
+            this.client.emitGameStart(this.client.playerSelectionState)
+        })
+
+        
+        this.game.events.on(Event.gameReady, () => {
+            this.scene.get('mainScene').scene.restart()
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()
         })
@@ -585,7 +592,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
             abilityKey3: abilities[2].item.key,
             abilityKey4: abilities[3].item.key,
         }
-        this.client.emitGameStart(playerConfUpdated)
+        // this.client.emitGameStart(playerConfUpdated)
+        this.client.emitPlayerSelectionStart({
+            gameMode: this.client.lobyState.gameMode,
+            player: playerConfUpdated,
+        })
     }
     
 }

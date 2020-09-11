@@ -53,7 +53,7 @@ export class MainScene extends Phaser.Scene {
             )
         }, false)
         this.client = this.game.registry.get('client')
-       
+        
         
         this.randomTable = new RandomItem()
         this.randomTable
@@ -68,7 +68,7 @@ export class MainScene extends Phaser.Scene {
         
     }
 
-    public create(gameInitConfig: GameInitConfig): void {
+    public create(): void {
         this.projectiles = new Projectiles(this)
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
@@ -76,11 +76,11 @@ export class MainScene extends Phaser.Scene {
         this.players = this.physics.add.group({
             collideWorldBounds: true,
             classType: Player,
-        }).addMultiple(gameInitConfig.players.map((playerModel) => {
+        }).addMultiple(this.client.gameState.players.map((playerModel) => {
             return new Player(this, playerModel)
         }))
         this.player = this.players.children.getArray()
-            .find((player: Player) => player.id === gameInitConfig.player.id) as Player
+            .find((player: Player) => player.id === this.client.gameState.player.id) as Player
 
         this.settingCamera()
         this.createBackground()

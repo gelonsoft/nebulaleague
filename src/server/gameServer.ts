@@ -90,10 +90,7 @@ export class GameServer {
         socket.on(
             PlayerSelectionEvent.init,
             () => {
-                socket.emit(
-                    PlayerSelectionEvent.init,
-                    this.lobyState.get(socket.id)
-                )
+                socket.emit(PlayerSelectionEvent.init)
             }
         )
 
@@ -116,9 +113,9 @@ export class GameServer {
     public addGameEventListener(socket: DomainSocket): void {
         socket.on(
             GameEvent.start,
-            (player: PlayerModel) => {
+            (playerSelectionState: PlayerSelectionState) => {
                 socket.emit(GameEvent.otherPlayers, this.getAllPlayers())
-                this.createPlayer(socket, player)
+                this.createPlayer(socket, playerSelectionState.player)
                 socket.emit(GameEvent.protagonist, socket.player)
                 socket.broadcast.emit(GameEvent.joined, socket.player)
             }

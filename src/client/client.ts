@@ -3,7 +3,7 @@ import { MyGame } from "./phaserEngine"
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
-import { PlayerModel, ProjectileModel, PlayerMovement, LobyState } from '../shared/models'
+import { PlayerModel, ProjectileModel, PlayerMovement, LobyState, PlayerSelectionState, GameState } from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
 import { PlayerConfig } from './player'
@@ -22,6 +22,8 @@ export class Client {
     public player: PlayerModel
     public players: PlayerModel[]
     public lobyState: LobyState
+    public playerSelectionState: PlayerSelectionState
+    public gameState: GameState
     public isProtagonistReady: boolean
     public isOtherPlayersReady: boolean
     
@@ -34,6 +36,9 @@ export class Client {
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.player = null
         this.players = []
+        this.lobyState = null
+        this.playerSelectionState = null
+        this.gameState = null
         this.isProtagonistReady = false
         this.isOtherPlayersReady = false
         this.listenEvents()
@@ -66,14 +71,14 @@ export class Client {
         this.socket.emit(PlayerSelectionEvent.end)
     }
     
-    public emitPlayerSelectionStart():void {
-        this.socket.emit(PlayerSelectionEvent.start)
+    public emitPlayerSelectionStart(playerSelectionState: PlayerSelectionState):void {
+        window.localStorage.setItem('playerConfig', JSON.stringify(playerSelectionState))
+        this.socket.emit(PlayerSelectionEvent.start, playerSelectionState)
     }
     
 
-    public emitGameStart(playerModel: PlayerModel) {
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerModel))
-        this.socket.emit(GameEvent.start, playerModel)
+    public emitGameStart(playerSelectionState: PlayerSelectionState) {
+        this.socket.emit(GameEvent.start, playerSelectionState)
     }
 
     public emitGameFire(projectileModel: ProjectileModel) {
@@ -84,12 +89,14 @@ export class Client {
         this.socket.emit(GameEvent.move, playerMovement)
     }
 
-    public launchGameIfReady(): void{
+    public launchGameWhenReady(): void{
         if(this.isGameReady) {
-            this.game.events.emit(ClientEvent.gameReady, {
-                player: this.player,
+            this.gameState = {
+                gameMode: this.lobyState.gameMode,
                 players: this.players,
-            })
+                player: this.player,
+            }
+            this.game.events.emit(ClientEvent.gameReady)
         }
     }
     
@@ -101,27 +108,39 @@ export class Client {
 
         this.socket.on(LobyEvent.start, (lobyState: LobyState) => {
             this.lobyState = lobyState
-            this.game.events.emit(ClientEvent.lobyReady, this.lobyState)
+            this.game.events.emit(ClientEvent.lobyStart, this.lobyState)
         })
         
-
         this.socket.on(LobyEvent.end, () => {
             console.log('recieve loby end')
         })
+
+
+        this.socket.on(PlayerSelectionEvent.init, () => {
+            console.log('recieve playerSelectionInit')
+        })
+
+        this.socket.on(PlayerSelectionEvent.start, (playerSelectionState: PlayerSelectionState) => {
+            this.playerSelectionState = playerSelectionState
+            this.game.events.emit(ClientEvent.playerSelectionStart)
+        })
+        
+        this.socket.on(PlayerSelectionEvent.end, () => {
+            console.log('recieve playerSelectionEnd')
+        })
         
 
-        
         this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
             this.player = playerModel
             this.players.push(this.player)
             this.isProtagonistReady = true
-            this.launchGameIfReady()
+            this.launchGameWhenReady()
         })
 
         this.socket.on(GameEvent.otherPlayers, (playersModel: PlayerModel[]) => {
             this.players.concat(playersModel)
             this.isOtherPlayersReady = true
-            this.launchGameIfReady()
+            this.launchGameWhenReady()
         })
 
         this.socket.on(GameEvent.joined, (playerModel: PlayerModel) => {
@@ -149,6 +168,4 @@ export class Client {
             this.game.events.emit(ClientEvent.playerFire, projectileModel)
         })
     }
-    
-    
 }

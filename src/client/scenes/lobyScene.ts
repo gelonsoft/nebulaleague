@@ -27,8 +27,9 @@ export class LobyScene extends Phaser.Scene {
         
         this.client = this.game.registry.get('client')
         this.client.emitLobyInit()
-        this.game.events.on(Event.lobyReady, (gameInitConfig: GameInitConfig) => {
+        this.game.events.on(Event.lobyStart, () => {
             this.scene.start('playerSelectionScene')
+            this.client.emitLobyEnd()
         })
         
         if (this.game.debug) {

@@ -1,6 +1,7 @@
 export class Event {
     public static readonly gameReady = 'gameReady'
-    public static readonly lobyReady = 'lobyReady'
+    public static readonly lobyStart = 'lobyStart'
+    public static readonly playerSelectionStart = 'playerSelectionStart'
     public static readonly playerJoined = 'playerJoined'
     public static readonly playerQuit = 'playerFire'
     public static readonly playerMove = 'playerMove'
