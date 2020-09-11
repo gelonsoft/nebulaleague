@@ -6,7 +6,6 @@ import {GameServer} from  './gameServer'
 require('dotenv-flow').config()
 
 
-
 const app = express()
 app.set('port', process.env.PORT || 3000)
 app.set('debug', process.env.DEBUG == 'true' || false)
@@ -14,7 +13,6 @@ app.set('debug', process.env.DEBUG == 'true' || false)
 
 
 const http = require("http").Server(app)
-const io = socketIO(http)
 
 if (app.get('debug')) {
     const webpack = require('webpack')
@@ -44,8 +42,8 @@ app.get("/", (req: any, res: any) => {
     res.sendFile(path.resolve("./public/index.html"))
 })
 
-
-const gameSession = new GameServer(io)
+const io = socketIO(http)
+new GameServer(io)
 http.listen(app.get('port'), () => {
-    console.log(`Server running at http://127.0.0.1:${app.get('port')}`)
+    console.info(`Server running at http://127.0.0.1:${app.get('port')}`)
 })

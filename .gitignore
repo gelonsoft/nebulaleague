@@ -18,6 +18,9 @@ dist/
 
 src/server/**/*.js
 src/server/**/*.map
+src/shared/**/*.js
+src/shared/**/*.map
+
 public/*.js
 public/*.txt
 public/css

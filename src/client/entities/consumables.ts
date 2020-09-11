@@ -56,7 +56,6 @@ export class Consumable extends Phaser.GameObjects.Sprite implements ConsumableI
     }
     
     public action(player: Player): void {
-        console.log('to implement')
     }
     
     public randomPosition(): void {

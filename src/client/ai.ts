@@ -313,7 +313,6 @@ export class PlayerAI {
     
 
     public doObstacleAvoidance(): void {
-        console.log('avoid obstacle')
     }
 
 

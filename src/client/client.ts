@@ -4,7 +4,7 @@ import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { MenuScene } from './scenes/menuScene'
 import { MainScene } from './scenes/mainScene'
 import { PlayerModel, ProjectileModel, PlayerMovement } from '../shared/models'
-import { GameEvent, ProjectileEvent, PlayerEvent } from '../shared/events.model'
+import { GameEvent } from '../shared/events.model'
 import { PlayerConfig } from './player'
 
 export interface GameInitConfig {
@@ -37,17 +37,17 @@ export class Client {
     }
 
 
-    public emitAuthenticate(playerConfig: PlayerConfig) {
+    public emitGameStart(playerConfig: PlayerConfig) {
         window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
-        this.socket.emit(GameEvent.authentication, playerConfig)
+        this.socket.emit(GameEvent.start, playerConfig)
     }
 
-    public emitProjectileFire(projectileModel: ProjectileModel) {
-        this.socket.emit(ProjectileEvent.fire , projectileModel)
+    public emitGameFire(projectileModel: ProjectileModel) {
+        this.socket.emit(GameEvent.fire , projectileModel)
     }
 
-    public emitPlayerMove(playerMovement: PlayerMovement) {
-        this.socket.emit(PlayerEvent.coordinates, playerMovement)
+    public emitGameMove(playerMovement: PlayerMovement) {
+        this.socket.emit(GameEvent.move, playerMovement)
     }
 
     get isGameReady(): boolean {
@@ -65,30 +65,30 @@ export class Client {
     
     
     public listenEvents(): void {
-        this.socket.on(PlayerEvent.protagonist, (playerModel: PlayerModel) => {
+        this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
             this.player = playerModel
             this.players.push(this.player)
             this.isProtagonistReady = true
             this.launchGameIfReady()
         })
 
-        this.socket.on(PlayerEvent.players, (playersModel: PlayerModel[]) => {
+        this.socket.on(GameEvent.otherPlayers, (playersModel: PlayerModel[]) => {
             this.players.concat(playersModel)
             this.isOtherPlayersReady = true
             this.launchGameIfReady()
         })
 
-        this.socket.on(PlayerEvent.joined, (playerModel: PlayerModel) => {
+        this.socket.on(GameEvent.joined, (playerModel: PlayerModel) => {
             this.players.push(playerModel)
-            this.game.events.emit(PlayerEvent.joined, playerModel)
+            this.game.events.emit(GameEvent.joined, playerModel)
         })
         
-        this.socket.on(PlayerEvent.quit, (playerId: string) => {
+        this.socket.on(GameEvent.quit, (playerId: string) => {
             this.players = this.players.filter((playerModel: PlayerModel) => playerModel.id !== playerId)
-            this.game.events.emit(PlayerEvent.quit, playerId)
+            this.game.events.emit(GameEvent.quit, playerId)
         })
 
-        this.socket.on(PlayerEvent.coordinates, (playerMovement: PlayerMovement) => {
+        this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
             this.players.forEach((player: PlayerModel) => {
                 if(player.id === playerMovement.id) {
                     player.x = playerMovement.x
@@ -96,11 +96,11 @@ export class Client {
                     player.rotation = playerMovement.rotation
                 }
             })
-            this.game.events.emit(PlayerEvent.coordinates, playerMovement)
+            this.game.events.emit(GameEvent.move, playerMovement)
         })
 
-        this.socket.on(ProjectileEvent.fire, (projectileModel: ProjectileModel) => {
-            this.game.events.emit(ProjectileEvent.fire, projectileModel)
+        this.socket.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
+            this.game.events.emit(GameEvent.fire, projectileModel)
         })
     }
     

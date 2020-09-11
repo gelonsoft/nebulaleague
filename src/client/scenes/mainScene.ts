@@ -16,7 +16,7 @@ import { MyGame } from '../phaserEngine'
 import { playersAIConfig } from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerEvent, ProjectileEvent } from '../../shared/events.model'
+import { GameEvent } from '../../shared/events.model'
 import { PlayerModel, ProjectileModel, PlayerMovement } from '../../shared/models'
 import { GameInitConfig, Client } from '../client'
 
@@ -180,14 +180,12 @@ export class MainScene extends Phaser.Scene {
 
 
     public registerEvent() :void {
-        this.game.events.on(PlayerEvent.joined, (playerModel: PlayerModel) => {
-            console.log('joined')
+        this.game.events.on(GameEvent.joined, (playerModel: PlayerModel) => {
             const otherPlayer = new Player(this, playerModel)
             this.players.add(otherPlayer)
         })
 
-        this.game.events.on(PlayerEvent.quit, (playerId: string) => {
-            console.log('quit')
+        this.game.events.on(GameEvent.quit, (playerId: string) => {
             this.players.getChildren().forEach((player: Player) => {
                 if (playerId === player.id) {
                     player.destroy()
@@ -195,7 +193,7 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(PlayerEvent.coordinates, (playerMovement: PlayerMovement) => {
+        this.game.events.on(GameEvent.move, (playerMovement: PlayerMovement) => {
             this.players.children.getArray().filter((player: Player) => {
                 if (player.id === playerMovement.id ) {
                     player.x = playerMovement.x
@@ -205,7 +203,7 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(ProjectileEvent.fire, (projectileModel: ProjectileModel) => {
+        this.game.events.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
             this.projectiles.fire(
                 projectileModel.key,
                 projectileModel.fromPlayerId,
@@ -265,7 +263,7 @@ export class MainScene extends Phaser.Scene {
         rotation: number
     ): void {
         if (fromPlayerId === this.player.id) {
-            this.client.emitProjectileFire({
+            this.client.emitGameFire({
                 key: projectileKey,
                 fromPlayerId: fromPlayerId,
                 x: position.x,
@@ -344,7 +342,7 @@ export class MainScene extends Phaser.Scene {
             // this.playersAIUpdate()
 
             
-            this.client.emitPlayerMove({
+            this.client.emitGameMove({
                 id: this.player.id,
                 x: this.player.x,
                 y: this.player.y,

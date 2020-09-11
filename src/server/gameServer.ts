@@ -12,110 +12,89 @@ from "../shared/models"
 import {
     ServerEvent,
     GameEvent,
-    PlayerEvent,
-    ProjectileEvent,
 } from "../shared/events.model"
 
 
-
 export class GameServer {
-    private io: SocketIO.Server
-    private gameHasStarted = false
-    private projectiles: Map<string, ProjectileModel>
-
+    public io: SocketIO.Server
+    public state: Map<string, any>
+    public clientRooms: Map<string, any>
+    
     constructor(io: SocketIO.Server) {
         this.io = io
+        this.state = new Map()
+        this.clientRooms = new Map()
+        
         this.socketEvents()
-        this.projectiles = new Map()
     }
 
 
-    private socketEvents(): void {
+    public socketEvents(): void {
         this.io.on(ServerEvent.connected, (socket: DomainSocket) => {
             this.attachListeners(socket)
         })
+
+        this.io.on(ServerEvent.disconnected, (socket: DomainSocket) => {
+            
+        })
     }
 
-    private attachListeners(socket: DomainSocket): void {
+    public attachListeners(socket: DomainSocket): void {
         this.addSignOnListener(socket)
         this.addSignOutListener(socket)
         this.addMovementListener(socket)
         this.addProjectileCreateListener(socket)
-        this.addProjectileDestroyListener(socket)
     }
 
 
-    private gameInitialised(socket: DomainSocket): void {
-        if (!this.gameHasStarted) {
-            this.gameHasStarted = true
-        }
+    public addSignOnListener(socket: DomainSocket): void {
+        socket.on(
+            GameEvent.start,
+            (player: PlayerModel) => {
+                socket.emit(GameEvent.otherPlayers, this.getAllPlayers())
+                this.createPlayer(socket, player)
+                socket.emit(GameEvent.protagonist, socket.player)
+                socket.broadcast.emit(GameEvent.joined, socket.player)
+            }
+        )
     }
 
-    private addSignOutListener(socket: DomainSocket): void {
-        socket.on(ServerEvent.disconnected, () => {
+     public addSignOutListener(socket: DomainSocket): void {
+        socket.on(GameEvent.end, () => {
             if (socket.player) {
-                socket.broadcast.emit(PlayerEvent.quit, socket.player.id)
+                socket.broadcast.emit(GameEvent.quit, socket.player.id)
             }
         })
     }
 
-    private addSignOnListener(socket: DomainSocket): void {
-        socket.on(
-            GameEvent.authentication,
-            (player: PlayerModel) => {
-                socket.emit(PlayerEvent.players, this.getAllPlayers())
-                this.createPlayer(socket, player)
-                socket.emit(PlayerEvent.protagonist, socket.player)
-                socket.broadcast.emit(PlayerEvent.joined, socket.player)
-                this.gameInitialised(socket)
-            }
-        )
-    }
-
-    private addProjectileCreateListener(socket: DomainSocket): void {
-        socket.on(
-            ProjectileEvent.fire,
-            (projectile: ProjectileModel) => {
-                this.io.emit(ProjectileEvent.fire, projectile)
-            }
-        )
+    public addProjectileCreateListener(socket: DomainSocket): void {
+        socket.on(GameEvent.fire, (projectile: ProjectileModel) => {
+            this.io.emit(GameEvent.fire, projectile)
+        })
     }
 
 
-    private addProjectileDestroyListener(socket: DomainSocket): void {
-        socket.on(
-            ProjectileEvent.kill,
-            (projectile: ProjectileModel) => {
-                // this.projectiles.delete(projectile.name)
-                socket.broadcast.emit(ProjectileEvent.kill, projectile)
-            }
-        )
-    }
-
-    private addMovementListener(socket: DomainSocket): void {
-        socket.on(PlayerEvent.coordinates, (playerChanged: PlayerChanged) => {
+    public addMovementListener(socket: DomainSocket): void {
+        socket.on(GameEvent.move, (playerChanged: PlayerChanged) => {
             socket.player = {
                 ...socket.player,
                 x: playerChanged.x,
                 y: playerChanged.y,
                 rotation: playerChanged.rotation,
             }
-            socket.broadcast.emit(PlayerEvent.coordinates, socket.player)
+            socket.broadcast.emit(GameEvent.move, socket.player)
         })
     }
     
-    private createPlayer(
+    public createPlayer(
         socket: DomainSocket,
         player: PlayerModel,
     ): void {
         socket.player = {
             name: player.name,
             id: uuidv4(),
-            // x: player.x,
-            // y: player.y,
             x: this.randomInt(0, 500),
             y: this.randomInt(0, 500),
-            
             abilityKey1: player.abilityKey1,
             abilityKey2: player.abilityKey2,
             abilityKey3: player.abilityKey3,
@@ -126,7 +105,7 @@ export class GameServer {
         }
     }
 
-    private getAllPlayers(): Array<PlayerModel> {
+    public getAllPlayers(): Array<PlayerModel> {
         return Object.keys(this.io.sockets.connected).reduce((acc, socketID) => {
             const player = (this.io.sockets.connected[socketID] as DomainSocket).player
             if (player) {
@@ -135,8 +114,9 @@ export class GameServer {
             return acc
         }, [])
     }
+    
 
-    private randomInt(low: number, high: number): number {
+    public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }
 }

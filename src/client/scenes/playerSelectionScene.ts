@@ -581,8 +581,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             abilityKey3: abilities[2].item.key,
             abilityKey4: abilities[3].item.key,
         }
-        
-        this.client.emitAuthenticate(playerConfUpdated)
+        this.client.emitGameStart(playerConfUpdated)
     }
     
 }
