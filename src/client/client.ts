@@ -4,7 +4,8 @@ import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { MenuScene } from './scenes/menuScene'
 import { MainScene } from './scenes/mainScene'
 import { PlayerModel, ProjectileModel, PlayerMovement } from '../shared/models'
-import { GameEvent } from '../shared/events.model'
+import { GameEvent } from '../shared/events'
+import { Event as ClientEvent }  from './events'
 import { PlayerConfig } from './player'
 
 export interface GameInitConfig {
@@ -56,7 +57,7 @@ export class Client {
 
     public launchGameIfReady(): void{
         if(this.isGameReady) {
-            this.game.events.emit('gameReady', {
+            this.game.events.emit(ClientEvent.gameReady, {
                 player: this.player,
                 players: this.players,
             })
@@ -80,12 +81,12 @@ export class Client {
 
         this.socket.on(GameEvent.joined, (playerModel: PlayerModel) => {
             this.players.push(playerModel)
-            this.game.events.emit(GameEvent.joined, playerModel)
+            this.game.events.emit(ClientEvent.playerJoined, playerModel)
         })
         
         this.socket.on(GameEvent.quit, (playerId: string) => {
             this.players = this.players.filter((playerModel: PlayerModel) => playerModel.id !== playerId)
-            this.game.events.emit(GameEvent.quit, playerId)
+            this.game.events.emit(ClientEvent.playerQuit, playerId)
         })
 
         this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
@@ -96,11 +97,11 @@ export class Client {
                     player.rotation = playerMovement.rotation
                 }
             })
-            this.game.events.emit(GameEvent.move, playerMovement)
+            this.game.events.emit(ClientEvent.playerMove, playerMovement)
         })
 
         this.socket.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
-            this.game.events.emit(GameEvent.fire, projectileModel)
+            this.game.events.emit(ClientEvent.playerFire, projectileModel)
         })
     }
     

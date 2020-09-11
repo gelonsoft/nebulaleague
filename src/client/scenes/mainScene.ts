@@ -13,13 +13,11 @@ import {
 } from '../config'
 import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
-import { playersAIConfig } from '../playersAI'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { GameEvent } from '../../shared/events.model'
 import { PlayerModel, ProjectileModel, PlayerMovement } from '../../shared/models'
 import { GameInitConfig, Client } from '../client'
-
+import  {Event } from '../events'
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
@@ -180,12 +178,12 @@ export class MainScene extends Phaser.Scene {
 
 
     public registerEvent() :void {
-        this.game.events.on(GameEvent.joined, (playerModel: PlayerModel) => {
+        this.game.events.on(Event.playerJoined, (playerModel: PlayerModel) => {
             const otherPlayer = new Player(this, playerModel)
             this.players.add(otherPlayer)
         })
 
-        this.game.events.on(GameEvent.quit, (playerId: string) => {
+        this.game.events.on(Event.playerQuit, (playerId: string) => {
             this.players.getChildren().forEach((player: Player) => {
                 if (playerId === player.id) {
                     player.destroy()
@@ -193,7 +191,7 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(GameEvent.move, (playerMovement: PlayerMovement) => {
+        this.game.events.on(Event.playerMove, (playerMovement: PlayerMovement) => {
             this.players.children.getArray().filter((player: Player) => {
                 if (player.id === playerMovement.id ) {
                     player.x = playerMovement.x
@@ -203,7 +201,7 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
+        this.game.events.on(Event.playerFire, (projectileModel: ProjectileModel) => {
             this.projectiles.fire(
                 projectileModel.key,
                 projectileModel.fromPlayerId,
@@ -216,43 +214,43 @@ export class MainScene extends Phaser.Scene {
     
     public syncHealth(player: Player): void {
         if (player.id === this.player.id) {
-            this.events.emit("healthChanged")
+            this.events.emit(Event.playerHealthChanged)
         }
     }
 
     public syncAbilitiesCooldown(player: Player, selectedAbilityKey: string, actionTime: ActionTimeInterface): void {
         if (player.id === this.player.id) {
-            this.events.emit('abilitiesCooldownChanged', selectedAbilityKey, actionTime)
+            this.events.emit(Event.abilitiesCooldownChanged, selectedAbilityKey, actionTime)
         }
     }
 
     public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
         if (player.id === this.player.id) {
-            this.events.emit('abilitiesSelectedChanged', selectedAbilityKey, selected)
+            this.events.emit(Event.abilitiesSelectedChanged, selectedAbilityKey, selected)
         }
     }
 
     public syncWeaponCooldown(player: Player, selectedWeaponKey: string, actionTime: ActionTimeInterface): void {
         if (player.id === this.player.id) {
-            this.events.emit("weaponsCooldownChanged", selectedWeaponKey, actionTime)
+            this.events.emit(Event.weaponsCooldownChanged, selectedWeaponKey, actionTime)
         }
     }
 
     public syncSelectedWeapon(player: Player, selected: boolean): void {
         if (player.id === this.player.id) {
-            this.events.emit('weaponSelectedChanged', selected)
+            this.events.emit(Event.weaponSelectedChanged, selected)
         }
     }
 
     public syncEffects(player: Player): void {
         if (player.id === this.player.id) {
-            this.events.emit('effectsChanged', player.effects)
+            this.events.emit(Event.effectsChanged, player.effects)
         }
     }
 
     public syncDeathTextCooldown(player: Player, cooldown: number): void {
         if (player.id === this.player.id) {
-            this.events.emit('deathCooldownChanged', cooldown)
+            this.events.emit(Event.deathCooldownChanged, cooldown)
         }
     }
     

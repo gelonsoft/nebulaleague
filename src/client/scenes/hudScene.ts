@@ -11,6 +11,7 @@ import { Player, ActionTimeInterface, EffectInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '../entities/effects'
+import { Event } from '../events'
 
 
 class SlotContainer extends Phaser.GameObjects.Container {
@@ -134,12 +135,12 @@ export class HudScene extends Phaser.Scene {
     create(): void {
         this.mainScene = this.scene.get("mainScene") as MainScene
         this.player = this.mainScene.player
-        this.mainScene.events.on("healthChanged", this.updateHealth, this)
-        this.mainScene.events.on('weaponsCooldownChanged', this.updateWeaponCooldown, this)
-        this.mainScene.events.on('weaponSelectedChanged', this.updateWeaponSelected, this)
-        this.mainScene.events.on('abilitiesCooldownChanged', this.updateAbilitiesCooldown, this)
-        this.mainScene.events.on('abilitiesSelectedChanged', this.updateAbilitiesSelected, this)
-        this.mainScene.events.on('effectsChanged', this.updateEffectChanged, this)
+        this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
+        this.mainScene.events.on(Event.abilitiesCooldownChanged, this.updateAbilitiesCooldown, this)
+        this.mainScene.events.on(Event.abilitiesSelectedChanged, this.updateAbilitiesSelected, this)
+        this.mainScene.events.on(Event.weaponsCooldownChanged, this.updateWeaponCooldown, this)
+        this.mainScene.events.on(Event.weaponSelectedChanged, this.updateWeaponSelected, this)
+        this.mainScene.events.on(Event.effectsChanged, this.updateEffectChanged, this)
 
         const top = this.scale.height - HUD_HEIGHT
         this.background = this.add.graphics()
@@ -154,10 +155,10 @@ export class HudScene extends Phaser.Scene {
         this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.actions.ability3.frame)
         this.abilityContainer4 = new SlotContainer(this, 380 + 62 * 3, 0, this.player.actions.ability4.frame)
         this.abilityToContainer = {
-            'ability1': this.abilityContainer1,
-            'ability2': this.abilityContainer2,
-            'ability3': this.abilityContainer3,
-            'ability4': this.abilityContainer4,
+            ability1: this.abilityContainer1,
+            ability2: this.abilityContainer2,
+            ability3: this.abilityContainer3,
+            ability4: this.abilityContainer4,
         }
         this.abilityContainer1.selected = true
         this.effectIconsContainer = createEffectIconsContainer(this, 4, 32, 2, -30, 20, 2)

@@ -12,7 +12,7 @@ from "../shared/models"
 import {
     ServerEvent,
     GameEvent,
-} from "../shared/events.model"
+} from "../shared/events"
 
 
 export class GameServer {
@@ -40,14 +40,22 @@ export class GameServer {
     }
 
     public attachListeners(socket: DomainSocket): void {
-        this.addSignOnListener(socket)
-        this.addSignOutListener(socket)
-        this.addMovementListener(socket)
-        this.addProjectileCreateListener(socket)
+        this.addLobyListener(socket)
+        this.addPlayerSelectionListener(socket)
+        this.addGameEventListener(socket)
     }
 
 
-    public addSignOnListener(socket: DomainSocket): void {
+    public addLobyListener(socket: DomainSocket): void {
+        console.log('listener logic')
+    }
+
+
+    public addPlayerSelectionListener(socket: DomainSocket): void {
+        console.log('player selection logic')
+    }
+
+    public addGameEventListener(socket: DomainSocket): void {
         socket.on(
             GameEvent.start,
             (player: PlayerModel) => {
@@ -57,24 +65,17 @@ export class GameServer {
                 socket.broadcast.emit(GameEvent.joined, socket.player)
             }
         )
-    }
 
-     public addSignOutListener(socket: DomainSocket): void {
         socket.on(GameEvent.end, () => {
             if (socket.player) {
                 socket.broadcast.emit(GameEvent.quit, socket.player.id)
             }
         })
-    }
 
-    public addProjectileCreateListener(socket: DomainSocket): void {
         socket.on(GameEvent.fire, (projectile: ProjectileModel) => {
             this.io.emit(GameEvent.fire, projectile)
-        })
-    }
+        }) 
 
-
-    public addMovementListener(socket: DomainSocket): void {
         socket.on(GameEvent.move, (playerChanged: PlayerChanged) => {
             socket.player = {
                 ...socket.player,
@@ -85,6 +86,7 @@ export class GameServer {
             socket.broadcast.emit(GameEvent.move, socket.player)
         })
     }
+    
     
     public createPlayer(
         socket: DomainSocket,

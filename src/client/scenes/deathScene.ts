@@ -2,6 +2,7 @@
 import { MyGame } from "../phaserEngine"
 import { MainScene } from "./mainScene"
 import { Player } from "../player"
+import { Event } from "../events"
 
 
 class TextContainer extends Phaser.GameObjects.Container {
@@ -62,7 +63,7 @@ export class DeathScene extends Phaser.Scene {
 
     public create() {
         this.followRandomPlayer()
-        this.mainScene.events.on("deathCooldownChanged", this.updateDeathCooldown, this)
+        this.mainScene.events.on(Event.effectsChanged, this.updateDeathCooldown, this)
         this.textContainer = new TextContainer(this, 0, 0)
     }
 
