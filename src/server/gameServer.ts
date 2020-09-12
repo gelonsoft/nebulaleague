@@ -52,7 +52,7 @@ export class GameServer {
     public attachListeners(socket: DomainSocket): void {
         this.addLobyListener(socket)
         this.addPlayerSelectionListener(socket)
-        this.addGameEventListener(socket)
+        this.addGameListener(socket)
     }
 
 
@@ -110,7 +110,7 @@ export class GameServer {
         )
     }
 
-    public addGameEventListener(socket: DomainSocket): void {
+    public addGameListener(socket: DomainSocket): void {
         socket.on(
             GameEvent.start,
             (playerSelectionState: PlayerSelectionState) => {

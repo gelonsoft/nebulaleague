@@ -21,6 +21,15 @@ export interface PlayerModel {
 }
 
 
+export interface PlayerConfig {
+    weaponPrimaryKey: string
+    weaponSecondaryKey: string
+    abilityKey1: string
+    abilityKey2: string
+    abilityKey3: string
+    abilityKey4: string    
+}
+
 export interface PlayerChanged {
     id: string
     x?: number

@@ -41,7 +41,7 @@ export class Client {
         this.gameState = null
         this.isProtagonistReady = false
         this.isOtherPlayersReady = false
-        this.listenEvents()
+        this.attachListeners()
     }
 
 
@@ -72,7 +72,6 @@ export class Client {
     }
     
     public emitPlayerSelectionStart(playerSelectionState: PlayerSelectionState):void {
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerSelectionState))
         this.socket.emit(PlayerSelectionEvent.start, playerSelectionState)
     }
     
@@ -100,8 +99,16 @@ export class Client {
         }
     }
     
+
     
-    public listenEvents(): void {
+    public attachListeners(): void {
+        this.addLobyListener()
+        this.addPlayerSelectionListener()
+        this.addGameListener()
+    }
+
+
+    public addLobyListener(): void {
         this.socket.on(LobyEvent.init, () => {
             console.log('recieve loby init')
         })
@@ -114,22 +121,32 @@ export class Client {
         this.socket.on(LobyEvent.end, () => {
             console.log('recieve loby end')
         })
+    }
 
-
+    public addPlayerSelectionListener(): void {
         this.socket.on(PlayerSelectionEvent.init, () => {
             console.log('recieve playerSelectionInit')
         })
 
         this.socket.on(PlayerSelectionEvent.start, (playerSelectionState: PlayerSelectionState) => {
             this.playerSelectionState = playerSelectionState
+            window.localStorage.setItem('playerConfig', JSON.stringify({
+                weaponPrimaryKey: this.playerSelectionState.player.weaponPrimaryKey,
+                weaponSecondaryKey: this.playerSelectionState.player.weaponSecondaryKey,
+                abilityKey1: this.playerSelectionState.player.abilityKey1,
+                abilityKey2: this.playerSelectionState.player.abilityKey2,
+                abilityKey3: this.playerSelectionState.player.abilityKey3,
+                abilityKey4: this.playerSelectionState.player.abilityKey4,
+            }))
             this.game.events.emit(ClientEvent.playerSelectionStart)
         })
         
         this.socket.on(PlayerSelectionEvent.end, () => {
             console.log('recieve playerSelectionEnd')
         })
-        
+    }
 
+    public addGameListener(): void {
         this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
             this.player = playerModel
             this.players.push(this.player)
@@ -166,6 +183,6 @@ export class Client {
 
         this.socket.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
             this.game.events.emit(ClientEvent.playerFire, projectileModel)
-        })
+        })        
     }
 }
