@@ -77,15 +77,17 @@ export interface DomainSocket extends Socket {
 export interface LobyState {
     name: string
     gameMode: string
+    playerSelectionRoom?: string
 }
 
 export interface PlayerSelectionState {
     gameMode: string
     player: PlayerModel
+    gameRoom?: string
 }
 
 export interface GameState {
     gameMode: string
     players: Array<PlayerModel>
-    player: PlayerModel
+    // player: PlayerModel
 }

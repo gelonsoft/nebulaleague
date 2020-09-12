@@ -58,28 +58,28 @@ export class Client {
         this.socket.emit(LobyEvent.end)
     }
 
-    public emitLobyStart(lobyState: LobyState):void {
+    public emitLobyStart(lobyState: LobyState): void {
         this.socket.emit(LobyEvent.start, lobyState)
     }
 
 
-    public emitPlayerSelectionInit():void {
-        this.socket.emit(PlayerSelectionEvent.init)
+    public emitPlayerSelectionInit(): void {
+        this.socket.emit(PlayerSelectionEvent.init, this.lobyState)
     }
 
-    public emitPlayerSelectionEnd():void {
+    public emitPlayerSelectionEnd(): void {
         this.socket.emit(PlayerSelectionEvent.end)
     }
     
-    public emitPlayerSelectionStart(playerSelectionState: PlayerSelectionState):void {
+    public emitPlayerSelectionStart(playerSelectionState: PlayerSelectionState): void {
         this.socket.emit(PlayerSelectionEvent.start, playerSelectionState)
     }
     
 
-    public emitGameStart(playerSelectionState: PlayerSelectionState) {
-        this.socket.emit(GameEvent.start, playerSelectionState)
+    public emitGameInit() {
+        this.socket.emit(GameEvent.init, this.playerSelectionState)
     }
-
+    
     public emitGameFire(projectileModel: ProjectileModel) {
         this.socket.emit(GameEvent.fire , projectileModel)
     }
@@ -88,17 +88,10 @@ export class Client {
         this.socket.emit(GameEvent.move, playerMovement)
     }
 
-    public launchGameWhenReady(): void{
-        if(this.isGameReady) {
-            this.gameState = {
-                gameMode: this.lobyState.gameMode,
-                players: this.players,
-                player: this.player,
-            }
-            this.game.events.emit(ClientEvent.gameReady)
-        }
-    }
     
+    get id(): string {
+        return this.socket.id
+    }
 
     
     public attachListeners(): void {
@@ -109,25 +102,13 @@ export class Client {
 
 
     public addLobyListener(): void {
-        this.socket.on(LobyEvent.init, () => {
-            console.log('recieve loby init')
-        })
-
         this.socket.on(LobyEvent.start, (lobyState: LobyState) => {
             this.lobyState = lobyState
             this.game.events.emit(ClientEvent.lobyStart, this.lobyState)
         })
-        
-        this.socket.on(LobyEvent.end, () => {
-            console.log('recieve loby end')
-        })
     }
 
     public addPlayerSelectionListener(): void {
-        this.socket.on(PlayerSelectionEvent.init, () => {
-            console.log('recieve playerSelectionInit')
-        })
-
         this.socket.on(PlayerSelectionEvent.start, (playerSelectionState: PlayerSelectionState) => {
             this.playerSelectionState = playerSelectionState
             window.localStorage.setItem('playerConfig', JSON.stringify({
@@ -140,25 +121,27 @@ export class Client {
             }))
             this.game.events.emit(ClientEvent.playerSelectionStart)
         })
-        
-        this.socket.on(PlayerSelectionEvent.end, () => {
-            console.log('recieve playerSelectionEnd')
-        })
     }
 
     public addGameListener(): void {
-        this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
-            this.player = playerModel
-            this.players.push(this.player)
-            this.isProtagonistReady = true
-            this.launchGameWhenReady()
+        this.socket.on(GameEvent.init, (gameState: GameState) => {
+            this.gameState = gameState
+            this.game.events.emit(ClientEvent.gameReady)
         })
 
-        this.socket.on(GameEvent.otherPlayers, (playersModel: PlayerModel[]) => {
-            this.players.concat(playersModel)
-            this.isOtherPlayersReady = true
-            this.launchGameWhenReady()
-        })
+        
+        // this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
+        //     this.player = playerModel
+        //     this.players.push(this.player)
+        //     this.isProtagonistReady = true
+        //     this.launchGameWhenReady()
+        // })
+
+        // this.socket.on(GameEvent.otherPlayers, (playersModel: PlayerModel[]) => {
+        //     this.players.concat(playersModel)
+        //     this.isOtherPlayersReady = true
+        //     this.launchGameWhenReady()
+        // })
 
         this.socket.on(GameEvent.joined, (playerModel: PlayerModel) => {
             this.players.push(playerModel)

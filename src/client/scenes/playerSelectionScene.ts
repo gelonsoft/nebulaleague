@@ -315,6 +315,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             )
         }, false)
         this.client = this.game.registry.get('client')
+        this.client.emitLobyInit()
 
         this.playerConfig = {
             ...DEFAULT_PLAYER_CONFIG,
@@ -325,7 +326,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
 
         this.game.events.on(Event.playerSelectionStart, () => {
-            this.client.emitGameStart(this.client.playerSelectionState)
+            this.client.emitGameInit()
         })
 
         
@@ -526,7 +527,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         this.playButtonDOM.addListener('click')
         this.playButtonDOM.on('click', (event) => {
-            this.startMainScene()
+            this.start()
         })
         this.setReadyButton()
     }
@@ -570,11 +571,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         if (this.game.debug) {
             window['menu'] = this
-            // this.startMainScene()
+            // this.start()
         }
     }
 
-    startMainScene() {
+    start() {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
         const [activatedWeaponSlotContainer, activatedAbilitySlotContainer]
             = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>

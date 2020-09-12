@@ -80,7 +80,7 @@ export class MainScene extends Phaser.Scene {
             return new Player(this, playerModel)
         }))
         this.player = this.players.children.getArray()
-            .find((player: Player) => player.id === this.client.gameState.player.id) as Player
+            .find((player: Player) => player.id === this.client.id) as Player
 
         this.settingCamera()
         this.createBackground()

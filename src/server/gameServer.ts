@@ -2,7 +2,6 @@ import { Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-    DomainSocket,
     PlayerModel,
     PlayerChanged,
     ProjectileModel,
@@ -22,46 +21,45 @@ import {
 
 export class GameServer {
     public io: SocketIO.Server
-    public lobyState: Map<string, LobyState>
-    public playerSelectionState: Map<string, PlayerSelectionState>
-    public gameState: Map<string, GameState>
-    public clientRooms: Map<string, string>
+    public roomToLobyState: Map<string, LobyState>
+    public roomToPlayerSelectionState: Map<string, PlayerSelectionState>
+    public roomToGameState: Map<string, GameState>
+    public clientToRoom: Map<string, string>
     
     constructor(io: SocketIO.Server) {
         this.io = io
-        this.lobyState = new Map()
-        this.gameState = new Map()
-        this.playerSelectionState = new Map()
-        this.clientRooms = new Map()
-        
+        this.roomToLobyState = new Map()
+        this.roomToGameState = new Map()
+        this.roomToPlayerSelectionState = new Map()
+        this.clientToRoom = new Map()
         this.socketEvents()
     }
 
 
     public socketEvents(): void {
-        this.io.on(ServerEvent.connected, (socket: DomainSocket) => {
+        this.io.on(ServerEvent.connected, (socket: Socket) => {
             this.attachListeners(socket)
         })
 
-        this.io.on(ServerEvent.disconnected, (socket: DomainSocket) => {
+        this.io.on(ServerEvent.disconnected, (socket: Socket) => {
             
         })
     }
 
 
-    public attachListeners(socket: DomainSocket): void {
+    public attachListeners(socket: Socket): void {
         this.addLobyListener(socket)
         this.addPlayerSelectionListener(socket)
         this.addGameListener(socket)
     }
 
 
-    public addLobyListener(socket: DomainSocket): void {
+    public addLobyListener(socket: Socket): void {
         socket.on(
             LobyEvent.init,
             () => {
                 socket.join('loby')
-                this.clientRooms.set(socket.id, 'loby')
+                this.clientToRoom.set(socket.id, 'loby')
                 this.io.to('loby').emit(LobyEvent.init)
             }
         )
@@ -69,7 +67,7 @@ export class GameServer {
         socket.on(
             LobyEvent.start,
             (lobyState: LobyState) => {
-                this.lobyState.set(socket.id, lobyState)
+                lobyState.playerSelectionRoom = uuidv4()
                 socket.emit(LobyEvent.start, lobyState)
             }
         )
@@ -79,25 +77,26 @@ export class GameServer {
             () => {
                 this.io.to('loby').emit(LobyEvent.end)
                 socket.leave('loby')
-                this.clientRooms.delete(socket.id)
+                this.clientToRoom.delete(socket.id)
             }
         )
     }
     
 
 
-    public addPlayerSelectionListener(socket: DomainSocket): void {
-        socket.on(
-            PlayerSelectionEvent.init,
-            () => {
-                socket.emit(PlayerSelectionEvent.init)
+    public addPlayerSelectionListener(socket: Socket): void {
+        socket.on(PlayerSelectionEvent.init,
+            (lobyState: LobyState) => {
+                socket.join(lobyState.playerSelectionRoom)
+                this.clientToRoom.set(socket.id, lobyState.playerSelectionRoom)
+                this.io.to(this.clientToRoom.get(socket.id)).emit(PlayerSelectionEvent.init)
             }
         )
 
         socket.on(
             PlayerSelectionEvent.start,
             (playerSelectionState: PlayerSelectionState) => {
-                this.playerSelectionState.set(socket.id, playerSelectionState)
+                playerSelectionState.gameRoom = this.startGameRoom(socket, playerSelectionState)
                 socket.emit(PlayerSelectionEvent.start, playerSelectionState)
             }
         )
@@ -105,93 +104,91 @@ export class GameServer {
         socket.on(
             PlayerSelectionEvent.end, 
             () => {
-                this.clientRooms.delete(socket.id)
+                this.io.to(this.clientToRoom.get(socket.id)).emit(LobyEvent.end)
+                socket.leave(this.clientToRoom.get(socket.id))
+                this.clientToRoom.delete(socket.id)
             }
         )
     }
 
-    public addGameListener(socket: DomainSocket): void {
+    public addGameListener(socket: Socket): void {
         socket.on(
-            GameEvent.start,
+            GameEvent.init,
             (playerSelectionState: PlayerSelectionState) => {
-                socket.emit(GameEvent.otherPlayers, this.getAllPlayers())
-                this.createPlayer(socket, playerSelectionState.player)
-                socket.emit(GameEvent.protagonist, socket.player)
-                socket.broadcast.emit(GameEvent.joined, socket.player)
+                const gameState = this.roomToGameState.get(playerSelectionState.gameRoom)
+                socket.join(playerSelectionState.gameRoom)
+                this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
+                gameState.players.push(playerSelectionState.player)
+                socket.emit(GameEvent.init, gameState)
             }
         )
 
         socket.on(GameEvent.end, () => {
-            if (socket.player) {
-                socket.broadcast.emit(GameEvent.quit, socket.player.id)
-            }
+            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.end)
+            socket.leave(this.clientToRoom.get(socket.id))
+            this.clientToRoom.delete(socket.id)
         })
 
+        
+        socket.on(GameEvent.joined, () => {
+            const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
+            const newPlayer = gameState.players.find((player) => player.id === socket.id)
+            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.joined, newPlayer)
+        })
+
+        socket.on(GameEvent.quit, () => {
+            const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
+            const quitPlayer = gameState.players.find((player) => player.id === socket.id)
+            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)
+        })
+        
         socket.on(GameEvent.fire, (projectile: ProjectileModel) => {
-            this.io.emit(GameEvent.fire, projectile)
+            this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.fire, projectile)
         }) 
 
         socket.on(GameEvent.move, (playerChanged: PlayerChanged) => {
-            socket.player = {
-                ...socket.player,
+            const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
+            const currentPlayer = gameState.players.find((player) => player.id === socket.id)
+            Object.assign(currentPlayer, {
                 x: playerChanged.x,
                 y: playerChanged.y,
                 rotation: playerChanged.rotation,
-            }
-            socket.broadcast.emit(GameEvent.move, socket.player)
+            })
+            socket.broadcast.emit(GameEvent.move, currentPlayer)
         })
     }
     
 
-    public newGameRoom(
-        socket: Socket,
-        gameMode: string
-    ): void {
-        
+    public newGameRoom(socket: Socket): string {
+        const { gameMode } = this.roomToLobyState.get(socket.id)
+        const roomName = uuidv4()
+        this.roomToGameState.set(roomName, {
+            gameMode: gameMode,
+            players: []
+        })
+        return roomName
     }
 
-    public startGameRoom(socket: Socket, gameMode: string): void {
-        
-        
-        
-    }
-
-    public associateGameRoom(): void {
-        
-    }
-
-
-    
-    
-    public createPlayer(
-        socket: DomainSocket,
-        player: PlayerModel,
-    ): void {
-        socket.player = {
-            name: player.name,
-            id: uuidv4(),
-            x: this.randomInt(0, 500),
-            y: this.randomInt(0, 500),
-            abilityKey1: player.abilityKey1,
-            abilityKey2: player.abilityKey2,
-            abilityKey3: player.abilityKey3,
-            abilityKey4: player.abilityKey4,
-            controlledBy: 0,
-            weaponPrimaryKey: player.weaponPrimaryKey,
-            weaponSecondaryKey: player.weaponSecondaryKey,
-        }
-    }
-
-    public getAllPlayers(): Array<PlayerModel> {
-        return Object.keys(this.io.sockets.connected).reduce((acc, socketID) => {
-            const player = (this.io.sockets.connected[socketID] as DomainSocket).player
-            if (player) {
-                acc.push(player)
+    public startGameRoom(socket: Socket, playerSelectionState: PlayerSelectionState): string {
+        let choosenRoom:string | null = null
+        if(playerSelectionState.gameMode === 'ffa') {
+            for (const [roomName, gameState] of Object.entries(this.roomToGameState)) {
+                if(gameState.gameMode === 'ffa' && gameState.players.length < 10) {
+                    choosenRoom = roomName
+                    break
+                }
             }
-            return acc
-        }, [])
+            if (!choosenRoom) {
+                choosenRoom = this.newGameRoom(socket)
+            }
+        }
+        return choosenRoom
     }
-    
+
+    public associatePlayerToGameRoom(): void {
+        
+    }
+
 
     public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
