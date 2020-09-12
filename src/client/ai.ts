@@ -1,8 +1,9 @@
-import { Player, PlayerDirection } from './player'
+import * as steering from './steering'
 import { MainScene } from './scenes/mainScene'
+import { Player } from './player'
+import { PlayerDirection } from '../shared/models'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import { PlayerAIConfig } from './playersAI'
-import * as steering from './steering'
 import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 

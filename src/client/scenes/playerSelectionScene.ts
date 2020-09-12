@@ -15,7 +15,7 @@ const COLOR_DISABLED = 0x888888
 
 
 const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
-    id: 'mainPlayer',
+    id: 'defaultPlayer',
     name: 'default',
     x: 0,
     y: 0,
@@ -304,7 +304,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     }
     
 
-    init(menuSceneConfig: LobySceneConfig): void {
+    init(): void {
         window.addEventListener('resize', () => {
             const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
             const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
@@ -331,6 +331,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         
         this.game.events.on(Event.gameReady, () => {
+            this.client.emitGameJoined()
             this.scene.get('mainScene').scene.restart()
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()

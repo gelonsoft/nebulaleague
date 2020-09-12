@@ -3,10 +3,9 @@ import { MyGame } from "./phaserEngine"
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
-import { PlayerModel, ProjectileModel, PlayerMovement, LobyState, PlayerSelectionState, GameState } from '../shared/models'
+import { PlayerModel, ProjectileModel, PlayerDirection, LobyState, PlayerSelectionState, GameState, PlayerMovement } from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
-import { PlayerConfig } from './player'
 
 export interface GameInitConfig {
     player: PlayerModel
@@ -24,8 +23,8 @@ export class Client {
     public lobyState: LobyState
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
-    public isProtagonistReady: boolean
-    public isOtherPlayersReady: boolean
+    public isGameInit: boolean
+    public isGameJoined: boolean
     
     
     constructor(game: MyGame) {
@@ -39,14 +38,14 @@ export class Client {
         this.lobyState = null
         this.playerSelectionState = null
         this.gameState = null
-        this.isProtagonistReady = false
-        this.isOtherPlayersReady = false
+        this.isGameInit = false
+        this.isGameJoined = false
         this.attachListeners()
     }
 
 
     get isGameReady(): boolean {
-        return this.isProtagonistReady && this.isOtherPlayersReady
+        return this.isGameInit && this.isGameJoined
     }
 
 
@@ -80,12 +79,16 @@ export class Client {
         this.socket.emit(GameEvent.init, this.playerSelectionState)
     }
     
-    public emitGameFire(projectileModel: ProjectileModel) {
-        this.socket.emit(GameEvent.fire , projectileModel)
+    public emitGameJoined() {
+        this.socket.emit(GameEvent.joined)
     }
 
-    public emitGameMove(playerMovement: PlayerMovement) {
-        this.socket.emit(GameEvent.move, playerMovement)
+    public emitGameMove(playerDirection: PlayerDirection) {
+        this.socket.emit(GameEvent.move, playerDirection)
+    }
+    
+    public emitGameFire(projectileModel: ProjectileModel) {
+        this.socket.emit(GameEvent.fire , projectileModel)
     }
 
     
@@ -129,43 +132,23 @@ export class Client {
             this.game.events.emit(ClientEvent.gameReady)
         })
 
-        
-        // this.socket.on(GameEvent.protagonist, (playerModel: PlayerModel) => {
-        //     this.player = playerModel
-        //     this.players.push(this.player)
-        //     this.isProtagonistReady = true
-        //     this.launchGameWhenReady()
-        // })
-
-        // this.socket.on(GameEvent.otherPlayers, (playersModel: PlayerModel[]) => {
-        //     this.players.concat(playersModel)
-        //     this.isOtherPlayersReady = true
-        //     this.launchGameWhenReady()
-        // })
-
-        this.socket.on(GameEvent.joined, (playerModel: PlayerModel) => {
-            this.players.push(playerModel)
-            this.game.events.emit(ClientEvent.playerJoined, playerModel)
+        this.socket.on(GameEvent.joined, (playerReceive: PlayerModel) => {
+            this.gameState.players.push(playerReceive)
+            this.game.events.emit(ClientEvent.playerJoined, playerReceive)
         })
         
-        this.socket.on(GameEvent.quit, (playerId: string) => {
-            this.players = this.players.filter((playerModel: PlayerModel) => playerModel.id !== playerId)
-            this.game.events.emit(ClientEvent.playerQuit, playerId)
+        this.socket.on(GameEvent.quit, (playerReceive: PlayerModel) => {
+            this.gameState.players =
+                this.gameState.players.filter((player: PlayerModel) => playerReceive.id !== player.id)
+            this.game.events.emit(ClientEvent.playerQuit, playerReceive.id)
         })
 
         this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
-            this.players.forEach((player: PlayerModel) => {
-                if(player.id === playerMovement.id) {
-                    player.x = playerMovement.x
-                    player.y = playerMovement.y
-                    player.rotation = playerMovement.rotation
-                }
-            })
             this.game.events.emit(ClientEvent.playerMove, playerMovement)
         })
 
-        this.socket.on(GameEvent.fire, (projectileModel: ProjectileModel) => {
-            this.game.events.emit(ClientEvent.playerFire, projectileModel)
-        })        
+        this.socket.on(GameEvent.fire, (projectileReceive: ProjectileModel) => {
+            this.game.events.emit(ClientEvent.playerFire, projectileReceive)
+        }) 
     }
 }

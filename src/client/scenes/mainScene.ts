@@ -15,7 +15,7 @@ import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerModel, ProjectileModel, PlayerMovement } from '../../shared/models'
+import { PlayerModel, ProjectileModel, PlayerMovement, PlayerDirection } from '../../shared/models'
 import { GameInitConfig, Client } from '../client'
 import  {Event } from '../events'
 
@@ -54,7 +54,6 @@ export class MainScene extends Phaser.Scene {
         }, false)
         this.client = this.game.registry.get('client')
         
-        
         this.randomTable = new RandomItem()
         this.randomTable
             .add('pill', 20)
@@ -85,7 +84,6 @@ export class MainScene extends Phaser.Scene {
         this.settingCamera()
         this.createBackground()
         // this.createConsumables()
-        
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
 
@@ -194,9 +192,10 @@ export class MainScene extends Phaser.Scene {
         this.game.events.on(Event.playerMove, (playerMovement: PlayerMovement) => {
             this.players.children.getArray().filter((player: Player) => {
                 if (player.id === playerMovement.id ) {
-                    player.x = playerMovement.x
-                    player.y = playerMovement.y
-                    player.rotation = playerMovement.rotation
+                    player.move({
+                        x: playerMovement.x,
+                        y: playerMovement.y,
+                    })
                 }
             })
         })
@@ -271,6 +270,21 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    // public syncMove(
+    //     projectileKey: string,
+    //     fromPlayerId: string,
+    //     position: Phaser.Math.Vector2,
+    //     rotation: number
+    // ): void {
+    //     if (fromPlayerId === this.player.id) {
+    //         this.client.emitGameMove({
+    //             x: position.x,
+    //             y: position.y,
+    //             rotation: rotation,
+    //         })
+    //     }
+    // }
+
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
             this.cameras.main.flash(1 * 1000, 125, 125, 125)
@@ -339,15 +353,6 @@ export class MainScene extends Phaser.Scene {
             this.playerControl.update()
             // this.playersAIUpdate()
 
-            
-            this.client.emitGameMove({
-                id: this.player.id,
-                x: this.player.x,
-                y: this.player.y,
-                rotation: this.player.rotation,
-            })
-
-            
             // collide with other players
             this.physics.overlap(
                 this.players,

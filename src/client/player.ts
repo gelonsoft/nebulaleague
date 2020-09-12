@@ -13,7 +13,7 @@ import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 import { createEffectIconsContainer, refreshEffectIcons } from './entities/effects'
-
+import { PlayerDirection } from '../shared/models'
 
 export enum ControlledBy {
     MainPlayer,
@@ -50,11 +50,6 @@ export interface EffectInterface {
     value: number
     duration: number
     tick?: number
-}
-
-export interface PlayerDirection {
-    x: number
-    y: number
 }
 
 export interface PlayerMoveNextForce {
@@ -268,7 +263,6 @@ export class Player extends Phaser.GameObjects.Container {
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity
         } else {
-            this.getNextMove({x:0, y:0})
             const playerMoveNextForce = this.getNextMove({x:0, y:0})
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity

@@ -1,6 +1,8 @@
 import { MainScene } from './scenes/mainScene'
-import { Player, PlayerDirection } from './player'
+import { Player } from './player'
+import { PlayerDirection } from '../shared/models'
 import { DebugScene } from './scenes/debugScene'
+import { Client } from './client'
 
 
 export class MainControl {
@@ -50,10 +52,12 @@ export class PlayerControl {
     public canLeftTrigger: boolean
     public canRightTrigger: boolean
     public active: boolean
+    public client: Client
     
     constructor(scene: MainScene, player: Player) {
-        this.player = player
         this.scene = scene
+        this.client = this.scene.game.registry.get('client')
+        this.player = player
         this.canLeftTrigger = true
         this.canRightTrigger = true
         this.active = true
@@ -90,8 +94,8 @@ export class PlayerControl {
             x: left + right,
             y: up + down,
         }
-        this.player.move(playerDirection)
-        
+        this.client.emitGameMove(playerDirection)
+        // this.player.move(playerDirection)
     }
 
     public handleSwitchWeapon(): void {

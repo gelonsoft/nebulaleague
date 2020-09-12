@@ -38,11 +38,17 @@ export interface PlayerChanged {
 }
 
 
+export interface PlayerDirection {
+    x: number
+    y: number
+}
+
+
 export interface PlayerMovement {
     id: string
     x: number
     y: number
-    rotation: number
+    rotation?: number
 }
 
 
