@@ -93,11 +93,6 @@ export interface ProjectileModel {
 }
 
 
-export interface DomainSocket extends Socket {
-    player: PlayerModel
-}
-
-
 export interface User {
     name?: string
     gameMode?: string
@@ -110,12 +105,11 @@ export interface LobyState {
 
 export interface PlayerSelectionState {
     gameMode: string
-    player: PlayerConfig
+    players: Array<PlayerModel>
     gameRoom?: string
 }
 
 export interface GameState {
     gameMode: string
     players: Array<PlayerModel>
-    // player: PlayerModel
 }

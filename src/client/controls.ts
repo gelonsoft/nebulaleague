@@ -185,7 +185,6 @@ export class PlayerControl {
             this.handleKeyboard()
             this.handleMouse()
             if(Object.keys(this.action).length > 0 ) {
-                console.log(this.action)
                 this.client.emitGameAction({
                     id: this.player.id,
                     ...this.action,

@@ -9,8 +9,12 @@ import {
     ControlledBy,
     PlayerAction,
     User,
+    PlayerConfig,
 }
 from "../shared/models"
+
+
+import { Config } from "../shared/config"
 
 import {
     ServerEvent,
@@ -65,12 +69,14 @@ export class GameServer {
             const room = this.clientToRoom.get(socket.id)
             const isFromLoby = this.roomToLobyState.has(room)
             const isFromPlayerSelection = this.roomToPlayerSelectionState.has(room)
-            const isFromGame = this.roomToPlayerSelectionState.has(room)
-            console.log({
+            const isFromGame = this.roomToGameState.has(room)
+            console.dir({
                 room,
                 isFromLoby,
                 isFromPlayerSelection,
                 isFromGame,
+                roomToPlayerSelectionState: this.roomToPlayerSelectionState,
+                roomToGameState: this.roomToGameState,
             })
         })
 
@@ -91,10 +97,12 @@ export class GameServer {
         socket.on(LobyEvent.start, (user: User) => {
             const lobyState = this.roomToLobyState.get(this.clientToRoom.get(socket.id))
             const lobyUser = lobyState.users.get(socket.id)
+            const selectedRoom = this.startPlayerSelectionRoom(socket, user)
+            
             Object.assign(lobyUser, {
                 name: user.name,
                 gameMode: user.gameMode,
-                playerSelectionRoom: uuidv4(),
+                playerSelectionRoom: selectedRoom,
             })
             socket.emit(LobyEvent.start, lobyUser)
         })
@@ -110,12 +118,17 @@ export class GameServer {
 
     public addPlayerSelectionListener(socket: Socket): void {
         socket.on(PlayerSelectionEvent.init, (user: User) => {
+            const playerSelectionState = this.roomToPlayerSelectionState.get(user.playerSelectionRoom)
             socket.join(user.playerSelectionRoom)
             this.clientToRoom.set(socket.id, user.playerSelectionRoom)
+            playerSelectionState.players.push({...Config.defaultPlayerModel, id: socket.id})
             this.io.to(this.clientToRoom.get(socket.id)).emit(PlayerSelectionEvent.init)
         })
 
-        socket.on(PlayerSelectionEvent.start, (playerSelectionState: PlayerSelectionState) => {
+        socket.on(PlayerSelectionEvent.start, (playerConfig: PlayerConfig) => {
+            const playerSelectionState = this.roomToPlayerSelectionState.get(this.clientToRoom.get(socket.id))
+            const playerModel = playerSelectionState.players.find((player) => player.id === socket.id)
+            Object.assign(playerModel, playerConfig)
             playerSelectionState.gameRoom = this.startGameRoom(socket, playerSelectionState)
             socket.emit(PlayerSelectionEvent.start, playerSelectionState)
         })
@@ -132,17 +145,8 @@ export class GameServer {
             const gameState = this.roomToGameState.get(playerSelectionState.gameRoom)
             socket.join(playerSelectionState.gameRoom)
             this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
-            gameState.players.push({
-                ...playerSelectionState.player,
-                id: socket.id,
-                selectedAbilityKey: null,
-                x: 0,
-                y: 0,
-                rotation: 0,
-                controlledBy: ControlledBy.MainPlayer
-            })
+            gameState.players.push(...playerSelectionState.players)
             socket.emit(GameEvent.init, gameState)
-            // this.debugRoom()
         })
 
         socket.on(GameEvent.end, () => {
@@ -169,7 +173,7 @@ export class GameServer {
     }
     
 
-    public newGameRoom(socket: Socket, playerSelectionState: PlayerSelectionState): string {
+    public newGameRoom(playerSelectionState: PlayerSelectionState): string {
         const roomName = uuidv4()
         this.roomToGameState.set(roomName, {
             gameMode: playerSelectionState.gameMode,
@@ -177,6 +181,16 @@ export class GameServer {
         })
         return roomName
     }
+
+    public newPlayerSelectionRoom(lobyUser: User): string {
+        const roomName = uuidv4()
+        this.roomToPlayerSelectionState.set(roomName, {
+            gameMode: lobyUser.gameMode,
+            players: [],
+        })
+        return roomName
+    }
+    
 
     public startGameRoom(socket: Socket, playerSelectionState: PlayerSelectionState): string {
         let choosenRoom:string | null = null
@@ -188,17 +202,23 @@ export class GameServer {
                 }
             }
             if (!choosenRoom) {
-                choosenRoom = this.newGameRoom(socket, playerSelectionState)
+                choosenRoom = this.newGameRoom(playerSelectionState)
             }
         }
         return choosenRoom
     }
 
-    public associatePlayerToGameRoom(): void {
-        
+    
+    public startPlayerSelectionRoom(socket: Socket, lobyUser: User): string {
+        let choosenRoom:string | null = null
+        if(lobyUser.gameMode === 'ffa') {
+            choosenRoom = this.newPlayerSelectionRoom(lobyUser)
+        }
+        return choosenRoom
     }
 
 
+    
     public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }

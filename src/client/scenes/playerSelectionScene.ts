@@ -2,6 +2,7 @@ import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
 import { PlayerConfig } from "../../shared/models"
+import { Config } from "../../shared/config"
 import { Client } from "../client"
 import { Event } from "../events"
 
@@ -11,17 +12,6 @@ const COLOR_UNSELECTED = 0xbbbbbb
 const COLOR_SELECTED = 0xffffff
 const COLOR_DISABLED = 0x888888
 
-
-
-const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
-    name: 'anonymous',
-    weaponPrimaryKey: 'uncertainity',
-    weaponSecondaryKey:'uncertainity',
-    abilityKey1: 'uncertainity',
-    abilityKey2: 'uncertainity',
-    abilityKey3: 'uncertainity',
-    abilityKey4: 'uncertainity',
-}
 
 enum ItemType {
     Weapon,
@@ -313,7 +303,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.client.emitPlayerSelectionInit()
 
         this.playerConfig = {
-            ...DEFAULT_PLAYER_CONFIG,
+            ...Config.defaultPlayerConfig,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
             name: this.client.lobyUser.name
         }
@@ -591,10 +581,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             abilityKey4: abilities[3].item.key,
         }
         // this.client.emitGameStart(playerConfUpdated)
-        this.client.emitPlayerSelectionStart({
-            gameMode: this.client.lobyUser.gameMode,
-            player: playerConfUpdated,
-        })
+        this.client.emitPlayerSelectionStart(playerConfUpdated)
     }
     
 }

@@ -5,13 +5,11 @@ import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
 import {
     PlayerModel,
-    ProjectileModel,
-    PlayerDirection,
-    LobyState,
-    PlayerSelectionState,
+    PlayerConfig,
     GameState,
     PlayerAction,
     User,
+    PlayerSelectionState,
 } from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
@@ -78,12 +76,21 @@ export class Client {
         this.socket.emit(PlayerSelectionEvent.end)
     }
     
-    public emitPlayerSelectionStart(playerSelectionState: PlayerSelectionState): void {
-        this.socket.emit(PlayerSelectionEvent.start, playerSelectionState)
+    public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
+        window.localStorage.setItem('playerConfig', JSON.stringify({
+            weaponPrimaryKey: playerConfig.weaponPrimaryKey,
+            weaponSecondaryKey: playerConfig.weaponSecondaryKey,
+            abilityKey1: playerConfig.abilityKey1,
+            abilityKey2: playerConfig.abilityKey2,
+            abilityKey3: playerConfig.abilityKey3,
+            abilityKey4: playerConfig.abilityKey4,
+        }))
+        this.socket.emit(PlayerSelectionEvent.start, playerConfig)
     }
     
 
     public emitGameInit() {
+        console.log(this.playerSelectionState)
         this.socket.emit(GameEvent.init, this.playerSelectionState)
     }
     
@@ -118,14 +125,6 @@ export class Client {
     public addPlayerSelectionListener(): void {
         this.socket.on(PlayerSelectionEvent.start, (playerSelectionState: PlayerSelectionState) => {
             this.playerSelectionState = playerSelectionState
-            window.localStorage.setItem('playerConfig', JSON.stringify({
-                weaponPrimaryKey: this.playerSelectionState.player.weaponPrimaryKey,
-                weaponSecondaryKey: this.playerSelectionState.player.weaponSecondaryKey,
-                abilityKey1: this.playerSelectionState.player.abilityKey1,
-                abilityKey2: this.playerSelectionState.player.abilityKey2,
-                abilityKey3: this.playerSelectionState.player.abilityKey3,
-                abilityKey4: this.playerSelectionState.player.abilityKey4,
-            }))
             this.game.events.emit(ClientEvent.playerSelectionStart)
         })
     }
