@@ -1,4 +1,9 @@
-import { Socket } from "socket.io";
+import { Socket } from "socket.io"
+
+export enum ControlledBy {
+    MainPlayer,
+    AIPlayer,
+}
 
 export interface CoordinatesModel {
     x: number
@@ -10,18 +15,20 @@ export interface PlayerModel {
     name: string
     x: number
     y: number
-    controlledBy: number
+    rotation: number
+    controlledBy: ControlledBy
+    selectedAbilityKey: string | null
     weaponPrimaryKey: string
     weaponSecondaryKey: string
     abilityKey1: string
     abilityKey2: string
     abilityKey3: string
     abilityKey4: string
-    rotation?: number
 }
 
 
 export interface PlayerConfig {
+    name: string
     weaponPrimaryKey: string
     weaponSecondaryKey: string
     abilityKey1: string
@@ -42,6 +49,15 @@ export interface PlayerDirection {
     x: number
     y: number
 }
+
+
+export interface PlayerAction {
+    id?: string
+    direction?: PlayerDirection,
+    selectAbility?: string,
+    action?: string,
+}
+
 
 
 export interface PlayerMovement {
@@ -88,7 +104,7 @@ export interface LobyState {
 
 export interface PlayerSelectionState {
     gameMode: string
-    player: PlayerModel
+    player: PlayerConfig
     gameRoom?: string
 }
 

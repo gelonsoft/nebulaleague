@@ -15,7 +15,7 @@ import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerModel, ProjectileModel, PlayerMovement, PlayerDirection } from '../../shared/models'
+import { PlayerModel, ProjectileModel, PlayerMovement, PlayerDirection, PlayerAction } from '../../shared/models'
 import { GameInitConfig, Client } from '../client'
 import  {Event } from '../events'
 
@@ -189,13 +189,20 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(Event.playerMove, (playerMovement: PlayerMovement) => {
+        this.game.events.on(Event.playerAction, (action: PlayerAction) => {
             this.players.children.getArray().filter((player: Player) => {
-                if (player.id === playerMovement.id ) {
-                    player.move({
-                        x: playerMovement.x,
-                        y: playerMovement.y,
-                    })
+                if (player.id === action.id ) {
+                    if(action.direction) {
+                        console.log('direction')
+                        player.move(action.direction)
+                    }
+                    if (action.selectAbility) {
+                        console.log('select ability')
+                        player.selectAbility(action.selectAbility)
+                    }
+                    if (action.action) {
+                        console.log('action')
+                    }
                 }
             })
         })
@@ -351,6 +358,7 @@ export class MainScene extends Phaser.Scene {
         if(this.player) {
             this.mainControl.update()
             this.playerControl.update()
+
             // this.playersAIUpdate()
 
             // collide with other players

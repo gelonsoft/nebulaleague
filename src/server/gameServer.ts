@@ -1,15 +1,17 @@
 import { Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid'
+import { inspect } from 'util'
+
 
 import {
-    PlayerModel,
-    PlayerChanged,
     ProjectileModel,
     GameState,
     LobyState,
     PlayerSelectionState,
     PlayerDirection,
     PlayerMovement,
+    ControlledBy,
+    PlayerAction,
 }
 from "../shared/models"
 
@@ -112,9 +114,15 @@ export class GameServer {
             const gameState = this.roomToGameState.get(playerSelectionState.gameRoom)
             socket.join(playerSelectionState.gameRoom)
             this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
+            // console.log(playerSelectionState.player)
             gameState.players.push({
                 ...playerSelectionState.player,
                 id: socket.id,
+                selectedAbilityKey: null,
+                x: 0,
+                y: 0,
+                rotation: 0,
+                controlledBy: ControlledBy.MainPlayer
             })
             socket.emit(GameEvent.init, gameState)
             this.debugRoom()
@@ -136,6 +144,11 @@ export class GameServer {
             const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
             const quitPlayer = gameState.players.find((player) => player.id === socket.id)
             socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)
+        })
+
+
+        socket.on(GameEvent.action, (actions: PlayerAction) => {
+            this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.action, actions)
         })
         
         socket.on(GameEvent.fire, (projectile: ProjectileModel) => {
@@ -189,10 +202,11 @@ export class GameServer {
     }
 
     public debugRoom() {
-        console.info({
+        console.dir({
             roomToLobyState: this.roomToLobyState,
             roomToPlayerSelectionState: JSON.stringify(this.roomToPlayerSelectionState),
             roomToGameState: this.roomToGameState,
-        })
+        }, {depth: null})
+        
     }
 }

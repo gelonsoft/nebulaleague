@@ -3,7 +3,15 @@ import { MyGame } from "./phaserEngine"
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
-import { PlayerModel, ProjectileModel, PlayerDirection, LobyState, PlayerSelectionState, GameState, PlayerMovement } from '../shared/models'
+import {
+    PlayerModel,
+    ProjectileModel,
+    PlayerDirection,
+    LobyState,
+    PlayerSelectionState,
+    GameState,
+    PlayerAction,
+} from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
 
@@ -83,6 +91,10 @@ export class Client {
         this.socket.emit(GameEvent.joined)
     }
 
+    public emitGameAction(actions: PlayerAction) {
+        this.socket.emit(GameEvent.action, actions)
+    }
+
     public emitGameMove(playerDirection: PlayerDirection) {
         this.socket.emit(GameEvent.move, playerDirection)
     }
@@ -143,9 +155,13 @@ export class Client {
             this.game.events.emit(ClientEvent.playerQuit, playerReceive.id)
         })
 
-        this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
-            this.game.events.emit(ClientEvent.playerMove, playerMovement)
+        this.socket.on(GameEvent.action, (action: PlayerAction) => {
+            this.game.events.emit(ClientEvent.playerAction, action)
         })
+        
+        // this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
+        //     this.game.events.emit(ClientEvent.playerMove, playerMovement)
+        // })
 
         this.socket.on(GameEvent.fire, (projectileReceive: ProjectileModel) => {
             this.game.events.emit(ClientEvent.playerFire, projectileReceive)

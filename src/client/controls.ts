@@ -1,6 +1,6 @@
 import { MainScene } from './scenes/mainScene'
 import { Player } from './player'
-import { PlayerDirection } from '../shared/models'
+import { PlayerAction, PlayerDirection } from '../shared/models'
 import { DebugScene } from './scenes/debugScene'
 import { Client } from './client'
 
@@ -44,6 +44,8 @@ export class MainControl {
 export class PlayerControl {
     public scene: MainScene
     public controls: any
+    public client: Client
+    public action: PlayerAction
     public player: Player
     public prevMoveLeft: boolean
     public prevMoveRight: boolean
@@ -52,12 +54,15 @@ export class PlayerControl {
     public canLeftTrigger: boolean
     public canRightTrigger: boolean
     public active: boolean
-    public client: Client
+    public previousDirection: PlayerDirection
+    public currentDirection: PlayerDirection
     
     constructor(scene: MainScene, player: Player) {
         this.scene = scene
         this.client = this.scene.game.registry.get('client')
         this.player = player
+        this.previousDirection = {x: 0, y: 0}
+        this.currentDirection = {x: 0, y: 0}
         this.canLeftTrigger = true
         this.canRightTrigger = true
         this.active = true
@@ -71,10 +76,10 @@ export class PlayerControl {
             moveDownQwerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             moveLeftAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
             moveUpAzerty: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z),
-            skill1: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
-            skill2: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
-            skill3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
-            skill4: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
+            ability1: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
+            ability2: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
+            ability3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
+            ability4: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
         }
     }
 
@@ -89,33 +94,39 @@ export class PlayerControl {
         const down = (this.controls.moveDownDvorak.isDown ||
             this.controls.moveDownQwerty.isDown ) ? 1: 0
 
-
+        this.previousDirection = this.currentDirection
         const playerDirection: PlayerDirection = {
             x: left + right,
             y: up + down,
         }
-        this.client.emitGameMove(playerDirection)
-        // this.player.move(playerDirection)
+        this.currentDirection = playerDirection
+
+        if((this.currentDirection.x !== this.previousDirection.x) ||
+           (this.currentDirection.y !== this.previousDirection.y) ) {
+            this.action.direction = this.currentDirection
+        }
     }
 
     public handleSwitchWeapon(): void {
-        const skill1 = this.scene.input.keyboard.checkDown(this.controls.skill1, 200)
-        const skill2 = this.scene.input.keyboard.checkDown(this.controls.skill2, 200)
-        const skill3 = this.scene.input.keyboard.checkDown(this.controls.skill3, 200)
-        const skill4 = this.scene.input.keyboard.checkDown(this.controls.skill4, 200)
+        const ability1 = this.scene.input.keyboard.checkDown(this.controls.ability1, 200)
+        const ability2 = this.scene.input.keyboard.checkDown(this.controls.ability2, 200)
+        const ability3 = this.scene.input.keyboard.checkDown(this.controls.ability3, 200)
+        const ability4 = this.scene.input.keyboard.checkDown(this.controls.ability4, 200)
 
-        if (skill1) {
-            this.player.selectAbility('ability1')
+        if (ability1) {
+            this.action.selectAbility = 'ability1'
         }
-        else if (skill2) {
-            this.player.selectAbility('ability2')
+        else if (ability2) {
+            this.action.selectAbility = 'ability2'
         }
-        else if (skill3) {
-            this.player.selectAbility('ability3')
+        else if (ability3) {
+            this.action.selectAbility = 'ability3'
         }
-        else if (skill4) {
-            this.player.selectAbility('ability4')
+        else if (ability4) {
+            this.action.selectAbility = 'ability4'
         }
+
+        
     }
     
     public handleMouse(): void {
@@ -129,14 +140,14 @@ export class PlayerControl {
 
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
-                this.player.action('weaponPrimary')
+                this.action.action = 'weaponPrimary'
                 this.canLeftTrigger = false
             }    
         }
 
         if (this.canRightTrigger) {
             if (pointer.rightButtonDown()) {
-                this.player.action('weaponSecondary')
+                this.action.action = 'weaponSecondary'
                 this.canRightTrigger = false
             }            
         }
@@ -160,8 +171,15 @@ export class PlayerControl {
     
     public update(): void {
         if (this.active) {
+            this.action = {}
             this.handleKeyboard()
             this.handleMouse()
+            if(this.action) {
+                this.client.emitGameAction({
+                    id: this.player.id,
+                    ...this.action,
+                })
+            }
         }
     }
 }

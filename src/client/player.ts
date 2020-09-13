@@ -15,16 +15,11 @@ import { PlayerAI } from './ai'
 import { createEffectIconsContainer, refreshEffectIcons } from './entities/effects'
 import { PlayerDirection } from '../shared/models'
 
-export enum ControlledBy {
-    MainPlayer,
-    OtherPlayer,
-    AIPlayer,
-}
+
 
 export interface PlayerConfig {
     id: string
     name: string
-    controlledBy: ControlledBy
     x: number
     y: number
     weaponPrimaryKey: string
@@ -108,8 +103,6 @@ export class Player extends Phaser.GameObjects.Container {
     public playerSprite: Phaser.GameObjects.Sprite
     public healthBar: HealthBar
     public effectIconsContainer: Phaser.GameObjects.Container
-    public playerState: Map<string, boolean | number>
-    public controlledBy: ControlledBy
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
     public actions: ActionsInterface
@@ -124,12 +117,10 @@ export class Player extends Phaser.GameObjects.Container {
     constructor(scene: MainScene, playerConfig: PlayerConfig) {
         super(scene)
         this.scene = scene
-        this.playerState = new Map()
         this.previousDirection = { x: 0, y: 0 }
         this.id = playerConfig.id
         this.x = playerConfig.x
         this.y = playerConfig.y
-        this.controlledBy = playerConfig.controlledBy
         this.maxHealth = PLAYER_DEFAULT_HEALTH
         this.health = this.maxHealth
         this.defaultSpeed = PLAYER_DEFAULT_SPEED

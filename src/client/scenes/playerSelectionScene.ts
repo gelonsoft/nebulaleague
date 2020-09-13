@@ -1,9 +1,8 @@
 import { MyGame } from "../phaserEngine"
 import { weaponsConfig } from '../entities/weapons'
 import { abilitiesConfig } from '../entities/abilities'
-import { ControlledBy, PlayerConfig } from "../player"
-import { LobySceneConfig } from "./lobyScene"
-import { Client, GameInitConfig } from "../client"
+import { PlayerConfig } from "../../shared/models"
+import { Client } from "../client"
 import { Event } from "../events"
 
 const COLOR_BACKGROUND = 0x000000
@@ -15,11 +14,7 @@ const COLOR_DISABLED = 0x888888
 
 
 const DEFAULT_PLAYER_CONFIG: PlayerConfig = {
-    id: 'defaultPlayer',
-    name: 'default',
-    x: 0,
-    y: 0,
-    controlledBy: ControlledBy.MainPlayer,
+    name: 'anonymous',
     weaponPrimaryKey: 'uncertainity',
     weaponSecondaryKey:'uncertainity',
     abilityKey1: 'uncertainity',
@@ -321,7 +316,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             ...DEFAULT_PLAYER_CONFIG,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
             name: this.client.lobyState.name,
-            gameMode: this.client.lobyState.gameMode,
         }
 
 
