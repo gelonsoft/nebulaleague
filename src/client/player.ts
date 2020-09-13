@@ -261,7 +261,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.previousDirection = playerDirection
     }
 
+    public rotateFromPointer(pointerRotation: number): void {
+        this.rotation = pointerRotation + Math.PI / 2
+    }
 
+    
     public draw(): void {
         if (this.selectedAbilityKey) {
             const selectedAbily = this.actions[this.selectedAbilityKey]

@@ -5,8 +5,6 @@ export class Event {
     public static readonly playerJoined = 'playerJoined'
     public static readonly playerQuit = 'playerFire'
     public static readonly playerAction = 'playerAction'
-    public static readonly playerMove = 'playerMove'
-    public static readonly playerFire = 'playerFire'
     public static readonly playerHealthChanged = 'playerHealthChanged'
     public static readonly abilitiesCooldownChanged = 'abilitiesCooldownChanged'
     public static readonly abilitiesSelectedChanged = 'abilitiesSelectedChanged'

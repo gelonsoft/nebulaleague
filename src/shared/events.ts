@@ -24,5 +24,4 @@ export class GameEvent {
     public static readonly action = "game:action"
     public static readonly move = "game:move"
     public static readonly hit = "game:hit"
-    public static readonly fire = "game:fire"
 }

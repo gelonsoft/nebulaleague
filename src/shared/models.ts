@@ -54,6 +54,7 @@ export interface PlayerDirection {
 export interface PlayerAction {
     id?: string
     direction?: PlayerDirection,
+    rotation?: number,
     selectAbility?: string,
     action?: string,
 }
@@ -96,10 +97,15 @@ export interface DomainSocket extends Socket {
     player: PlayerModel
 }
 
-export interface LobyState {
-    name: string
-    gameMode: string
+
+export interface User {
+    name?: string
+    gameMode?: string
     playerSelectionRoom?: string
+}
+
+export interface LobyState {
+    users: Map<string, User>
 }
 
 export interface PlayerSelectionState {

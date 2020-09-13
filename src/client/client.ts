@@ -11,6 +11,7 @@ import {
     PlayerSelectionState,
     GameState,
     PlayerAction,
+    User,
 } from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
@@ -28,7 +29,7 @@ export class Client {
     public lobyScene: LobyScene
     public player: PlayerModel
     public players: PlayerModel[]
-    public lobyState: LobyState
+    public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
     public isGameInit: boolean
@@ -43,7 +44,7 @@ export class Client {
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.player = null
         this.players = []
-        this.lobyState = null
+        this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
         this.isGameInit = false
@@ -56,7 +57,6 @@ export class Client {
         return this.isGameInit && this.isGameJoined
     }
 
-
     public emitLobyInit(): void {
         this.socket.emit(LobyEvent.init)
     }
@@ -65,13 +65,13 @@ export class Client {
         this.socket.emit(LobyEvent.end)
     }
 
-    public emitLobyStart(lobyState: LobyState): void {
-        this.socket.emit(LobyEvent.start, lobyState)
+    public emitLobyStart(user: User): void {
+        this.socket.emit(LobyEvent.start, user)
     }
 
 
     public emitPlayerSelectionInit(): void {
-        this.socket.emit(PlayerSelectionEvent.init, this.lobyState)
+        this.socket.emit(PlayerSelectionEvent.init, this.lobyUser)
     }
 
     public emitPlayerSelectionEnd(): void {
@@ -95,14 +95,6 @@ export class Client {
         this.socket.emit(GameEvent.action, actions)
     }
 
-    public emitGameMove(playerDirection: PlayerDirection) {
-        this.socket.emit(GameEvent.move, playerDirection)
-    }
-    
-    public emitGameFire(projectileModel: ProjectileModel) {
-        this.socket.emit(GameEvent.fire , projectileModel)
-    }
-
     
     get id(): string {
         return this.socket.id
@@ -117,9 +109,9 @@ export class Client {
 
 
     public addLobyListener(): void {
-        this.socket.on(LobyEvent.start, (lobyState: LobyState) => {
-            this.lobyState = lobyState
-            this.game.events.emit(ClientEvent.lobyStart, this.lobyState)
+        this.socket.on(LobyEvent.start, (user: User) => {
+            this.lobyUser = user
+            this.game.events.emit(ClientEvent.lobyStart, this.lobyUser)
         })
     }
 
@@ -158,13 +150,5 @@ export class Client {
         this.socket.on(GameEvent.action, (action: PlayerAction) => {
             this.game.events.emit(ClientEvent.playerAction, action)
         })
-        
-        // this.socket.on(GameEvent.move, (playerMovement: PlayerMovement) => {
-        //     this.game.events.emit(ClientEvent.playerMove, playerMovement)
-        // })
-
-        this.socket.on(GameEvent.fire, (projectileReceive: ProjectileModel) => {
-            this.game.events.emit(ClientEvent.playerFire, projectileReceive)
-        }) 
     }
 }

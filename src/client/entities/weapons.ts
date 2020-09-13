@@ -112,7 +112,7 @@ export class Weapon  {
             sourcePosition.x, sourcePosition.y,
             pointerPosition.x, pointerPosition.y,
         )
-        this.projectiles.syncFire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
+        this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
     }
 
     

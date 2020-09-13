@@ -189,31 +189,24 @@ export class MainScene extends Phaser.Scene {
             })
         })
 
-        this.game.events.on(Event.playerAction, (action: PlayerAction) => {
+        this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             this.players.children.getArray().filter((player: Player) => {
-                if (player.id === action.id ) {
-                    if(action.direction) {
-                        console.log('direction')
-                        player.move(action.direction)
+                if (player.id === playerAction.id ) {
+
+                    if(playerAction.direction) {
+                        player.move(playerAction.direction)
                     }
-                    if (action.selectAbility) {
-                        console.log('select ability')
-                        player.selectAbility(action.selectAbility)
+                    if(playerAction.rotation) {
+                        player.rotateFromPointer(playerAction.rotation)
                     }
-                    if (action.action) {
-                        console.log('action')
+                    if (playerAction.selectAbility) {
+                        player.selectAbility(playerAction.selectAbility)
+                    }
+                    if (playerAction.action) {
+                        this.player.action(playerAction.action)
                     }
                 }
             })
-        })
-
-        this.game.events.on(Event.playerFire, (projectileModel: ProjectileModel) => {
-            this.projectiles.fire(
-                projectileModel.key,
-                projectileModel.fromPlayerId,
-                new Phaser.Math.Vector2(projectileModel.x, projectileModel.y),
-                projectileModel.rotation
-            )
         })
     }
     
@@ -260,38 +253,6 @@ export class MainScene extends Phaser.Scene {
         }
     }
     
-    public syncProjectileFire(
-        projectileKey: string,
-        fromPlayerId: string,
-        position: Phaser.Math.Vector2,
-        rotation: number
-    ): void {
-        if (fromPlayerId === this.player.id) {
-            this.client.emitGameFire({
-                key: projectileKey,
-                fromPlayerId: fromPlayerId,
-                x: position.x,
-                y: position.y,
-                rotation: rotation,
-            })
-        }
-    }
-
-    // public syncMove(
-    //     projectileKey: string,
-    //     fromPlayerId: string,
-    //     position: Phaser.Math.Vector2,
-    //     rotation: number
-    // ): void {
-    //     if (fromPlayerId === this.player.id) {
-    //         this.client.emitGameMove({
-    //             x: position.x,
-    //             y: position.y,
-    //             rotation: rotation,
-    //         })
-    //     }
-    // }
-
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
             this.cameras.main.flash(1 * 1000, 125, 125, 125)

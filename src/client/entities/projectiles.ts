@@ -465,15 +465,6 @@ export class Projectiles
         }[projectileKeyName]
     }
 
-    public syncFire(
-        projectileKey: string,
-        fromPlayerId: string,
-        position: Phaser.Math.Vector2,
-        rotation?: number
-    ): void {
-        this.scene.syncProjectileFire(projectileKey, fromPlayerId, position, rotation)
-    }
-    
     public fire(
         key: string,
         fromPlayerId: string,

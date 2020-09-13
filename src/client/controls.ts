@@ -56,6 +56,8 @@ export class PlayerControl {
     public active: boolean
     public previousDirection: PlayerDirection
     public currentDirection: PlayerDirection
+    public previousMouseRotation: number
+    public currentMouseRotation: number
     
     constructor(scene: MainScene, player: Player) {
         this.scene = scene
@@ -63,6 +65,8 @@ export class PlayerControl {
         this.player = player
         this.previousDirection = {x: 0, y: 0}
         this.currentDirection = {x: 0, y: 0}
+        this.previousMouseRotation = 0
+        this.currentMouseRotation = 0
         this.canLeftTrigger = true
         this.canRightTrigger = true
         this.active = true
@@ -81,6 +85,7 @@ export class PlayerControl {
             ability3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
             ability4: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
         }
+
     }
 
     public handleMovement(): void {
@@ -131,12 +136,17 @@ export class PlayerControl {
     
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
-        const angleToPointer = Phaser.Math.Angle.Between(
+        const pointerRotation = Phaser.Math.Angle.Between(
             this.player.body.center.x, this.player.body.center.y,
             this.scene.pointerPosition.x, this.scene.pointerPosition.y
         ) 
+
+        this.previousMouseRotation = this.currentMouseRotation
+        this.currentMouseRotation = pointerRotation
+        if (this.currentMouseRotation !== this.previousMouseRotation) {
+            this.action.rotation = this.currentMouseRotation
+        }
         
-        this.player.rotation = angleToPointer + Math.PI / 2
 
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
@@ -174,7 +184,8 @@ export class PlayerControl {
             this.action = {}
             this.handleKeyboard()
             this.handleMouse()
-            if(this.action) {
+            if(Object.keys(this.action).length > 0 ) {
+                console.log(this.action)
                 this.client.emitGameAction({
                     id: this.player.id,
                     ...this.action,
