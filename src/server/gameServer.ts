@@ -81,12 +81,12 @@ export class GameServer {
         const isFromLoby = this.roomToLobyState.has(room)
         const isFromPlayerSelection = this.roomToPlayerSelectionState.has(room)
         const isFromGame = this.roomToGameState.has(room)
-        this.debugRoom(socket)
         if (isFromLoby) {
             this.handleLobyEnd(socket)
         } else if (isFromPlayerSelection) {
             this.handlePlayerSelectionEnd(socket)
         } else if (isFromGame) {
+            this.handleGameQuit(socket)
             this.handleGameEnd(socket)
         }
     }
@@ -155,24 +155,32 @@ export class GameServer {
         socket.emit(GameEvent.init, gameState)
     }
 
-    public handleGameEnd(socket) {
-        socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.end)
-        socket.leave(this.clientToRoom.get(socket.id))
-        this.clientToRoom.delete(socket.id)
-    }
-
     public handleGameJoined(socket) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const newPlayer = gameState.players.find((player) => player.id === socket.id)
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.joined, newPlayer)
+        
     }
 
     public handleGameQuit(socket) {
+        console.log('quit is called first')
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        const quitPlayer = gameState.players.find((player) => player.id === socket.id)
-        socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)        
+        const quitPlayerId = gameState.players.findIndex((player) => player.id === socket.id)
+        const quitPlayer = gameState.players[quitPlayerId]
+        gameState.players.splice(quitPlayerId, 1)
+        socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)
     }
 
+    public handleGameEnd(socket) {
+        console.log('end is call second')
+        socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.end)
+        this.leaveGameRoom(socket)
+        socket.leave(this.clientToRoom.get(socket.id))
+        this.clientToRoom.delete(socket.id)
+    }
+
+
+    
     public handleGameAction(socket, actions: PlayerAction) {
         this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.action, actions)        
     }
@@ -226,23 +234,30 @@ export class GameServer {
 
     public leavePlayerSelectionRoom(socket: Socket) {
         const selectionRoom = this.clientToRoom.get(socket.id)
-        // should handle player but now we only have one player so we delete the entire room
         this.roomToPlayerSelectionState.delete(selectionRoom)
     }
+
+    public leaveGameRoom(socket: Socket) {
+        const gameRoom = this.clientToRoom.get(socket.id)
+        this.debugRoom(socket, gameRoom)
+        if (this.roomToGameState.get(gameRoom).players.length === 0) {
+            this.roomToGameState.delete(gameRoom)            
+        }
+    }
+    
     
     
     public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }
 
-    public debugRoom(socket, depth=1) {
-        const currentRoom = this.clientToRoom.get(socket.id)
-        const isFromLoby = this.roomToLobyState.has(currentRoom)
-        const isFromPlayerSelection = this.roomToPlayerSelectionState.has(currentRoom)
-        const isFromGame = this.roomToGameState.has(currentRoom)
+    public debugRoom(socket, room, depth=1) {
+        const isFromLoby = this.roomToLobyState.has(room)
+        const isFromPlayerSelection = this.roomToPlayerSelectionState.has(room)
+        const isFromGame = this.roomToGameState.has(room)
         
         console.dir({
-            currentRoom,
+            room,
             isFromLoby,
             isFromPlayerSelection,
             isFromGame,
