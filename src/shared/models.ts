@@ -112,4 +112,5 @@ export interface PlayerSelectionState {
 export interface GameState {
     gameMode: string
     players: Array<PlayerModel>
+    hostId?: string
 }

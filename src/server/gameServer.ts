@@ -153,6 +153,9 @@ export class GameServer {
         this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
         gameState.players.push(...playerSelectionState.players)
         socket.emit(GameEvent.init, gameState)
+        if(!gameState.hostId ) {
+            gameState.hostId = gameState.players[0].id
+        }
     }
 
     public handleGameJoined(socket) {
@@ -163,16 +166,17 @@ export class GameServer {
     }
 
     public handleGameQuit(socket) {
-        console.log('quit is called first')
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        const quitPlayerId = gameState.players.findIndex((player) => player.id === socket.id)
-        const quitPlayer = gameState.players[quitPlayerId]
-        gameState.players.splice(quitPlayerId, 1)
+        const quitPlayerIndex = gameState.players.findIndex((player) => player.id === socket.id)
+        const quitPlayer = gameState.players[quitPlayerIndex]
+        gameState.players.splice(quitPlayerIndex, 1)
+        if(quitPlayer.id === gameState.hostId && gameState.players.length > 0) {
+            gameState.hostId = gameState.players[0].id
+        }
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)
     }
 
     public handleGameEnd(socket) {
-        console.log('end is call second')
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.end)
         this.leaveGameRoom(socket)
         socket.leave(this.clientToRoom.get(socket.id))
@@ -191,7 +195,7 @@ export class GameServer {
         const roomName = uuidv4()
         this.roomToGameState.set(roomName, {
             gameMode: playerSelectionState.gameMode,
-            players: []
+            players: [],
         })
         return roomName
     }
@@ -239,8 +243,9 @@ export class GameServer {
 
     public leaveGameRoom(socket: Socket) {
         const gameRoom = this.clientToRoom.get(socket.id)
-        this.debugRoom(socket, gameRoom)
-        if (this.roomToGameState.get(gameRoom).players.length === 0) {
+        const gameState = this.roomToGameState.get(gameRoom)
+        
+        if (gameState.players.length === 0) {
             this.roomToGameState.delete(gameRoom)            
         }
     }
