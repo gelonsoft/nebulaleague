@@ -15,8 +15,8 @@ import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerModel, ProjectileModel, PlayerMovement, PlayerDirection, PlayerAction } from '../../shared/models'
-import { GameInitConfig, Client } from '../client'
+import { PlayerModel, PlayerAction } from '../../shared/models'
+import { Client } from '../client'
 import  {Event } from '../events'
 
 export class MainScene extends Phaser.Scene {
@@ -83,7 +83,6 @@ export class MainScene extends Phaser.Scene {
 
         this.settingCamera()
         this.createBackground()
-        // this.createConsumables()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
 
@@ -195,6 +194,8 @@ export class MainScene extends Phaser.Scene {
 
                     if(playerAction.direction) {
                         player.move(playerAction.direction)
+                    } else {
+                        player.move(player.previousDirection)
                     }
                     if(playerAction.rotation) {
                         player.rotateFromPointer(playerAction.rotation)
@@ -203,7 +204,7 @@ export class MainScene extends Phaser.Scene {
                         player.selectAbility(playerAction.selectAbility)
                     }
                     if (playerAction.action) {
-                        this.player.action(playerAction.action)
+                        player.action(playerAction.action)
                     }
                 }
             })
@@ -339,15 +340,6 @@ export class MainScene extends Phaser.Scene {
                 null,
                 this
             )
-
-            // // collide with consumables
-            // this.physics.overlap(
-            //     this.consumables,
-            //     this.players,
-            //     this.handlePlayerConsumableOverlap,
-            //     null,
-            //     this
-            // )
 
             // draw weapon and skills
             if (this.player.active) {
