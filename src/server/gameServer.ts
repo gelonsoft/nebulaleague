@@ -152,10 +152,10 @@ export class GameServer {
         socket.join(playerSelectionState.gameRoom)
         this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
         gameState.players.push(...playerSelectionState.players)
-        socket.emit(GameEvent.init, gameState)
         if(!gameState.hostId ) {
             gameState.hostId = gameState.players[0].id
         }
+        socket.emit(GameEvent.init, gameState)
     }
 
     public handleGameJoined(socket) {
@@ -172,6 +172,7 @@ export class GameServer {
         gameState.players.splice(quitPlayerIndex, 1)
         if(quitPlayer.id === gameState.hostId && gameState.players.length > 0) {
             gameState.hostId = gameState.players[0].id
+            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.newHost, gameState.hostId)
         }
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.quit, quitPlayer)
     }

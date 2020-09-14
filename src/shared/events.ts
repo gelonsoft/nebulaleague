@@ -22,6 +22,5 @@ export class GameEvent {
     public static readonly quit = "game:quit"
     public static readonly joined = "game:joined"
     public static readonly action = "game:action"
-    public static readonly move = "game:move"
-    public static readonly hit = "game:hit"
+    public static readonly newHost = "game:newHost"
 }

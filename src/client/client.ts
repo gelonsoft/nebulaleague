@@ -30,6 +30,7 @@ export class Client {
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
+    public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
     
@@ -45,6 +46,7 @@ export class Client {
         this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
+        this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
         this.attachListeners()
@@ -132,17 +134,21 @@ export class Client {
     public addGameListener(): void {
         this.socket.on(GameEvent.init, (gameState: GameState) => {
             this.gameState = gameState
+            this.isHost = gameState.hostId === this.id
             this.game.events.emit(ClientEvent.gameReady)
         })
 
         this.socket.on(GameEvent.joined, (playerReceive: PlayerModel) => {
-            this.gameState.players.push(playerReceive)
             this.game.events.emit(ClientEvent.playerJoined, playerReceive)
+        })
+
+        this.socket.on(GameEvent.newHost, (hostId: string) => {
+            if(this.id === hostId) {
+                this.isHost = true
+            }
         })
         
         this.socket.on(GameEvent.quit, (playerReceive: PlayerModel) => {
-            this.gameState.players =
-                this.gameState.players.filter((player: PlayerModel) => playerReceive.id !== player.id)
             this.game.events.emit(ClientEvent.playerQuit, playerReceive.id)
         })
 
