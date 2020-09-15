@@ -109,7 +109,6 @@ export class PlayerControl {
         if((this.currentDirection.x !== this.previousDirection.x) ||
            (this.currentDirection.y !== this.previousDirection.y) ) {
             this.action.direction = this.currentDirection
-            console.log(this.action.direction)
         }
     }
 

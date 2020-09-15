@@ -13,22 +13,9 @@ import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
 import { createEffectIconsContainer, refreshEffectIcons } from './entities/effects'
-import { PlayerDirection } from '../shared/models'
+import { PlayerDirection, PlayerModel, ControlledBy } from '../shared/models'
 
 
-
-export interface PlayerConfig {
-    id: string
-    name: string
-    x: number
-    y: number
-    weaponPrimaryKey: string
-    weaponSecondaryKey:string
-    abilityKey1: string
-    abilityKey2: string
-    abilityKey3: string
-    abilityKey4: string
-}
 
 export enum EffectKeys {
     Slow = 'slowed',
@@ -103,6 +90,7 @@ export class Player extends Phaser.GameObjects.Container {
     public playerSprite: Phaser.GameObjects.Sprite
     public healthBar: HealthBar
     public effectIconsContainer: Phaser.GameObjects.Container
+    public controlledBy: ControlledBy
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
     public actions: ActionsInterface
@@ -113,19 +101,22 @@ export class Player extends Phaser.GameObjects.Container {
     public effects: Set<EffectInterface>
     public burningTime: Phaser.Time.TimerEvent | null
     public deathCooldownDelay: number
+    public playerModel: PlayerModel
 
-    constructor(scene: MainScene, playerConfig: PlayerConfig) {
+    constructor(scene: MainScene, playerModel: PlayerModel) {
         super(scene)
         this.scene = scene
+        this.playerModel = playerModel
         this.previousDirection = { x: 0, y: 0 }
-        this.id = playerConfig.id
-        this.x = playerConfig.x
-        this.y = playerConfig.y
+        this.id = playerModel.id
+        this.x = playerModel.x
+        this.y = playerModel.y
         this.maxHealth = PLAYER_DEFAULT_HEALTH
         this.health = this.maxHealth
         this.defaultSpeed = PLAYER_DEFAULT_SPEED
         this.isParalyzed = false
         this.isStunned = false
+        this.controlledBy = playerModel.controlledBy
         this.deathCooldownDelay = 10
 
         this.initPlayer()
@@ -148,12 +139,12 @@ export class Player extends Phaser.GameObjects.Container {
         }
 
         this.actions = {
-            weaponPrimary: this.scene.weapons[playerConfig.weaponPrimaryKey],
-            weaponSecondary: this.scene.weapons[playerConfig.weaponSecondaryKey],
-            ability1: this.scene.abilities[playerConfig.abilityKey1],
-            ability2: this.scene.abilities[playerConfig.abilityKey2],
-            ability3: this.scene.abilities[playerConfig.abilityKey3],
-            ability4: this.scene.abilities[playerConfig.abilityKey4],
+            weaponPrimary: this.scene.weapons[playerModel.weaponPrimaryKey],
+            weaponSecondary: this.scene.weapons[playerModel.weaponSecondaryKey],
+            ability1: this.scene.abilities[playerModel.abilityKey1],
+            ability2: this.scene.abilities[playerModel.abilityKey2],
+            ability3: this.scene.abilities[playerModel.abilityKey3],
+            ability4: this.scene.abilities[playerModel.abilityKey4],
         }
         this.selectedAbilityKey = null
         this.effects = new Set()
@@ -583,5 +574,23 @@ export class Player extends Phaser.GameObjects.Container {
         this.setVisible(true)
         this.healthBar.setVisible(true)
         this.effectIconsContainer.setVisible(false)
+    }
+
+    public getUpdatedModel() {
+        return {
+            id: this.id,
+            name: this.name,
+            x: this.x,
+            y: this.y,
+            rotation: this.rotation,
+            controlledBy: this.controlledBy,
+            selectedAbilityKey: this.selectedAbilityKey,
+            weaponPrimaryKey: this.playerModel.weaponPrimaryKey,
+            weaponSecondaryKey: this.playerModel.weaponSecondaryKey,
+            abilityKey1: this.playerModel.abilityKey1,
+            abilityKey2: this.playerModel.abilityKey2,
+            abilityKey3: this.playerModel.abilityKey3,
+            abilityKey4: this.playerModel.abilityKey4,
+        }
     }
 }

@@ -6,12 +6,12 @@ import {
     GameState,
     LobyState,
     PlayerSelectionState,
-    ControlledBy,
     PlayerAction,
     User,
     PlayerConfig,
+    GameStateUpdated,
 }
-from "../shared/models"
+    from "../shared/models"
 
 
 import { Config } from "../shared/config"
@@ -31,7 +31,7 @@ export class GameServer {
     public roomToPlayerSelectionState: Map<string, PlayerSelectionState>
     public roomToGameState: Map<string, GameState>
     public clientToRoom: Map<string, string>
-    
+
     constructor(io: SocketIO.Server) {
         this.io = io
         this.roomToLobyState = new Map()
@@ -64,11 +64,12 @@ export class GameServer {
         socket.on(PlayerSelectionEvent.init, (user: User) => this.handlePlayerSelectionInit(socket, user))
         socket.on(PlayerSelectionEvent.start, (player: PlayerConfig) => this.handlePlayerSelectionStart(socket, player))
         socket.on(PlayerSelectionEvent.end, () => this.handlePlayerSelectionEnd(socket))
-        
+
 
         socket.on(GameEvent.init, (playerSelection: PlayerSelectionState) => this.handleGameInit(socket, playerSelection))
         socket.on(GameEvent.end, () => this.handleGameEnd(socket))
         socket.on(GameEvent.joined, () => this.handleGameJoined(socket))
+        socket.on(GameEvent.updated, (gameState: GameStateUpdated) => this.handleGameUpdate(socket, gameState))
         socket.on(GameEvent.quit, () => this.handleGameQuit(socket))
         socket.on(GameEvent.action, (action: PlayerAction) => this.handleGameAction(socket, action))
 
@@ -122,12 +123,12 @@ export class GameServer {
         this.clientToRoom.delete(socket.id)
     }
 
-    
+
     public handlePlayerSelectionInit(socket, user: User) {
         const playerSelectionState = this.roomToPlayerSelectionState.get(user.playerSelectionRoom)
         socket.join(user.playerSelectionRoom)
         this.clientToRoom.set(socket.id, user.playerSelectionRoom)
-        playerSelectionState.players.push({...Config.defaultPlayerModel, id: socket.id})
+        playerSelectionState.players.push({ ...Config.defaultPlayerModel, id: socket.id })
         this.io.to(this.clientToRoom.get(socket.id)).emit(PlayerSelectionEvent.init)
     }
 
@@ -147,22 +148,29 @@ export class GameServer {
     }
 
 
-    public handleGameInit(socket, playerSelectionState: PlayerSelectionState) {
+    public handleGameInit(socket: Socket, playerSelectionState: PlayerSelectionState) {
         const gameState = this.roomToGameState.get(playerSelectionState.gameRoom)
         socket.join(playerSelectionState.gameRoom)
         this.clientToRoom.set(socket.id, playerSelectionState.gameRoom)
         gameState.players.push(...playerSelectionState.players)
-        if(!gameState.hostId ) {
+        if (!gameState.hostId) {
             gameState.hostId = gameState.players[0].id
+        } else {
+            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.refreshServerFromHost)
         }
         socket.emit(GameEvent.init, gameState)
+    }
+
+    public handleGameUpdate(socket, gameStateUpdated: GameStateUpdated) {
+        const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
+        Object.assign(gameState, gameStateUpdated)
+        socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.updated, gameState)
     }
 
     public handleGameJoined(socket) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const newPlayer = gameState.players.find((player) => player.id === socket.id)
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.joined, newPlayer)
-        
     }
 
     public handleGameQuit(socket) {
@@ -170,7 +178,7 @@ export class GameServer {
         const quitPlayerIndex = gameState.players.findIndex((player) => player.id === socket.id)
         const quitPlayer = gameState.players[quitPlayerIndex]
         gameState.players.splice(quitPlayerIndex, 1)
-        if(quitPlayer.id === gameState.hostId && gameState.players.length > 0) {
+        if (quitPlayer.id === gameState.hostId && gameState.players.length > 0) {
             gameState.hostId = gameState.players[0].id
             socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.newHost, gameState.hostId)
         }
@@ -185,12 +193,11 @@ export class GameServer {
     }
 
 
-    
     public handleGameAction(socket, actions: PlayerAction) {
-        this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.action, actions)        
+        this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.action, actions)
     }
 
-    
+
 
     public newGameRoom(playerSelectionState: PlayerSelectionState): string {
         const roomName = uuidv4()
@@ -209,13 +216,13 @@ export class GameServer {
         })
         return roomName
     }
-    
+
 
     public startGameRoom(socket: Socket, playerSelectionState: PlayerSelectionState): string {
-        let choosenRoom:string | null = null
-        if(playerSelectionState.gameMode === 'ffa') {
+        let choosenRoom: string | null = null
+        if (playerSelectionState.gameMode === 'ffa') {
             for (const [roomName, gameState] of this.roomToGameState.entries()) {
-                if(gameState.gameMode === 'ffa' && gameState.players.length < 10) {
+                if (gameState.gameMode === 'ffa' && gameState.players.length < 10) {
                     choosenRoom = roomName
                     break
                 }
@@ -227,10 +234,10 @@ export class GameServer {
         return choosenRoom
     }
 
-    
+
     public startPlayerSelectionRoom(socket: Socket, lobyUser: User): string {
-        let choosenRoom:string | null = null
-        if(lobyUser.gameMode === 'ffa') {
+        let choosenRoom: string | null = null
+        if (lobyUser.gameMode === 'ffa') {
             choosenRoom = this.newPlayerSelectionRoom(lobyUser)
         }
         return choosenRoom
@@ -245,23 +252,22 @@ export class GameServer {
     public leaveGameRoom(socket: Socket) {
         const gameRoom = this.clientToRoom.get(socket.id)
         const gameState = this.roomToGameState.get(gameRoom)
-        
+
         if (gameState.players.length === 0) {
-            this.roomToGameState.delete(gameRoom)            
+            this.roomToGameState.delete(gameRoom)
         }
     }
-    
-    
-    
+
+
     public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }
 
-    public debugRoom(socket, room, depth=1) {
+    public debugRoom(socket, room, depth = 1) {
         const isFromLoby = this.roomToLobyState.has(room)
         const isFromPlayerSelection = this.roomToPlayerSelectionState.has(room)
         const isFromGame = this.roomToGameState.has(room)
-        
+
         console.dir({
             room,
             isFromLoby,
@@ -270,8 +276,6 @@ export class GameServer {
             roomToLobyState: this.roomToLobyState,
             roomToPlayerSelectionState: this.roomToPlayerSelectionState,
             roomToGameState: this.roomToGameState,
-        }, {depth: depth})        
+        }, { depth: depth })
     }
-
-    
 }

@@ -19,6 +19,8 @@ export class GameEvent {
     public static readonly init = "game:init"
     public static readonly end = "game:end"
     public static readonly start = "game:start"
+    public static readonly updated = "game:updated"
+    public static readonly refreshServerFromHost = "game:refreshServerFromHost"
     public static readonly quit = "game:quit"
     public static readonly joined = "game:joined"
     public static readonly action = "game:action"

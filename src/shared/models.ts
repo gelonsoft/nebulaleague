@@ -34,7 +34,7 @@ export interface PlayerConfig {
     abilityKey1: string
     abilityKey2: string
     abilityKey3: string
-    abilityKey4: string    
+    abilityKey4: string
 }
 
 export interface PlayerChanged {
@@ -93,6 +93,7 @@ export interface ProjectileModel {
 }
 
 
+
 export interface User {
     name?: string
     gameMode?: string
@@ -107,6 +108,10 @@ export interface PlayerSelectionState {
     gameMode: string
     players: Array<PlayerModel>
     gameRoom?: string
+}
+
+export interface GameStateUpdated {
+    players: Array<PlayerModel>
 }
 
 export interface GameState {

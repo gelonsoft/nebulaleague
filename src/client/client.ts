@@ -10,9 +10,11 @@ import {
     PlayerAction,
     User,
     PlayerSelectionState,
+    GameStateUpdated,
 } from '../shared/models'
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
+import { Player } from './player'
 
 export interface GameInitConfig {
     player: PlayerModel
@@ -30,6 +32,7 @@ export class Client {
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
+    public isStarted: boolean
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
@@ -46,12 +49,16 @@ export class Client {
         this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
+        this.isStarted = false
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
         this.attachListeners()
     }
 
+    get id(): string {
+        return this.socket.id
+    }
 
     get isGameReady(): boolean {
         return this.isGameInit && this.isGameJoined
@@ -68,7 +75,6 @@ export class Client {
     public emitLobyStart(user: User): void {
         this.socket.emit(LobyEvent.start, user)
     }
-
 
     public emitPlayerSelectionInit(): void {
         this.socket.emit(PlayerSelectionEvent.init, this.lobyUser)
@@ -92,7 +98,6 @@ export class Client {
     
 
     public emitGameInit() {
-        console.log(this.playerSelectionState)
         this.socket.emit(GameEvent.init, this.playerSelectionState)
     }
     
@@ -104,9 +109,8 @@ export class Client {
         this.socket.emit(GameEvent.action, actions)
     }
 
-    
-    get id(): string {
-        return this.socket.id
+    public emitGameUpdated(gameUpdated: GameStateUpdated) {
+        this.socket.emit(GameEvent.updated, gameUpdated)
     }
 
     
@@ -135,10 +139,39 @@ export class Client {
         this.socket.on(GameEvent.init, (gameState: GameState) => {
             this.gameState = gameState
             this.isHost = gameState.hostId === this.id
-            this.game.events.emit(ClientEvent.gameReady)
+            if(this.isHost) {
+                this.game.events.emit(ClientEvent.gameReady)
+                this.isStarted = true
+            }
         })
 
+        this.socket.on(GameEvent.updated, (updatedGamestate: GameState) => {
+            if(!this.isStarted) {
+                updatedGamestate.players.push(this.gameState.players[this.gameState.players.length - 1])
+                this.gameState = updatedGamestate
+                this.game.events.emit(ClientEvent.gameReady)
+                this.isStarted = true
+            }
+        })
+
+        this.socket.on(GameEvent.refreshServerFromHost, () => {
+            if(this.isHost) {
+                const updatedPlayers =
+                    this.mainScene.players.children.getArray().map((player: Player) => {
+                        return player.getUpdatedModel()
+                    })
+                const gameStateUpdated = {
+                    players: updatedPlayers
+                }
+                this.emitGameUpdated(gameStateUpdated)
+            }
+        })
+        
+
         this.socket.on(GameEvent.joined, (playerReceive: PlayerModel) => {
+            console.log('recieve')
+            console.log(playerReceive)
+            
             this.game.events.emit(ClientEvent.playerJoined, playerReceive)
         })
 
