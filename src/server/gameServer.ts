@@ -69,6 +69,7 @@ export class GameServer {
         socket.on(GameEvent.init, (playerSelection: PlayerSelectionState) => this.handleGameInit(socket, playerSelection))
         socket.on(GameEvent.end, () => this.handleGameEnd(socket))
         socket.on(GameEvent.joined, () => this.handleGameJoined(socket))
+        socket.on(GameEvent.refreshServer, () => this.handleGameRefresh(socket))
         socket.on(GameEvent.updated, (gameState: GameStateUpdated) => this.handleGameUpdate(socket, gameState))
         socket.on(GameEvent.quit, () => this.handleGameQuit(socket))
         socket.on(GameEvent.action, (action: PlayerAction) => this.handleGameAction(socket, action))
@@ -155,10 +156,14 @@ export class GameServer {
         gameState.players.push(...playerSelectionState.players)
         if (!gameState.hostId) {
             gameState.hostId = gameState.players[0].id
-        } else {
-            socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.refreshServerFromHost)
-        }
+        } 
         socket.emit(GameEvent.init, gameState)
+    }
+
+    public handleGameRefresh(socket: Socket) {
+        const hostId = this.roomToGameState.get(this.clientToRoom.get(socket.id)).hostId
+        console.log(hostId)
+        socket.to(hostId).emit(GameEvent.refreshServer)
     }
 
     public handleGameUpdate(socket, gameStateUpdated: GameStateUpdated) {
@@ -171,6 +176,9 @@ export class GameServer {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const newPlayer = gameState.players.find((player) => player.id === socket.id)
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.joined, newPlayer)
+        // socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.refreshServerFromHost)
+        
+        // socket.emit(GameEvent.updated, gameState)
     }
 
     public handleGameQuit(socket) {

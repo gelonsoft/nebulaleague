@@ -109,6 +109,10 @@ export class Client {
         this.socket.emit(GameEvent.action, actions)
     }
 
+    public emitGameRefresh() {
+        this.socket.emit(GameEvent.refreshServer)
+    }
+
     public emitGameUpdated(gameUpdated: GameStateUpdated) {
         this.socket.emit(GameEvent.updated, gameUpdated)
     }
@@ -139,39 +143,36 @@ export class Client {
         this.socket.on(GameEvent.init, (gameState: GameState) => {
             this.gameState = gameState
             this.isHost = gameState.hostId === this.id
-            if(this.isHost) {
+            if(!this.isHost) {
+                this.emitGameRefresh()
+            } else {
                 this.game.events.emit(ClientEvent.gameReady)
-                this.isStarted = true
             }
         })
 
         this.socket.on(GameEvent.updated, (updatedGamestate: GameState) => {
-            if(!this.isStarted) {
-                updatedGamestate.players.push(this.gameState.players[this.gameState.players.length - 1])
-                this.gameState = updatedGamestate
-                this.game.events.emit(ClientEvent.gameReady)
-                this.isStarted = true
-            }
+            console.log({
+                gameState: this.gameState,
+                updatedGamestate: updatedGamestate,
+            })
+            
+            this.gameState = updatedGamestate
+            this.game.events.emit(ClientEvent.gameReady)
         })
 
-        this.socket.on(GameEvent.refreshServerFromHost, () => {
-            if(this.isHost) {
-                const updatedPlayers =
-                    this.mainScene.players.children.getArray().map((player: Player) => {
-                        return player.getUpdatedModel()
-                    })
-                const gameStateUpdated = {
-                    players: updatedPlayers
-                }
-                this.emitGameUpdated(gameStateUpdated)
+        this.socket.on(GameEvent.refreshServer, () => {
+            const updatedPlayers =
+                this.mainScene.players.children.getArray().map((player: Player) => {
+                    return player.getUpdatedModel()
+                })
+            const gameStateUpdated = {
+                players: updatedPlayers
             }
+            this.emitGameUpdated(gameStateUpdated)
         })
         
 
         this.socket.on(GameEvent.joined, (playerReceive: PlayerModel) => {
-            console.log('recieve')
-            console.log(playerReceive)
-            
             this.game.events.emit(ClientEvent.playerJoined, playerReceive)
         })
 
