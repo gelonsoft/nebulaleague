@@ -15,9 +15,9 @@ import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
 import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerModel, PlayerAction, PlayerConfig } from '../../shared/models'
+import { PlayerModel, PlayerAction, PlayerConfig, Position } from '../../shared/models'
 import { Client } from '../client'
-import  {Event } from '../events'
+import { Event } from '../events'
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
@@ -53,7 +53,7 @@ export class MainScene extends Phaser.Scene {
             )
         }, false)
         this.client = this.game.registry.get('client')
-        
+
         this.randomTable = new RandomItem()
         this.randomTable
             .add('pill', 20)
@@ -64,7 +64,7 @@ export class MainScene extends Phaser.Scene {
             window['p'] = this.player
             window['m'] = this
         }
-        
+
     }
 
     public create(): void {
@@ -87,7 +87,7 @@ export class MainScene extends Phaser.Scene {
         this.mainControl = new MainControl(this)
 
     }
-    
+
 
     public settingCamera(): void {
         this.mainCameraZoom = 0.5
@@ -174,7 +174,7 @@ export class MainScene extends Phaser.Scene {
     // }
 
 
-    public registerEvent() :void {
+    public registerEvent(): void {
         this.game.events.on(Event.playerJoined, (playerModel: PlayerModel) => {
             const otherPlayer = new Player(this, playerModel)
             this.players.add(otherPlayer)
@@ -190,28 +190,32 @@ export class MainScene extends Phaser.Scene {
 
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             this.players.children.getArray().filter((player: Player) => {
-                if (player.id === playerAction.id ) {
+                if (player.id === playerAction.id) {
 
-                    if(playerAction.direction) {
+                    if (playerAction.direction) {
                         player.move(playerAction.direction)
                     } else {
                         player.move(player.previousDirection)
                     }
-                    if(playerAction.rotation) {
+                    if (playerAction.rotation) {
                         player.rotateFromPointer(playerAction.rotation)
                     }
                     if (playerAction.selectAbility) {
                         player.selectAbility(playerAction.selectAbility)
                     }
+
                     if (playerAction.action) {
-                        player.action(playerAction.action)
+                        const pointerVector = new Phaser.Math.Vector2(
+                            playerAction.pointerPosition.x, playerAction.pointerPosition.y
+                        )
+                        player.action(playerAction.action, pointerVector)
                     }
                 }
             })
         })
     }
-    
-    
+
+
     public syncHealth(player: Player): void {
         if (player.id === this.player.id) {
             this.events.emit(Event.playerHealthChanged)
@@ -253,7 +257,7 @@ export class MainScene extends Phaser.Scene {
             this.events.emit(Event.deathCooldownChanged, cooldown)
         }
     }
-    
+
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
             this.cameras.main.flash(1 * 1000, 125, 125, 125)
@@ -277,10 +281,20 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    get pointerPosition(): Phaser.Math.Vector2 {
+    get pointerPositionVector(): Phaser.Math.Vector2 {
         const pointer = this.input.activePointer
         return this.cameras.main.getWorldPoint(pointer.x, pointer.y)
     }
+
+    get pointerPosition(): Position {
+        const pointer = this.input.activePointer
+        const pointerFromWorld = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
+        return {
+            x: pointerFromWorld.x,
+            y: pointerFromWorld.y,
+        }
+    }
+
 
     public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
         player2.body.velocity.scale(-1)
@@ -290,7 +304,7 @@ export class MainScene extends Phaser.Scene {
     public handleEnemyProjectileCollide(
         hittedPlayer: Player,
         projectile: Phaser.GameObjects.Sprite & ProjectileInterface)
-    : void {
+        : void {
         if (hittedPlayer.id !== projectile.fromPlayerId) {
             projectile.actionOnCollision(hittedPlayer)
         }
@@ -317,7 +331,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     public update(time: number, delta: number): void {
-        if(this.player) {
+        if (this.player) {
             this.mainControl.update()
             this.playerControl.update()
 
@@ -352,6 +366,6 @@ export class MainScene extends Phaser.Scene {
                 .forEach((player: Player) => {
                     player.update()
                 })
-        }            
+        }
     }
 }

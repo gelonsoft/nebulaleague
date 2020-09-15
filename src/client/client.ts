@@ -32,7 +32,6 @@ export class Client {
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
-    public isStarted: boolean
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
@@ -49,7 +48,6 @@ export class Client {
         this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
-        this.isStarted = false
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false

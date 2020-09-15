@@ -50,6 +50,12 @@ export interface PlayerDirection {
     y: number
 }
 
+export interface Position {
+    x: number
+    y: number
+}
+
+
 
 export interface PlayerAction {
     id?: string
@@ -57,6 +63,10 @@ export interface PlayerAction {
     rotation?: number,
     selectAbility?: string,
     action?: string,
+    pointerPosition?: {
+        x: number,
+        y: number
+    }
 }
 
 

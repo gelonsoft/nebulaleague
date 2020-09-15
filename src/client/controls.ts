@@ -146,10 +146,11 @@ export class PlayerControl {
         if (this.currentMouseRotation !== this.previousMouseRotation) {
             this.action.rotation = this.currentMouseRotation
         }
-        
 
+        
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
+                this.action.pointerPosition = this.scene.pointerPosition
                 this.action.action = 'weaponPrimary'
                 this.canLeftTrigger = false
             }    
@@ -157,6 +158,7 @@ export class PlayerControl {
 
         if (this.canRightTrigger) {
             if (pointer.rightButtonDown()) {
+                this.action.pointerPosition = this.scene.pointerPosition
                 this.action.action = 'weaponSecondary'
                 this.canRightTrigger = false
             }            

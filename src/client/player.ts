@@ -67,12 +67,12 @@ interface ActionsInterface {
 
 export interface ActionInterface {
     draw(sourcePosition: Phaser.Math.Vector2,
-         pointerPosition: Phaser.Math.Vector2,
-         isLaserReady?: boolean): void,
+        pointerPosition: Phaser.Math.Vector2,
+        isLaserReady?: boolean): void,
     cleaDraw(): void,
     trigger(player: Player,
-            sourcePosition: Phaser.Math.Vector2,
-            pointerPosition: Phaser.Math.Vector2): void
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2): void
     rangeDistance: number
 }
 
@@ -180,7 +180,7 @@ export class Player extends Phaser.GameObjects.Container {
     public initEffectsContainer(): void {
         this.effectIconsContainer = createEffectIconsContainer(this.scene, 4, 32, 0, -4, 26, 0)
     }
-    
+
     private attachPhysics(): void {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.accelerationChange = PLAYER_ACCELERATION_CHANGE
@@ -213,8 +213,8 @@ export class Player extends Phaser.GameObjects.Container {
     public getNextMove(playerDirection: PlayerDirection): PlayerMoveNextForce {
         const isXChange = this.previousDirection.x !== playerDirection.x
         const isYChange = this.previousDirection.y !== playerDirection.y
-        const newAccelerationSpeedX = isXChange ? this.accelerationSteady: this.accelerationChange
-        const newAccelerationSpeedY = isYChange ? this.accelerationSteady: this.accelerationChange
+        const newAccelerationSpeedX = isXChange ? this.accelerationSteady : this.accelerationChange
+        const newAccelerationSpeedY = isYChange ? this.accelerationSteady : this.accelerationChange
         const newAcceleration = new Phaser.Math.Vector2(playerDirection.x, playerDirection.y)
             .normalize()
             .multiply(new Phaser.Math.Vector2(newAccelerationSpeedX, newAccelerationSpeedY))
@@ -230,7 +230,7 @@ export class Player extends Phaser.GameObjects.Container {
         const newPosition =
             this.body.position.clone()
                 .add(newVelocity.clone().add(newAcceleration)
-                .scale(this.scene.game.loop.delta / 1000))
+                    .scale(this.scene.game.loop.delta / 1000))
 
         return {
             acceleration: newAcceleration,
@@ -245,7 +245,7 @@ export class Player extends Phaser.GameObjects.Container {
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity
         } else {
-            const playerMoveNextForce = this.getNextMove({x:0, y:0})
+            const playerMoveNextForce = this.getNextMove({ x: 0, y: 0 })
             this.body.acceleration = playerMoveNextForce.acceleration
             this.body.velocity = playerMoveNextForce.velocity
         }
@@ -256,30 +256,30 @@ export class Player extends Phaser.GameObjects.Container {
         this.rotation = pointerRotation + Math.PI / 2
     }
 
-    
+
     public draw(): void {
         if (this.selectedAbilityKey) {
             const selectedAbily = this.actions[this.selectedAbilityKey]
-            selectedAbily.draw(this, this.scene.pointerPosition)
+            selectedAbily.draw(this, this.scene.pointerPositionVector)
         } else {
             this.actions.weaponPrimary.draw(
                 this.getPrimaryWeaponPosition(),
-                this.scene.pointerPosition,
+                this.scene.pointerPositionVector,
                 this.actionTimes.weaponPrimary.ready
             )
             this.actions.weaponSecondary.draw(
                 this.getSecondaryWeaponPosition(),
-                this.scene.pointerPosition,
+                this.scene.pointerPositionVector,
                 this.actionTimes.weaponSecondary.ready
             )
         }
     }
 
-    public action(selectedWeaponKey: string): void {
+    public action(selectedWeaponKey: string, pointerPosition: Phaser.Math.Vector2): void {
         if (this.selectedAbilityKey) {
-            this.castSelectedAbility(this.scene.pointerPosition)
+            this.castSelectedAbility(pointerPosition)
         } else {
-            this.fire(selectedWeaponKey, this.scene.pointerPosition)
+            this.fire(selectedWeaponKey, pointerPosition)
         }
     }
 
@@ -322,7 +322,7 @@ export class Player extends Phaser.GameObjects.Container {
         const ability = this.actions[selectedAbilityKey]
         const actionTime = this.actionTimes[selectedAbilityKey]
         const sourceAbilityPosition = this.body.center
-        
+
         if (actionTime.ready) {
             actionTime.ready = false
             ability.trigger(this, sourceAbilityPosition, targetAbilityPosition)
@@ -427,9 +427,9 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public handleEffectCreated (effect: EffectInterface) {
+    public handleEffectCreated(effect: EffectInterface) {
         const value = effect.value
-        switch(effect.name) {
+        switch (effect.name) {
             case EffectKeys.Slow:
             case EffectKeys.Fast:
                 this.body.maxSpeed = this.body.maxSpeed * value
@@ -441,7 +441,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.isStunned = true
                 break
             case EffectKeys.Burn:
-                if(!this.burningTime) {
+                if (!this.burningTime) {
                     this.burningTime = this.scene.time.addEvent({
                         delay: effect.tick * 1000,
                         callback: () => {
@@ -459,7 +459,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     public handleEffectRemoved(effect) {
         const value = effect.value
-        switch(effect.name) {
+        switch (effect.name) {
             case EffectKeys.Slow:
             case EffectKeys.Fast:
                 this.body.maxSpeed = this.body.maxSpeed / value
@@ -481,9 +481,9 @@ export class Player extends Phaser.GameObjects.Container {
         refreshEffectIcons(this.effects, this.effectIconsContainer)
     }
 
-    public hit(damage:number, recieveEffects?: Array<EffectInterface>) {
+    public hit(damage: number, recieveEffects?: Array<EffectInterface>) {
         this.health -= damage
-        if(recieveEffects) {
+        if (recieveEffects) {
             this.addEffects(recieveEffects)
         }
         this.scene.tweens.add({
@@ -512,7 +512,7 @@ export class Player extends Phaser.GameObjects.Container {
             for (const actionTime of Object.values(this.actionTimes)) {
                 actionTime.cooldown = 0
             }
-            
+
             this.scene.startDeathTransition(this)
 
             this.actionTimes.death.cooldown = this.deathCooldownDelay
@@ -525,14 +525,14 @@ export class Player extends Phaser.GameObjects.Container {
                 callbackScope: this,
                 loop: true,
             })
-            
+
             this.scene.time.addEvent({
                 delay: this.deathCooldownDelay * 1000,
                 callback: () => {
                     this.actionTimes.death.cooldown = 0
                     this.actionTimes.death.timerEvent.remove(false)
                     this.actionTimes.death.timerEvent = null
-                    if(!this.active) {
+                    if (!this.active) {
                         this.reset(this.scene.players)
                         this.scene.stopDeathTransition(this)
                     }
@@ -541,7 +541,7 @@ export class Player extends Phaser.GameObjects.Container {
             })
         }
     }
-    
+
     public update() {
         this.healthBar.x = this.body.center.x - this.healthBar.width / 2
         this.healthBar.y = this.body.top - this.healthBar.height - 6
@@ -550,20 +550,20 @@ export class Player extends Phaser.GameObjects.Container {
         this.handleDeath()
     }
 
-    
+
     public reset(otherPlayers: Phaser.Physics.Arcade.Group): void {
         let overlaping = true
         let x = 0
         let y = 0
-        
+
         while (overlaping) {
-            overlaping= false
+            overlaping = false
             const circle = new Phaser.Geom.Circle(x, y, PLAYER_SIZE / 2)
             x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
             y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
-            
+
             otherPlayers.getChildren().forEach((player: Player) => {
-                if (circle.contains(player.x, player.y )) {
+                if (circle.contains(player.x, player.y)) {
                     overlaping = true
                 }
             })
@@ -576,7 +576,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.setVisible(false)
     }
 
-    public getUpdatedModel() {
+    public getUpdatedModel(): PlayerModel {
         return {
             id: this.id,
             name: this.name,
