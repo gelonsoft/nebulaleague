@@ -1,6 +1,6 @@
 import { MainScene } from '../scenes/mainScene'
 import { Player } from '../player'
-import { Projectiles, getDistanceProjectile } from './projectiles'
+import { Projectiles } from './projectiles'
 
 
 export const weaponsConfig = {
@@ -97,7 +97,7 @@ export class Weapon  {
         this.cooldownDelay = weaponConfig.cooldownDelay
         this.projectileKey =  weaponConfig.projectileKey
         this.canFire = true
-        this.rangeDistance = getDistanceProjectile(this.projectileKey)
+        this.rangeDistance = Projectiles.getDistanceProjectile(this.projectileKey)
         this.laser = this.scene.add.graphics({
             lineStyle: weaponConfig.laserConfig
         })

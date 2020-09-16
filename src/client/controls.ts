@@ -9,7 +9,7 @@ export class MainControl {
     public scene: MainScene
     public controls: any
     public isDebugSceneActive: boolean
-    constructor (scene: MainScene) {
+    constructor(scene: MainScene) {
         this.scene = scene
         this.controls = {
             toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
@@ -17,11 +17,11 @@ export class MainControl {
         }
         this.isDebugSceneActive = true
     }
-    
+
     public update(): void {
         const toggleDebugScene = this.scene.input.keyboard.checkDown(this.controls.toggleDebugScene, 200)
-        const toggleHelpMenuDown  = this.scene.input.keyboard.checkDown(this.controls.toggleMenu, 200)
-        
+        const toggleHelpMenuDown = this.scene.input.keyboard.checkDown(this.controls.toggleMenu, 200)
+
         if (this.scene.game.debug && toggleDebugScene && this.isDebugSceneActive) {
             this.scene.scene.pause('debugScene')
             this.isDebugSceneActive = false
@@ -31,7 +31,7 @@ export class MainControl {
         }
 
         if (toggleHelpMenuDown) {
-            if(this.scene.scene.isActive('mainMenuScene')) {
+            if (this.scene.scene.isActive('mainMenuScene')) {
                 this.scene.scene.sleep('mainMenuScene')
             } else {
                 this.scene.scene.launch('mainMenuScene')
@@ -58,13 +58,13 @@ export class PlayerControl {
     public currentDirection: PlayerDirection
     public previousMouseRotation: number
     public currentMouseRotation: number
-    
+
     constructor(scene: MainScene, player: Player) {
         this.scene = scene
         this.client = this.scene.game.registry.get('client')
         this.player = player
-        this.previousDirection = {x: 0, y: 0}
-        this.currentDirection = {x: 0, y: 0}
+        this.previousDirection = { x: 0, y: 0 }
+        this.currentDirection = { x: 0, y: 0 }
         this.previousMouseRotation = 0
         this.currentMouseRotation = 0
         this.canLeftTrigger = true
@@ -89,15 +89,15 @@ export class PlayerControl {
     }
 
     public handleMovement(): void {
-        const left = ( this.controls.moveLeftQwerty.isDown ||
-            this.controls.moveLeftAzerty.isDown ) ? -1: 0
+        const left = (this.controls.moveLeftQwerty.isDown ||
+            this.controls.moveLeftAzerty.isDown) ? -1 : 0
         const right = (this.controls.moveRightDvorak.isDown ||
-            this.controls.moveRightQwerty.isDown ) ? 1: 0
+            this.controls.moveRightQwerty.isDown) ? 1 : 0
         const up = (this.controls.moveUpDvorak.isDown ||
             this.controls.moveUpQwerty.isDown ||
-            this.controls.moveUpAzerty.isDown ) ? -1: 0
+            this.controls.moveUpAzerty.isDown) ? -1 : 0
         const down = (this.controls.moveDownDvorak.isDown ||
-            this.controls.moveDownQwerty.isDown ) ? 1: 0
+            this.controls.moveDownQwerty.isDown) ? 1 : 0
 
         this.previousDirection = this.currentDirection
         const playerDirection: PlayerDirection = {
@@ -106,8 +106,8 @@ export class PlayerControl {
         }
         this.currentDirection = playerDirection
 
-        if((this.currentDirection.x !== this.previousDirection.x) ||
-           (this.currentDirection.y !== this.previousDirection.y) ) {
+        if ((this.currentDirection.x !== this.previousDirection.x) ||
+            (this.currentDirection.y !== this.previousDirection.y)) {
             this.action.direction = this.currentDirection
         }
     }
@@ -131,29 +131,30 @@ export class PlayerControl {
             this.action.selectAbility = 'ability4'
         }
 
-        
+
     }
-    
+
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
         const pointerRotation = Phaser.Math.Angle.Between(
             this.player.body.center.x, this.player.body.center.y,
             this.scene.pointerPosition.x, this.scene.pointerPosition.y
-        ) 
+        )
 
-        this.previousMouseRotation = this.currentMouseRotation
         this.currentMouseRotation = pointerRotation
-        if (this.currentMouseRotation !== this.previousMouseRotation) {
+        if (this.currentMouseRotation <= this.previousMouseRotation - Math.PI / 180 ||
+            this.currentMouseRotation >= this.previousMouseRotation + Math.PI / 180) {
             this.action.rotation = this.currentMouseRotation
+            this.previousMouseRotation = this.currentMouseRotation
         }
 
-        
+
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
                 this.action.pointerPosition = this.scene.pointerPosition
                 this.action.action = 'weaponPrimary'
                 this.canLeftTrigger = false
-            }    
+            }
         }
 
         if (this.canRightTrigger) {
@@ -161,9 +162,9 @@ export class PlayerControl {
                 this.action.pointerPosition = this.scene.pointerPosition
                 this.action.action = 'weaponSecondary'
                 this.canRightTrigger = false
-            }            
+            }
         }
-        
+
         if (pointer.leftButtonReleased()) {
             this.canLeftTrigger = true
         }
@@ -175,18 +176,18 @@ export class PlayerControl {
     public toggleActive(): void {
         this.active = !this.active
     }
-    
+
     public handleKeyboard(): void {
         this.handleMovement()
         this.handleSwitchWeapon()
     }
-    
+
     public update(): void {
         if (this.active) {
             this.action = {}
             this.handleKeyboard()
             this.handleMouse()
-            if(Object.keys(this.action).length > 0 ) {
+            if (Object.keys(this.action).length > 0) {
                 this.client.emitGameAction({
                     id: this.player.id,
                     ...this.action,
@@ -203,7 +204,7 @@ export class DebugControl {
     public cameraControls: any
     public isFreeCamera: boolean
     public isPaused: boolean
-    constructor (scene: DebugScene) {
+    constructor(scene: DebugScene) {
         this.scene = scene
         this.controls = {
             toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
@@ -219,15 +220,15 @@ export class DebugControl {
 
     public update(delta: number): void {
         const toggleCameraDown = this.scene.input.keyboard.checkDown(this.controls.toggleCamera, 200)
-        const togglePauseDown  = this.scene.input.keyboard.checkDown(this.controls.pause, 200)
-        const toggleHelpMenuDown  = this.scene.input.keyboard.checkDown(this.controls.toggleHelpMenu, 200)
+        const togglePauseDown = this.scene.input.keyboard.checkDown(this.controls.pause, 200)
+        const toggleHelpMenuDown = this.scene.input.keyboard.checkDown(this.controls.toggleHelpMenu, 200)
         const slowGameDown = this.scene.input.keyboard.checkDown(this.controls.slowGame, 200)
-        const speedGameDown  = this.scene.input.keyboard.checkDown(this.controls.speedGame, 200)
-        const resetGameSpeedDown  = this.scene.input.keyboard.checkDown(this.controls.resetGame, 200)
+        const speedGameDown = this.scene.input.keyboard.checkDown(this.controls.speedGame, 200)
+        const resetGameSpeedDown = this.scene.input.keyboard.checkDown(this.controls.resetGame, 200)
         const fullscreen = this.scene.input.keyboard.checkDown(this.controls.fullscreen, 200)
-        
+
         if (toggleCameraDown) {
-            if(this.isFreeCamera) {
+            if (this.isFreeCamera) {
                 this.scene.mainScene.cameras.main.stopFollow()
             } else {
                 this.scene.mainScene.cameras.main.startFollow(this.scene.mainScene.player, true)
@@ -236,14 +237,14 @@ export class DebugControl {
         }
 
         if (togglePauseDown) {
-            if(this.isPaused) {
-				this.scene.resumeScene()
-			} else {
+            if (this.isPaused) {
+                this.scene.resumeScene()
+            } else {
                 this.scene.pauseScene()
-			}
+            }
             this.isPaused = !this.isPaused
         }
-        
+
         if (slowGameDown) {
             this.scene.slowDownGame()
         }
@@ -251,11 +252,11 @@ export class DebugControl {
         if (speedGameDown) {
             this.scene.speedUpGame()
         }
-        
+
         if (resetGameSpeedDown) {
             this.scene.resetGameSpeed()
         }
-        
+
         if (toggleHelpMenuDown) {
             this.scene.toggleHelpMenu()
         }
@@ -263,7 +264,7 @@ export class DebugControl {
         this.cameraControls.update(delta)
 
         if (fullscreen) {
-            if(this.scene.scale.isFullscreen) {
+            if (this.scene.scale.isFullscreen) {
                 this.scene.scale.stopFullscreen()
             } else {
                 this.scene.scale.startFullscreen()

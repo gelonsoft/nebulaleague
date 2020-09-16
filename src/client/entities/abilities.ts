@@ -1,6 +1,6 @@
 import { MainScene } from '../scenes/mainScene'
 import { Player } from '../player'
-import { Projectiles, getDistanceProjectile } from './projectiles'
+import { Projectiles } from './projectiles'
 
 
 export enum DrawingStyles {
@@ -170,7 +170,7 @@ export class Ability  {
                 break;
                 
             case DrawingStyles.Ray:
-                this.rangeDistance = getDistanceProjectile(this.projectileKey)
+                this.rangeDistance = Projectiles.getDistanceProjectile(this.projectileKey)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break;

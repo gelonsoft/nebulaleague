@@ -170,13 +170,6 @@ const projectilesConfig = {
 }
 
 
-export function getDistanceProjectile(key): number {
-    const projectileConfig = projectilesConfig[key]
-    return projectileConfig.speed * projectileConfig.lifespan
-}
-
-
-
 export interface ProjectileInterface {
     fire(position: Phaser.Math.Vector2, rotation: number): void
     actionOnCollision(hittedPlayer: Player): void
@@ -202,6 +195,7 @@ export interface ProjectileConfig {
     strokeAlpha?: number
     tick?: number
     triggerAfter?: number
+    shouldBeKilled: false
 }
 
 
@@ -216,7 +210,9 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public damage?: number
     public fromPlayerId: string
     public killEvent: Phaser.Time.TimerEvent
+    public shouldBeKilled: boolean
     public effects?: Array<EffectInterface>
+        
 
     public constructor(scene: MainScene, projectileConfig: ProjectileConfig) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
@@ -228,7 +224,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.fromPlayerId = 'unknown'
         this.effects = projectileConfig.effects || []
         this.killEvent = null
-        
+        this.shouldBeKilled = false
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.radius = projectileConfig.radius
@@ -251,12 +247,15 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.body.velocity.y = uy * this.speed
         this.killEvent = this.scene.time.addEvent({
             delay: this.lifespan * 1000,
-            callback: function() {
+            callback: () => {
+                
+                this.shouldBeKilled = true
+
                 this.kill()
+
             },
             callbackScope: this,
         })
-        // this.scene.syncProjectileFire(this)
     }
 
     public actionOnCollision(hittedPlayer: Player) {
@@ -441,6 +440,32 @@ export class Projectiles
     }
 
 
+    public static getTimeToReachTarget(key: string, targetDistance: number) {
+        if (projectilesConfig[key]?.speed) {
+            return targetDistance / projectilesConfig[key].speed
+        } else if(projectilesConfig[key]?.triggerAfter) {
+            return projectilesConfig[key].triggerAfter 
+        } else {
+            return 0
+        }
+    }
+
+
+    public static getProjectileByClassName(projectileKeyName: string) {
+        return {
+            'Bullet': Bullet,
+            'BlockWithTick': BlockWithTick,
+            'BlockWithDelay': BlockWithDelay,
+        }[projectileKeyName]
+    }
+    
+
+    public static getDistanceProjectile(key): number {
+        const projectileConfig = projectilesConfig[key]
+        return projectileConfig.speed * projectileConfig.lifespan
+    }
+
+    
     public addProjectile(
         key: string,
         projectileConfig: any,
@@ -448,21 +473,13 @@ export class Projectiles
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
         const keys = [...Array(length).keys()]
         keys.forEach((index) => {
-            const ClassName = this.getProjectileByClassName(projectileConfig.className)
+            const ClassName = Projectiles.getProjectileByClassName(projectileConfig.className)
             const projectile = new ClassName(this.scene, projectileConfig)
             projectile.setName(`${key}-${index}`)
             this.projectileByIds.set(projectile.name, projectile)
             group.add(projectile)
         })
         this.projectiles.set(key, group)
-    }
-
-    public getProjectileByClassName(projectileKeyName: string) {
-        return {
-            'Bullet': Bullet,
-            'BlockWithTick': BlockWithTick,
-            'BlockWithDelay': BlockWithDelay,
-        }[projectileKeyName]
     }
 
     public fire(
@@ -477,16 +494,6 @@ export class Projectiles
         projectile.fire(position, rotation)
     }
 
-
-    public getTimeToReachTarget(key: string, targetDistance: number) {
-        if (projectilesConfig[key]?.speed) {
-            return targetDistance / projectilesConfig[key].speed
-        } else if(projectilesConfig[key]?.triggerAfter) {
-            return projectilesConfig[key].triggerAfter 
-        } else {
-            return 0
-        }
-    }
 
     public getAll(): Array<Phaser.Physics.Arcade.Group> {
         return Array.from(this.projectiles.values())

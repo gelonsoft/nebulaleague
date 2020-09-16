@@ -6,6 +6,7 @@ import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } 
 import { PlayerAIConfig } from './playersAI'
 import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
+import { Projectiles } from './entities/projectiles'
 
 export const SEEK_BEHAVIOUR = 'seek'
 export const FLEE_BEHAVIOUR = 'flee'
@@ -355,11 +356,11 @@ export class PlayerAI {
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 
-        const timeToReachTarget = choosenAction.projectiles.getTimeToReachTarget(
+        const timeToReachTarget = Projectiles.getTimeToReachTarget(
             choosenAction.projectileKey,
             choosenPlayer.body.center.clone().distance(this.player.body.center)
         )
-                
+        
         const playerToTarget = choosenPlayer.body.center.clone()
             .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget))
         
