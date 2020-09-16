@@ -5,16 +5,16 @@ import { GameObjects } from "phaser"
 
 const projectilesConfig = {
     pistolBullet: {
-        name: 'pistolBullet',
+        key: 'pistolBullet',
         className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 80,
-        speed: 1300,
+        speed: 1400,
         lifespan: 0.4,
         radius: 14,
     },
     ak47Bullet: {
-        name: 'ak47Bullet',
+        key: 'ak47Bullet',
         className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 70,
@@ -23,7 +23,7 @@ const projectilesConfig = {
         radius: 14,
     },
     p90Bullet: {
-        name: 'p90Bullet',
+        key: 'p90Bullet',
         className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 40,
@@ -32,7 +32,7 @@ const projectilesConfig = {
         radius: 14,
     },
     revolverBullet: {
-        name: 'revolverBullet',
+        key: 'revolverBullet',
         className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 450,
@@ -41,7 +41,7 @@ const projectilesConfig = {
         radius: 16,
     },
     thompsonBullet: {
-        name: 'thompsonBullet',
+        key: 'thompsonBullet',
         className: 'Bullet',
         frame: 'beams-purple1.png',
         damage: 200,
@@ -50,7 +50,7 @@ const projectilesConfig = {
         radius: 18,
     },
     chargedArrowProjectile: {
-        name: 'chargedArrowProjectile',
+        key: 'chargedArrowProjectile',
         className: 'Bullet',
         frame: 'charged_arrow_bullet.png',
         damage: 80,
@@ -64,7 +64,7 @@ const projectilesConfig = {
         }]
     },
     flameProjectile: {
-        name: 'flameProjectile',
+        key: 'flameProjectile',
         className: 'BlockWithTick',
         radius: 50,
         lifespan: 1,
@@ -82,7 +82,7 @@ const projectilesConfig = {
         }]
     },
     rootTipProjectile: {
-        name: 'rootTipProjectile',
+        key: 'rootTipProjectile',
         className: 'BlockWithDelay',
         radius: 60,
         damage: 30,
@@ -99,7 +99,7 @@ const projectilesConfig = {
         }]
     },
     frozenWaveProjectile: {
-        name: 'frozenWaveProjectile',
+        key: 'frozenWaveProjectile',
         className: 'BlockWithDelay',
         radius: 320,
         damage: 10,
@@ -116,7 +116,7 @@ const projectilesConfig = {
         }]
     },
     psychicWaveProjectile: {
-        name: 'psychicWaveProjectile',
+        key: 'psychicWaveProjectile',
         className: 'BlockWithDelay',
         radius: 230,
         damage: 0,
@@ -133,7 +133,7 @@ const projectilesConfig = {
         }]
     },
     lightningWaveProjectile: {
-        name: 'lightningWaveProjectile',
+        key: 'lightningWaveProjectile',
         className: 'BlockWithDelay',
         radius: 260,
         damage: 10,
@@ -150,7 +150,7 @@ const projectilesConfig = {
         }]
     },
     fireWaveProjectile: {
-        name: 'fireWaveProjectile',
+        key: 'fireWaveProjectile',
         className: 'BlockWithDelay',
         radius: 240,
         damage: 30,
@@ -182,6 +182,7 @@ export interface ProjectileInterface {
 }
 
 export interface ProjectileConfig {
+    key: string
     name: string
     frame: string
     speed: number
@@ -195,36 +196,36 @@ export interface ProjectileConfig {
     strokeAlpha?: number
     tick?: number
     triggerAfter?: number
-    shouldBeKilled: false
 }
 
 
 export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {
     public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
-    public gate: number
+    public key: string
     public lifespan: number
     public speed: number
     public shotInterval: number
     public radius: number
+    public goalPosition?: Phaser.Math.Vector2
+    public initialPosition?: Phaser.Math.Vector2
+    public goalDistance?: number
     public damage?: number
     public fromPlayerId: string
     public killEvent: Phaser.Time.TimerEvent
-    public shouldBeKilled: boolean
     public effects?: Array<EffectInterface>
         
 
     public constructor(scene: MainScene, projectileConfig: ProjectileConfig) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
         this.scene = scene
-        this.name = projectileConfig.name
+        this.key = projectileConfig.key
         this.lifespan = projectileConfig.lifespan
         this.speed = projectileConfig.speed
         this.damage = projectileConfig.damage
         this.fromPlayerId = 'unknown'
         this.effects = projectileConfig.effects || []
         this.killEvent = null
-        this.shouldBeKilled = false
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.radius = projectileConfig.radius
@@ -234,35 +235,57 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.setVisible(false)
     }
 
-    public fire(position: Phaser.Math.Vector2, rotation: number) {
-        const ux = Math.cos(rotation)
-        const uy = Math.sin(rotation)
-        this.body.reset(position.x, position.y)
+    public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number) {
+        const ux = Math.cos(initialRotation)
+        const uy = Math.sin(initialRotation)
+        this.body.reset(initialPosition.x, initialPosition.y)
         this.setVisible(true)
         this.setActive(true)
         this.body.setEnable(true)
-        this.setRotation(rotation + Math.PI / 2)
-        this.setRotation(rotation)
         this.body.velocity.x = ux * this.speed
         this.body.velocity.y = uy * this.speed
+
+        this.initialPosition = initialPosition
+        this.goalDistance = Math.round(Projectiles.getDistance(this.key))
+        this.goalPosition = new Phaser.Math.Vector2(
+            this.initialPosition.x + this.goalDistance,
+            this.initialPosition.y + this.goalDistance,
+        )
+        
         this.killEvent = this.scene.time.addEvent({
-            delay: this.lifespan * 1000,
+            repeat: -1,
             callback: () => {
-                
-                this.shouldBeKilled = true
-
-                this.kill()
-
+                const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
+                if (currentDistance >= this.goalDistance) {
+                    this.body.x = this.goalPosition.x
+                    this.body.y = this.goalPosition.y
+                    this.body.setVelocity(0, 0)
+                    this.setVisible(false)
+                    this.scene.time.addEvent({
+                        delay: 100,
+                        callback: () => {
+                            this.kill()
+                        }
+                    })
+                    this.killEvent.destroy()
+                    this.killEvent = null
+                }
             },
             callbackScope: this,
         })
     }
 
+    
     public actionOnCollision(hittedPlayer: Player) {
-        hittedPlayer.hit(this.damage, this.effects)
-        this.kill()
-        this.killEvent.remove()
-        this.killEvent = null
+        const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
+        if (currentDistance <= this.goalDistance) {
+            hittedPlayer.hit(this.damage, this.effects)
+            this.kill()
+            if(this.killEvent) {
+                this.killEvent.remove()
+                this.killEvent = null
+            }            
+        }
     }
     
     public kill() {
@@ -277,6 +300,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
 export class Block extends Phaser.GameObjects.Graphics {
     public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
+    public key: string
     public radius: number
     public lifespan: number
     public damage: number
@@ -293,6 +317,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public constructor(scene: MainScene, blockConfig: ProjectileConfig) {
         super(scene)
         this.fromPlayerId = 'unkown'
+        this.key = blockConfig.key
         this.radius = blockConfig.radius
         this.lifespan = blockConfig.lifespan
         this.damage = blockConfig.damage
@@ -460,7 +485,7 @@ export class Projectiles
     }
     
 
-    public static getDistanceProjectile(key): number {
+    public static getDistance(key): number {
         const projectileConfig = projectilesConfig[key]
         return projectileConfig.speed * projectileConfig.lifespan
     }

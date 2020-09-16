@@ -170,7 +170,7 @@ export class Ability  {
                 break;
                 
             case DrawingStyles.Ray:
-                this.rangeDistance = Projectiles.getDistanceProjectile(this.projectileKey)
+                this.rangeDistance = Projectiles.getDistance(this.projectileKey)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break;

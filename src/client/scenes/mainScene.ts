@@ -291,7 +291,7 @@ export class MainScene extends Phaser.Scene {
         const pointerFromWorld = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
         return {
             x: pointerFromWorld.x,
-            y: pointerFromWorld.y,
+            y: pointerFromWorld.y
         }
     }
 

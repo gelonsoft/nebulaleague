@@ -97,7 +97,7 @@ export class Weapon  {
         this.cooldownDelay = weaponConfig.cooldownDelay
         this.projectileKey =  weaponConfig.projectileKey
         this.canFire = true
-        this.rangeDistance = Projectiles.getDistanceProjectile(this.projectileKey)
+        this.rangeDistance = Projectiles.getDistance(this.projectileKey)
         this.laser = this.scene.add.graphics({
             lineStyle: weaponConfig.laserConfig
         })
@@ -134,8 +134,8 @@ export class Weapon  {
 
         const line = new Phaser.Geom.Line(
             sourcePosition.x, sourcePosition.y,
-            sourcePosition.x + Math.cos(angleToPointer) * this.rangeDistance * 0.98,
-            sourcePosition.y + Math.sin(angleToPointer) * this.rangeDistance * 0.98,
+            sourcePosition.x + Math.cos(angleToPointer) * this.rangeDistance,
+            sourcePosition.y + Math.sin(angleToPointer) * this.rangeDistance,
         )
         this.laser.clear()
         this.laser.strokeLineShape(line)
