@@ -31,7 +31,7 @@ module.exports = {
         extensions: [".ts", ".js"],
         alias: {
             phaser: phaser,
-            "@": path.resolve(__dirname, 'src/client'),
+            "~": path.resolve(__dirname, 'src/client'),
             "@shared": path.resolve(__dirname, 'src/shared'),
         }
     },
@@ -41,7 +41,6 @@ module.exports = {
             use: {
                 loader: 'ts-loader',
                 options: {
-                    // configFile: "tsconfig-client.json"
                     configFile: "tsconfig.json"
                 },  
             },

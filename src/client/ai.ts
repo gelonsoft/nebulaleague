@@ -1,17 +1,17 @@
-import * as steering from './steering'
-import { MainScene } from './scenes/mainScene'
-import { Player } from './player'
-import { PlayerDirection } from '../shared/models'
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
-import { PlayerAIConfig } from './playersAI'
-import { Weapon } from './entities/weapons'
-import { Ability } from './entities/abilities'
-import { Projectiles } from './entities/projectiles'
+import * as steering from '~/steering'
+import { MainScene } from '~/scenes/mainScene'
+import { Player } from '~/player'
+import { PlayerDirection } from '@shared/models'
+import { PlayerAIConfig } from '~/playersAI'
+import { Weapon } from '~/entities/weapons'
+import { Ability } from '~/entities/abilities'
+import { Projectiles } from '~/entities/projectiles'
 
 export const SEEK_BEHAVIOUR = 'seek'
 export const FLEE_BEHAVIOUR = 'flee'
 export const WANDER_BEHAVIOUR = 'wander'
-export const MOVE_AROUND_BEHAVIOUR = 'move_'
+export const MOVE_AROUND_BEHAVIOUR = 'move'
 
 enum Behaviour {
     Default,

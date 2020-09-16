@@ -1,7 +1,6 @@
-import { AnimationHelper } from "../helpers/animationHelper"
-import { MyGame } from "../phaserEngine"
-import * as io from 'socket.io-client'
-import { Client } from '../client'
+import { AnimationHelper } from "~/helpers/animationHelper"
+import { MyGame } from "~/phaserEngine"
+import { Client } from '~/client'
 
 export class BootScene extends Phaser.Scene {
     public game: MyGame

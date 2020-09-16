@@ -9,7 +9,7 @@
         "strict": false,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/server/*"],
+            "~/*": ["src/server/*"],
             "@shared/*": ["src/shared/*"]
         },
     },

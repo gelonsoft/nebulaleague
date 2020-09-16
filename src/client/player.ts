@@ -1,10 +1,15 @@
 import 'phaser'
-import { MainScene } from './scenes/mainScene'
-import  {Config } from '../shared/config'
-import { Weapon } from './entities/weapons'
-import { Ability } from './entities/abilities'
-import { HealthBar } from './entities/healthbar'
-import { PlayerAI } from '@/ai'
+import { MainScene } from '~/scenes/mainScene'
+import { Config } from '@shared/config'
+import {
+    PlayerDirection,
+    PlayerModel,
+    ControlledBy
+} from '@shared/models'
+import { PlayerAI } from '~/ai'
+import { Weapon } from '~/entities/weapons'
+import { Ability } from '~/entities/abilities'
+import { HealthBar } from '~/entities/healthbar'
 
 
 import {
@@ -12,8 +17,7 @@ import {
     EffectKeys,
     createEffectIconsContainer,
     refreshEffectIcons,
-} from './entities/effects'
-import { PlayerDirection, PlayerModel, ControlledBy } from '../shared/models'
+} from '~/entities/effects'
 
 
 export interface PlayerMoveNextForce {

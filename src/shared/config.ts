@@ -1,7 +1,5 @@
 import {
     EffectKeys,
-    PlayerConfig,
-    PlayerModel,
     ControlledBy,
 } from '../shared/models'
 

@@ -1,8 +1,9 @@
 import * as io from 'socket.io-client'
-import { MyGame } from "./phaserEngine"
-import { PlayerSelectionScene } from './scenes/playerSelectionScene'
-import { LobyScene } from './scenes/lobyScene'
-import { MainScene } from './scenes/mainScene'
+import { MyGame } from "~/phaserEngine"
+import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
+import { LobyScene } from '~/scenes/lobyScene'
+import { MainScene } from '~/scenes/mainScene'
+import { Player } from '~/player'
 
 import {
     PlayerModel,
@@ -12,10 +13,9 @@ import {
     User,
     PlayerSelectionState,
     GameStateUpdated,
-} from '../shared/models'
-import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
+} from '@shared/models'
+import { GameEvent, LobyEvent, PlayerSelectionEvent } from '@shared/events'
 import { Event as ClientEvent }  from './events'
-import { Player } from './player'
 
 
 export interface GameInitConfig {

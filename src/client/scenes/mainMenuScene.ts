@@ -1,4 +1,4 @@
-import { MyGame } from "../phaserEngine"
+import { MyGame } from "~/phaserEngine"
 
 export class MainMenuScene extends Phaser.Scene {
     public game: MyGame

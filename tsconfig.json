@@ -9,7 +9,7 @@
         "strict": false,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/client/*"],
+            "~/*": ["src/client/*"],
             "@shared/*": ["src/shared/*"]
         },
     },
@@ -22,7 +22,8 @@
 	],
     "include": [
 	    "./src/client/**/*",
-	    "./src/shared/**/*"
+	    "./src/shared/**/*",
+	    "./src/server/**/*"
     ],
     "exclude": [
         "node_modules"

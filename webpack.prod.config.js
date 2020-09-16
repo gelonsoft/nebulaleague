@@ -21,7 +21,12 @@ module.exports = {
         chunkFilename: '[name].[hash].js'
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            phaser: phaser,
+            "~": path.resolve(__dirname, 'src/client'),
+            "@shared": path.resolve(__dirname, 'src/shared'),
+        }
     },
     module: {
         rules: [{
@@ -29,7 +34,7 @@ module.exports = {
             use: {
                 loader: 'ts-loader',
                 options: {
-                    configFile: "tsconfig-client.json"
+                    configFile: "tsconfig.json"
                 },  
             },
             exclude: [

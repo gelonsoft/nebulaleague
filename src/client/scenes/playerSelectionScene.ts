@@ -1,10 +1,10 @@
-import { MyGame } from "../phaserEngine"
-import { weaponsConfig } from '../entities/weapons'
-import { abilitiesConfig } from '../entities/abilities'
-import { PlayerConfig } from "../../shared/models"
-import { Config } from "../../shared/config"
-import { Client } from "../client"
-import { Event } from "../events"
+import { PlayerConfig } from "@shared/models"
+import { Config } from "@shared/config"
+import { Client } from "~/client"
+import { Event } from "~/events"
+import { MyGame } from "~/phaserEngine"
+import { weaponsConfig } from '~/entities/weapons'
+import { abilitiesConfig } from '~/entities/abilities'
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444

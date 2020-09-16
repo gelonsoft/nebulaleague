@@ -2,7 +2,7 @@ import * as express from "express"
 import * as path from "path"
 import * as socketIO from "socket.io"
 
-import {GameServer} from  './gameServer'
+import { GameServer } from './gameServer'
 require('dotenv-flow').config()
 
 
@@ -23,7 +23,7 @@ if (app.get('debug')) {
     config.plugins.push(new webpack.HotModuleReplacementPlugin())
 
     const compiler = webpack(config)
-    
+
 
     app.use(webpackDevMiddleware(compiler, {
         publicPath: config.output.publicPath,

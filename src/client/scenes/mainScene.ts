@@ -1,16 +1,15 @@
-import { Player, ActionTimeInterface, } from '../player'
-import { MainControl, PlayerControl } from '../controls'
-import { Consumable, RandomItem } from '../entities/consumables'
-import { Projectiles, ProjectileInterface } from '../entities/projectiles'
-
-import { Config } from '../../shared/config'
-import { PlayerAI } from '../ai'
-import { MyGame } from '../phaserEngine'
-import { Weapon, buildWeapons } from '../entities/weapons'
-import { buildAbilities, Ability } from '../entities/abilities'
-import { PlayerModel, PlayerAction, PlayerConfig, Position } from '../../shared/models'
-import { Client } from '../client'
-import { Event } from '../events'
+import { Config } from '@shared/config'
+import { PlayerModel, PlayerAction, PlayerConfig, Position } from '@shared/models'
+import { Event } from '~/events'
+import { MyGame } from '~/phaserEngine'
+import { Client } from '~/client'
+import { PlayerAI } from '~/ai'
+import { Player, ActionTimeInterface, } from '~/player'
+import { MainControl, PlayerControl } from '~/controls'
+import { Consumable, RandomItem } from '~/entities/consumables'
+import { Projectiles, ProjectileInterface } from '~/entities/projectiles'
+import { Weapon, buildWeapons } from '~/entities/weapons'
+import { buildAbilities, Ability } from '~/entities/abilities'
 
 
 export class MainScene extends Phaser.Scene {

@@ -1,6 +1,6 @@
-import { MainScene } from '../scenes/mainScene'
-import { Player } from '../player'
-import { Projectiles } from './projectiles'
+import { MainScene } from '~/scenes/mainScene'
+import { Player } from '~/player'
+import { Projectiles } from '~/entities/projectiles'
 
 
 export enum DrawingStyles {

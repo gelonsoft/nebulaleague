@@ -1,6 +1,6 @@
-import { MyGame } from "../phaserEngine"
-import { Client, GameInitConfig } from "../client"
-import { Event } from "../events"
+import { MyGame } from "~/phaserEngine"
+import { Client } from "~/client"
+import { Event } from "~/events"
 
 export interface LobySceneConfig {
     playerName: string,
@@ -24,20 +24,20 @@ export class LobyScene extends Phaser.Scene {
         window.addEventListener('resize', () => {
             this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
         }, false)
-        
+
         this.client = this.game.registry.get('client')
         this.client.emitLobyInit()
         this.game.events.on(Event.lobyStart, () => {
             this.scene.start('playerSelectionScene')
             this.client.emitLobyEnd()
         })
-        
+
         if (this.game.debug) {
             window['menu'] = this
             // this.scene.start('playerSelectionScene', {
             //     playerName: 'defaultName',
             // })
-        }        
+        }
     }
 
     createBackground() {
@@ -68,7 +68,7 @@ export class LobyScene extends Phaser.Scene {
             }
         })
     }
-    
+
     create(): void {
         this.createBackground()
         this.createMenu()

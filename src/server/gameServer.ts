@@ -1,17 +1,13 @@
 import { Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid'
-// import {} from ''
-
 import {
     GameState,
     LobyState,
     PlayerSelectionState,
-    PlayerAction,
     User,
     PlayerConfig,
     GameStateUpdated,
-}
-    from "../shared/models"
+} from "../shared/models"
 
 
 import { Config } from "../shared/config"
@@ -22,6 +18,7 @@ import {
     LobyEvent,
     PlayerSelectionEvent,
 } from "../shared/events"
+
 
 
 export class GameServer {
@@ -161,7 +158,6 @@ export class GameServer {
 
     public handleGameRefresh(socket: Socket) {
         const hostId = this.roomToGameState.get(this.clientToRoom.get(socket.id)).hostId
-        console.log(hostId)
         socket.to(hostId).emit(GameEvent.refreshServer)
     }
 
@@ -175,9 +171,6 @@ export class GameServer {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const newPlayer = gameState.players.find((player) => player.id === socket.id)
         socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.joined, newPlayer)
-        // socket.to(this.clientToRoom.get(socket.id)).emit(GameEvent.refreshServerFromHost)
-        
-        // socket.emit(GameEvent.updated, gameState)
     }
 
     public handleGameQuit(socket) {
