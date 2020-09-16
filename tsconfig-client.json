@@ -7,7 +7,11 @@
         "noImplicitAny": false,
         "allowJs": true,
         "strict": false,
-        "rootDir": "src/client"
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/client/*"],
+            "@shared/*": ["src/shared/*"]
+        },
     },
 	"typeRoots": [
 		"node_modules/@types",
@@ -17,7 +21,11 @@
 		"phaser"
 	],
     "include": [
-	    "src/client/**/*"
+	    "./src/client/**/*"
+	    "./src/shared/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }
 

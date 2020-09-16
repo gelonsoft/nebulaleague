@@ -3,6 +3,7 @@ import { MyGame } from "./phaserEngine"
 import { PlayerSelectionScene } from './scenes/playerSelectionScene'
 import { LobyScene } from './scenes/lobyScene'
 import { MainScene } from './scenes/mainScene'
+
 import {
     PlayerModel,
     PlayerConfig,
@@ -15,6 +16,7 @@ import {
 import { GameEvent, LobyEvent, PlayerSelectionEvent } from '../shared/events'
 import { Event as ClientEvent }  from './events'
 import { Player } from './player'
+
 
 export interface GameInitConfig {
     player: PlayerModel

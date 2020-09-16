@@ -1,6 +1,6 @@
 import { Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid'
-
+// import {} from ''
 
 import {
     GameState,
@@ -128,7 +128,7 @@ export class GameServer {
         const playerSelectionState = this.roomToPlayerSelectionState.get(user.playerSelectionRoom)
         socket.join(user.playerSelectionRoom)
         this.clientToRoom.set(socket.id, user.playerSelectionRoom)
-        playerSelectionState.players.push({ ...Config.defaultPlayerModel, id: socket.id })
+        playerSelectionState.players.push({ ...Config.player.defaultModel, id: socket.id })
         this.io.to(this.clientToRoom.get(socket.id)).emit(PlayerSelectionEvent.init)
     }
 

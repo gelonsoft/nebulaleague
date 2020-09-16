@@ -303,7 +303,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.client.emitPlayerSelectionInit()
 
         this.playerConfig = {
-            ...Config.defaultPlayerConfig,
+            ...Config.player.defaultConfig,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
             name: this.client.lobyUser.name
         }

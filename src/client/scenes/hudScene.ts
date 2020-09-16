@@ -1,5 +1,5 @@
 import { MyGame } from "../phaserEngine"
-import { Config } from '../config'
+import { Config } from '../../shared/config'
 import { Player, ActionTimeInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'

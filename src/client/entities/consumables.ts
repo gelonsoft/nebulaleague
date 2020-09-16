@@ -1,6 +1,6 @@
 import { MainScene } from '../scenes/mainScene'
 import { Player } from '../player'
-import { Config } from '../config'
+import { Config } from '@shared/config'
 
 export interface ConsumableInterface {
     action: (player: Player) => void

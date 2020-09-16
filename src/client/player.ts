@@ -1,10 +1,12 @@
 import 'phaser'
 import { MainScene } from './scenes/mainScene'
-import {Config} from './config'
+import  {Config } from '../shared/config'
 import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
-import { PlayerAI } from './ai'
+import { PlayerAI } from '@/ai'
+
+
 import {
     EffectInterface,
     EffectKeys,

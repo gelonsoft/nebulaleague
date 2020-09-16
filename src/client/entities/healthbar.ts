@@ -1,4 +1,4 @@
-import { Config } from '../config'
+import { Config } from '../../shared/config'
 
 
 export class HealthBar extends Phaser.GameObjects.Graphics {

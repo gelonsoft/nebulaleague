@@ -8,10 +8,10 @@
     },
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
-        "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node --inspect src/server/server.js\"",
+        "dev": "env NODE_ENV=development tsc-watch -p ./tsconfig-server.json --onSuccess \"node --inspect src/server/server.js\"",
         "dev:client": "webpack-dev-server --config client/webpack/dev.config.js",
         "build:client": "webpack --config webpack.prod.config.js",
-        "build:server": "tsc -p .",
+        "build:server": "tsc -p ./tsconfig-server.json",
         "prod": "env NODE_ENV=production npm-run-all client:prod server:prod",
         "predeploy": "npm run clean && npm install",
         "deploy": "env NODE_ENV=production npm-run-all build:client build:server",

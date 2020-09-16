@@ -3,7 +3,7 @@ import { MainControl, PlayerControl } from '../controls'
 import { Consumable, RandomItem } from '../entities/consumables'
 import { Projectiles, ProjectileInterface } from '../entities/projectiles'
 
-import { Config } from '../config'
+import { Config } from '../../shared/config'
 import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
@@ -11,6 +11,7 @@ import { buildAbilities, Ability } from '../entities/abilities'
 import { PlayerModel, PlayerAction, PlayerConfig, Position } from '../../shared/models'
 import { Client } from '../client'
 import { Event } from '../events'
+
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame

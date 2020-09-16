@@ -1,7 +1,7 @@
 import { MainScene } from "../scenes/mainScene"
 import { EffectKeys, EffectInterface } from "./effects"
 import { Player } from "../player"
-import { Config } from '../config'
+import { Config } from '../../shared/config'
 
 
 

@@ -9,7 +9,7 @@
         "strict": false,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/client/*"],
+            "@/*": ["src/server/*"],
             "@shared/*": ["src/shared/*"]
         },
     },
@@ -21,7 +21,7 @@
 		"phaser"
 	],
     "include": [
-	    "./src/client/**/*",
+	    "./src/server/**/*",
 	    "./src/shared/**/*"
     ],
     "exclude": [
