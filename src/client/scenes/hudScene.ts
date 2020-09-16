@@ -1,12 +1,5 @@
 import { MyGame } from "../phaserEngine"
-import {
-    HUD_HEIGHT,
-    HUD_PADDING,
-    HUD_PADDING_INNER,
-    HUD_SLOT_COLOR_SELECTED,
-    HUD_SLOT_COLOR_UNSELECTED,
-    HUD_BACKGROUND,
-} from '../config'
+import { Config } from '../config'
 import { Player, ActionTimeInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'
@@ -34,9 +27,9 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.cooldown = 0
         this.selected = false
         this.width = 60
-        this.height = HUD_HEIGHT
-        this.innerWidth = this.width - HUD_PADDING 
-        this.innerHeight = this.height - HUD_PADDING
+        this.height = Config.hud.height
+        this.innerWidth = this.width - Config.hud.padding
+        this.innerHeight = this.height - Config.hud.padding
         this.graphic = new Phaser.GameObjects.Graphics(scene)
         this.image = new Phaser.GameObjects.Image(scene, 9, 9, 'atlas', frame)
         this.textCooldown = new Phaser.GameObjects.Text(scene, 0, 0, '', {})
@@ -47,8 +40,8 @@ class SlotContainer extends Phaser.GameObjects.Container {
     public create() {
         this.graphic.fillStyle(0x000000)
         this.graphic.fillRect(0, 0, this.width, this.height)
-        this.graphic.fillStyle(HUD_SLOT_COLOR_UNSELECTED)
-        this.graphic.fillRect(HUD_PADDING_INNER, HUD_PADDING_INNER, this.innerWidth, this.innerHeight)
+        this.graphic.fillStyle(Config.hud.slotColorUnselected)
+        this.graphic.fillRect(Config.hud.paddingInner, Config.hud.paddingInner, this.innerWidth, this.innerHeight)
         this.image.setDisplaySize(42, 42)
         this.image.setDisplayOrigin(0, 0)
         this.graphic.setAlpha(0.4)
@@ -63,20 +56,20 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.graphic.fillRect(0, 0, this.width, this.height)
         if (this.cooldown < 0.1) {
             if (this.selected) {
-                this.graphic.fillStyle(HUD_SLOT_COLOR_SELECTED)
+                this.graphic.fillStyle(Config.hud.slotColorSelected)
                 this.graphic.fillRect(
-                    HUD_PADDING_INNER,
-                    HUD_PADDING_INNER,
+                    Config.hud.paddingInner,
+                    Config.hud.paddingInner,
                     this.innerWidth,
                     this.innerHeight,
                 )
                 this.graphic.setAlpha(1)
                 this.image.setAlpha(1)
             } else {
-                this.graphic.fillStyle(HUD_SLOT_COLOR_UNSELECTED)
+                this.graphic.fillStyle(Config.hud.slotColorUnselected)
                 this.graphic.fillRect(
-                    HUD_PADDING_INNER,
-                    HUD_PADDING_INNER,
+                    Config.hud.paddingInner,
+                    Config.hud.paddingInner,
                     this.innerWidth,
                     this.innerHeight,
                 )
@@ -114,20 +107,20 @@ export class HudScene extends Phaser.Scene {
     public mainScene: MainScene
 
     constructor() {
-        super({key: "hudScene"})
+        super({ key: "hudScene" })
     }
 
-    public init(): void {        
+    public init(): void {
         if (this.game.debug) {
             window['h'] = this
         }
         window.addEventListener('resize', () => {
-            const top = this.scale.height - HUD_HEIGHT
+            const top = this.scale.height - Config.hud.height
             this.mainContainer.setX(0)
             this.mainContainer.setY(top)
             this.background.clear()
-            this.background.fillStyle(HUD_BACKGROUND, 0.2)
-            this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
+            this.background.fillStyle(Config.hud.background, 0.2)
+            this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
         }, false)
     }
 
@@ -142,12 +135,12 @@ export class HudScene extends Phaser.Scene {
         this.mainScene.events.on(Event.weaponSelectedChanged, this.updateWeaponSelected, this)
         this.mainScene.events.on(Event.effectsChanged, this.updateEffectChanged, this)
 
-        const top = this.scale.height - HUD_HEIGHT
+        const top = this.scale.height - Config.hud.height
         this.background = this.add.graphics()
-        this.background.fillStyle(HUD_BACKGROUND, 0.2)
-        this.background.fillRect(0, 0, this.scale.width, HUD_HEIGHT)
+        this.background.fillStyle(Config.hud.background, 0.2)
+        this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
 
-        this.healthBar = new HealthBar(this, 0, 0, 240, HUD_HEIGHT, HUD_PADDING, this.player.maxHealth)
+        this.healthBar = new HealthBar(this, 0, 0, 240, Config.hud.height, Config.hud.padding, this.player.maxHealth)
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.actions.weaponPrimary.frame)
         this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.actions.weaponSecondary.frame)
         this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.actions.ability1.frame)

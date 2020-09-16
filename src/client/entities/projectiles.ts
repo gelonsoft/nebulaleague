@@ -1,173 +1,8 @@
 import { MainScene } from "../scenes/mainScene"
 import { EffectKeys, EffectInterface } from "./effects"
 import { Player } from "../player"
+import { Config } from '../config'
 
-
-const projectilesConfig = {
-    pistolBullet: {
-        key: 'pistolBullet',
-        className: 'Bullet',
-        frame: 'beams-purple1.png',
-        damage: 80,
-        speed: 1400,
-        lifespan: 0.4,
-        radius: 14,
-    },
-    ak47Bullet: {
-        key: 'ak47Bullet',
-        className: 'Bullet',
-        frame: 'beams-purple1.png',
-        damage: 70,
-        speed: 1200,
-        lifespan: 0.45,
-        radius: 14,
-    },
-    p90Bullet: {
-        key: 'p90Bullet',
-        className: 'Bullet',
-        frame: 'beams-purple1.png',
-        damage: 40,
-        speed: 1500,
-        lifespan: 0.3,
-        radius: 14,
-    },
-    revolverBullet: {
-        key: 'revolverBullet',
-        className: 'Bullet',
-        frame: 'beams-purple1.png',
-        damage: 450,
-        speed: 100,
-        lifespan: 10,
-        radius: 16,
-    },
-    thompsonBullet: {
-        key: 'thompsonBullet',
-        className: 'Bullet',
-        frame: 'beams-purple1.png',
-        damage: 200,
-        speed: 1700,
-        lifespan: 0.45,
-        radius: 18,
-    },
-    chargedArrowProjectile: {
-        key: 'chargedArrowProjectile',
-        className: 'Bullet',
-        frame: 'charged_arrow_bullet.png',
-        damage: 80,
-        speed: 1200,
-        lifespan: 0.5,
-        radius: 25,
-        effects: [{
-            name: EffectKeys.Slow,
-            value: 0.8,
-            duration: 2,
-        }]
-    },
-    flameProjectile: {
-        key: 'flameProjectile',
-        className: 'BlockWithTick',
-        radius: 50,
-        lifespan: 1,
-        damage: 25,
-        tick: 0.15,
-        fillColor: 0xaa0000,
-        strokeColor: 0xff0000,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Burn,
-            value: 10,
-            duration: 3,
-            tick: 0.5,
-        }]
-    },
-    rootTipProjectile: {
-        key: 'rootTipProjectile',
-        className: 'BlockWithDelay',
-        radius: 60,
-        damage: 30,
-        lifespan: 0.6,
-        triggerAfter: 0.4,
-        fillColor: 0x00aa00,
-        strokeColor: 0x00ff00,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Paralyze,
-            value: 0.8,
-            duration: 3,
-        }]
-    },
-    frozenWaveProjectile: {
-        key: 'frozenWaveProjectile',
-        className: 'BlockWithDelay',
-        radius: 320,
-        damage: 10,
-        lifespan: 0.6,
-        triggerAfter: 0.2,
-        fillColor: 0x00aaff,
-        strokeColor: 0x00aaff,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Freeze,
-            value: 0.8,
-            duration: 4,
-        }]
-    },
-    psychicWaveProjectile: {
-        key: 'psychicWaveProjectile',
-        className: 'BlockWithDelay',
-        radius: 230,
-        damage: 0,
-        lifespan: 0.6,
-        triggerAfter: 0.2,
-        fillColor: 0x800080,
-        strokeColor: 0xa000a0,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Stun,
-            value: 0.8,
-            duration: 1.5,
-        }]
-    },
-    lightningWaveProjectile: {
-        key: 'lightningWaveProjectile',
-        className: 'BlockWithDelay',
-        radius: 260,
-        damage: 10,
-        lifespan: 0.6,
-        triggerAfter: 0.2,
-        fillColor: 0xfdd023,
-        strokeColor: 0xfee034,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Paralyze,
-            value: 0.8,
-            duration: 2.5,
-        }]
-    },
-    fireWaveProjectile: {
-        key: 'fireWaveProjectile',
-        className: 'BlockWithDelay',
-        radius: 240,
-        damage: 30,
-        lifespan: 0.6,
-        triggerAfter: 0.2,
-        fillColor: 0xe25822,
-        strokeColor: 0xe37a33,
-        fillAlpha: 0.6,
-        strokeAlpha: 0.8,
-        effects: [{
-            name: EffectKeys.Burn,
-            value: 10,
-            duration: 1,
-            tick: 0.5,
-        }]
-    }
-}
 
 
 export interface ProjectileInterface {
@@ -448,26 +283,26 @@ export class Projectiles {
         this.projectileByIds = new Map()
         this.scene = scene
 
-        this.addProjectile('pistolBullet', projectilesConfig.pistolBullet, 200)
-        this.addProjectile('ak47Bullet', projectilesConfig.ak47Bullet, 200)
-        this.addProjectile('p90Bullet', projectilesConfig.p90Bullet, 200)
-        this.addProjectile('revolverBullet', projectilesConfig.revolverBullet, 200)
-        this.addProjectile('thompsonBullet', projectilesConfig.thompsonBullet, 200)
-        this.addProjectile('chargedArrowProjectile', projectilesConfig.chargedArrowProjectile, 20)
-        this.addProjectile('flameProjectile', projectilesConfig.flameProjectile, 20)
-        this.addProjectile('rootTipProjectile', projectilesConfig.rootTipProjectile, 20)
-        this.addProjectile('frozenWaveProjectile', projectilesConfig.frozenWaveProjectile, 40)
-        this.addProjectile('psychicWaveProjectile', projectilesConfig.psychicWaveProjectile, 40)
-        this.addProjectile('lightningWaveProjectile', projectilesConfig.lightningWaveProjectile, 40)
-        this.addProjectile('fireWaveProjectile', projectilesConfig.fireWaveProjectile, 40)
+        this.addProjectile('pistolBullet', Config.projectile.pistolBullet, 200)
+        this.addProjectile('ak47Bullet', Config.projectile.ak47Bullet, 200)
+        this.addProjectile('p90Bullet', Config.projectile.p90Bullet, 200)
+        this.addProjectile('revolverBullet', Config.projectile.revolverBullet, 200)
+        this.addProjectile('thompsonBullet', Config.projectile.thompsonBullet, 200)
+        this.addProjectile('chargedArrowProjectile', Config.projectile.chargedArrowProjectile, 20)
+        this.addProjectile('flameProjectile', Config.projectile.flameProjectile, 20)
+        this.addProjectile('rootTipProjectile', Config.projectile.rootTipProjectile, 20)
+        this.addProjectile('frozenWaveProjectile', Config.projectile.frozenWaveProjectile, 40)
+        this.addProjectile('psychicWaveProjectile', Config.projectile.psychicWaveProjectile, 40)
+        this.addProjectile('lightningWaveProjectile', Config.projectile.lightningWaveProjectile, 40)
+        this.addProjectile('fireWaveProjectile', Config.projectile.fireWaveProjectile, 40)
     }
 
 
     public static getTimeToReachTarget(key: string, targetDistance: number) {
-        if (projectilesConfig[key]?.speed) {
-            return targetDistance / projectilesConfig[key].speed
-        } else if (projectilesConfig[key]?.triggerAfter) {
-            return projectilesConfig[key].triggerAfter
+        if (Config.projectile[key]?.speed) {
+            return targetDistance / Config.projectile[key].speed
+        } else if (Config.projectile[key]?.triggerAfter) {
+            return Config.projectile[key].triggerAfter
         } else {
             return 0
         }
@@ -484,7 +319,7 @@ export class Projectiles {
 
 
     public static getDistance(key): number {
-        const projectileConfig = projectilesConfig[key]
+        const projectileConfig = Config.projectile[key]
         return projectileConfig.speed * projectileConfig.lifespan
     }
 

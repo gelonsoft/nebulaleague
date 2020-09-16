@@ -1,14 +1,9 @@
-import { Socket } from "socket.io"
-
+// PLAYER INTERFACE //
 export enum ControlledBy {
     MainPlayer,
     AIPlayer,
 }
 
-export interface CoordinatesModel {
-    x: number
-    y: number
-}
 
 export interface PlayerModel {
     id: string
@@ -55,8 +50,6 @@ export interface Position {
     y: number
 }
 
-
-
 export interface PlayerAction {
     direction?: PlayerDirection,
     rotation?: number,
@@ -68,8 +61,6 @@ export interface PlayerAction {
     }
 }
 
-
-
 export interface PlayerMovement {
     id: string
     x: number
@@ -78,6 +69,7 @@ export interface PlayerMovement {
 }
 
 
+// WEAPONS INTERFACE
 export interface LaserModel {
     width: number
     color: number
@@ -93,6 +85,7 @@ export interface WeaponModel {
 }
 
 
+// PROJECTILEs INTERFACE
 export interface ProjectileModel {
     key: string
     fromPlayerId: string
@@ -102,7 +95,25 @@ export interface ProjectileModel {
 }
 
 
+// EFFECT INTERFACE
+export enum EffectKeys {
+    Slow = 'slowed',
+    Fast = 'fastenned',
+    Paralyze = 'paralyzed',
+    Stun = 'stunned',
+    Burn = 'burned',
+    Freeze = 'freezed',
+}
 
+export interface EffectInterface {
+    name: EffectKeys
+    value: number
+    duration: number
+    tick?: number
+}
+
+
+// SERVER INTERFACE
 export interface User {
     name?: string
     gameMode?: string

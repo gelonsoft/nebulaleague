@@ -1,9 +1,4 @@
-import {
-    HEALTH_BAR_COLOR_BACKGROUND,
-    HEALTH_BAR_COLOR_HIGH,
-    HEALTH_BAR_COLOR_LOW,
-    HEALTH_BAR_COLOR_MEDIUM,
-} from '../config'
+import { Config } from '../config'
 
 
 export class HealthBar extends Phaser.GameObjects.Graphics {
@@ -48,7 +43,7 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         this.clear()
         this.fillStyle(0x000000)
         this.fillRect(0, 0, this.width, this.height)
-        this.fillStyle(HEALTH_BAR_COLOR_BACKGROUND)
+        this.fillStyle(Config.healthBar.colorBackground)
         this.fillRect(
             this.innerPadding,
             this.innerPadding,
@@ -56,11 +51,11 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
             this.innerHeight,
         )
         if (health <= this.maxHealth / 10) {
-            this.fillStyle(HEALTH_BAR_COLOR_LOW)
+            this.fillStyle(Config.healthBar.colorLow)
         } else if (health <= this.maxHealth / 10 * 3) {
-            this.fillStyle(HEALTH_BAR_COLOR_MEDIUM)
+            this.fillStyle(Config.healthBar.colorMedium)
         } else {
-            this.fillStyle(HEALTH_BAR_COLOR_HIGH)
+            this.fillStyle(Config.healthBar.colorHigh)
         }
         const percent = this.innerWidth / this.maxHealth
         const widthHealth = Math.floor(percent * health)

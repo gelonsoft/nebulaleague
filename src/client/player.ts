@@ -1,13 +1,6 @@
 import 'phaser'
 import { MainScene } from './scenes/mainScene'
-import {
-    PLAYER_ACCELERATION_CHANGE,
-    PLAYER_ACCELERATION_STEADY,
-    PLAYER_DRAG,
-    PLAYER_DEFAULT_SPEED,
-    PLAYER_DEFAULT_HEALTH,
-    PLAYER_SIZE,
-} from './config'
+import {Config} from './config'
 import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
@@ -98,9 +91,9 @@ export class Player extends Phaser.GameObjects.Container {
         this.id = playerModel.id
         this.x = playerModel.x
         this.y = playerModel.y
-        this.maxHealth = PLAYER_DEFAULT_HEALTH
+        this.maxHealth = Config.player.defaultHealth
         this.health = this.maxHealth
-        this.defaultSpeed = PLAYER_DEFAULT_SPEED
+        this.defaultSpeed = Config.player.defaultSpeed
         this.isParalyzed = false
         this.isStunned = false
         this.controlledBy = playerModel.controlledBy
@@ -109,7 +102,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.initPlayer()
         this.initHealthbar()
         this.initEffectsContainer()
-        this.setSize(PLAYER_SIZE, PLAYER_SIZE)
+        this.setSize(Config.player.size, Config.player.size)
         this.attachPhysics()
         this.scene.add.existing(this)
         this.controlledByAI = null
@@ -152,8 +145,8 @@ export class Player extends Phaser.GameObjects.Container {
         )
             .setDisplayOrigin(0.5, 0.5)
             .setOrigin(0.5, 0.5)
-            .setDisplaySize(PLAYER_SIZE, PLAYER_SIZE)
-            .setSize(PLAYER_SIZE, PLAYER_SIZE)
+            .setDisplaySize(Config.player.size, Config.player.size)
+            .setSize(Config.player.size, Config.player.size)
         this.add(this.playerSprite)
     }
 
@@ -170,12 +163,12 @@ export class Player extends Phaser.GameObjects.Container {
 
     private attachPhysics(): void {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-        this.accelerationChange = PLAYER_ACCELERATION_CHANGE
-        this.accelerationSteady = PLAYER_ACCELERATION_STEADY
-        this.body.setCircle(PLAYER_SIZE / 2)
+        this.accelerationChange = Config.player.accelerationChange
+        this.accelerationSteady = Config.player.accelerationSteady
+        this.body.setCircle(Config.player.size / 2)
         this.body.setAllowDrag(true)
-        this.body.setDrag(PLAYER_DRAG, PLAYER_DRAG)
-        this.body.setMaxSpeed(PLAYER_DEFAULT_SPEED)
+        this.body.setDrag(Config.player.drag, Config.player.drag)
+        this.body.setMaxSpeed(Config.player.defaultSpeed)
         this.body.immovable = true
     }
 
@@ -545,7 +538,7 @@ export class Player extends Phaser.GameObjects.Container {
 
         while (overlaping) {
             overlaping = false
-            const circle = new Phaser.Geom.Circle(x, y, PLAYER_SIZE / 2)
+            const circle = new Phaser.Geom.Circle(x, y, Config.player.size / 2)
             x = Phaser.Math.Between(0, this.scene.physics.world.bounds.width)
             y = Phaser.Math.Between(0, this.scene.physics.world.bounds.height)
 

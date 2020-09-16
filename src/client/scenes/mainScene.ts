@@ -2,15 +2,8 @@ import { Player, ActionTimeInterface, } from '../player'
 import { MainControl, PlayerControl } from '../controls'
 import { Consumable, RandomItem } from '../entities/consumables'
 import { Projectiles, ProjectileInterface } from '../entities/projectiles'
-import {
-    WORLD_WIDTH,
-    WORLD_HEIGHT,
-    PLAYER_TO_PLAYER_DAMAGE,
-    PLAYER_SIZE,
-    HUD_HEIGHT,
-    PARALAX_SCROLL_FACTOR,
 
-} from '../config'
+import { Config } from '../config'
 import { PlayerAI } from '../ai'
 import { MyGame } from '../phaserEngine'
 import { Weapon, buildWeapons } from '../entities/weapons'
@@ -48,8 +41,8 @@ export class MainScene extends Phaser.Scene {
     public init(): void {
         window.addEventListener('resize', () => {
             this.backgroundImage.setDisplaySize(
-                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
-                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
+                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor,
             )
         }, false)
         this.client = this.game.registry.get('client')
@@ -93,18 +86,21 @@ export class MainScene extends Phaser.Scene {
         this.mainCameraZoom = 0.5
         this.freeCamera = false
         this.cameras.main.setZoom(this.mainCameraZoom)
-        this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
-        this.physics.world.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT - HUD_HEIGHT - PLAYER_SIZE / 2)
+        this.cameras.main.setBounds(0, 0, Config.world.width, Config.world.height)
+        this.physics.world.setBounds(
+            0, 0,
+            Config.world.width,
+            Config.world.height - Config.hud.height - Config.player.size / 2)
         this.cameras.main.startFollow(this.player, true)
     }
 
 
     public createBackground(): void {
         this.backgroundImage = this.add.image(0, 0, 'backgroundGalaxy3')
-            .setScrollFactor(PARALAX_SCROLL_FACTOR, PARALAX_SCROLL_FACTOR)
+            .setScrollFactor(Config.world.paralaxScrollFactor, Config.world.paralaxScrollFactor)
             .setDisplaySize(
-                this.cameras.main.displayWidth + WORLD_WIDTH * PARALAX_SCROLL_FACTOR,
-                this.cameras.main.displayHeight + WORLD_HEIGHT * PARALAX_SCROLL_FACTOR,
+                this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
+                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor,
             )
             .setOrigin(0.23, 0.23)
             .setAlpha(0.7)
@@ -120,7 +116,7 @@ export class MainScene extends Phaser.Scene {
 
     // public createAIPlayers(): void {
     //     let index = 0
-    //     while (this.players.getLength() < MAX_PLAYER) {
+    //     while (this.players.getLength() < Config.player.size) {
     //         const playerAIConfig = playersAIConfig[index]
     //         const playerConfig = {
     //             id: playerAIConfig.id,
@@ -292,7 +288,7 @@ export class MainScene extends Phaser.Scene {
 
     public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
         player2.body.velocity.scale(-1)
-        player2.hit(PLAYER_TO_PLAYER_DAMAGE)
+        player2.hit(Config.player.toOtherDamage)
     }
 
     public handleEnemyProjectileCollide(
