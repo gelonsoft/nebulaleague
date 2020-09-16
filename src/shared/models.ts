@@ -58,7 +58,6 @@ export interface Position {
 
 
 export interface PlayerAction {
-    id?: string
     direction?: PlayerDirection,
     rotation?: number,
     selectAbility?: string,

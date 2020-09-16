@@ -72,7 +72,6 @@ export class GameServer {
         socket.on(GameEvent.refreshServer, () => this.handleGameRefresh(socket))
         socket.on(GameEvent.updated, (gameState: GameStateUpdated) => this.handleGameUpdate(socket, gameState))
         socket.on(GameEvent.quit, () => this.handleGameQuit(socket))
-        socket.on(GameEvent.action, (action: PlayerAction) => this.handleGameAction(socket, action))
 
         socket.on(ServerEvent.disconnected, () => this.handleDisconnect(socket))
     }
@@ -198,11 +197,6 @@ export class GameServer {
         this.leaveGameRoom(socket)
         socket.leave(this.clientToRoom.get(socket.id))
         this.clientToRoom.delete(socket.id)
-    }
-
-
-    public handleGameAction(socket, actions: PlayerAction) {
-        this.io.to(this.clientToRoom.get(socket.id)).emit(GameEvent.action, actions)
     }
 
 

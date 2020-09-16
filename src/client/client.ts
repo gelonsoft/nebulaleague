@@ -103,9 +103,6 @@ export class Client {
         this.socket.emit(GameEvent.joined)
     }
 
-    public emitGameAction(actions: PlayerAction) {
-        this.socket.emit(GameEvent.action, actions)
-    }
 
     public emitGameRefresh() {
         this.socket.emit(GameEvent.refreshServer)

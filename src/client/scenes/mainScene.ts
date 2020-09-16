@@ -189,29 +189,23 @@ export class MainScene extends Phaser.Scene {
         })
 
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
-            this.players.children.getArray().filter((player: Player) => {
-                if (player.id === playerAction.id) {
-
-                    if (playerAction.direction) {
-                        player.move(playerAction.direction)
-                    } else {
-                        player.move(player.previousDirection)
-                    }
-                    if (playerAction.rotation) {
-                        player.rotateFromPointer(playerAction.rotation)
-                    }
-                    if (playerAction.selectAbility) {
-                        player.selectAbility(playerAction.selectAbility)
-                    }
-
-                    if (playerAction.action) {
-                        const pointerVector = new Phaser.Math.Vector2(
-                            playerAction.pointerPosition.x, playerAction.pointerPosition.y
-                        )
-                        player.action(playerAction.action, pointerVector)
-                    }
-                }
-            })
+            if (playerAction.direction) {
+                this.player.move(playerAction.direction)
+            } else {
+                this.player.move(this.player.previousDirection)
+            }
+            if (playerAction.rotation) {
+                this.player.rotateFromPointer(playerAction.rotation)
+            }
+            if (playerAction.selectAbility) {
+                this.player.selectAbility(playerAction.selectAbility)
+            }
+            if (playerAction.action) {
+                const pointerVector = new Phaser.Math.Vector2(
+                    playerAction.pointerPosition.x, playerAction.pointerPosition.y
+                )
+                this.player.action(playerAction.action, pointerVector)
+            }
         })
     }
 

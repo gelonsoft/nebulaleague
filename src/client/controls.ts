@@ -2,7 +2,7 @@ import { MainScene } from './scenes/mainScene'
 import { Player } from './player'
 import { PlayerAction, PlayerDirection } from '../shared/models'
 import { DebugScene } from './scenes/debugScene'
-import { Client } from './client'
+import { Event }  from './events'
 
 
 export class MainControl {
@@ -44,7 +44,6 @@ export class MainControl {
 export class PlayerControl {
     public scene: MainScene
     public controls: any
-    public client: Client
     public action: PlayerAction
     public player: Player
     public prevMoveLeft: boolean
@@ -61,7 +60,6 @@ export class PlayerControl {
 
     constructor(scene: MainScene, player: Player) {
         this.scene = scene
-        this.client = this.scene.game.registry.get('client')
         this.player = player
         this.previousDirection = { x: 0, y: 0 }
         this.currentDirection = { x: 0, y: 0 }
@@ -187,12 +185,7 @@ export class PlayerControl {
             this.action = {}
             this.handleKeyboard()
             this.handleMouse()
-            if (Object.keys(this.action).length > 0) {
-                this.client.emitGameAction({
-                    id: this.player.id,
-                    ...this.action,
-                })
-            }
+            this.scene.game.events.emit(Event.playerAction, this.action)
         }
     }
 }
