@@ -1,6 +1,6 @@
 import { MainScene } from "../scenes/mainScene"
-import { Player, EffectKeys, EffectInterface } from "../player"
-import { GameObjects } from "phaser"
+import { EffectKeys, EffectInterface } from "./effects"
+import { Player } from "../player"
 
 
 const projectilesConfig = {
@@ -214,7 +214,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public fromPlayerId: string
     public killEvent: Phaser.Time.TimerEvent
     public effects?: Array<EffectInterface>
-        
+
 
     public constructor(scene: MainScene, projectileConfig: ProjectileConfig) {
         super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
@@ -229,7 +229,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.radius = projectileConfig.radius
-        this.setDisplaySize(projectileConfig.radius, projectileConfig.radius )
+        this.setDisplaySize(projectileConfig.radius, projectileConfig.radius)
         this.body.setEnable(false)
         this.setActive(false)
         this.setVisible(false)
@@ -251,7 +251,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
             this.initialPosition.x + this.goalDistance,
             this.initialPosition.y + this.goalDistance,
         )
-        
+
         this.killEvent = this.scene.time.addEvent({
             repeat: -1,
             callback: () => {
@@ -275,19 +275,19 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         })
     }
 
-    
+
     public actionOnCollision(hittedPlayer: Player) {
         const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
         if (currentDistance <= this.goalDistance) {
             hittedPlayer.hit(this.damage, this.effects)
             this.kill()
-            if(this.killEvent) {
+            if (this.killEvent) {
                 this.killEvent.remove()
                 this.killEvent = null
-            }            
+            }
         }
     }
-    
+
     public kill() {
         this.setActive(false)
         this.setVisible(false)
@@ -312,8 +312,8 @@ export class Block extends Phaser.GameObjects.Graphics {
     public strokeAlpha: number
     public hittedPlayerIds: Set<string>
     public killedOnHit: boolean
-    
-    
+
+
     public constructor(scene: MainScene, blockConfig: ProjectileConfig) {
         super(scene)
         this.fromPlayerId = 'unkown'
@@ -369,13 +369,13 @@ export class Block extends Phaser.GameObjects.Graphics {
             this.hittedPlayerIds.add(hittedPlayer.id)
         }
     }
-    
-    
+
+
     public kill() {
         this.setActive(false)
         this.setVisible(false)
         this.body.setEnable(false)
-        this.body.reset(-10000, -10000)        
+        this.body.reset(-10000, -10000)
     }
 }
 
@@ -398,7 +398,7 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
             duration: this.triggerAfter * 1000,
             ease: 'Cubic.easeIn',
         })
-        
+
         this.scene.time.addEvent({
             delay: this.triggerAfter * 1000,
             callback: () => {
@@ -427,7 +427,7 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         super.fire(position)
         this.tickTimer = this.tick
     }
-    
+
     public actionOnCollision(hittedPlayer: Player) {
         this.tickTimer += this.scene.game.loop.delta / 1000
         if (this.tickTimer >= this.tick) {
@@ -439,17 +439,15 @@ export class BlockWithTick extends Block implements ProjectileInterface {
 
 
 
-export class Projectiles
-{
+export class Projectiles {
     public projectiles: Map<string, Phaser.Physics.Arcade.Group>
     public projectileByIds: Map<string, Bullet | Block>
     public scene: MainScene
-    constructor (scene: MainScene)
-    {
+    constructor(scene: MainScene) {
         this.projectiles = new Map()
         this.projectileByIds = new Map()
         this.scene = scene
-        
+
         this.addProjectile('pistolBullet', projectilesConfig.pistolBullet, 200)
         this.addProjectile('ak47Bullet', projectilesConfig.ak47Bullet, 200)
         this.addProjectile('p90Bullet', projectilesConfig.p90Bullet, 200)
@@ -468,8 +466,8 @@ export class Projectiles
     public static getTimeToReachTarget(key: string, targetDistance: number) {
         if (projectilesConfig[key]?.speed) {
             return targetDistance / projectilesConfig[key].speed
-        } else if(projectilesConfig[key]?.triggerAfter) {
-            return projectilesConfig[key].triggerAfter 
+        } else if (projectilesConfig[key]?.triggerAfter) {
+            return projectilesConfig[key].triggerAfter
         } else {
             return 0
         }
@@ -483,14 +481,14 @@ export class Projectiles
             'BlockWithDelay': BlockWithDelay,
         }[projectileKeyName]
     }
-    
+
 
     public static getDistance(key): number {
         const projectileConfig = projectilesConfig[key]
         return projectileConfig.speed * projectileConfig.lifespan
     }
 
-    
+
     public addProjectile(
         key: string,
         projectileConfig: any,
@@ -512,7 +510,7 @@ export class Projectiles
         fromPlayerId: string,
         position: Phaser.Math.Vector2,
         rotation?: number)
-    : void {
+        : void {
         const projectileGroup = this.projectiles.get(key)
         const projectile = projectileGroup.getFirstDead()
         projectile.fromPlayerId = fromPlayerId

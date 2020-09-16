@@ -7,10 +7,10 @@ import {
     HUD_SLOT_COLOR_UNSELECTED,
     HUD_BACKGROUND,
 } from '../config'
-import { Player, ActionTimeInterface, EffectInterface } from "../player"
+import { Player, ActionTimeInterface } from "../player"
 import { MainScene } from "./mainScene"
 import { HealthBar } from '../entities/healthbar'
-import { createEffectIconsContainer, refreshEffectIcons } from '../entities/effects'
+import { EffectInterface, createEffectIconsContainer, refreshEffectIcons } from '../entities/effects'
 import { Event } from '../events'
 
 

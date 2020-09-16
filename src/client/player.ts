@@ -12,27 +12,14 @@ import { Weapon } from './entities/weapons'
 import { Ability } from './entities/abilities'
 import { HealthBar } from './entities/healthbar'
 import { PlayerAI } from './ai'
-import { createEffectIconsContainer, refreshEffectIcons } from './entities/effects'
+import {
+    EffectInterface,
+    EffectKeys,
+    createEffectIconsContainer,
+    refreshEffectIcons,
+} from './entities/effects'
 import { PlayerDirection, PlayerModel, ControlledBy } from '../shared/models'
 
-
-
-export enum EffectKeys {
-    Slow = 'slowed',
-    Fast = 'fastenned',
-    Paralyze = 'paralyzed',
-    Stun = 'stunned',
-    Burn = 'burned',
-    Freeze = 'freezed',
-}
-
-
-export interface EffectInterface {
-    name: EffectKeys
-    value: number
-    duration: number
-    tick?: number
-}
 
 export interface PlayerMoveNextForce {
     acceleration: Phaser.Math.Vector2
