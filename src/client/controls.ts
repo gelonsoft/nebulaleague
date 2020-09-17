@@ -269,16 +269,16 @@ export class DebugControl {
 
 
 
-export function settingCameraControl(game: MainScene): Phaser.Cameras.Controls.SmoothedKeyControl {
-    const cursors = game.input.keyboard.createCursorKeys()
+export function settingCameraControl(scene: MainScene): Phaser.Cameras.Controls.SmoothedKeyControl {
+    const cursors = scene.input.keyboard.createCursorKeys()
     const controlConfig = {
-        camera: game.cameras.main,
+        camera: scene.cameras.main,
         left: cursors.left,
         right: cursors.right,
         up: cursors.up,
         down: cursors.down,
-        zoomIn: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-        zoomOut: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N),
+        zoomIn: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        zoomOut: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N),
         acceleration: 0.06,
         drag: 0.0005,
         maxSpeed: 1.0

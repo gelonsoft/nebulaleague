@@ -123,6 +123,13 @@ export class DebugScene extends Phaser.Scene {
                 this.mainScene.playerControl.active = true
                 this.mainScene.physics.world.drawDebug = !this.mainScene.physics.world.drawDebug
             }
+            else if (event.target.name === 'displayPlayerChangeButton') {
+                console.dir({
+                    playerBefore: this.mainScene.playerBefore,
+                    playerAfter: this.mainScene.playerAfter,
+                })
+            }
+            
             this.debugMenu.setVisible(false)
         })
     }

@@ -33,10 +33,10 @@ export interface PlayerConfig {
 }
 
 export interface PlayerChanged {
-    id: string
     x?: number
     y?: number
     rotation?: number
+    health?: number
 }
 
 
@@ -170,16 +170,16 @@ export interface LobyState {
 
 export interface PlayerSelectionState {
     gameMode: string
-    players: Array<PlayerModel>
+    players: Record<string, PlayerModel>
     gameRoom?: string
 }
 
 export interface GameStateUpdated {
-    players: Array<PlayerModel>
+    players: Record<string, PlayerChanged>
 }
 
 export interface GameState {
     gameMode: string
-    players: Array<PlayerModel>
+    players: Record<string, PlayerModel>
     hostId?: string
 }

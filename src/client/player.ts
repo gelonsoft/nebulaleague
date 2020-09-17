@@ -6,7 +6,8 @@ import {
     PlayerModel,
     ControlledBy,
     EffectKeys,
-    EffectModel
+    EffectModel,
+    PlayerChanged
 } from '@shared/models'
 import { PlayerAI } from '~/ai'
 import { Weapon } from '~/entities/weapons'
@@ -560,21 +561,11 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.setVisible(false)
     }
 
-    public getUpdatedModel(): PlayerModel {
+    public getChanged(): PlayerChanged {
         return {
-            id: this.id,
-            name: this.name,
-            x: this.x,
-            y: this.y,
+            x: this.body.center.x,
+            y: this.body.center.y,
             rotation: this.rotation,
-            controlledBy: this.controlledBy,
-            selectedAbilityKey: this.selectedAbilityKey,
-            weaponPrimaryKey: this.playerModel.weaponPrimaryKey,
-            weaponSecondaryKey: this.playerModel.weaponSecondaryKey,
-            abilityKey1: this.playerModel.abilityKey1,
-            abilityKey2: this.playerModel.abilityKey2,
-            abilityKey3: this.playerModel.abilityKey3,
-            abilityKey4: this.playerModel.abilityKey4,
         }
     }
 }

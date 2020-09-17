@@ -142,25 +142,20 @@ export class Client {
         })
 
         this.socket.on(ClientEvent.gameUpdated, (updatedGamestate: GameState) => {
-            console.log({
-                gameState: this.gameState,
-                updatedGamestate: updatedGamestate,
-            })
-            
             this.gameState = updatedGamestate
-            this.game.events.emit(Event.gameReady)
+            // this.game.events.emit(Event.gameReady)
         })
 
-        this.socket.on(ClientEvent.gameRefreshServer, () => {
-            const updatedPlayers =
-                this.mainScene.players.children.getArray().map((player: Player) => {
-                    return player.getUpdatedModel()
-                })
-            const gameStateUpdated = {
-                players: updatedPlayers
-            }
-            this.emitGameUpdated(gameStateUpdated)
-        })
+        // this.socket.on(ClientEvent.gameRefreshServer, () => {
+        //     const updatedPlayers =
+        //         this.mainScene.players.children.getArray().map((player: Player) => {
+        //             return player.getUpdatedModel()
+        //         })
+        //     const gameStateUpdated = {
+        //         players: updatedPlayers
+        //     }
+        //     this.emitGameUpdated(gameStateUpdated)
+        // })
         
 
         this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {

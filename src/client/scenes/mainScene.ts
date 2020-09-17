@@ -1,5 +1,6 @@
+import { updatedDiff } from 'deep-object-diff'
 import { Config } from '@shared/config'
-import { PlayerModel, PlayerAction, PlayerConfig, Position } from '@shared/models'
+import { PlayerModel, PlayerAction, PlayerConfig, Position, PlayerChanged } from '@shared/models'
 import { Event } from '@shared/events'
 import { MyGame } from '~/phaserEngine'
 import { Client } from '~/client'
@@ -31,6 +32,9 @@ export class MainScene extends Phaser.Scene {
     public backgroundImage: Phaser.GameObjects.Image
     public playerConfig: PlayerConfig
     public socket: SocketIOClient.Socket
+    public playerChanged: PlayerChanged | null
+    public playerBefore: PlayerChanged | null
+    public playerAfter: PlayerChanged | null
 
     constructor() {
         super({
@@ -54,6 +58,7 @@ export class MainScene extends Phaser.Scene {
         this.registerEvent()
 
         if (this.game.debug) {
+            this.scene.run('debugScene', this)
             window['p'] = this.player
             window['m'] = this
         }
@@ -68,7 +73,7 @@ export class MainScene extends Phaser.Scene {
         this.players = this.physics.add.group({
             collideWorldBounds: true,
             classType: Player,
-        }).addMultiple(this.client.gameState.players.map((playerModel) => {
+        }).addMultiple(Object.values(this.client.gameState.players).map((playerModel) => {
             return new Player(this, playerModel)
         }))
         this.player = this.players.children.getArray()
@@ -78,7 +83,6 @@ export class MainScene extends Phaser.Scene {
         this.createBackground()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
-
     }
 
 
@@ -187,6 +191,7 @@ export class MainScene extends Phaser.Scene {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
                 this.player.move(playerAction.direction)
+                
             } else {
                 this.player.move(this.player.previousDirection)
             }
@@ -321,41 +326,48 @@ export class MainScene extends Phaser.Scene {
     }
 
     public update(time: number, delta: number): void {
-        if (this.player) {
-            this.mainControl.update()
-            this.playerControl.update()
+        this.playerAfter = this.player.getChanged()
+        this.mainControl.update()
+        this.playerControl.update()
 
-            // this.playersAIUpdate()
+        // this.playersAIUpdate()
 
-            // collide with other players
-            this.physics.overlap(
-                this.players,
-                this.players,
-                this.handlePlayerPlayerCollide,
-                null,
-                this
-            )
+        // collide with other players
+        this.physics.overlap(
+            this.players,
+            this.players,
+            this.handlePlayerPlayerCollide,
+            null,
+            this
+        )
 
-            // collide with projectiles
-            this.physics.overlap(
-                this.players,
-                this.projectiles.getAll(),
-                this.handleEnemyProjectileCollide,
-                null,
-                this
-            )
+        // collide with projectiles
+        this.physics.overlap(
+            this.players,
+            this.projectiles.getAll(),
+            this.handleEnemyProjectileCollide,
+            null,
+            this
+        )
 
-            // draw weapon and skills
-            if (this.player.active) {
-                this.player.draw()
-            }
-
-            // update players
-            this.players.getChildren()
-                .filter((player: Player) => player.active)
-                .forEach((player: Player) => {
-                    player.update()
-                })
+        // draw weapon and skills
+        if (this.player.active) {
+            this.player.draw()
         }
+
+        // update players
+        this.players.getChildren()
+            .filter((player: Player) => player.active)
+            .forEach((player: Player) => {
+                player.update()
+            })
+        
+        this.playerBefore = this.playerAfter
+        this.playerChanged = updatedDiff(this.playerBefore, this.playerAfter)
+        this.client.emitGameUpdated({
+            players: {
+                [this.player.id]: this.playerChanged
+            }
+        })
     }
 }
