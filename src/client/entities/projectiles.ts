@@ -283,26 +283,26 @@ export class Projectiles {
         this.projectileByIds = new Map()
         this.scene = scene
 
-        this.addProjectile('pistolBullet', Config.projectile.pistolBullet, 200)
-        this.addProjectile('ak47Bullet', Config.projectile.ak47Bullet, 200)
-        this.addProjectile('p90Bullet', Config.projectile.p90Bullet, 200)
-        this.addProjectile('revolverBullet', Config.projectile.revolverBullet, 200)
-        this.addProjectile('thompsonBullet', Config.projectile.thompsonBullet, 200)
-        this.addProjectile('chargedArrowProjectile', Config.projectile.chargedArrowProjectile, 20)
-        this.addProjectile('flameProjectile', Config.projectile.flameProjectile, 20)
-        this.addProjectile('rootTipProjectile', Config.projectile.rootTipProjectile, 20)
-        this.addProjectile('frozenWaveProjectile', Config.projectile.frozenWaveProjectile, 40)
-        this.addProjectile('psychicWaveProjectile', Config.projectile.psychicWaveProjectile, 40)
-        this.addProjectile('lightningWaveProjectile', Config.projectile.lightningWaveProjectile, 40)
-        this.addProjectile('fireWaveProjectile', Config.projectile.fireWaveProjectile, 40)
+        this.addProjectile('pistolBullet', Config.projectiles.pistolBullet, 200)
+        this.addProjectile('ak47Bullet', Config.projectiles.ak47Bullet, 200)
+        this.addProjectile('p90Bullet', Config.projectiles.p90Bullet, 200)
+        this.addProjectile('revolverBullet', Config.projectiles.revolverBullet, 200)
+        this.addProjectile('thompsonBullet', Config.projectiles.thompsonBullet, 200)
+        this.addProjectile('chargedArrowProjectile', Config.projectiles.chargedArrowProjectile, 20)
+        this.addProjectile('flameProjectile', Config.projectiles.flameProjectile, 20)
+        this.addProjectile('rootTipProjectile', Config.projectiles.rootTipProjectile, 20)
+        this.addProjectile('frozenWaveProjectile', Config.projectiles.frozenWaveProjectile, 40)
+        this.addProjectile('psychicWaveProjectile', Config.projectiles.psychicWaveProjectile, 40)
+        this.addProjectile('lightningWaveProjectile', Config.projectiles.lightningWaveProjectile, 40)
+        this.addProjectile('fireWaveProjectile', Config.projectiles.fireWaveProjectile, 40)
     }
 
 
     public static getTimeToReachTarget(key: string, targetDistance: number) {
-        if (Config.projectile[key]?.speed) {
-            return targetDistance / Config.projectile[key].speed
-        } else if (Config.projectile[key]?.triggerAfter) {
-            return Config.projectile[key].triggerAfter
+        if (Config.projectiles[key]?.speed) {
+            return targetDistance / Config.projectiles[key].speed
+        } else if (Config.projectiles[key]?.triggerAfter) {
+            return Config.projectiles[key].triggerAfter
         } else {
             return 0
         }
@@ -319,7 +319,7 @@ export class Projectiles {
 
 
     public static getDistance(key): number {
-        const projectileConfig = Config.projectile[key]
+        const projectileConfig = Config.projectiles[key]
         return projectileConfig.speed * projectileConfig.lifespan
     }
 

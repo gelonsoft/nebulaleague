@@ -363,8 +363,8 @@ export class Player extends Phaser.GameObjects.Container {
                 this.selectedAbilityKey = key
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, true)
                 this.scene.syncSelectedWeapon(this, false)
-                this.actions.weaponPrimary.laser.clear()
-                this.actions.weaponSecondary.laser.clear()
+                this.actions.weaponPrimary.laserGraphics.clear()
+                this.actions.weaponSecondary.laserGraphics.clear()
                 this.scene.input.setDefaultCursor('url(assets/cursors/SC2-cursor.cur), pointer')
                 // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-target-none.cur), pointer')
                 // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-select-none.cur), pointer')

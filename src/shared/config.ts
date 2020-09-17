@@ -1,6 +1,8 @@
 import {
     EffectKeys,
     ControlledBy,
+    AbilityAction,
+    AbilityDrawingStyle,
 } from '../shared/models'
 
 
@@ -79,7 +81,146 @@ export class Config {
         }
     }
 
-    public static readonly projectile = {
+    public static readonly weapons = {
+        pistol: {
+            name: 'pistol',
+            frame: 'pistol-gun.png',
+            cooldownDelay: 0.7,
+            projectileKey: 'pistolBullet',
+            laser: {
+                color: 0xff5252,
+                width: 3,
+                alpha: 0.9,
+            }
+        },
+        ak47: {
+            name: 'ak47',
+            frame: 'ak47.png',
+            cooldownDelay: 0.5,
+            projectileKey: 'ak47Bullet',
+            laser: {
+                color: 0x00f8f8,
+                width: 3,
+                alpha: 0.9,
+            }
+        },
+        p90: {
+            name: 'p90',
+            frame: 'p90.png',
+            cooldownDelay: 0.2,
+            projectileKey: 'p90Bullet',
+            laser: {
+                color: 0x00ff00,
+                width: 3,
+                alpha: 0.9,
+            }
+        },
+        revolver: {
+            name: 'revolver',
+            frame: 'revolver.png',
+            cooldownDelay: 0.2,
+            projectileKey: 'revolverBullet',
+            laser: {
+                color: 0x00ff00,
+                width: 3,
+                alpha: 0.9,
+            }
+        },
+        thompson: {
+            name: 'thompson',
+            frame: 'thompson-m1928.png',
+            cooldownDelay: 5,
+            projectileKey: 'thompsonBullet',
+            laser: {
+                color: 0x0000ff,
+                width: 3,
+                alpha: 0.9,
+            }
+        }
+    }
+
+    public static readonly abilities = {
+        blink: {
+            name: 'blink',
+            frame: 'teleport.png',
+            action: AbilityAction.Blink,
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 10,
+            rangeDistance: 500,
+            radiusDistance: 30,
+            triggerAfter: 0.05,
+        },
+        flame: {
+            name: 'flame',
+            frame: 'fire-zone.png',
+            action: AbilityAction.Projectile,
+            projectileKey: 'flameProjectile',
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 20,
+            rangeDistance: 420,
+            radiusDistance: 60,
+        },
+        rootTip: {
+            name: 'rootTip',
+            frame: 'root-tip.png',
+            projectileKey: 'rootTipProjectile',
+            action: AbilityAction.Projectile,
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 15,
+            rangeDistance: 450,
+            radiusDistance: 60,
+        },
+        chargedArrow: {
+            name: 'chargedArrow',
+            frame: 'charged-arrow.png',
+            action: AbilityAction.ProjectileWithRotation,
+            projectileKey: 'chargedArrowProjectile',
+            drawingStyle: AbilityDrawingStyle.Ray,
+            cooldownDelay: 10,
+        },
+        frozenWave: {
+            name: 'frozenWave',
+            frame: 'frozen-body.png',
+            action: AbilityAction.Projectile,
+            projectileKey: 'frozenWaveProjectile',
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 5,
+            radiusDistanceAlpha: 0.4,
+            radiusDistance: 320,
+        },
+        psychicWave: {
+            name: 'psychicWave',
+            frame: 'psychic-waves.png',
+            action: AbilityAction.Projectile,
+            projectileKey: 'psychicWaveProjectile',
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 10,
+            radiusDistanceAlpha: 0.4,
+            radiusDistance: 230,
+        },
+        lightningWave: {
+            name: 'lightningWave',
+            frame: 'lightning-shout.png',
+            action: AbilityAction.Projectile,
+            projectileKey: 'lightningWaveProjectile',
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 8,
+            radiusDistanceAlpha: 0.4,
+            radiusDistance: 260,
+        },
+        fireWave: {
+            name: 'fireWave',
+            frame: 'fire-wave.png',
+            action: AbilityAction.Projectile,
+            projectileKey: 'fireWaveProjectile',
+            drawingStyle: AbilityDrawingStyle.Zone,
+            cooldownDelay: 3,
+            radiusDistanceAlpha: 0.4,
+            radiusDistance: 240,
+        },
+    }
+    
+    public static readonly projectiles = {
         pistolBullet: {
             key: 'pistolBullet',
             className: 'Bullet',

@@ -1,131 +1,19 @@
+import { AbilityDrawingStyle, AbilityModel, AbilityAction } from '@shared/models'
+import { Config } from '@shared/config'
 import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/player'
 import { Projectiles } from '~/entities/projectiles'
 
 
-export enum DrawingStyles {
-    Zone,
-    Ray,
-}
 
-export enum Action {
-    Blink,
-    Projectile,
-    ProjectileWithRotation,
-}
-
-
-export interface AbilityConfig {
-    name: string
-    frame: string
-    action: Action
-    projectileKey?: string
-    cooldownDelay: number
-    rangeDistance?: number
-    drawingStyle: DrawingStyles
-    radiusDistance?: number
-    rangeDistanceColor?: number
-    triggerAfter?: number
-    radiusDistanceColor?: number
-    raySize?: number
-    rayColor?: number
-    rangeDistanceAlpha?: number
-    radiusDistanceAlpha?: number
-    rayDistanceAlpha?: number
-}
-
-
-
-export const abilitiesConfig = {
-    blink: {
-        name: 'blink',
-        frame: 'teleport.png',
-        action: Action.Blink,
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 10,
-        rangeDistance: 500,
-        radiusDistance: 30,
-        triggerAfter: 0.05,
-    },
-    flame: {
-        name: 'flame',
-        frame: 'fire-zone.png',
-        action: Action.Projectile,
-        projectileKey: 'flameProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 20,
-        rangeDistance: 420,
-        radiusDistance: 60,
-    },
-    rootTip: {
-        name: 'rootTip',
-        frame: 'root-tip.png',
-        projectileKey: 'rootTipProjectile',
-        action: Action.Projectile,
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 15,
-        rangeDistance: 450,
-        radiusDistance: 60,
-    },
-    chargedArrow: {
-        name: 'chargedArrow',
-        frame: 'charged-arrow.png',
-        action: Action.ProjectileWithRotation,
-        projectileKey: 'chargedArrowProjectile',
-        drawingStyle: DrawingStyles.Ray,
-        cooldownDelay: 10,
-    },
-    frozenWave: {
-        name: 'frozenWave',
-        frame: 'frozen-body.png',
-        action: Action.Projectile,
-        projectileKey: 'frozenWaveProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 5,
-        radiusDistanceAlpha: 0.4,
-        radiusDistance: 320,
-    },
-    psychicWave: {
-        name: 'psychicWave',
-        frame: 'psychic-waves.png',
-        action: Action.Projectile,
-        projectileKey: 'psychicWaveProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 10,
-        radiusDistanceAlpha: 0.4,
-        radiusDistance: 230,
-    },
-    lightningWave: {
-        name: 'lightningWave',
-        frame: 'lightning-shout.png',
-        action: Action.Projectile,
-        projectileKey: 'lightningWaveProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 8,
-        radiusDistanceAlpha: 0.4,
-        radiusDistance: 260,
-    },
-    fireWave: {
-        name: 'fireWave',
-        frame: 'fire-wave.png',
-        action: Action.Projectile,
-        projectileKey: 'fireWaveProjectile',
-        drawingStyle: DrawingStyles.Zone,
-        cooldownDelay: 3,
-        radiusDistanceAlpha: 0.4,
-        radiusDistance: 240,
-    },
-}
-
-
-export class Ability  {
+export class Ability {
     public scene: MainScene
     public projectiles: Projectiles
     public name: string
     public frame: string
-    public action: Action
+    public action: AbilityAction
     public cooldownDelay: number
-    public drawingStyle: DrawingStyles
+    public drawingStyle: AbilityDrawingStyle
     public projectileKey?: string
     public rangeDistance: number
     public radiusDistance: number
@@ -140,9 +28,9 @@ export class Ability  {
     public rangeGraphics?: Phaser.GameObjects.Graphics
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
-    
-    
-    constructor(scene: MainScene, config: AbilityConfig) {
+
+
+    constructor(scene: MainScene, config: AbilityModel) {
         this.scene = scene
         this.projectiles = this.scene.projectiles
         this.name = config.name
@@ -161,22 +49,22 @@ export class Ability  {
         this.rangeDistanceAlpha = config.rangeDistanceAlpha || 0.2
         this.radiusDistanceAlpha = config.radiusDistanceAlpha || 0.8
         this.rayDistanceAlpha = config.radiusDistanceAlpha || 1
-        
 
-        switch(config.drawingStyle) {
-            case DrawingStyles.Zone:
+
+        switch (config.drawingStyle) {
+            case AbilityDrawingStyle.Zone:
                 this.rangeGraphics = this.scene.add.graphics()
                 this.radiusGraphics = this.scene.add.graphics()
                 break;
-                
-            case DrawingStyles.Ray:
+
+            case AbilityDrawingStyle.Ray:
                 this.rangeDistance = Projectiles.getDistance(this.projectileKey)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break;
         }
     }
-   public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
+    public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
             this.rangeGraphics.fillStyle(this.rangeDistanceColor, this.rangeDistanceAlpha)
@@ -188,32 +76,32 @@ export class Ability  {
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
             const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition) ?
-                pointerPosition:
+                pointerPosition :
                 this.getMaxRadiusPosition(player)
-                
+
             this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
             this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
         }
 
-       if (this.rayGraphics) {
-           this.rayGraphics.clear()
-           const rayEndPosition = this.getMaxRadiusPosition(player)
-           
-           const line = new Phaser.Geom.Line(
-               player.body.center.x,
-               player.body.center.y,
-               rayEndPosition.x,
-               rayEndPosition.y,
-           )
-           
-           this.rayGraphics.lineStyle(this.raySize, this.rayColor, this.rayDistanceAlpha)
-           this.rayGraphics.strokeLineShape(line)
-       }
+        if (this.rayGraphics) {
+            this.rayGraphics.clear()
+            const rayEndPosition = this.getMaxRadiusPosition(player)
+
+            const line = new Phaser.Geom.Line(
+                player.body.center.x,
+                player.body.center.y,
+                rayEndPosition.x,
+                rayEndPosition.y,
+            )
+
+            this.rayGraphics.lineStyle(this.raySize, this.rayColor, this.rayDistanceAlpha)
+            this.rayGraphics.strokeLineShape(line)
+        }
     }
-    
-   public clearDraw(): void {
+
+    public clearDraw(): void {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
         }
@@ -226,13 +114,13 @@ export class Ability  {
     }
 
     public isInRangeToTrigger(
-       sourcePosition: Phaser.Math.Vector2,
-       pointerPosition: Phaser.Math.Vector2
-   ): boolean {
-       const distance = Phaser.Math.Distance.Between(
-           sourcePosition.x, sourcePosition.y,
-           pointerPosition.x, pointerPosition.y
-       )
+        sourcePosition: Phaser.Math.Vector2,
+        pointerPosition: Phaser.Math.Vector2
+    ): boolean {
+        const distance = Phaser.Math.Distance.Between(
+            sourcePosition.x, sourcePosition.y,
+            pointerPosition.x, pointerPosition.y
+        )
         return distance <= this.rangeDistance
     }
 
@@ -270,11 +158,11 @@ export class Ability  {
     ): void {
         const targetPosition =
             this.isInRangeToTrigger(player.body.center, pointerPosition) ?
-            pointerPosition:
-            this.getMaxRadiusPosition(player)
-        
+                pointerPosition :
+                this.getMaxRadiusPosition(player)
+
         switch (this.action) {
-            case Action.Blink:
+            case AbilityAction.Blink:
                 this.scene.tweens.add({
                     targets: player,
                     alpha: { from: 1, to: 0 },
@@ -291,10 +179,10 @@ export class Ability  {
                     },
                 })
                 break
-            case Action.Projectile:
+            case AbilityAction.Projectile:
                 this.triggerProjectile(player, sourcePosition, targetPosition)
                 break
-            case Action.ProjectileWithRotation:
+            case AbilityAction.ProjectileWithRotation:
                 this.triggerProjectile(player, sourcePosition, targetPosition, true)
                 break
         }
@@ -306,7 +194,7 @@ export function buildAbilities(
     scene: MainScene,
 ): Record<string, Ability> {
     const abilities = {}
-    for(const [key, config] of Object.entries(abilitiesConfig)) {
+    for (const [key, config] of Object.entries(Config.abilities)) {
         abilities[key] = new Ability(scene, config)
     }
     return abilities

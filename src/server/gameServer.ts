@@ -139,7 +139,6 @@ export class GameServer {
         const playerModel = playerSelectionState.players.find((player) => player.id === socket.id)
         Object.assign(playerModel, playerConfig)
         playerSelectionState.gameRoom = this.startGameRoom(socket, playerSelectionState)
-        console.log('hello')
         socket.emit(ClientEvent.playerSelectionStart, playerSelectionState)
     }
 

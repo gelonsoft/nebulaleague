@@ -1,79 +1,9 @@
+import { WeaponModel } from '@shared/models'
+import { Config } from '@shared/config'
 import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/player'
 import { Projectiles } from '~/entities/projectiles'
 
-
-export const weaponsConfig = {
-    pistol: {
-        name: 'pistol',
-        frame: 'pistol-gun.png',
-        cooldownDelay: 0.7,
-        projectileKey: 'pistolBullet',
-        laserConfig: {
-            color: 0xff5252,
-            width: 3,
-            alpha: 0.9,
-        }
-    },
-    ak47: {
-        name: 'ak47',
-        frame: 'ak47.png',
-        cooldownDelay: 0.5,
-        projectileKey: 'ak47Bullet',
-        laserConfig: {
-            color: 0x00f8f8,
-            width: 3,
-            alpha: 0.9,
-        }
-    },
-    p90: {
-        name: 'p90',
-        frame: 'p90.png',
-        cooldownDelay: 0.2,
-        projectileKey: 'p90Bullet',
-        laserConfig: {
-            color: 0x00ff00,
-            width: 3,
-            alpha: 0.9,
-        }
-    },
-    revolver: {
-        name: 'revolver',
-        frame: 'revolver.png',
-        cooldownDelay: 0.2,
-        projectileKey: 'revolverBullet',
-        laserConfig: {
-            color: 0x00ff00,
-            width: 3,
-            alpha: 0.9,
-        }
-    },
-    thompson: {
-        name: 'thompson',
-        frame: 'thompson-m1928.png',
-        cooldownDelay: 5,
-        projectileKey: 'thompsonBullet',
-        laserConfig: {
-            color: 0x0000ff,
-            width: 3,
-            alpha: 0.9,
-        }
-    }
-}
-
-export interface LaserConfig {
-    width: number
-    color: number
-    alpha: number
-}
-
-export interface WeaponConfig {
-    name: string
-    frame: string
-    cooldownDelay: number
-    projectileKey: string
-    laserConfig: LaserConfig
-}
 
 
 export class Weapon  {
@@ -82,24 +12,24 @@ export class Weapon  {
     public projectiles: Projectiles
     public name: string
     public frame: string
-    public laser: Phaser.GameObjects.Graphics
+    public laserGraphics: Phaser.GameObjects.Graphics
     public projectileKey: string
     public cooldownDelay: number
     public canFire: boolean
     public rangeDistance: number
     public weaponTimerEvent: Phaser.Time.TimerEvent | null
     
-    constructor(scene: MainScene, weaponConfig: WeaponConfig) {
+    constructor(scene: MainScene, weaponModel: WeaponModel) {
         this.scene = scene
         this.projectiles = scene.projectiles
-        this.name = weaponConfig.name
-        this.frame = weaponConfig.frame
-        this.cooldownDelay = weaponConfig.cooldownDelay
-        this.projectileKey =  weaponConfig.projectileKey
+        this.name = weaponModel.name
+        this.frame = weaponModel.frame
+        this.cooldownDelay = weaponModel.cooldownDelay
+        this.projectileKey =  weaponModel.projectileKey
         this.canFire = true
         this.rangeDistance = Projectiles.getDistance(this.projectileKey)
-        this.laser = this.scene.add.graphics({
-            lineStyle: weaponConfig.laserConfig
+        this.laserGraphics = this.scene.add.graphics({
+            lineStyle: weaponModel.laser
         })
     }
 
@@ -127,9 +57,9 @@ export class Weapon  {
         )
         
         if (isLaserReady) {
-            this.laser.alpha = 0.5
+            this.laserGraphics.alpha = 0.5
         } else {
-            this.laser.alpha = 0.1
+            this.laserGraphics.alpha = 0.1
         }
 
         const line = new Phaser.Geom.Line(
@@ -137,10 +67,9 @@ export class Weapon  {
             sourcePosition.x + Math.cos(angleToPointer) * this.rangeDistance,
             sourcePosition.y + Math.sin(angleToPointer) * this.rangeDistance,
         )
-        this.laser.clear()
-        this.laser.strokeLineShape(line)
+        this.laserGraphics.clear()
+        this.laserGraphics.strokeLineShape(line)
     }
-
     public clearDraw() {}
 }
 
@@ -149,7 +78,7 @@ export function buildWeapons(
     scene: MainScene,
 ): Record<string, Weapon> {
     const weapons = {}
-    for(const [key, weaponConfig] of Object.entries(weaponsConfig)) {
+    for(const [key, weaponConfig] of Object.entries(Config.weapons)) {
         weapons[key] = new Weapon(scene, weaponConfig)
     }
     return weapons

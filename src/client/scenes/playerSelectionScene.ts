@@ -3,8 +3,6 @@ import { Config } from "@shared/config"
 import { Event } from "@shared/events"
 import { Client } from "~/client"
 import { MyGame } from "~/phaserEngine"
-import { weaponsConfig } from '~/entities/weapons'
-import { abilitiesConfig } from '~/entities/abilities'
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
@@ -395,12 +393,12 @@ export class PlayerSelectionScene extends Phaser.Scene {
         
         const weaponContainerHeight = Math.max(
             2 * (slotSize + slotOffsetBetween),
-            (Object.values(weaponsConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
+            (Object.values(Config.weapons).length / slotColumnCount) * (slotSize + slotOffsetBetween)
         )
 
         const abilitiesContainerHeight = Math.max(
             4 * (slotSize + slotOffsetBetween),
-            (Object.values(abilitiesConfig).length / slotColumnCount) * (slotSize + slotOffsetBetween)
+            (Object.values(Config.abilities).length / slotColumnCount) * (slotSize + slotOffsetBetween)
         )
 
         const slotContainerWidth =
@@ -409,7 +407,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         
         const [weaponsContainer, selectedWeapons] = createSlotsContainer(
             this,
-            weaponsConfig,
+            Config.weapons,
             ItemType.Weapon,
             slotSize,
             slotPadding,
@@ -419,7 +417,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         weaponsContainer.setPosition(0, 0)
         const [abilitiesContainer, selectedAbilities] = createSlotsContainer(
             this,
-            abilitiesConfig,
+            Config.abilities,
             ItemType.Ability,
             slotSize,
             slotPadding,

@@ -79,13 +79,51 @@ export interface LaserModel {
 export interface WeaponModel {
     name: string
     frame: string
-    shotInterval: number
+    cooldownDelay: number
     projectileKey: string
-    laserConfig: LaserModel
+    laser: LaserModel
 }
 
 
-// PROJECTILEs INTERFACE
+
+// ABILITIES INTERFACE
+export enum AbilityDrawingStyle {
+    Zone,
+    Ray,
+}
+
+export enum AbilityAction {
+    Blink,
+    Projectile,
+    ProjectileWithRotation,
+}
+
+
+export interface AbilityModel {
+    name: string
+    frame: string
+    action: AbilityAction
+    projectileKey?: string
+    cooldownDelay: number
+    rangeDistance?: number
+    drawingStyle: AbilityDrawingStyle
+    radiusDistance?: number
+    rangeDistanceColor?: number
+    triggerAfter?: number
+    radiusDistanceColor?: number
+    raySize?: number
+    rayColor?: number
+    rangeDistanceAlpha?: number
+    radiusDistanceAlpha?: number
+    rayDistanceAlpha?: number
+}
+
+
+
+
+
+
+// PROJECTILE INTERFACE
 export interface ProjectileModel {
     key: string
     fromPlayerId: string
