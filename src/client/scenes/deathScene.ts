@@ -1,7 +1,8 @@
+import { Event } from "@shared/events"
 import { MyGame } from "~/phaserEngine"
 import { MainScene } from "~/scenes/mainScene"
 import { Player } from "~/player"
-import { Event } from "~/events"
+
 
 
 class TextContainer extends Phaser.GameObjects.Container {

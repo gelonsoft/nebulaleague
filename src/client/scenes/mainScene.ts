@@ -1,6 +1,6 @@
 import { Config } from '@shared/config'
 import { PlayerModel, PlayerAction, PlayerConfig, Position } from '@shared/models'
-import { Event } from '~/events'
+import { Event } from '@shared/events'
 import { MyGame } from '~/phaserEngine'
 import { Client } from '~/client'
 import { PlayerAI } from '~/ai'

@@ -1,7 +1,7 @@
 import { PlayerConfig } from "@shared/models"
 import { Config } from "@shared/config"
+import { Event } from "@shared/events"
 import { Client } from "~/client"
-import { Event } from "~/events"
 import { MyGame } from "~/phaserEngine"
 import { weaponsConfig } from '~/entities/weapons'
 import { abilitiesConfig } from '~/entities/abilities'

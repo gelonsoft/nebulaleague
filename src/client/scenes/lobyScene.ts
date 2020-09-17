@@ -1,6 +1,6 @@
 import { MyGame } from "~/phaserEngine"
 import { Client } from "~/client"
-import { Event } from "~/events"
+import { Event } from "@shared/events"
 
 export interface LobySceneConfig {
     playerName: string,
@@ -28,6 +28,7 @@ export class LobyScene extends Phaser.Scene {
         this.client = this.game.registry.get('client')
         this.client.emitLobyInit()
         this.game.events.on(Event.lobyStart, () => {
+            console.log('play')
             this.scene.start('playerSelectionScene')
             this.client.emitLobyEnd()
         })
