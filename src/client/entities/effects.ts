@@ -1,30 +1,6 @@
 import 'phaser'
-
-export interface EffectInterface {
-    name: EffectKeys
-    value: number
-    duration: number
-    tick?: number
-}
-
-
-export const effectIconsToFrame = {
-    slowed: 'snail.png',
-    fastenned: 'running-shoe.png',
-    paralyzed: 'stone-block.png',
-    stunned: 'brain-freeze.png',
-    burned: 'flame.png',
-    freezed: 'frozen-block.png',
-}
-
-export enum EffectKeys {
-    Slow = 'slowed',
-    Fast = 'fastenned',
-    Paralyze = 'paralyzed',
-    Stun = 'stunned',
-    Burn = 'burned',
-    Freeze = 'freezed',
-}
+import { Config } from '@shared/config'
+import { EffectInterface } from '@shared/models'
 
 
 export class EffectIconContainer extends Phaser.GameObjects.Container {
@@ -110,10 +86,10 @@ export function refreshEffectIcons(
     effectIcons.forEach((obj: EffectIconContainer) => {
         obj.setAlpha(0)
     })
-        
+
     let index = 0
     for (const effect of effects) {
-        const frameName = effectIconsToFrame[effect.name]
+        const frameName = Config.effect.toFrameName[effect.name]
         const obj = effectIcons[index] as EffectIconContainer
         obj.refresh(frameName)
         index += 1

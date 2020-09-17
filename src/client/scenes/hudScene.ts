@@ -1,10 +1,11 @@
-import { MyGame } from "~/phaserEngine"
 import { Config } from '@shared/config'
 import { Event } from '@shared/events'
+import { EffectInterface } from '@shared/models'
+import { MyGame } from "~/phaserEngine"
 import { Player, ActionTimeInterface } from "~/player"
 import { MainScene } from "~/scenes/mainScene"
 import { HealthBar } from '~/entities/healthbar'
-import { EffectInterface, createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
+import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
 
 
 class SlotContainer extends Phaser.GameObjects.Container {

@@ -4,7 +4,9 @@ import { Config } from '@shared/config'
 import {
     PlayerDirection,
     PlayerModel,
-    ControlledBy
+    ControlledBy,
+    EffectKeys,
+    EffectInterface
 } from '@shared/models'
 import { PlayerAI } from '~/ai'
 import { Weapon } from '~/entities/weapons'
@@ -12,12 +14,8 @@ import { Ability } from '~/entities/abilities'
 import { HealthBar } from '~/entities/healthbar'
 
 
-import {
-    EffectInterface,
-    EffectKeys,
-    createEffectIconsContainer,
-    refreshEffectIcons,
-} from '~/entities/effects'
+import { createEffectIconsContainer, refreshEffectIcons, } from '~/entities/effects'
+
 
 
 export interface PlayerMoveNextForce {

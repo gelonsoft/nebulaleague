@@ -1,7 +1,7 @@
-import { MainScene } from "~/scenes/mainScene"
-import { EffectInterface } from "~/entities/effects"
-import { Player } from "~/player"
 import { Config } from '@shared/config'
+import { EffectInterface } from "@shared/models"
+import { MainScene } from "~/scenes/mainScene"
+import { Player } from "~/player"
 
 
 
