@@ -17,10 +17,6 @@ import {
 import { ClientEvent, ServerEvent, Event }  from '@shared/events'
 
 
-export interface GameInitConfig {
-    player: PlayerModel
-    players: PlayerModel[]
-}
 
 export class Client {
     public socket: SocketIOClient.Socket

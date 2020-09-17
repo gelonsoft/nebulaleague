@@ -6,7 +6,7 @@ import {
     PlayerModel,
     ControlledBy,
     EffectKeys,
-    EffectInterface
+    EffectModel
 } from '@shared/models'
 import { PlayerAI } from '~/ai'
 import { Weapon } from '~/entities/weapons'
@@ -82,7 +82,7 @@ export class Player extends Phaser.GameObjects.Container {
     public accelerationChange: number
     public accelerationSteady: number
     public actionTimes: ActionTimesInterface
-    public effects: Set<EffectInterface>
+    public effects: Set<EffectModel>
     public burningTime: Phaser.Time.TimerEvent | null
     public deathCooldownDelay: number
     public playerModel: PlayerModel
@@ -396,7 +396,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
 
-    public addEffects(recieveEffects: Array<EffectInterface>): void {
+    public addEffects(recieveEffects: Array<EffectModel>): void {
         for (const effect of recieveEffects) {
             const appliedEffect = Object.assign(effect)
             this.effects.add(appliedEffect)
@@ -411,7 +411,7 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public handleEffectCreated(effect: EffectInterface) {
+    public handleEffectCreated(effect: EffectModel) {
         const value = effect.value
         switch (effect.name) {
             case EffectKeys.Slow:
@@ -465,7 +465,7 @@ export class Player extends Phaser.GameObjects.Container {
         refreshEffectIcons(this.effects, this.effectIconsContainer)
     }
 
-    public hit(damage: number, recieveEffects?: Array<EffectInterface>) {
+    public hit(damage: number, recieveEffects?: Array<EffectModel>) {
         this.health -= damage
         if (recieveEffects) {
             this.addEffects(recieveEffects)

@@ -120,16 +120,22 @@ export interface AbilityModel {
 
 
 
-
-
-
 // PROJECTILE INTERFACE
 export interface ProjectileModel {
     key: string
-    fromPlayerId: string
-    x: number
-    y: number
-    rotation?: number
+    name: string
+    frame: string
+    speed: number
+    damage: number
+    lifespan: number
+    effects?: Array<any>
+    radius: number
+    fillColor?: number
+    strokeColor?: number
+    fillAlpha?: number
+    strokeAlpha?: number
+    tick?: number
+    triggerAfter?: number
 }
 
 
@@ -143,7 +149,7 @@ export enum EffectKeys {
     Freeze = 'freezed',
 }
 
-export interface EffectInterface {
+export interface EffectModel {
     name: EffectKeys
     value: number
     duration: number

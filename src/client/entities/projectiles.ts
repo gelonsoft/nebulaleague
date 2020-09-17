@@ -1,5 +1,5 @@
 import { Config } from '@shared/config'
-import { EffectInterface } from "@shared/models"
+import { ProjectileModel, EffectModel } from "@shared/models"
 import { MainScene } from "~/scenes/mainScene"
 import { Player } from "~/player"
 
@@ -14,23 +14,6 @@ export interface ProjectileInterface {
     x: number
     y: number
     rotation?: number
-}
-
-export interface ProjectileConfig {
-    key: string
-    name: string
-    frame: string
-    speed: number
-    damage: number
-    lifespan: number
-    effects?: Array<any>
-    radius: number
-    fillColor?: number
-    strokeColor?: number
-    fillAlpha?: number
-    strokeAlpha?: number
-    tick?: number
-    triggerAfter?: number
 }
 
 
@@ -48,23 +31,23 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public damage?: number
     public fromPlayerId: string
     public killEvent: Phaser.Time.TimerEvent
-    public effects?: Array<EffectInterface>
+    public effects?: Array<EffectModel>
 
 
-    public constructor(scene: MainScene, projectileConfig: ProjectileConfig) {
-        super(scene, -10000, -10000, 'atlas', projectileConfig.frame)
+    public constructor(scene: MainScene, projectileModel: ProjectileModel) {
+        super(scene, -10000, -10000, 'atlas', projectileModel.frame)
         this.scene = scene
-        this.key = projectileConfig.key
-        this.lifespan = projectileConfig.lifespan
-        this.speed = projectileConfig.speed
-        this.damage = projectileConfig.damage
+        this.key = projectileModel.key
+        this.lifespan = projectileModel.lifespan
+        this.speed = projectileModel.speed
+        this.damage = projectileModel.damage
         this.fromPlayerId = 'unknown'
-        this.effects = projectileConfig.effects || []
+        this.effects = projectileModel.effects || []
         this.killEvent = null
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
-        this.radius = projectileConfig.radius
-        this.setDisplaySize(projectileConfig.radius, projectileConfig.radius)
+        this.radius = projectileModel.radius
+        this.setDisplaySize(projectileModel.radius, projectileModel.radius)
         this.body.setEnable(false)
         this.setActive(false)
         this.setVisible(false)
@@ -140,7 +123,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public lifespan: number
     public damage: number
     public fromPlayerId: string
-    public effects?: Array<EffectInterface>
+    public effects?: Array<EffectModel>
     public fillColor: number
     public strokeColor: number
     public fillAlpha: number
@@ -149,7 +132,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public killedOnHit: boolean
 
 
-    public constructor(scene: MainScene, blockConfig: ProjectileConfig) {
+    public constructor(scene: MainScene, blockConfig: ProjectileModel) {
         super(scene)
         this.fromPlayerId = 'unkown'
         this.key = blockConfig.key
@@ -217,7 +200,7 @@ export class Block extends Phaser.GameObjects.Graphics {
 export class BlockWithDelay extends Block implements ProjectileInterface {
     public triggerAfter: number
     public active: boolean
-    public constructor(scene: MainScene, blockConfig: ProjectileConfig) {
+    public constructor(scene: MainScene, blockConfig: ProjectileModel) {
         super(scene, blockConfig)
         this.triggerAfter = blockConfig.triggerAfter
         this.active = false
@@ -253,7 +236,7 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
 export class BlockWithTick extends Block implements ProjectileInterface {
     public tick: number
     public tickTimer: number
-    public constructor(scene: MainScene, blockConfig: ProjectileConfig) {
+    public constructor(scene: MainScene, blockConfig: ProjectileModel) {
         super(scene, blockConfig)
         this.tick = blockConfig.tick
     }

@@ -27,8 +27,12 @@ export class RandomItem {
         const consumables: Array<Consumable> = []
 
         for (const key of this.entries) {
-            const x = Phaser.Math.Between(Config.consumable.width / 2, Config.world.width - Config.world.width / 2)
-            const y = Phaser.Math.Between(Config.consumable.width / 2, Config.world.height - Config.world.width / 2)
+            const x = Phaser.Math.Between(
+                Config.consumable.width / 2, Config.world.width - Config.world.width / 2
+            )
+            const y = Phaser.Math.Between(
+                Config.consumable.width / 2, Config.world.height - Config.world.width / 2
+            )
 
             if (key === 'pill') {
                 consumables.push(new PillConsumable(scene, x, y))
@@ -50,12 +54,15 @@ export class Consumable extends Phaser.GameObjects.Sprite implements ConsumableI
         this.setDisplaySize(Config.consumable.width, Config.consumable.height)
     }
 
-    public action(player: Player): void {
-    }
+    public action(player: Player): void {}
 
     public randomPosition(): void {
-        this.x = Phaser.Math.Between(Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2)
-        this.y = Phaser.Math.Between(Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2)
+        this.x = Phaser.Math.Between(
+            Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2
+        )
+        this.y = Phaser.Math.Between(
+            Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2
+        )
         this.body.x = this.x - this.displayWidth / 2
         this.body.y = this.y - this.displayHeight / 2
     }

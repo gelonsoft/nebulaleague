@@ -1,6 +1,6 @@
 import 'phaser'
 import { Config } from '@shared/config'
-import { EffectInterface } from '@shared/models'
+import { EffectModel } from '@shared/models'
 
 
 export class EffectIconContainer extends Phaser.GameObjects.Container {
@@ -78,7 +78,7 @@ export function createEffectIconsContainer(
 
 
 export function refreshEffectIcons(
-    effects: Set<EffectInterface>,
+    effects: Set<EffectModel>,
     effectIconsContainer: Phaser.GameObjects.Container
 ) {
 

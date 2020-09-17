@@ -1,6 +1,6 @@
 import { Config } from '@shared/config'
 import { Event } from '@shared/events'
-import { EffectInterface } from '@shared/models'
+import { EffectModel } from '@shared/models'
 import { MyGame } from "~/phaserEngine"
 import { Player, ActionTimeInterface } from "~/player"
 import { MainScene } from "~/scenes/mainScene"
@@ -209,7 +209,7 @@ export class HudScene extends Phaser.Scene {
         this.weaponSecondaryContainer.refresh()
     }
 
-    private updateEffectChanged(icons: Set<EffectInterface>) {
+    private updateEffectChanged(icons: Set<EffectModel>) {
         refreshEffectIcons(icons, this.effectIconsContainer)
     }
 }
