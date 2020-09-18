@@ -175,7 +175,7 @@ export interface PlayerSelectionState {
 }
 
 export interface GameStateUpdated {
-    players: Record<string, PlayerChanged>
+    players?: Record<string, PlayerChanged>
 }
 
 export interface GameState {

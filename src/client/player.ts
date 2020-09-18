@@ -53,7 +53,7 @@ interface ActionsInterface {
 export interface ActionInterface {
     draw(sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2,
-        isLaserReady?: boolean): void,
+        isLaserReady?: boolean),
     cleaDraw(): void,
     trigger(player: Player,
         sourcePosition: Phaser.Math.Vector2,

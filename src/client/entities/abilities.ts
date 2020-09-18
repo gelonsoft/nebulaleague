@@ -5,7 +5,6 @@ import { Player } from '~/player'
 import { Projectiles } from '~/entities/projectiles'
 
 
-
 export class Ability {
     public scene: MainScene
     public projectiles: Projectiles

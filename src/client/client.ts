@@ -3,7 +3,6 @@ import { MyGame } from "~/phaserEngine"
 import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
 import { LobyScene } from '~/scenes/lobyScene'
 import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/player'
 
 import {
     PlayerModel,
@@ -105,7 +104,9 @@ export class Client {
     }
 
     public emitGameUpdated(gameUpdated: GameStateUpdated) {
-        this.socket.emit(ServerEvent.gameUpdated, gameUpdated)
+        if(Object.keys(gameUpdated).length) {
+            this.socket.emit(ServerEvent.gameUpdated, gameUpdated)
+        }
     }
 
     
@@ -134,15 +135,19 @@ export class Client {
         this.socket.on(ClientEvent.gameInit, (gameState: GameState) => {
             this.gameState = gameState
             this.isHost = gameState.hostId === this.id
-            if(!this.isHost) {
-                this.emitGameRefresh()
-            } else {
-                this.game.events.emit(Event.gameReady)
-            }
+            this.game.events.emit(Event.gameReady)
+            console.log(this.gameState)
+            // if(!this.isHost) {
+            //     this.emitGameRefresh()
+            // } else {
+            //     this.game.events.emit(Event.gameReady)
+            // }
         })
 
         this.socket.on(ClientEvent.gameUpdated, (updatedGamestate: GameState) => {
             this.gameState = updatedGamestate
+            
+            // console.log(updatedGamestate)
             // this.game.events.emit(Event.gameReady)
         })
 

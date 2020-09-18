@@ -1,3 +1,4 @@
+import * as objectAssignDeep from "object-assign-deep"
 import { Socket } from "socket.io"
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -166,20 +167,19 @@ export class GameServer {
         socket.to(hostId).emit(ClientEvent.gameRefreshServer)
     }
 
-    public handleGameUpdate(socket, gameStateUpdated: GameStateUpdated) {
+    public handleGameUpdate(socket: Socket, gameStateUpdated: GameStateUpdated) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        Object.assign(gameState, gameStateUpdated)
+        objectAssignDeep(gameState, gameStateUpdated)
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameState)
     }
 
-    public handleGameJoined(socket) {
+    public handleGameJoined(socket: Socket) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        // const newPlayer = gameState.players.find((player) => player.id === socket.id)
         const newPlayer = gameState.players[socket.id]
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameJoined, newPlayer)
     }
 
-    public handleGameQuit(socket) {
+    public handleGameQuit(socket: Socket) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const quitPlayer = gameState.players[socket.id]
         if (quitPlayer.id === gameState.hostId && Object.keys(gameState.players).length > 0) {
@@ -196,8 +196,6 @@ export class GameServer {
         socket.leave(this.clientToRoom.get(socket.id))
         this.clientToRoom.delete(socket.id)
     }
-
-
 
     public newGameRoom(playerSelectionState: PlayerSelectionState): string {
         const roomName = uuidv4()
@@ -216,7 +214,6 @@ export class GameServer {
         })
         return roomName
     }
-
 
     public startGameRoom(socket: Socket, playerSelectionState: PlayerSelectionState): string {
         let choosenRoom: string | null = null

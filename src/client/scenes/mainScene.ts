@@ -1,6 +1,13 @@
 import { updatedDiff } from 'deep-object-diff'
 import { Config } from '@shared/config'
-import { PlayerModel, PlayerAction, PlayerConfig, Position, PlayerChanged } from '@shared/models'
+import {
+    PlayerModel,
+    PlayerAction,
+    PlayerConfig,
+    Position,
+    PlayerChanged,
+    GameStateUpdated,
+} from '@shared/models'
 import { Event } from '@shared/events'
 import { MyGame } from '~/phaserEngine'
 import { Client } from '~/client'
@@ -58,7 +65,7 @@ export class MainScene extends Phaser.Scene {
         this.registerEvent()
 
         if (this.game.debug) {
-            this.scene.run('debugScene', this)
+            // this.scene.run('debugScene', this)
             window['p'] = this.player
             window['m'] = this
         }
@@ -325,6 +332,17 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    public getDiffGameState(): GameStateUpdated {
+        const playerChanged = updatedDiff(this.playerBefore, this.playerAfter)
+        const updateGameState: GameStateUpdated = {}
+        if (Object.keys(playerChanged).length > 0) {
+            updateGameState.players = {
+                [this.player.id]: playerChanged
+            }
+        }
+        return updateGameState
+    }
+    
     public update(time: number, delta: number): void {
         this.playerAfter = this.player.getChanged()
         this.mainControl.update()
@@ -362,12 +380,8 @@ export class MainScene extends Phaser.Scene {
                 player.update()
             })
         
+
+        this.client.emitGameUpdated(this.getDiffGameState())
         this.playerBefore = this.playerAfter
-        this.playerChanged = updatedDiff(this.playerBefore, this.playerAfter)
-        this.client.emitGameUpdated({
-            players: {
-                [this.player.id]: this.playerChanged
-            }
-        })
     }
 }
