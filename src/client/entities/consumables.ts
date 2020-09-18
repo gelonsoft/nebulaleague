@@ -1,5 +1,5 @@
 import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/player'
+import { Player } from '~/entities/player'
 import { Config } from '@shared/config'
 
 export interface ConsumableInterface {

@@ -11,8 +11,8 @@ import {
 import { Event } from '@shared/events'
 import { MyGame } from '~/phaserEngine'
 import { Client } from '~/client'
-import { PlayerAI } from '~/ai'
-import { Player, ActionTimeInterface, } from '~/player'
+import { PlayerAI } from '~/ai/playerAI'
+import { Player, ActionTimeInterface, } from '~/entities/player'
 import { MainControl, PlayerControl } from '~/controls'
 import { Consumable, RandomItem } from '~/entities/consumables'
 import { Projectiles, ProjectileInterface } from '~/entities/projectiles'
@@ -123,62 +123,6 @@ export class MainScene extends Phaser.Scene {
         this.consumables = this.physics.add.staticGroup()
         this.consumables.addMultiple(this.randomTable.spawn(this))
     }
-
-
-    // public createAIPlayers(): void {
-    //     let index = 0
-    //     while (this.players.getLength() < Config.player.size) {
-    //         const playerAIConfig = playersAIConfig[index]
-    //         const playerConfig = {
-    //             id: playerAIConfig.id,
-    //             name: 'bot',
-    //             controlledBy: ControlledBy.AIPlayer,
-    //             x: 0,
-    //             y: 0,
-    //             weaponPrimaryKey: playerAIConfig.weaponPrimaryKey,
-    //             weaponSecondaryKey: playerAIConfig.weaponSecondaryKey,
-    //             abilityKey1: playerAIConfig.abilityKey1,
-    //             abilityKey2: playerAIConfig.abilityKey2,
-    //             abilityKey3: playerAIConfig.abilityKey3,
-    //             abilityKey4: playerAIConfig.abilityKey4,
-    //         }
-    //         this.createPlayer(playerConfig, playerAIConfig)
-    //         index += 1
-    //     }
-    //     const pt: Player = this.players.getChildren()[1] as Player
-    //     pt.x = 500
-    //     pt.y = 500
-    // }
-
-
-    // public createPlayer(playerConfig: PlayerConfig, playerConfigAI?: any): void {
-    //     const newPlayer = new Player(this, playerConfig)
-    //     this.players.add(newPlayer)
-    //     if (playerConfig.controlledBy === ControlledBy.MainPlayer) {
-    //         this.player = newPlayer
-    //         this.players.add(newPlayer)
-    //         window['p'] = newPlayer
-    //     }
-    //     else if (playerConfig.controlledBy === ControlledBy.AIPlayer) {
-    //         const playersChildren = this.players.getChildren() as Player[]
-
-    //         this.players.add(newPlayer)
-    //         const playerAI = new PlayerAI(
-    //             this,
-    //             newPlayer,
-    //             playersChildren.filter((player) => player.id !== newPlayer.id),
-    //             playerConfigAI
-    //         )
-    //         this.playersAI.push(playerAI)
-    //     }
-    // }
-
-
-    // public initResetPlayersPosition(): void {
-    //     this.players.getChildren().forEach((player: Player) => {
-    //         player.reset(this.players)
-    //     })
-    // }
 
 
     public registerEvent(): void {

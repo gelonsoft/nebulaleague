@@ -1,7 +1,7 @@
 import { Event } from "@shared/events"
 import { MyGame } from "~/phaserEngine"
 import { MainScene } from "~/scenes/mainScene"
-import { Player } from "~/player"
+import { Player } from '~/entities/player'
 
 
 

@@ -1,8 +1,8 @@
 import { MainScene } from "~/scenes/mainScene"
 import { MyGame } from "~/phaserEngine"
 import { DebugControl } from "~/controls"
-import { PlayerAI } from "~/ai"
-import { Player } from "~/player"
+import { PlayerAI } from '~/ai/playerAI'
+import { Player } from '~/entities/player'
 
 
 

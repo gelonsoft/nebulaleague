@@ -9,7 +9,7 @@ import {
     EffectModel,
     PlayerChanged
 } from '@shared/models'
-import { PlayerAI } from '~/ai'
+import { PlayerAI } from '~/ai/playerAI'
 import { Weapon } from '~/entities/weapons'
 import { Ability } from '~/entities/abilities'
 import { HealthBar } from '~/entities/healthbar'

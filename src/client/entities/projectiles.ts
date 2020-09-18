@@ -1,7 +1,7 @@
 import { Config } from '@shared/config'
 import { ProjectileModel, EffectModel } from "@shared/models"
 import { MainScene } from "~/scenes/mainScene"
-import { Player } from "~/player"
+import { Player } from "~/entities/player"
 
 
 

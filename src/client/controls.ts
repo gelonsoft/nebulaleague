@@ -1,6 +1,6 @@
 import { Event }  from '@shared/events'
 import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/player'
+import { Player } from '~/entities/player'
 import { PlayerAction, PlayerDirection } from '@shared/models'
 import { DebugScene } from '~/scenes/debugScene'
 

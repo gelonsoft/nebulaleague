@@ -2,7 +2,7 @@ import { Config } from '@shared/config'
 import { Event } from '@shared/events'
 import { EffectModel } from '@shared/models'
 import { MyGame } from "~/phaserEngine"
-import { Player, ActionTimeInterface } from "~/player"
+import { Player, ActionTimeInterface } from '~/entities/player'
 import { MainScene } from "~/scenes/mainScene"
 import { HealthBar } from '~/entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
