@@ -1,5 +1,5 @@
 import * as io from 'socket.io-client'
-import { MyGame } from "~/phaserEngine"
+import { MyGame } from "~/index"
 import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
 import { LobyScene } from '~/scenes/lobyScene'
 import { MainScene } from '~/scenes/mainScene'

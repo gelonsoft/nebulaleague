@@ -1,5 +1,5 @@
 import { AnimationHelper } from "~/helpers/animationHelper"
-import { MyGame } from "~/phaserEngine"
+import { MyGame } from "~/index"
 import { Client } from '~/client'
 
 export class BootScene extends Phaser.Scene {

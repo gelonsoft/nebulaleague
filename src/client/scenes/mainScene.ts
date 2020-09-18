@@ -9,7 +9,7 @@ import {
     GameStateUpdated,
 } from '@shared/models'
 import { Event } from '@shared/events'
-import { MyGame } from '~/phaserEngine'
+import { MyGame } from '~/index'
 import { Client } from '~/client'
 import { PlayerAI } from '~/ai/playerAI'
 import { Player, ActionTimeInterface, } from '~/entities/player'

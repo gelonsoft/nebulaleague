@@ -1,4 +1,4 @@
-import { MyGame } from "~/phaserEngine"
+import { MyGame } from "~/index"
 import { Client } from "~/client"
 import { Event } from "@shared/events"
 
