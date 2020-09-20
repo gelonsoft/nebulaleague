@@ -1,5 +1,6 @@
 import { Config } from '@shared/config'
-import { ProjectileModel, EffectModel } from "@shared/models"
+import { Event } from '@shared/events'
+import { ProjectileModel, EffectModel, ProjectileChanged } from "@shared/models"
 import { MainScene } from "~/scenes/mainScene"
 import { Player } from "~/entities/player"
 
@@ -9,6 +10,7 @@ export interface ProjectileInterface {
     fire(position: Phaser.Math.Vector2, rotation: number): void
     actionOnCollision(hittedPlayer: Player): void
     kill(): void
+    getChanged(): ProjectileChanged
     fromPlayerId: string
     name: string
     x: number
@@ -91,6 +93,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
             },
             callbackScope: this,
         })
+        this.scene.game.events.emit(Event.ProjectileFired, this)
     }
 
 
@@ -111,6 +114,14 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.setVisible(false)
         this.body.setEnable(false)
         this.body.reset(-10000, -10000)
+        this.scene.game.events.emit(Event.ProjectileKilled, this)
+    }
+
+    public getChanged(): ProjectileChanged {
+        return {
+            x: this.body.center.x,
+            y: this.body.center.y,
+        }
     }
 }
 
@@ -132,18 +143,18 @@ export class Block extends Phaser.GameObjects.Graphics {
     public killedOnHit: boolean
 
 
-    public constructor(scene: MainScene, blockConfig: ProjectileModel) {
+    public constructor(scene: MainScene, blockModel: ProjectileModel) {
         super(scene)
         this.fromPlayerId = 'unkown'
-        this.key = blockConfig.key
-        this.radius = blockConfig.radius
-        this.lifespan = blockConfig.lifespan
-        this.damage = blockConfig.damage
-        this.effects = blockConfig.effects || []
-        this.fillColor = blockConfig.fillColor
-        this.strokeColor = blockConfig.strokeColor
-        this.fillAlpha = blockConfig.fillAlpha
-        this.strokeAlpha = blockConfig.strokeAlpha
+        this.key = blockModel.key
+        this.radius = blockModel.radius
+        this.lifespan = blockModel.lifespan
+        this.damage = blockModel.damage
+        this.effects = blockModel.effects || []
+        this.fillColor = blockModel.fillColor
+        this.strokeColor = blockModel.strokeColor
+        this.fillAlpha = blockModel.fillAlpha
+        this.strokeAlpha = blockModel.strokeAlpha
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.scene.add.existing(this)
         this.body.setEnable(false)
@@ -178,7 +189,7 @@ export class Block extends Phaser.GameObjects.Graphics {
             },
             callbackScope: this,
         })
-        // this.scene.syncProjectileFire(this)
+        this.scene.game.events.emit(Event.ProjectileFired, this)
     }
 
     public actionOnCollision(hittedPlayer: Player) {
@@ -194,7 +205,16 @@ export class Block extends Phaser.GameObjects.Graphics {
         this.setVisible(false)
         this.body.setEnable(false)
         this.body.reset(-10000, -10000)
+        this.scene.game.events.emit(Event.ProjectileKilled, this)
     }
+
+    public getChanged(): ProjectileChanged {
+        return {
+            x: this.body.center.x,
+            y: this.body.center.y,
+        }
+    }
+    
 }
 
 export class BlockWithDelay extends Block implements ProjectileInterface {
@@ -306,6 +326,11 @@ export class Projectiles {
         return projectileConfig.speed * projectileConfig.lifespan
     }
 
+    public getProjectile(id: string) {
+        const [key, index] = id.split('-')
+        console.log(key)
+        console.log(index)
+    }
 
     public addProjectile(
         key: string,
@@ -317,7 +342,6 @@ export class Projectiles {
             const ClassName = Projectiles.getProjectileByClassName(projectileConfig.className)
             const projectile = new ClassName(this.scene, projectileConfig)
             projectile.setName(`${key}-${index}`)
-            this.projectileByIds.set(projectile.name, projectile)
             group.add(projectile)
         })
         this.projectiles.set(key, group)
@@ -328,10 +352,11 @@ export class Projectiles {
         fromPlayerId: string,
         position: Phaser.Math.Vector2,
         rotation?: number)
-        : void {
+    : void {
         const projectileGroup = this.projectiles.get(key)
         const projectile = projectileGroup.getFirstDead()
         projectile.fromPlayerId = fromPlayerId
+        this.projectileByIds.set(projectile.name, projectile)
         projectile.fire(position, rotation)
     }
 

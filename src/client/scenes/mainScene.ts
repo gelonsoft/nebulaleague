@@ -1,15 +1,17 @@
-import { updatedDiff } from 'deep-object-diff'
+import { updatedDiff, diff } from 'deep-object-diff'
 import { Config } from '@shared/config'
 import {
+    Position,
     PlayerModel,
     PlayerAction,
     PlayerConfig,
-    Position,
     PlayerChanged,
+    ProjectileChanged,
     GameStateUpdated,
+    GameState,
 } from '@shared/models'
 import { Event } from '@shared/events'
-import { MyGame } from '~/index'
+import { MyGame } from '../index'
 import { Client } from '~/client'
 import { PlayerAI } from '~/ai/playerAI'
 import { Player, ActionTimeInterface, } from '~/entities/player'
@@ -38,10 +40,11 @@ export class MainScene extends Phaser.Scene {
     public mainCameraZoom: number
     public backgroundImage: Phaser.GameObjects.Image
     public playerConfig: PlayerConfig
-    public socket: SocketIOClient.Socket
-    public playerChanged: PlayerChanged | null
-    public playerBefore: PlayerChanged | null
-    public playerAfter: PlayerChanged | null
+    public playerPrevious: PlayerChanged | null
+    public playerCurrent: PlayerChanged | null
+    public projectilesPrevious: Record<string, ProjectileChanged> 
+    public projectilesCurrent: Record<string, ProjectileChanged> 
+    
 
     constructor() {
         super({
@@ -69,6 +72,11 @@ export class MainScene extends Phaser.Scene {
             window['p'] = this.player
             window['m'] = this
         }
+
+        this.playerPrevious = null
+        this.playerCurrent = null
+        this.projectilesPrevious = {}
+        this.projectilesCurrent = {}
 
     }
 
@@ -158,6 +166,32 @@ export class MainScene extends Phaser.Scene {
                 )
                 this.player.action(playerAction.action, pointerVector)
             }
+        })
+
+        this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
+            this.projectilesCurrent[projectile.name] = projectile.getChanged()
+            // this.client.emitGameUpdated(this.getDiffGameState())
+        })
+
+        this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
+            delete this.projectilesCurrent[projectile.name]
+            // this.client.emitGameUpdated(this.getDiffGameState())
+        })
+
+        
+        this.game.events.on(Event.gameUpdated, (gameState: GameState) => {
+            for (const [idModel, playerModel] of Object.entries(gameState.players)) {
+                const player = this.players.children.get('id', idModel as any)
+                Object.assign(player, playerModel)
+            }
+            
+
+            console.log(gameState)
+            for (const [idModel, projectileModel] of Object.entries(gameState.projectiles)) {
+                this.projectiles.getProjectile(idModel)
+                console.log()
+            }
+            
         })
     }
 
@@ -277,18 +311,30 @@ export class MainScene extends Phaser.Scene {
     }
 
     public getDiffGameState(): GameStateUpdated {
-        const playerChanged = updatedDiff(this.playerBefore, this.playerAfter)
+        const playerChanged = diff(this.playerPrevious, this.playerCurrent) as Record<string, PlayerChanged>
+        const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<string, ProjectileChanged>
+
         const updateGameState: GameStateUpdated = {}
         if (Object.keys(playerChanged).length > 0) {
             updateGameState.players = {
                 [this.player.id]: playerChanged
             }
         }
+        if (Object.keys(projectilesChanged).length > 0) {
+            updateGameState.projectiles = projectilesChanged
+        }
+        
         return updateGameState
     }
     
     public update(time: number, delta: number): void {
-        this.playerAfter = this.player.getChanged()
+        this.playerCurrent = this.player.getChanged()
+        for (const name of Object.keys(this.projectilesCurrent)) {
+            this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name).getChanged()
+        }
+
+
+        
         this.mainControl.update()
         this.playerControl.update()
 
@@ -323,9 +369,12 @@ export class MainScene extends Phaser.Scene {
             .forEach((player: Player) => {
                 player.update()
             })
-        
 
-        this.client.emitGameUpdated(this.getDiffGameState())
-        this.playerBefore = this.playerAfter
+        const gameStateChanged = this.getDiffGameState()
+        if(Object.keys(gameStateChanged).length > 0) {
+            this.client.emitGameUpdated(gameStateChanged)
+        }
+        this.playerPrevious = this.playerCurrent
+        this.projectilesPrevious = Object.assign({}, this.projectilesCurrent)
     }
 }

@@ -1,5 +1,6 @@
 import 'process'
 import './main.scss'
+
 import { MainScene } from "~/scenes/mainScene"
 import { HudScene } from "~/scenes/hudScene"
 import { BootScene } from "~/scenes/bootScene"

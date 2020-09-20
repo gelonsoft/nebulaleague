@@ -1,3 +1,4 @@
+import * as objectAssignDeep from "object-assign-deep"
 import * as io from 'socket.io-client'
 import { MyGame } from "~/index"
 import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
@@ -104,9 +105,7 @@ export class Client {
     }
 
     public emitGameUpdated(gameUpdated: GameStateUpdated) {
-        if(Object.keys(gameUpdated).length) {
-            this.socket.emit(ServerEvent.gameUpdated, gameUpdated)
-        }
+        this.socket.emit(ServerEvent.gameUpdated, gameUpdated)
     }
 
     
@@ -136,7 +135,6 @@ export class Client {
             this.gameState = gameState
             this.isHost = gameState.hostId === this.id
             this.game.events.emit(Event.gameReady)
-            console.log(this.gameState)
             // if(!this.isHost) {
             //     this.emitGameRefresh()
             // } else {
@@ -144,11 +142,10 @@ export class Client {
             // }
         })
 
-        this.socket.on(ClientEvent.gameUpdated, (updatedGamestate: GameState) => {
-            this.gameState = updatedGamestate
-            
-            // console.log(updatedGamestate)
-            // this.game.events.emit(Event.gameReady)
+        this.socket.on(ClientEvent.gameUpdated, (gameState: GameState) => {
+            this.gameState = gameState
+            this.game.events.emit(Event.gameUpdated, this.gameState)
+
         })
 
         // this.socket.on(ClientEvent.gameRefreshServer, () => {

@@ -365,8 +365,6 @@ export class Player extends Phaser.GameObjects.Container {
                 this.actions.weaponPrimary.laserGraphics.clear()
                 this.actions.weaponSecondary.laserGraphics.clear()
                 this.scene.input.setDefaultCursor('url(assets/cursors/SC2-cursor.cur), pointer')
-                // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-target-none.cur), pointer')
-                // this.scene.input.setDefaultCursor('url(assets/cursors/SC2-select-none.cur), pointer')
             }
         }
     }
@@ -566,6 +564,7 @@ export class Player extends Phaser.GameObjects.Container {
             x: this.body.center.x,
             y: this.body.center.y,
             rotation: this.rotation,
+            health: this.health,
         }
     }
 }

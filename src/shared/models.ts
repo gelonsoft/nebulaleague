@@ -1,3 +1,12 @@
+// GENERAL INTERFACE //
+
+export interface Position {
+    x: number
+    y: number
+}
+
+
+
 // PLAYER INTERFACE //
 export enum ControlledBy {
     MainPlayer,
@@ -45,10 +54,6 @@ export interface PlayerDirection {
     y: number
 }
 
-export interface Position {
-    x: number
-    y: number
-}
 
 export interface PlayerAction {
     direction?: PlayerDirection,
@@ -124,12 +129,12 @@ export interface AbilityModel {
 export interface ProjectileModel {
     key: string
     name: string
-    frame: string
     speed: number
     damage: number
     lifespan: number
-    effects?: Array<any>
     radius: number
+    effects?: Array<any>
+    frame?: string
     fillColor?: number
     strokeColor?: number
     fillAlpha?: number
@@ -137,6 +142,19 @@ export interface ProjectileModel {
     tick?: number
     triggerAfter?: number
 }
+
+
+export interface ProjectileChanged {
+    x?: number
+    y?: number
+    fillColor?: number
+    strokeColor?: number
+    fillAlpha?: number
+    strokeAlpha?: number
+    tick?: number
+    triggerAfter?: number
+}
+
 
 
 // EFFECT INTERFACE
@@ -176,10 +194,12 @@ export interface PlayerSelectionState {
 
 export interface GameStateUpdated {
     players?: Record<string, PlayerChanged>
+    projectiles?: Record<string, ProjectileChanged>
 }
 
 export interface GameState {
     gameMode: string
-    players: Record<string, PlayerModel>
     hostId?: string
+    players: Record<string, PlayerModel>
+    projectiles: Record<string, ProjectileModel>
 }

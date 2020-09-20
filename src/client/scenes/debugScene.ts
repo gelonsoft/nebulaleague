@@ -125,8 +125,8 @@ export class DebugScene extends Phaser.Scene {
             }
             else if (event.target.name === 'displayPlayerChangeButton') {
                 console.dir({
-                    playerBefore: this.mainScene.playerBefore,
-                    playerAfter: this.mainScene.playerAfter,
+                    playerBefore: this.mainScene.playerPrevious,
+                    playerAfter: this.mainScene.playerCurrent,
                 })
             }
             

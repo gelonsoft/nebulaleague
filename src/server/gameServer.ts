@@ -170,7 +170,9 @@ export class GameServer {
     public handleGameUpdate(socket: Socket, gameStateUpdated: GameStateUpdated) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         objectAssignDeep(gameState, gameStateUpdated)
+        this.debugRoom(socket, this.clientToRoom.get(socket.id), 4)
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameState)
+        // socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateUpdated)
     }
 
     public handleGameJoined(socket: Socket) {
@@ -202,6 +204,7 @@ export class GameServer {
         this.roomToGameState.set(roomName, {
             gameMode: playerSelectionState.gameMode,
             players: {},
+            projectiles: {},
         })
         return roomName
     }
