@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Nebulaleague</title>
+        <title><%= htmlWebpackPlugin.options.title %></title>
         <link rel="icon" href="/assets/favicons/favicon.ico">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.googleAnalycticsId %>"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', <%= htmlWebpackPlugin.options.googleAnalycticsId %>);
+        </script>
     </head>
     <body>
         <div id="spacefighter"></div>

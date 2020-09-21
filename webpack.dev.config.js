@@ -78,7 +78,11 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
+            title: 'Nebulaleague',
+            template: 'src/index.ejs',
             filename: 'index.html',
+            scriptLoading: 'defer',
+            googleAnalycticsId: 'UA-62380614-3',
         }),
         new webpack.EnvironmentPlugin({
             DEBUG: process.env.DEBUG || true
