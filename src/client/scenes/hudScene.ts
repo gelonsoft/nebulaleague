@@ -1,12 +1,11 @@
 import { Config } from '@shared/config'
 import { Event } from '@shared/events'
 import { EffectModel } from '@shared/models'
-import { MyGame } from "~/index"
+import { MyGame } from '~/index'
 import { Player, ActionTimeInterface } from '~/entities/player'
-import { MainScene } from "~/scenes/mainScene"
+import { MainScene } from '~/scenes/mainScene'
 import { HealthBar } from '~/entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
-
 
 class SlotContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -19,7 +18,6 @@ class SlotContainer extends Phaser.GameObjects.Container {
     public innerWidth: number
     public innerHeight: number
     public selected: boolean
-
 
     constructor(scene: Phaser.Scene, x: number, y: number, frame: string) {
         super(scene, x, y)
@@ -42,7 +40,12 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.graphic.fillStyle(0x000000)
         this.graphic.fillRect(0, 0, this.width, this.height)
         this.graphic.fillStyle(Config.hud.slotColorUnselected)
-        this.graphic.fillRect(Config.hud.paddingInner, Config.hud.paddingInner, this.innerWidth, this.innerHeight)
+        this.graphic.fillRect(
+            Config.hud.paddingInner,
+            Config.hud.paddingInner,
+            this.innerWidth,
+            this.innerHeight
+        )
         this.image.setDisplaySize(42, 42)
         this.image.setDisplayOrigin(0, 0)
         this.graphic.setAlpha(0.4)
@@ -62,7 +65,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
                     Config.hud.paddingInner,
                     Config.hud.paddingInner,
                     this.innerWidth,
-                    this.innerHeight,
+                    this.innerHeight
                 )
                 this.graphic.setAlpha(1)
                 this.image.setAlpha(1)
@@ -72,7 +75,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
                     Config.hud.paddingInner,
                     Config.hud.paddingInner,
                     this.innerWidth,
-                    this.innerHeight,
+                    this.innerHeight
                 )
                 this.graphic.setAlpha(0.4)
                 this.image.setAlpha(0.4)
@@ -86,8 +89,6 @@ class SlotContainer extends Phaser.GameObjects.Container {
         }
     }
 }
-
-
 
 export class HudScene extends Phaser.Scene {
     public game: MyGame
@@ -108,26 +109,29 @@ export class HudScene extends Phaser.Scene {
     public mainScene: MainScene
 
     constructor() {
-        super({ key: "hudScene" })
+        super({ key: 'hudScene' })
     }
 
     public init(): void {
         if (this.game.debug) {
             window['h'] = this
         }
-        window.addEventListener('resize', () => {
-            const top = this.scale.height - Config.hud.height
-            this.mainContainer.setX(0)
-            this.mainContainer.setY(top)
-            this.background.clear()
-            this.background.fillStyle(Config.hud.background, 0.2)
-            this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
-        }, false)
+        window.addEventListener(
+            'resize',
+            () => {
+                const top = this.scale.height - Config.hud.height
+                this.mainContainer.setX(0)
+                this.mainContainer.setY(top)
+                this.background.clear()
+                this.background.fillStyle(Config.hud.background, 0.2)
+                this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
+            },
+            false
+        )
     }
 
-
     create(): void {
-        this.mainScene = this.scene.get("mainScene") as MainScene
+        this.mainScene = this.scene.get('mainScene') as MainScene
         this.player = this.mainScene.player
         this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
         this.mainScene.events.on(Event.abilitiesCooldownChanged, this.updateAbilitiesCooldown, this)
@@ -141,9 +145,22 @@ export class HudScene extends Phaser.Scene {
         this.background.fillStyle(Config.hud.background, 0.2)
         this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
 
-        this.healthBar = new HealthBar(this, 0, 0, 240, Config.hud.height, Config.hud.padding, this.player.maxHealth)
+        this.healthBar = new HealthBar(
+            this,
+            0,
+            0,
+            240,
+            Config.hud.height,
+            Config.hud.padding,
+            this.player.maxHealth
+        )
         this.weaponPrimaryContainer = new SlotContainer(this, 250, 0, this.player.actions.weaponPrimary.frame)
-        this.weaponSecondaryContainer = new SlotContainer(this, 310, 0, this.player.actions.weaponSecondary.frame)
+        this.weaponSecondaryContainer = new SlotContainer(
+            this,
+            310,
+            0,
+            this.player.actions.weaponSecondary.frame
+        )
         this.abilityContainer1 = new SlotContainer(this, 380, 0, this.player.actions.ability1.frame)
         this.abilityContainer2 = new SlotContainer(this, 380 + 62, 0, this.player.actions.ability2.frame)
         this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.actions.ability3.frame)
@@ -157,26 +174,20 @@ export class HudScene extends Phaser.Scene {
         this.abilityContainer1.selected = true
         this.effectIconsContainer = createEffectIconsContainer(this, 4, 32, 2, -30, 20, 2)
 
-
-        this.mainContainer = this.add.container(
-            0,
-            top,
-            [
-                this.background,
-                this.healthBar,
-                this.weaponPrimaryContainer,
-                this.weaponSecondaryContainer,
-                this.abilityContainer1,
-                this.abilityContainer2,
-                this.abilityContainer3,
-                this.abilityContainer4,
-                this.effectIconsContainer,
-            ]
-        )
+        this.mainContainer = this.add.container(0, top, [
+            this.background,
+            this.healthBar,
+            this.weaponPrimaryContainer,
+            this.weaponSecondaryContainer,
+            this.abilityContainer1,
+            this.abilityContainer2,
+            this.abilityContainer3,
+            this.abilityContainer4,
+            this.effectIconsContainer,
+        ])
         this.updateHealth()
         this.updateWeaponSelected(true)
     }
-
 
     private updateHealth() {
         this.healthBar.refresh(this.player.health)
@@ -195,8 +206,10 @@ export class HudScene extends Phaser.Scene {
     }
 
     private updateWeaponCooldown(selectedWeaponKey: string, actionTime: ActionTimeInterface) {
-        const container = selectedWeaponKey === 'weaponPrimary' ?
-            this.weaponPrimaryContainer : this.weaponSecondaryContainer
+        const container =
+            selectedWeaponKey === 'weaponPrimary'
+                ? this.weaponPrimaryContainer
+                : this.weaponSecondaryContainer
 
         container.cooldown = actionTime.cooldown
         container.refresh()

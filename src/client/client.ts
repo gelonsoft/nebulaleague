@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
-import * as objectAssignDeep from "object-assign-deep"
+import * as objectAssignDeep from 'object-assign-deep'
 import * as io from 'socket.io-client'
-import { MyGame } from "~/index"
+import { MyGame } from '~/index'
 import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
 import { LobyScene } from '~/scenes/lobyScene'
 import { MainScene } from '~/scenes/mainScene'
@@ -15,9 +15,7 @@ import {
     PlayerSelectionState,
     GameStateChanged,
 } from '@shared/models'
-import { ClientEvent, ServerEvent, Event }  from '@shared/events'
-
-
+import { ClientEvent, ServerEvent, Event } from '@shared/events'
 
 export class Client {
     public socket: SocketIOClient.Socket
@@ -35,14 +33,15 @@ export class Client {
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
-    
-    
+
     constructor(game: MyGame) {
         this.game = game
         this.socket = io.connect()
-        this.mainScene = this.game.scene.getScene('mainScene') as MainScene
+        this.mainScene = this.game.scene.getScene('mainScene') as MainScene                                   
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
-        this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
+        this.playerSelectionScene = this.game.scene.getScene(
+            'playerSelectionScene'
+        ) as PlayerSelectionScene
         this.player = null
         this.players = []
         this.lobyUser = null
@@ -67,7 +66,7 @@ export class Client {
     public emitLobyInit(): void {
         this.socket.emit(ServerEvent.lobyInit)
     }
-    
+
     public emitLobyEnd(): void {
         this.socket.emit(ServerEvent.lobyEnd)
     }
@@ -83,24 +82,26 @@ export class Client {
     public emitPlayerSelectionEnd(): void {
         this.socket.emit(ServerEvent.playerSelectionEnd)
     }
-    
+
     public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
-        window.localStorage.setItem('playerConfig', JSON.stringify({
-            weaponPrimaryKey: playerConfig.weaponPrimaryKey,
-            weaponSecondaryKey: playerConfig.weaponSecondaryKey,
-            abilityKey1: playerConfig.abilityKey1,
-            abilityKey2: playerConfig.abilityKey2,
-            abilityKey3: playerConfig.abilityKey3,
-            abilityKey4: playerConfig.abilityKey4,
-        }))
+        window.localStorage.setItem(
+            'playerConfig',
+            JSON.stringify({
+                weaponPrimaryKey: playerConfig.weaponPrimaryKey,
+                weaponSecondaryKey: playerConfig.weaponSecondaryKey,
+                abilityKey1: playerConfig.abilityKey1,
+                abilityKey2: playerConfig.abilityKey2,
+                abilityKey3: playerConfig.abilityKey3,
+                abilityKey4: playerConfig.abilityKey4,
+            })
+        )
         this.socket.emit(ServerEvent.playerSelectionStart, playerConfig)
     }
-    
 
     public emitGameInit() {
         this.socket.emit(ServerEvent.gameInit, this.playerSelectionState)
     }
-    
+
     public emitGameJoined() {
         this.socket.emit(ServerEvent.gameJoined)
     }
@@ -110,18 +111,19 @@ export class Client {
     }
 
     public emitGameUpdated() {
-        if(!isEmpty(this.gameStateUpdatedCurrent)) {
-            this.socket.emit(ServerEvent.gameUpdated, this.gameStateUpdatedCurrent)
+        if (!isEmpty(this.gameStateUpdatedCurrent)) {
+            this.socket.emit(
+                ServerEvent.gameUpdated,
+                this.gameStateUpdatedCurrent
+            )
         }
     }
 
-    
     public attachListeners(): void {
         this.addLobyListener()
         this.addPlayerSelectionListener()
         this.addGameListener()
     }
-
 
     public addLobyListener(): void {
         this.socket.on(ClientEvent.lobyStart, (user: User) => {
@@ -131,10 +133,13 @@ export class Client {
     }
 
     public addPlayerSelectionListener(): void {
-        this.socket.on(ClientEvent.playerSelectionStart, (playerSelectionState: PlayerSelectionState) => {
-            this.playerSelectionState = playerSelectionState
-            this.game.events.emit(Event.playerSelectionStart)
-        })
+        this.socket.on(
+            ClientEvent.playerSelectionStart,
+            (playerSelectionState: PlayerSelectionState) => {
+                this.playerSelectionState = playerSelectionState
+                this.game.events.emit(Event.playerSelectionStart)
+            }
+        )
     }
 
     public addGameListener(): void {
@@ -144,21 +149,24 @@ export class Client {
             this.game.events.emit(Event.gameReady)
         })
 
-        this.socket.on(ClientEvent.gameUpdated, (gameState: GameStateChanged) => {
-            this.gameStateChangedRecieved = gameState
-            this.game.events.emit(Event.gameUpdated)
-        })
+        this.socket.on(
+            ClientEvent.gameUpdated,
+            (gameState: GameStateChanged) => {
+                this.gameStateChangedRecieved = gameState
+                this.game.events.emit(Event.gameUpdated)
+            }
+        )
 
         this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {
             this.game.events.emit(Event.playerJoined, playerReceive)
         })
 
         this.socket.on(ClientEvent.gameNewHost, (hostId: string) => {
-            if(this.id === hostId) {
+            if (this.id === hostId) {
                 this.isHost = true
             }
         })
-        
+
         this.socket.on(ClientEvent.gameQuit, (playerReceive: PlayerModel) => {
             this.game.events.emit(Event.playerQuit, playerReceive.id)
         })
