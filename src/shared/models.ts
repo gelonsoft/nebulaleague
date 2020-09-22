@@ -192,13 +192,29 @@ export interface PlayerSelectionState {
     gameRoom?: string
 }
 
-export interface GameStateUpdated {
-    players?: Record<string, PlayerChanged>
-    projectiles?: Record<string, ProjectileChanged>
-    toDelete?: {
+// export interface GameStateUpdated {
+//     players?: Record<string, PlayerChanged>
+//     projectiles?: Record<string, ProjectileChanged>
+//     toDelete?: {
+//         projectiles?: Array<string>
+//     }
+// }
+
+export interface GameStateChanged {
+    created?: {
+        players?: Record<string, PlayerModel>
+        projectiles?: Record<string, ProjectileModel>
+    },
+    updated?: {
+        players?: Record<string, PlayerChanged>
+        projectiles?: Record<string, ProjectileChanged>
+    },
+    deleted?: {
+        players?: Array<string>
         projectiles?: Array<string>
     }
 }
+
 
 export interface GameState {
     gameMode: string

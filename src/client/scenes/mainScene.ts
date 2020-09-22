@@ -1,5 +1,8 @@
-import { updatedDiff, diff } from 'deep-object-diff'
+// import { updatedDiff, diff } from 'deep-object-diff'
+// import { diff } from 'js-crud-diff'
+import { diff } from 'deep-object-diff'
 import { Config } from '@shared/config'
+import { pickBy, isEmpty } from 'lodash'
 import {
     Position,
     PlayerModel,
@@ -7,7 +10,7 @@ import {
     PlayerConfig,
     PlayerChanged,
     ProjectileChanged,
-    GameStateUpdated,
+    GameStateChanged,
     GameState,
 } from '@shared/models'
 import { Event } from '@shared/events'
@@ -170,12 +173,11 @@ export class MainScene extends Phaser.Scene {
 
         this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
             this.projectilesCurrent[projectile.name] = projectile.getChanged()
-            this.client.emitGameUpdated(this.getDiffGameState())
+            // this.client.emitGameUpdated(this.getDiffGameState())
         })
 
         this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
             delete this.projectilesCurrent[projectile.name]
-            // this.client.emitGameUpdated(this.getDiffGameState())
         })
 
         
@@ -307,31 +309,46 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public getDiffGameState(): GameStateUpdated {
+    public getDiffGameState(): GameStateChanged {
         const playerChanged = diff(this.playerPrevious, this.playerCurrent) as Record<string, PlayerChanged>
         const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<string, ProjectileChanged>
-     
 
-        const gameStatedUpdated: GameStateUpdated = {}
-        if (Object.keys(playerChanged).length > 0) {
-            gameStatedUpdated.players = {
+        
+        const isPlayersChanged = Object.keys(playerChanged).length > 0
+        const isProjectilesChanged = Object.keys(projectilesChanged).length > 0
+        const gameStatedUpdated: GameStateChanged = {}
+
+        gameStatedUpdated.updated = {}
+        gameStatedUpdated.deleted = {}
+
+        if(isProjectilesChanged) {
+            
+            const projectilesUpdated = pickBy(projectilesChanged, value => value !== undefined)
+            const projectilesDeleted = Object.keys(pickBy(projectilesChanged, value => value === undefined))
+
+
+            if(Object.keys(projectilesUpdated).length > 0) {
+                gameStatedUpdated.updated.projectiles = projectilesUpdated
+            }
+
+            if(projectilesDeleted.length > 0) {
+                gameStatedUpdated.deleted.projectiles = projectilesDeleted
+            }
+        }
+
+        if (isPlayersChanged) {
+            gameStatedUpdated.updated.players = {
                 [this.player.id]: playerChanged
             }
         }
-        if (Object.keys(projectilesChanged).length > 0) {
-            let isDeleteProjectilesCreated = false
-            for (const [projectileKey, projectileValue] of Object.entries(projectilesChanged)) {
-                if (projectileValue === undefined) {
-                    if(!isDeleteProjectilesCreated) {
-                        gameStatedUpdated.toDelete = {}
-                        gameStatedUpdated.toDelete.projectiles = []
-                        isDeleteProjectilesCreated = true
-                    }
-                    gameStatedUpdated.toDelete.projectiles.push(projectileKey)
-                }
-            }
-            gameStatedUpdated.projectiles = projectilesChanged
+
+        if(isEmpty(gameStatedUpdated.updated)) {
+            delete gameStatedUpdated.updated
         }
+        if(isEmpty(gameStatedUpdated.deleted)) {
+            delete gameStatedUpdated.deleted
+        }
+        
         return gameStatedUpdated
     }
     
@@ -377,10 +394,9 @@ export class MainScene extends Phaser.Scene {
                 player.update()
             })
 
-        const gameStateChanged = this.getDiffGameState()
-        if(Object.keys(gameStateChanged).length > 0) {
-            this.client.emitGameUpdated(gameStateChanged)
-        }
+        this.client.gameStateUpdatedCurrent = this.getDiffGameState()
+        this.client.emitGameUpdated()
+        
         this.playerPrevious = this.playerCurrent
         this.projectilesPrevious = Object.assign({}, this.projectilesCurrent)
     }

@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import * as objectAssignDeep from "object-assign-deep"
 import * as io from 'socket.io-client'
 import { MyGame } from "~/index"
@@ -12,7 +13,7 @@ import {
     PlayerAction,
     User,
     PlayerSelectionState,
-    GameStateUpdated,
+    GameStateChanged,
 } from '@shared/models'
 import { ClientEvent, ServerEvent, Event }  from '@shared/events'
 
@@ -29,6 +30,8 @@ export class Client {
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
+    public gameStateUpdatedRecieved: GameStateChanged
+    public gameStateUpdatedCurrent: GameStateChanged
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
@@ -45,6 +48,8 @@ export class Client {
         this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
+        this.gameStateUpdatedRecieved = {}
+        this.gameStateUpdatedCurrent = {}
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
@@ -104,8 +109,10 @@ export class Client {
         this.socket.emit(ServerEvent.gameRefreshServer)
     }
 
-    public emitGameUpdated(gameUpdated: GameStateUpdated) {
-        this.socket.emit(ServerEvent.gameUpdated, gameUpdated)
+    public emitGameUpdated() {
+        if(!isEmpty(this.gameStateUpdatedCurrent)) {
+            this.socket.emit(ServerEvent.gameUpdated, this.gameStateUpdatedCurrent)
+        }
     }
 
     
@@ -140,7 +147,6 @@ export class Client {
         this.socket.on(ClientEvent.gameUpdated, (gameState: GameState) => {
             this.gameState = gameState
             this.game.events.emit(Event.gameUpdated, this.gameState)
-
         })
 
         this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {

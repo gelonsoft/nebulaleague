@@ -7,7 +7,7 @@ import {
     PlayerSelectionState,
     User,
     PlayerConfig,
-    GameStateUpdated,
+    GameStateChanged,
 } from "../shared/models"
 
 
@@ -73,7 +73,7 @@ export class GameServer {
         socket.on(ServerEvent.gameRefreshServer, () => this.handleGameRefresh(socket))
         socket.on(
             ServerEvent.gameUpdated,
-            (gameState: GameStateUpdated) => this.handleGameUpdate(socket, gameState)
+            (gameState: GameStateChanged) => this.handleGameUpdate(socket, gameState)
         )
         socket.on(ServerEvent.gameQuit, () => this.handleGameQuit(socket))
         socket.on(ServerEvent.disconnected, () => this.handleDisconnect(socket))
@@ -167,26 +167,21 @@ export class GameServer {
         socket.to(hostId).emit(ClientEvent.gameRefreshServer)
     }
 
-    public handleGameUpdate(socket: Socket, gameStateUpdated: GameStateUpdated) {
+    public handleGameUpdate(socket: Socket, gameStateChanged: GameStateChanged) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        const toDelete = gameStateUpdated.toDelete
-        if (toDelete) {
-            if(gameStateUpdated.toDelete.projectiles) {
-                for (const projectileKey of gameStateUpdated.toDelete?.projectiles) {
-                    delete gameState.projectiles[projectileKey]
-                }
-            }            
-            delete gameStateUpdated.toDelete
-        }
-        
-        objectAssignDeep(gameState, gameStateUpdated)
+        objectAssignDeep(gameState, gameStateChanged.created) 
+        objectAssignDeep(gameState, gameStateChanged.updated)
+
+        // for (const [keyEntity, idKeys] of Object.entries(gameStateChanged.deleted)) {
+        //     for (const key of idKeys) {
+        //         delete gameState[keyEntity][key]
+        //     }
+        // }
         console.dir({
-            gameState: gameState,
-            gameStateUpdated: gameStateUpdated,
+            gameState,
+            gameStateChanged,
         }, {depth: 4})
-        
-        socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameState)
-        // socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateUpdated)
+        socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateChanged)
     }
 
     public handleGameJoined(socket: Socket) {
@@ -198,10 +193,6 @@ export class GameServer {
     public handleGameQuit(socket: Socket) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
         const quitPlayer = gameState.players[socket.id]
-        if (quitPlayer.id === gameState.hostId && Object.keys(gameState.players).length > 0) {
-            gameState.hostId = socket.id
-            socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameNewHost, gameState.hostId)
-        }
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameQuit, quitPlayer)
         delete gameState.players[socket.id]
     }
