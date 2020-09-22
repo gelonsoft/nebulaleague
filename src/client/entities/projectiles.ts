@@ -11,6 +11,7 @@ export interface ProjectileInterface {
     actionOnCollision(hittedPlayer: Player): void
     kill(): void
     getChanged(): ProjectileChanged
+    // getModel(): ProjectileModel
     fromPlayerId: string
     name: string
     x: number
@@ -60,6 +61,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         const uy = Math.sin(initialRotation)
         this.body.reset(initialPosition.x, initialPosition.y)
         this.setVisible(true)
+        this.visible = true
         this.setActive(true)
         this.body.setEnable(true)
         this.body.velocity.x = ux * this.speed
@@ -92,6 +94,10 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
             },
             callbackScope: this,
         })
+        setTimeout(() => {
+            console.log(this)
+        }, 100)
+        // console.log(this)
         this.scene.game.events.emit(Event.ProjectileFired, this)
     }
 
@@ -325,10 +331,10 @@ export class Projectiles {
         return projectileConfig.speed * projectileConfig.lifespan
     }
 
-    public getProjectile(id: string) {
-        const [key, index] = id.split('-')
-        console.log(key)
-        console.log(index)
+    public getProjectile(name: string): ProjectileInterface {
+        const key = name.split('-')[0]
+        const projectile =  this.projectiles.get(key).children.get('name', name as any) as any
+        return projectile as ProjectileInterface
     }
 
     public addProjectile(
@@ -336,6 +342,7 @@ export class Projectiles {
         projectileConfig: any,
         length: number): void {
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
+
         const keys = [...Array(length).keys()]
         keys.forEach((index) => {
             const ClassName = Projectiles.getProjectileByClassName(projectileConfig.className)

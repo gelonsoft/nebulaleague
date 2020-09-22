@@ -172,15 +172,19 @@ export class GameServer {
         objectAssignDeep(gameState, gameStateChanged.created) 
         objectAssignDeep(gameState, gameStateChanged.updated)
 
-        // for (const [keyEntity, idKeys] of Object.entries(gameStateChanged.deleted)) {
-        //     for (const key of idKeys) {
-        //         delete gameState[keyEntity][key]
-        //     }
-        // }
+        if(gameStateChanged.deleted) {
+            for (const [keyEntity, idKeys] of Object.entries(gameStateChanged.deleted)) {
+                for (const key of idKeys) {
+                    delete gameState[keyEntity][key]
+                }
+            }
+        }
+
         console.dir({
-            gameState,
             gameStateChanged,
+            gameState,
         }, {depth: 4})
+        
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateChanged)
     }
 

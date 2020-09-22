@@ -173,6 +173,7 @@ export class MainScene extends Phaser.Scene {
 
         this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
             this.projectilesCurrent[projectile.name] = projectile.getChanged()
+            // console.log(projectile)
             // this.client.emitGameUpdated(this.getDiffGameState())
         })
 
@@ -181,16 +182,26 @@ export class MainScene extends Phaser.Scene {
         })
 
         
-        this.game.events.on(Event.gameUpdated, (gameState: GameState) => {
-            for (const [idModel, playerModel] of Object.entries(gameState.players)) {
-                const player = this.players.children.get('id', idModel as any)
-                Object.assign(player, playerModel)
+        this.game.events.on(Event.gameUpdated, () => {
+            const gameStateReceived = this.client.gameStateChangedRecieved
+            // console.log(gameStateReceived)
+
+            if(gameStateReceived.updated !== undefined) {
+                if(gameStateReceived.updated.players !== undefined) {
+                    for (const [idModel, playerChanged] of Object.entries(gameStateReceived.updated.players)) {
+                        const player = this.players.children.get('id', idModel as any)
+                        Object.assign(player, playerChanged)
+                    }                                    
+                }
+
+                if(gameStateReceived.updated.projectiles !== undefined) {
+                    for (const [idModel, projectileChanged] of Object.entries(gameStateReceived.updated.projectiles)) {
+                        const projectile = this.projectiles.getProjectile(idModel)
+                        // console.log(projectile)
+                        // Object.assign(projectile, projectileChanged)
+                    }
+                }
             }
-            
-            for (const [idModel, projectileModel] of Object.entries(gameState.projectiles)) {
-                this.projectiles.getProjectile(idModel)
-            }
-            
         })
     }
 

@@ -1,4 +1,4 @@
-import { Event }  from '@shared/events'
+import { Event } from '@shared/events'
 import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/entities/player'
 import { PlayerAction, PlayerDirection } from '@shared/models'
