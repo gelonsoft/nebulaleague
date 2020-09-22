@@ -195,6 +195,9 @@ export interface PlayerSelectionState {
 export interface GameStateUpdated {
     players?: Record<string, PlayerChanged>
     projectiles?: Record<string, ProjectileChanged>
+    toDelete?: {
+        projectiles?: Array<string>
+    }
 }
 
 export interface GameState {

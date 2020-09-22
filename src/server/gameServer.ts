@@ -169,8 +169,22 @@ export class GameServer {
 
     public handleGameUpdate(socket: Socket, gameStateUpdated: GameStateUpdated) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
+        const toDelete = gameStateUpdated.toDelete
+        if (toDelete) {
+            if(gameStateUpdated.toDelete.projectiles) {
+                for (const projectileKey of gameStateUpdated.toDelete?.projectiles) {
+                    delete gameState.projectiles[projectileKey]
+                }
+            }            
+            delete gameStateUpdated.toDelete
+        }
+        
         objectAssignDeep(gameState, gameStateUpdated)
-        this.debugRoom(socket, this.clientToRoom.get(socket.id), 4)
+        console.dir({
+            gameState: gameState,
+            gameStateUpdated: gameStateUpdated,
+        }, {depth: 4})
+        
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameState)
         // socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateUpdated)
     }

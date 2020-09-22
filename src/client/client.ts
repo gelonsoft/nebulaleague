@@ -135,11 +135,6 @@ export class Client {
             this.gameState = gameState
             this.isHost = gameState.hostId === this.id
             this.game.events.emit(Event.gameReady)
-            // if(!this.isHost) {
-            //     this.emitGameRefresh()
-            // } else {
-            //     this.game.events.emit(Event.gameReady)
-            // }
         })
 
         this.socket.on(ClientEvent.gameUpdated, (gameState: GameState) => {
@@ -147,18 +142,6 @@ export class Client {
             this.game.events.emit(Event.gameUpdated, this.gameState)
 
         })
-
-        // this.socket.on(ClientEvent.gameRefreshServer, () => {
-        //     const updatedPlayers =
-        //         this.mainScene.players.children.getArray().map((player: Player) => {
-        //             return player.getUpdatedModel()
-        //         })
-        //     const gameStateUpdated = {
-        //         players: updatedPlayers
-        //     }
-        //     this.emitGameUpdated(gameStateUpdated)
-        // })
-        
 
         this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {
             this.game.events.emit(Event.playerJoined, playerReceive)

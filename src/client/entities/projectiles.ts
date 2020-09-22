@@ -82,7 +82,6 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
                     this.body.setVelocity(0, 0)
                     this.setVisible(false)
                     this.scene.time.addEvent({
-                        delay: 100,
                         callback: () => {
                             this.kill()
                         }

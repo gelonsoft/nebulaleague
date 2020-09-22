@@ -170,7 +170,7 @@ export class MainScene extends Phaser.Scene {
 
         this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
             this.projectilesCurrent[projectile.name] = projectile.getChanged()
-            // this.client.emitGameUpdated(this.getDiffGameState())
+            this.client.emitGameUpdated(this.getDiffGameState())
         })
 
         this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
@@ -185,11 +185,8 @@ export class MainScene extends Phaser.Scene {
                 Object.assign(player, playerModel)
             }
             
-
-            console.log(gameState)
             for (const [idModel, projectileModel] of Object.entries(gameState.projectiles)) {
                 this.projectiles.getProjectile(idModel)
-                console.log()
             }
             
         })
@@ -313,18 +310,29 @@ export class MainScene extends Phaser.Scene {
     public getDiffGameState(): GameStateUpdated {
         const playerChanged = diff(this.playerPrevious, this.playerCurrent) as Record<string, PlayerChanged>
         const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<string, ProjectileChanged>
+     
 
-        const updateGameState: GameStateUpdated = {}
+        const gameStatedUpdated: GameStateUpdated = {}
         if (Object.keys(playerChanged).length > 0) {
-            updateGameState.players = {
+            gameStatedUpdated.players = {
                 [this.player.id]: playerChanged
             }
         }
         if (Object.keys(projectilesChanged).length > 0) {
-            updateGameState.projectiles = projectilesChanged
+            let isDeleteProjectilesCreated = false
+            for (const [projectileKey, projectileValue] of Object.entries(projectilesChanged)) {
+                if (projectileValue === undefined) {
+                    if(!isDeleteProjectilesCreated) {
+                        gameStatedUpdated.toDelete = {}
+                        gameStatedUpdated.toDelete.projectiles = []
+                        isDeleteProjectilesCreated = true
+                    }
+                    gameStatedUpdated.toDelete.projectiles.push(projectileKey)
+                }
+            }
+            gameStatedUpdated.projectiles = projectilesChanged
         }
-        
-        return updateGameState
+        return gameStatedUpdated
     }
     
     public update(time: number, delta: number): void {
@@ -332,7 +340,6 @@ export class MainScene extends Phaser.Scene {
         for (const name of Object.keys(this.projectilesCurrent)) {
             this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name).getChanged()
         }
-
 
         
         this.mainControl.update()
