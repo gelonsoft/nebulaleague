@@ -7,17 +7,14 @@ import {
     ControlledBy,
     EffectKeys,
     EffectModel,
-    PlayerChanged
+    PlayerChanged,
 } from '@shared/models'
 import { PlayerAI } from '~/ai/playerAI'
 import { Weapon } from '~/entities/weapons'
 import { Ability } from '~/entities/abilities'
 import { HealthBar } from '~/entities/healthbar'
 
-
-import { createEffectIconsContainer, refreshEffectIcons, } from '~/entities/effects'
-
-
+import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
 
 export interface PlayerMoveNextForce {
     acceleration: Phaser.Math.Vector2
@@ -51,17 +48,11 @@ interface ActionsInterface {
 }
 
 export interface ActionInterface {
-    draw(sourcePosition: Phaser.Math.Vector2,
-        pointerPosition: Phaser.Math.Vector2,
-        isLaserReady?: boolean),
-    cleaDraw(): void,
-    trigger(player: Player,
-        sourcePosition: Phaser.Math.Vector2,
-        pointerPosition: Phaser.Math.Vector2): void
+    draw(sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2, isLaserReady?: boolean)
+    cleaDraw(): void
+    trigger(player: Player, sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2): void
     rangeDistance: number
 }
-
-
 
 export class Player extends Phaser.GameObjects.Container {
     public body: Phaser.Physics.Arcade.Body
@@ -112,7 +103,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.add.existing(this)
         this.controlledByAI = null
 
-
         this.actionTimes = {
             weaponPrimary: { cooldown: 0, ready: true },
             weaponSecondary: { cooldown: 0, ready: true },
@@ -140,14 +130,9 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-
     public initPlayer(): void {
-        this.playerSprite = this.scene.add.sprite(
-            0,
-            0,
-            'atlas',
-            'playerShip1_blue.png',
-        )
+        this.playerSprite = this.scene.add
+            .sprite(0, 0, 'atlas', 'playerShip1_blue.png')
             .setDisplayOrigin(0.5, 0.5)
             .setOrigin(0.5, 0.5)
             .setDisplaySize(Config.player.size, Config.player.size)
@@ -156,9 +141,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public initHealthbar(): void {
-        this.healthBar = new HealthBar(
-            this.scene, 0, 0, 120, 12, 0, this.maxHealth,
-        )
+        this.healthBar = new HealthBar(this.scene, 0, 0, 120, 12, 0, this.maxHealth)
         this.healthBar.refresh(this.health)
     }
 
@@ -176,7 +159,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.body.setMaxSpeed(Config.player.defaultSpeed)
         this.body.immovable = true
     }
-
 
     public getAllNextMove(): Array<PlayerMoveNextForce> {
         const directions = [
@@ -204,7 +186,6 @@ export class Player extends Phaser.GameObjects.Container {
             .normalize()
             .multiply(new Phaser.Math.Vector2(newAccelerationSpeedX, newAccelerationSpeedY))
 
-
         const newVelocity = this.body.velocity.clone()
         if (isXChange) {
             newVelocity.x = 0
@@ -212,10 +193,12 @@ export class Player extends Phaser.GameObjects.Container {
         if (isYChange) {
             newVelocity.y = 0
         }
-        const newPosition =
-            this.body.position.clone()
-                .add(newVelocity.clone().add(newAcceleration)
-                    .scale(this.scene.game.loop.delta / 1000))
+        const newPosition = this.body.position.clone().add(
+            newVelocity
+                .clone()
+                .add(newAcceleration)
+                .scale(this.scene.game.loop.delta / 1000)
+        )
 
         return {
             acceleration: newAcceleration,
@@ -240,7 +223,6 @@ export class Player extends Phaser.GameObjects.Container {
     public rotateFromPointer(pointerRotation: number): void {
         this.rotation = pointerRotation + Math.PI / 2
     }
-
 
     public draw(): void {
         if (this.selectedAbilityKey) {
@@ -268,12 +250,13 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-
     public fire(selectedWeaponKey: string, targetFirePosition: Phaser.Math.Vector2): void {
         const weapon = this.actions[selectedWeaponKey]
         const weaponTime = this.actionTimes[selectedWeaponKey]
-        const sourceFirePosition = selectedWeaponKey === 'weaponPrimary' ?
-            this.getPrimaryWeaponPosition() : this.getSecondaryWeaponPosition()
+        const sourceFirePosition =
+            selectedWeaponKey === 'weaponPrimary'
+                ? this.getPrimaryWeaponPosition()
+                : this.getSecondaryWeaponPosition()
 
         if (weaponTime.ready) {
             weaponTime.ready = false
@@ -345,7 +328,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
     }
 
-
     public selectAbility(key) {
         if (this.actionTimes[key].cooldown === 0) {
             if (this.selectedAbilityKey === key) {
@@ -374,26 +356,22 @@ export class Player extends Phaser.GameObjects.Container {
             this.body.x + this.displayWidth / 2,
             this.body.y + this.displayHeight / 2
         )
-        const offset = Phaser.Math.Vector2.ONE
-            .clone()
+        const offset = Phaser.Math.Vector2.ONE.clone()
             .setToPolar(this.rotation - Math.PI / 2 - Math.PI / 2)
             .scale(this.displayWidth * 0.5)
         return positionCenter.clone().add(offset)
     }
-
 
     public getSecondaryWeaponPosition(): Phaser.Math.Vector2 {
         const positionCenter = new Phaser.Math.Vector2(
             this.body.x + this.displayWidth / 2,
             this.body.y + this.displayHeight / 2
         )
-        const offset = Phaser.Math.Vector2.ONE
-            .clone()
+        const offset = Phaser.Math.Vector2.ONE.clone()
             .setToPolar(this.rotation - Math.PI / 2 + Math.PI / 2)
             .scale(this.displayWidth * 0.5)
         return positionCenter.clone().add(offset)
     }
-
 
     public addEffects(recieveEffects: Array<EffectModel>): void {
         for (const effect of recieveEffects) {
@@ -405,7 +383,7 @@ export class Player extends Phaser.GameObjects.Container {
                 callback: () => {
                     this.effects.delete(appliedEffect)
                     this.handleEffectRemoved(appliedEffect)
-                }
+                },
             })
         }
     }
@@ -520,7 +498,7 @@ export class Player extends Phaser.GameObjects.Container {
                         this.scene.stopDeathTransition(this)
                     }
                 },
-                callbackScope: this
+                callbackScope: this,
             })
         }
     }
@@ -532,7 +510,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
         this.handleDeath()
     }
-
 
     public reset(otherPlayers: Phaser.Physics.Arcade.Group): void {
         let overlaping = true

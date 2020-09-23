@@ -2,7 +2,6 @@ import 'phaser'
 import { Config } from '@shared/config'
 import { EffectModel } from '@shared/models'
 
-
 export class EffectIconContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
     public graphic: Phaser.GameObjects.Graphics
@@ -21,7 +20,8 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
         width: number,
         height: number,
         padding: number,
-        frame: string) {
+        frame: string
+    ) {
         super(scene, x, y)
         this.scene = scene
         this.scene.add.existing(this)
@@ -58,15 +58,16 @@ export function createEffectIconsContainer(
     offsetLeft: number,
     offsetTop: number,
     size: number,
-    padding: number,
+    padding: number
 ): Phaser.GameObjects.Container {
     const effectIconsContainer = new Phaser.GameObjects.Container(scene, 0, 0)
-    Array.from(Array(length).keys()).forEach(index => {
+    Array.from(Array(length).keys()).forEach((index) => {
         const effect = new EffectIconContainer(
             scene,
             offsetBetween * index + offsetLeft,
             offsetTop,
-            size, size,
+            size,
+            size,
             padding,
             'flame.png'
         )
@@ -76,12 +77,10 @@ export function createEffectIconsContainer(
     return effectIconsContainer
 }
 
-
 export function refreshEffectIcons(
     effects: Set<EffectModel>,
     effectIconsContainer: Phaser.GameObjects.Container
 ) {
-
     const effectIcons = effectIconsContainer.getAll()
     effectIcons.forEach((obj: EffectIconContainer) => {
         obj.setAlpha(0)

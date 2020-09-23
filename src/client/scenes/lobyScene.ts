@@ -1,9 +1,9 @@
-import { MyGame } from "~/index"
-import { Client } from "~/client"
-import { Event } from "@shared/events"
+import { MyGame } from '~/index'
+import { Client } from '~/client'
+import { Event } from '@shared/events'
 
 export interface LobySceneConfig {
-    playerName: string,
+    playerName: string
 }
 
 export class LobyScene extends Phaser.Scene {
@@ -14,16 +14,19 @@ export class LobyScene extends Phaser.Scene {
     public menuHTML: Phaser.GameObjects.DOMElement
     constructor() {
         super({
-            key: "lobyScene"
+            key: 'lobyScene',
         })
         this.playerName = ''
     }
 
-
     init(): void {
-        window.addEventListener('resize', () => {
-            this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
-        }, false)
+        window.addEventListener(
+            'resize',
+            () => {
+                this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
+            },
+            false
+        )
 
         this.client = this.game.registry.get('client')
         this.client.emitLobyInit()
@@ -41,25 +44,29 @@ export class LobyScene extends Phaser.Scene {
     }
 
     createBackground() {
-        this.background = this.add.image(0, 0, 'backgroundGalaxy1')
-            .setDisplaySize(
-                this.scale.width,
-                this.scale.height,
-            )
+        this.background = this.add
+            .image(0, 0, 'backgroundGalaxy1')
+            .setDisplaySize(this.scale.width, this.scale.height)
             .setOrigin(0)
             .setAlpha(0.5)
     }
 
     createMenu() {
-        this.menuHTML = this.add.dom(0, 0).createFromCache('mainMenuHTML')
+        this.menuHTML = this.add
+            .dom(0, 0)
+            .createFromCache('mainMenuHTML')
             .setPosition(this.scale.width / 2, this.scale.height / 2)
 
-        this.menuHTML.getChildByID('playerNameInput').addEventListener('keyup', (event: any) => {
-            this.playerName = event.currentTarget.value
-        }, true)
+        this.menuHTML.getChildByID('playerNameInput').addEventListener(
+            'keyup',
+            (event: any) => {
+                this.playerName = event.currentTarget.value
+            },
+            true
+        )
         this.menuHTML.addListener('click')
         this.menuHTML.addListener('keypress')
-        this.menuHTML.on('click', event => {
+        this.menuHTML.on('click', (event) => {
             if (event.target.name === 'playButton') {
                 this.client.emitLobyStart({
                     name: this.playerName,
@@ -73,5 +80,4 @@ export class LobyScene extends Phaser.Scene {
         this.createBackground()
         this.createMenu()
     }
-
 }

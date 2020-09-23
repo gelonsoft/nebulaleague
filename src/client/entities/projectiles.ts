@@ -1,10 +1,8 @@
 import { Config } from '@shared/config'
 import { Event } from '@shared/events'
-import { ProjectileModel, EffectModel, ProjectileChanged } from "@shared/models"
-import { MainScene } from "~/scenes/mainScene"
-import { Player } from "~/entities/player"
-
-
+import { ProjectileModel, EffectModel, ProjectileChanged } from '@shared/models'
+import { MainScene } from '~/scenes/mainScene'
+import { Player } from '~/entities/player'
 
 export interface ProjectileInterface {
     fire(position: Phaser.Math.Vector2, rotation: number): void
@@ -17,8 +15,9 @@ export interface ProjectileInterface {
     x: number
     y: number
     rotation?: number
+    visble?: boolean
+    active?: boolean
 }
-
 
 export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {
     public body: Phaser.Physics.Arcade.Body
@@ -35,7 +34,6 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public fromPlayerId: string
     public killEvent: Phaser.Time.TimerEvent
     public effects?: Array<EffectModel>
-
 
     public constructor(scene: MainScene, projectileModel: ProjectileModel) {
         super(scene, -10000, -10000, 'atlas', projectileModel.frame)
@@ -61,8 +59,9 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         const uy = Math.sin(initialRotation)
         this.body.reset(initialPosition.x, initialPosition.y)
         this.setVisible(true)
-        this.visible = true
         this.setActive(true)
+        this.active = true
+        this.visible = true
         this.body.setEnable(true)
         this.body.velocity.x = ux * this.speed
         this.body.velocity.y = uy * this.speed
@@ -71,7 +70,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
         this.goalDistance = Math.round(Projectiles.getDistance(this.key))
         this.goalPosition = new Phaser.Math.Vector2(
             this.initialPosition.x + this.goalDistance,
-            this.initialPosition.y + this.goalDistance,
+            this.initialPosition.y + this.goalDistance
         )
 
         this.killEvent = this.scene.time.addEvent({
@@ -86,7 +85,7 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
                     this.scene.time.addEvent({
                         callback: () => {
                             this.kill()
-                        }
+                        },
                     })
                     this.killEvent.destroy()
                     this.killEvent = null
@@ -94,13 +93,9 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
             },
             callbackScope: this,
         })
-        setTimeout(() => {
-            console.log(this)
-        }, 100)
-        // console.log(this)
+        console.log(this)
         this.scene.game.events.emit(Event.ProjectileFired, this)
     }
-
 
     public actionOnCollision(hittedPlayer: Player) {
         const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
@@ -130,7 +125,6 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     }
 }
 
-
 export class Block extends Phaser.GameObjects.Graphics {
     public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
@@ -146,7 +140,6 @@ export class Block extends Phaser.GameObjects.Graphics {
     public strokeAlpha: number
     public hittedPlayerIds: Set<string>
     public killedOnHit: boolean
-
 
     public constructor(scene: MainScene, blockModel: ProjectileModel) {
         super(scene)
@@ -204,7 +197,6 @@ export class Block extends Phaser.GameObjects.Graphics {
         }
     }
 
-
     public kill() {
         this.setActive(false)
         this.setVisible(false)
@@ -219,7 +211,6 @@ export class Block extends Phaser.GameObjects.Graphics {
             y: this.body.center.y,
         }
     }
-    
 }
 
 export class BlockWithDelay extends Block implements ProjectileInterface {
@@ -246,7 +237,7 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
             delay: this.triggerAfter * 1000,
             callback: () => {
                 this.active = true
-            }
+            },
         })
     }
 
@@ -256,7 +247,6 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
         }
     }
 }
-
 
 export class BlockWithTick extends Block implements ProjectileInterface {
     public tick: number
@@ -279,8 +269,6 @@ export class BlockWithTick extends Block implements ProjectileInterface {
         }
     }
 }
-
-
 
 export class Projectiles {
     public projectiles: Map<string, Phaser.Physics.Arcade.Group>
@@ -305,7 +293,6 @@ export class Projectiles {
         this.addProjectile('fireWaveProjectile', Config.projectiles.fireWaveProjectile, 40)
     }
 
-
     public static getTimeToReachTarget(key: string, targetDistance: number) {
         if (Config.projectiles[key]?.speed) {
             return targetDistance / Config.projectiles[key].speed
@@ -316,15 +303,13 @@ export class Projectiles {
         }
     }
 
-
     public static getProjectileByClassName(projectileKeyName: string) {
         return {
-            'Bullet': Bullet,
-            'BlockWithTick': BlockWithTick,
-            'BlockWithDelay': BlockWithDelay,
+            Bullet: Bullet,
+            BlockWithTick: BlockWithTick,
+            BlockWithDelay: BlockWithDelay,
         }[projectileKeyName]
     }
-
 
     public static getDistance(key): number {
         const projectileConfig = Config.projectiles[key]
@@ -333,14 +318,11 @@ export class Projectiles {
 
     public getProjectile(name: string): ProjectileInterface {
         const key = name.split('-')[0]
-        const projectile =  this.projectiles.get(key).children.get('name', name as any) as any
+        const projectile = this.projectiles.get(key).children.get('name', name as any) as any
         return projectile as ProjectileInterface
     }
 
-    public addProjectile(
-        key: string,
-        projectileConfig: any,
-        length: number): void {
+    public addProjectile(key: string, projectileConfig: any, length: number): void {
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
 
         const keys = [...Array(length).keys()]
@@ -353,19 +335,13 @@ export class Projectiles {
         this.projectiles.set(key, group)
     }
 
-    public fire(
-        key: string,
-        fromPlayerId: string,
-        position: Phaser.Math.Vector2,
-        rotation?: number)
-    : void {
+    public fire(key: string, fromPlayerId: string, position: Phaser.Math.Vector2, rotation?: number): void {
         const projectileGroup = this.projectiles.get(key)
         const projectile = projectileGroup.getFirstDead()
         projectile.fromPlayerId = fromPlayerId
         this.projectileByIds.set(projectile.name, projectile)
         projectile.fire(position, rotation)
     }
-
 
     public getAll(): Array<Phaser.Physics.Arcade.Group> {
         return Array.from(this.projectiles.values())

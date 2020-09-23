@@ -1,9 +1,7 @@
-import { Event } from "@shared/events"
-import { MyGame } from "~/index"
-import { MainScene } from "~/scenes/mainScene"
+import { Event } from '@shared/events'
+import { MyGame } from '~/index'
+import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/entities/player'
-
-
 
 class TextContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -15,7 +13,7 @@ class TextContainer extends Phaser.GameObjects.Container {
         this.scene = scene
         this.scene.add.existing(this)
         this.textCooldown = new Phaser.GameObjects.Text(scene, 0, 0, '', {
-            fontSize: '80px'
+            fontSize: '80px',
         })
         this.add([this.textCooldown])
         this.create()
@@ -31,8 +29,6 @@ class TextContainer extends Phaser.GameObjects.Container {
     }
 }
 
-
-
 export class DeathScene extends Phaser.Scene {
     public game: MyGame
     public mainScene: MainScene
@@ -40,17 +36,16 @@ export class DeathScene extends Phaser.Scene {
     public textContainer: TextContainer
     public canResetAfterDelay: number
     public canResetAfterElapsed: number
-    
-    constructor() {
-        super({key: "deathScene"})
-    }
 
+    constructor() {
+        super({ key: 'deathScene' })
+    }
 
     public init(mainScene): void {
         this.mainScene = mainScene
         this.canResetAfterDelay = 1
         this.canResetAfterElapsed = 0
-        
+
         this.events.on('wake', () => {
             this.followRandomPlayer()
             this.canResetAfterElapsed = 0
@@ -68,15 +63,14 @@ export class DeathScene extends Phaser.Scene {
     }
 
     public followRandomPlayer() {
-        const players = this.mainScene.players.getChildren()
-            .filter((player: Player) => player.active)
+        const players = this.mainScene.players.getChildren().filter((player: Player) => player.active)
         const randomIndex = Phaser.Math.RND.integerInRange(0, players.length - 1)
-        this.followedPlayer = players[randomIndex]  as Player
+        this.followedPlayer = players[randomIndex] as Player
         if (players.length > 0) {
             this.mainScene.cameras.main.startFollow(this.followedPlayer, true)
         }
     }
-    
+
     public stopFollowing() {
         this.mainScene.cameras.main.startFollow(this.mainScene.player, true)
     }
@@ -88,9 +82,9 @@ export class DeathScene extends Phaser.Scene {
             this.mainScene.stopDeathTransition(this.mainScene.player)
         }
     }
-    
+
     public update(): void {
-        this.canResetAfterElapsed +=  this.game.loop.delta / 1000
+        this.canResetAfterElapsed += this.game.loop.delta / 1000
         if (this.canResetAfterElapsed >= this.canResetAfterDelay) {
             this.handleMouse()
         }

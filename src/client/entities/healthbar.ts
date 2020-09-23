@@ -1,6 +1,5 @@
 import { Config } from '@shared/config'
 
-
 export class HealthBar extends Phaser.GameObjects.Graphics {
     public scene: Phaser.Scene
     public maxHealth: number
@@ -21,7 +20,7 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         width: number,
         height: number,
         padding: number,
-        maxHealth: number,
+        maxHealth: number
     ) {
         super(scene)
         this.scene.add.existing(this)
@@ -37,32 +36,22 @@ export class HealthBar extends Phaser.GameObjects.Graphics {
         this.health = 0
     }
 
-
     public refresh(health: number) {
         this.health = health
         this.clear()
         this.fillStyle(0x000000)
         this.fillRect(0, 0, this.width, this.height)
         this.fillStyle(Config.healthBar.colorBackground)
-        this.fillRect(
-            this.innerPadding,
-            this.innerPadding,
-            this.innerWidth,
-            this.innerHeight,
-        )
+        this.fillRect(this.innerPadding, this.innerPadding, this.innerWidth, this.innerHeight)
         if (health <= this.maxHealth / 10) {
             this.fillStyle(Config.healthBar.colorLow)
-        } else if (health <= this.maxHealth / 10 * 3) {
+        } else if (health <= (this.maxHealth / 10) * 3) {
             this.fillStyle(Config.healthBar.colorMedium)
         } else {
             this.fillStyle(Config.healthBar.colorHigh)
         }
         const percent = this.innerWidth / this.maxHealth
         const widthHealth = Math.floor(percent * health)
-        this.fillRect(
-            this.innerPadding,
-            this.innerPadding,
-            widthHealth,
-            this.innerHeight)
+        this.fillRect(this.innerPadding, this.innerPadding, widthHealth, this.innerHeight)
     }
 }

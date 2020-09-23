@@ -28,10 +28,12 @@ export class RandomItem {
 
         for (const key of this.entries) {
             const x = Phaser.Math.Between(
-                Config.consumable.width / 2, Config.world.width - Config.world.width / 2
+                Config.consumable.width / 2,
+                Config.world.width - Config.world.width / 2
             )
             const y = Phaser.Math.Between(
-                Config.consumable.width / 2, Config.world.height - Config.world.width / 2
+                Config.consumable.width / 2,
+                Config.world.height - Config.world.width / 2
             )
 
             if (key === 'pill') {
@@ -41,10 +43,6 @@ export class RandomItem {
         return consumables
     }
 }
-
-
-
-
 
 export class Consumable extends Phaser.GameObjects.Sprite implements ConsumableInterface {
     public body: Phaser.Physics.Arcade.Body
@@ -58,16 +56,17 @@ export class Consumable extends Phaser.GameObjects.Sprite implements ConsumableI
 
     public randomPosition(): void {
         this.x = Phaser.Math.Between(
-            Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2
+            Config.consumable.width / 2,
+            Config.world.width - Config.consumable.width / 2
         )
         this.y = Phaser.Math.Between(
-            Config.consumable.width / 2, Config.world.width - Config.consumable.width / 2
+            Config.consumable.width / 2,
+            Config.world.width - Config.consumable.width / 2
         )
         this.body.x = this.x - this.displayWidth / 2
         this.body.y = this.y - this.displayHeight / 2
     }
 }
-
 
 export class PillConsumable extends Consumable {
     public health: number
@@ -79,10 +78,6 @@ export class PillConsumable extends Consumable {
     }
 
     public action(player: Player): void {
-        player.health = Phaser.Math.Clamp(
-            this.health + player.health,
-            0,
-            player.maxHealth
-        )
+        player.health = Phaser.Math.Clamp(this.health + player.health, 0, player.maxHealth)
     }
 }

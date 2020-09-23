@@ -37,11 +37,9 @@ export class Client {
     constructor(game: MyGame) {
         this.game = game
         this.socket = io.connect()
-        this.mainScene = this.game.scene.getScene('mainScene') as MainScene                                   
+        this.mainScene = this.game.scene.getScene('mainScene') as MainScene
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
-        this.playerSelectionScene = this.game.scene.getScene(
-            'playerSelectionScene'
-        ) as PlayerSelectionScene
+        this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.player = null
         this.players = []
         this.lobyUser = null
@@ -112,10 +110,7 @@ export class Client {
 
     public emitGameUpdated() {
         if (!isEmpty(this.gameStateUpdatedCurrent)) {
-            this.socket.emit(
-                ServerEvent.gameUpdated,
-                this.gameStateUpdatedCurrent
-            )
+            this.socket.emit(ServerEvent.gameUpdated, this.gameStateUpdatedCurrent)
         }
     }
 
@@ -133,13 +128,10 @@ export class Client {
     }
 
     public addPlayerSelectionListener(): void {
-        this.socket.on(
-            ClientEvent.playerSelectionStart,
-            (playerSelectionState: PlayerSelectionState) => {
-                this.playerSelectionState = playerSelectionState
-                this.game.events.emit(Event.playerSelectionStart)
-            }
-        )
+        this.socket.on(ClientEvent.playerSelectionStart, (playerSelectionState: PlayerSelectionState) => {
+            this.playerSelectionState = playerSelectionState
+            this.game.events.emit(Event.playerSelectionStart)
+        })
     }
 
     public addGameListener(): void {
@@ -149,13 +141,10 @@ export class Client {
             this.game.events.emit(Event.gameReady)
         })
 
-        this.socket.on(
-            ClientEvent.gameUpdated,
-            (gameState: GameStateChanged) => {
-                this.gameStateChangedRecieved = gameState
-                this.game.events.emit(Event.gameUpdated)
-            }
-        )
+        this.socket.on(ClientEvent.gameUpdated, (gameState: GameStateChanged) => {
+            this.gameStateChangedRecieved = gameState
+            this.game.events.emit(Event.gameUpdated)
+        })
 
         this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {
             this.game.events.emit(Event.playerJoined, playerReceive)

@@ -1,15 +1,14 @@
 import 'process'
 import './main.scss'
 
-import { MainScene } from "~/scenes/mainScene"
-import { HudScene } from "~/scenes/hudScene"
-import { BootScene } from "~/scenes/bootScene"
+import { MainScene } from '~/scenes/mainScene'
+import { HudScene } from '~/scenes/hudScene'
+import { BootScene } from '~/scenes/bootScene'
 import { DebugScene } from '~/scenes/debugScene'
 import { LobyScene } from '~/scenes/lobyScene'
 import { MainMenuScene } from '~/scenes/mainMenuScene'
 import { DeathScene } from '~/scenes/deathScene'
 import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
-
 
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {
@@ -40,15 +39,15 @@ export class PhaserSpaceGame {
                 width: window.innerWidth * window.devicePixelRatio,
                 height: window.innerHeight * window.devicePixelRatio,
                 autoCenter: Phaser.Scale.NONE,
-                parent: "nebulaleague",
+                parent: 'nebulaleague',
             },
             parent: 'nebulaleague',
             dom: {
-                createContainer: true
+                createContainer: true,
             },
             backgroundColor: 0x444400,
             audio: {
-                noAudio: true
+                noAudio: true,
             },
             banner: isDebug,
             physics: {
@@ -57,7 +56,7 @@ export class PhaserSpaceGame {
                     gravity: { x: 0, y: 0 },
                     fps: 60,
                     debug: isDebug,
-                }
+                },
             },
             scene: scenes,
         })
@@ -68,7 +67,6 @@ export class PhaserSpaceGame {
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight)
         })
-        
     }
 }
 

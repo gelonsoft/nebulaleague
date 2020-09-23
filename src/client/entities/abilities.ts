@@ -4,7 +4,6 @@ import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/entities/player'
 import { Projectiles } from '~/entities/projectiles'
 
-
 export class Ability {
     public scene: MainScene
     public projectiles: Projectiles
@@ -28,7 +27,6 @@ export class Ability {
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
 
-
     constructor(scene: MainScene, config: AbilityModel) {
         this.scene = scene
         this.projectiles = this.scene.projectiles
@@ -49,18 +47,17 @@ export class Ability {
         this.radiusDistanceAlpha = config.radiusDistanceAlpha || 0.8
         this.rayDistanceAlpha = config.radiusDistanceAlpha || 1
 
-
         switch (config.drawingStyle) {
             case AbilityDrawingStyle.Zone:
                 this.rangeGraphics = this.scene.add.graphics()
                 this.radiusGraphics = this.scene.add.graphics()
-                break;
+                break
 
             case AbilityDrawingStyle.Ray:
                 this.rangeDistance = Projectiles.getDistance(this.projectileKey)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
-                break;
+                break
         }
     }
     public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
@@ -74,9 +71,9 @@ export class Ability {
 
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
-            const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition) ?
-                pointerPosition :
-                this.getMaxRadiusPosition(player)
+            const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition)
+                ? pointerPosition
+                : this.getMaxRadiusPosition(player)
 
             this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
@@ -92,7 +89,7 @@ export class Ability {
                 player.body.center.x,
                 player.body.center.y,
                 rayEndPosition.x,
-                rayEndPosition.y,
+                rayEndPosition.y
             )
 
             this.rayGraphics.lineStyle(this.raySize, this.rayColor, this.rayDistanceAlpha)
@@ -117,31 +114,33 @@ export class Ability {
         pointerPosition: Phaser.Math.Vector2
     ): boolean {
         const distance = Phaser.Math.Distance.Between(
-            sourcePosition.x, sourcePosition.y,
-            pointerPosition.x, pointerPosition.y
+            sourcePosition.x,
+            sourcePosition.y,
+            pointerPosition.x,
+            pointerPosition.y
         )
         return distance <= this.rangeDistance
     }
 
     public getMaxRadiusPosition(player: Player): Phaser.Math.Vector2 {
-        return Phaser.Math.Vector2.ONE
-            .clone()
+        return Phaser.Math.Vector2.ONE.clone()
             .setToPolar(player.rotation - Math.PI / 2)
             .scale(this.rangeDistance)
             .add(player.body.center)
     }
 
-
     public triggerProjectile(
         player: Player,
         sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2,
-        withRotation = false,
+        withRotation = false
     ): void {
         if (withRotation) {
             const rotationPlayer = Phaser.Math.Angle.Between(
-                sourcePosition.x, sourcePosition.y,
-                pointerPosition.x, pointerPosition.y,
+                sourcePosition.x,
+                sourcePosition.y,
+                pointerPosition.x,
+                pointerPosition.y
             )
             this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
         } else {
@@ -149,16 +148,14 @@ export class Ability {
         }
     }
 
-
     public trigger(
         player: Player,
         sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2
     ): void {
-        const targetPosition =
-            this.isInRangeToTrigger(player.body.center, pointerPosition) ?
-                pointerPosition :
-                this.getMaxRadiusPosition(player)
+        const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition)
+            ? pointerPosition
+            : this.getMaxRadiusPosition(player)
 
         switch (this.action) {
             case AbilityAction.Blink:
@@ -188,14 +185,10 @@ export class Ability {
     }
 }
 
-
-export function buildAbilities(
-    scene: MainScene,
-): Record<string, Ability> {
+export function buildAbilities(scene: MainScene): Record<string, Ability> {
     const abilities = {}
     for (const [key, config] of Object.entries(Config.abilities)) {
         abilities[key] = new Ability(scene, config)
     }
     return abilities
 }
-

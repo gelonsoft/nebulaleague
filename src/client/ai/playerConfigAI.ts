@@ -1,23 +1,21 @@
 import { Wander } from '~/ai/steering'
 
-
 export interface PlayerAIConfig {
     wander: Wander
     weaponPrecisionHandicap: number
     fleeForSecondRange: [number, number]
     fleeAfterSecondRange: [number, number]
     moveCombatAngleRange: [number, number]
-    moveCombatSecondRange: [number, number],
+    moveCombatSecondRange: [number, number]
     actionsTriggerSecondRange: {
-        weaponPrimary: [number, number],
-        weaponSecondary: [number, number],
-        ability1: [number, number],
-        ability2: [number, number],
-        ability3: [number, number],
-        ability4: [number, number],
+        weaponPrimary: [number, number]
+        weaponSecondary: [number, number]
+        ability1: [number, number]
+        ability2: [number, number]
+        ability3: [number, number]
+        ability4: [number, number]
     }
 }
-
 
 export const playerAI1 = {
     id: 'playerAI1',
@@ -45,9 +43,8 @@ export const playerAI1 = {
         ability2: [0.2, 0.3],
         ability3: [0.1, 0.2],
         ability4: [0, 0.1],
-    }
+    },
 }
-
 
 export const playerAI2 = {
     id: 'playerAI2',
@@ -75,9 +72,8 @@ export const playerAI2 = {
         ability2: [0.2, 0.3],
         ability3: [0.1, 0.1],
         ability4: [0, 0.1],
-    }
+    },
 }
-
 
 export const playerAI3 = {
     id: 'playerAI3',
@@ -105,10 +101,8 @@ export const playerAI3 = {
         ability2: [0, 0],
         ability3: [0, 0],
         ability4: [0, 0.2],
-    }
+    },
 }
-
-
 
 export const playerAI4 = {
     id: 'playerAI4',
@@ -136,9 +130,8 @@ export const playerAI4 = {
         ability2: [0, 0.2],
         ability3: [0, 0.1],
         ability4: [0, 0.4],
-    }
+    },
 }
-
 
 export const playerAI5 = {
     id: 'playerAI5',
@@ -152,7 +145,7 @@ export const playerAI5 = {
         radialMag: 100,
         distanceExtension: 100,
         angle: 0,
-        variance: 0.005,        
+        variance: 0.005,
     },
     weaponPrecisionHandicap: 10,
     fleeAfterSecondRange: [30, 50],
@@ -166,9 +159,8 @@ export const playerAI5 = {
         ability2: [0.2, 1],
         ability3: [0.1, 1],
         ability4: [0.1, 1],
-    }
+    },
 }
-
 
 export const playerAI6 = {
     id: 'playerAI6',
@@ -182,7 +174,7 @@ export const playerAI6 = {
         radialMag: 400,
         distanceExtension: 500,
         angle: 0,
-        variance: 0.03,        
+        variance: 0.03,
     },
     weaponPrecisionHandicap: 4,
     fleeAfterSecondRange: [30, 50],
@@ -196,10 +188,8 @@ export const playerAI6 = {
         ability2: [0.2, 0.8],
         ability3: [0.2, 0.8],
         ability4: [0.2, 0.8],
-    }
-    
+    },
 }
-
 
 export const playerAI7 = {
     id: 'playerAI7',
@@ -227,9 +217,8 @@ export const playerAI7 = {
         ability2: [0.1, 0.6],
         ability3: [0.1, 0.6],
         ability4: [0.1, 0.6],
-    }
+    },
 }
-
 
 export const playerAI8 = {
     id: 'playerAI8',
@@ -243,7 +232,7 @@ export const playerAI8 = {
         radialMag: 400,
         distanceExtension: 300,
         angle: 0,
-        variance: 0.1,        
+        variance: 0.1,
     },
     weaponPrecisionHandicap: 1,
     fleeAfterSecondRange: [30, 50],
@@ -257,9 +246,8 @@ export const playerAI8 = {
         ability2: [0.2, 0.9],
         ability3: [0.2, 0.9],
         ability4: [0.2, 0.9],
-    }
+    },
 }
-
 
 export const playerAI9 = {
     id: 'playerAI9',
@@ -287,8 +275,7 @@ export const playerAI9 = {
         ability2: [0.3, 0.4],
         ability3: [0.3, 0.4],
         ability4: [0.3, 0.4],
-    }
-    
+    },
 }
 
 export const playersAIConfig = [

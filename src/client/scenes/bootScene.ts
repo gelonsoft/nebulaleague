@@ -1,5 +1,5 @@
-import { AnimationHelper } from "~/helpers/animationHelper"
-import { MyGame } from "~/index"
+import { AnimationHelper } from '~/helpers/animationHelper'
+import { MyGame } from '~/index'
 import { Client } from '~/client'
 
 export class BootScene extends Phaser.Scene {
@@ -10,10 +10,9 @@ export class BootScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: "bootScene"
+            key: 'bootScene',
         })
     }
-
 
     init(): void {
         if (this.game.debug) {
@@ -21,13 +20,13 @@ export class BootScene extends Phaser.Scene {
         }
 
         this.game.canvas.oncontextmenu = function (e) {
-            e.preventDefault();
+            e.preventDefault()
         }
 
         const client = new Client(this.game)
         this.registry.set('client', client)
     }
-    
+
     preload(): void {
         // set the background, create the loading and progress bar and init values
         // with the global data manager (= this.registry)
@@ -36,8 +35,8 @@ export class BootScene extends Phaser.Scene {
 
         // pass value to change the loading bar fill
         this.load.on(
-            "progress",
-            function(value) {
+            'progress',
+            function (value) {
                 this.progressBar.clear()
                 this.progressBar.fillStyle(0x88e453, 1)
                 this.progressBar.fillRect(
@@ -52,8 +51,8 @@ export class BootScene extends Phaser.Scene {
 
         // delete bar graphics, when loading complete
         this.load.on(
-            "complete",
-            function() {
+            'complete',
+            function () {
                 // this.animationHelperInstance = new AnimationHelper(
                 //   this,
                 //   this.cache.json.get("animationJSON")
@@ -69,7 +68,7 @@ export class BootScene extends Phaser.Scene {
         this.load.html('mainMenuSceneHTML', 'assets/html/mainMenuScene.html')
 
         // load our package
-        this.load.pack("preload", "assets/pack.json", 'preload')
+        this.load.pack('preload', 'assets/pack.json', 'preload')
 
         if (this.game.debug) {
             this.load.html('debugMenuHTML', 'assets/html/debugMenu.html')

@@ -4,8 +4,6 @@ import { Player } from '~/entities/player'
 import { PlayerAction, PlayerDirection } from '@shared/models'
 import { DebugScene } from '~/scenes/debugScene'
 
-
-
 export class MainControl {
     public scene: MainScene
     public controls: any
@@ -40,7 +38,6 @@ export class MainControl {
         }
     }
 }
-
 
 export class PlayerControl {
     public scene: MainScene
@@ -84,19 +81,18 @@ export class PlayerControl {
             ability3: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
             ability4: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
         }
-
     }
 
     public handleMovement(): void {
-        const left = (this.controls.moveLeftQwerty.isDown ||
-            this.controls.moveLeftAzerty.isDown) ? -1 : 0
-        const right = (this.controls.moveRightDvorak.isDown ||
-            this.controls.moveRightQwerty.isDown) ? 1 : 0
-        const up = (this.controls.moveUpDvorak.isDown ||
+        const left = this.controls.moveLeftQwerty.isDown || this.controls.moveLeftAzerty.isDown ? -1 : 0
+        const right = this.controls.moveRightDvorak.isDown || this.controls.moveRightQwerty.isDown ? 1 : 0
+        const up =
+            this.controls.moveUpDvorak.isDown ||
             this.controls.moveUpQwerty.isDown ||
-            this.controls.moveUpAzerty.isDown) ? -1 : 0
-        const down = (this.controls.moveDownDvorak.isDown ||
-            this.controls.moveDownQwerty.isDown) ? 1 : 0
+            this.controls.moveUpAzerty.isDown
+                ? -1
+                : 0
+        const down = this.controls.moveDownDvorak.isDown || this.controls.moveDownQwerty.isDown ? 1 : 0
 
         this.previousDirection = this.currentDirection
         const playerDirection: PlayerDirection = {
@@ -105,8 +101,10 @@ export class PlayerControl {
         }
         this.currentDirection = playerDirection
 
-        if ((this.currentDirection.x !== this.previousDirection.x) ||
-            (this.currentDirection.y !== this.previousDirection.y)) {
+        if (
+            this.currentDirection.x !== this.previousDirection.x ||
+            this.currentDirection.y !== this.previousDirection.y
+        ) {
             this.action.direction = this.currentDirection
         }
     }
@@ -119,34 +117,32 @@ export class PlayerControl {
 
         if (ability1) {
             this.action.selectAbility = 'ability1'
-        }
-        else if (ability2) {
+        } else if (ability2) {
             this.action.selectAbility = 'ability2'
-        }
-        else if (ability3) {
+        } else if (ability3) {
             this.action.selectAbility = 'ability3'
-        }
-        else if (ability4) {
+        } else if (ability4) {
             this.action.selectAbility = 'ability4'
         }
-
-
     }
 
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
         const pointerRotation = Phaser.Math.Angle.Between(
-            this.player.body.center.x, this.player.body.center.y,
-            this.scene.pointerPosition.x, this.scene.pointerPosition.y
+            this.player.body.center.x,
+            this.player.body.center.y,
+            this.scene.pointerPosition.x,
+            this.scene.pointerPosition.y
         )
 
         this.currentMouseRotation = pointerRotation
-        if (this.currentMouseRotation <= this.previousMouseRotation - Math.PI / 180 ||
-            this.currentMouseRotation >= this.previousMouseRotation + Math.PI / 180) {
+        if (
+            this.currentMouseRotation <= this.previousMouseRotation - Math.PI / 180 ||
+            this.currentMouseRotation >= this.previousMouseRotation + Math.PI / 180
+        ) {
             this.action.rotation = this.currentMouseRotation
             this.previousMouseRotation = this.currentMouseRotation
         }
-
 
         if (this.canLeftTrigger) {
             if (pointer.leftButtonDown()) {
@@ -190,7 +186,6 @@ export class PlayerControl {
         }
     }
 }
-
 
 export class DebugControl {
     public scene: DebugScene
@@ -267,8 +262,6 @@ export class DebugControl {
     }
 }
 
-
-
 export function settingCameraControl(scene: MainScene): Phaser.Cameras.Controls.SmoothedKeyControl {
     const cursors = scene.input.keyboard.createCursorKeys()
     const controlConfig = {
@@ -281,7 +274,7 @@ export function settingCameraControl(scene: MainScene): Phaser.Cameras.Controls.
         zoomOut: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N),
         acceleration: 0.06,
         drag: 0.0005,
-        maxSpeed: 1.0
+        maxSpeed: 1.0,
     }
     return new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig)
 }

@@ -1,15 +1,14 @@
-import { PlayerConfig } from "@shared/models"
-import { Config } from "@shared/config"
-import { Event } from "@shared/events"
-import { Client } from "~/client"
-import { MyGame } from "~/index"
+import { PlayerConfig } from '@shared/models'
+import { Config } from '@shared/config'
+import { Event } from '@shared/events'
+import { Client } from '~/client'
+import { MyGame } from '~/index'
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444
 const COLOR_UNSELECTED = 0xbbbbbb
 const COLOR_SELECTED = 0xffffff
 const COLOR_DISABLED = 0x888888
-
 
 enum ItemType {
     Weapon,
@@ -32,14 +31,14 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
     public padding: number
     public initialX: number
     public initialY: number
-    
+
     constructor(
         scene: PlayerSelectionScene,
         x: number,
         y: number,
         item: Item,
         size: number,
-        padding: number,
+        padding: number
     ) {
         super(scene, x, y)
         this.initialX = x
@@ -51,15 +50,11 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
         this.padding = padding
         this.innerSize = this.size - this.padding
 
-        
         this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(
-            scene,
-            0,
-            0,
-            'atlas',
-            this.item.frame,
-        ).setDisplaySize(this.innerSize, this.innerSize)
+        this.image = new Phaser.GameObjects.Image(scene, 0, 0, 'atlas', this.item.frame).setDisplaySize(
+            this.innerSize,
+            this.innerSize
+        )
         this.add([this.graphic, this.image])
         this.setSize(this.size, this.size)
     }
@@ -92,10 +87,9 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
     }
 }
 
-
 class SlotContainer extends SlotBaseContainer {
     public isDisabled: boolean
-    
+
     constructor(
         scene: PlayerSelectionScene,
         x: number,
@@ -107,16 +101,16 @@ class SlotContainer extends SlotBaseContainer {
     ) {
         super(scene, x, y, item, size, padding)
         this.isDisabled = isDisabled || false
-        if(!this.isDisabled) {
+        if (!this.isDisabled) {
             this.enable()
         } else {
             this.disable()
         }
 
         this.draw()
-        
-        this.on('pointerover', () =>  {
-            if(!this.isDisabled) {
+
+        this.on('pointerover', () => {
+            if (!this.isDisabled) {
                 this.drawFocus()
                 this.scene.setActivePickedSlot(this)
                 for (const slot of this.scene.activatedPickedSlot) {
@@ -125,8 +119,8 @@ class SlotContainer extends SlotBaseContainer {
             }
         })
 
-        this.on('pointerdown', () =>  {
-            if(!this.isDisabled) {
+        this.on('pointerdown', () => {
+            if (!this.isDisabled) {
                 this.drawFocus()
                 this.scene.setActivePickedSlot(this)
                 for (const slot of this.scene.activatedPickedSlot) {
@@ -134,14 +128,14 @@ class SlotContainer extends SlotBaseContainer {
                 }
             }
         })
-        
+
         this.on('pointerout', () => {
-            if(!this.isDisabled) {
+            if (!this.isDisabled) {
                 this.draw()
                 for (const slot of this.scene.activatedPickedSlot) {
                     slot.drawDefault()
                 }
-            } 
+            }
         })
     }
 
@@ -154,16 +148,14 @@ class SlotContainer extends SlotBaseContainer {
 
     enable() {
         this.isDisabled = false
-        this.setInteractive({cursor: 'pointer'})
+        this.setInteractive({ cursor: 'pointer' })
         this.scene.input.setDraggable(this, true)
         this.draw()
     }
 }
 
-
-
 class SelectedSlotContainer extends SlotBaseContainer {
-    public slotTarget? : SlotContainer
+    public slotTarget?: SlotContainer
     constructor(
         scene: PlayerSelectionScene,
         x: number,
@@ -175,7 +167,8 @@ class SelectedSlotContainer extends SlotBaseContainer {
     ) {
         super(scene, x, y, item, size, padding)
         this.slotTarget = slotTarget
-        const zone = this.scene.add.zone(-this.size / 2, -this.size / 2, this.size, this.size)
+        const zone = this.scene.add
+            .zone(-this.size / 2, -this.size / 2, this.size, this.size)
             .setRectangleDropZone(this.size * 2, this.size * 2)
         this.add(zone)
         this.drawDefault()
@@ -196,22 +189,21 @@ class SelectedSlotContainer extends SlotBaseContainer {
     }
 
     public drawDefault() {
-        if(this.isEmpty) {
+        if (this.isEmpty) {
             this.drawDisable()
         } else {
             this.draw()
         }
     }
-    
+
     public handleDragOff() {
-        if(this.isEmpty) {
+        if (this.isEmpty) {
             this.drawDisable()
         } else {
             this.draw()
         }
     }
 }
-
 
 export function createSlotsContainer(
     scene: PlayerSelectionScene,
@@ -220,22 +212,22 @@ export function createSlotsContainer(
     size: number,
     padding: number,
     offsetBetween: number,
-    columnCount: number,
+    columnCount: number
 ): [Phaser.GameObjects.Container, Record<string, SlotContainer>] {
     const slotsContainer = new Phaser.GameObjects.Container(scene, 0, 0)
     const slotActivated = {}
-    
+
     Object.values(itemsConfig).forEach((config, index) => {
         const row = index % columnCount
         const column = Math.floor(index / columnCount)
-        
+
         const slotContainer = new SlotContainer(
             scene,
             row * (size + offsetBetween),
             column * (size + offsetBetween),
             { key: config.name, frame: config.frame, type: itemType },
             size,
-            padding,
+            padding
         )
         const weaponKeys = {
             weaponPrimary: scene.playerConfig.weaponPrimaryKey,
@@ -247,7 +239,7 @@ export function createSlotsContainer(
             ability3: scene.playerConfig.abilityKey3,
             ability4: scene.playerConfig.abilityKey4,
         }
-        
+
         for (const [key, value] of Object.entries(weaponKeys)) {
             if (value === config.name) {
                 slotActivated[key] = slotContainer
@@ -260,13 +252,12 @@ export function createSlotsContainer(
                 slotContainer.disable()
             }
         }
-        
+
         slotsContainer.add(slotContainer)
     })
     scene.add.existing(slotsContainer)
     return [slotsContainer, slotActivated]
 }
-
 
 export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
@@ -282,30 +273,29 @@ export class PlayerSelectionScene extends Phaser.Scene {
     public gameContainerHeight: number
     constructor() {
         super({
-            key: "playerSelectionScene"
+            key: 'playerSelectionScene',
         })
     }
-    
 
     init(): void {
-        window.addEventListener('resize', () => {
-            const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
-            const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
-            
-            this.gameContainer.setPosition(
-                gameContainerX,
-                gameContainerY,
-            )
-        }, false)
+        window.addEventListener(
+            'resize',
+            () => {
+                const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
+                const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
+
+                this.gameContainer.setPosition(gameContainerX, gameContainerY)
+            },
+            false
+        )
         this.client = this.game.registry.get('client')
         this.client.emitPlayerSelectionInit()
 
         this.playerConfig = {
             ...Config.player.defaultConfig,
             ...JSON.parse(window.localStorage.getItem('playerConfig')),
-            name: this.client.lobyUser.name
+            name: this.client.lobyUser.name,
         }
-
 
         this.game.events.on(Event.playerSelectionStart, () => {
             this.client.emitPlayerSelectionEnd()
@@ -313,26 +303,22 @@ export class PlayerSelectionScene extends Phaser.Scene {
             this.client.emitGameJoined()
         })
 
-        
         this.game.events.on(Event.gameReady, () => {
             // this.client.emitGameJoined()
 
             this.scene.get('mainScene').scene.restart()
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()
-            
         })
         this.initDrag()
 
         if (this.game.debug) {
             window['playerSelectionMenu'] = this
-        }        
-        
+        }
     }
 
-    
     initDrag() {
-        this.input.on('drag',  (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {
+        this.input.on('drag', (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {
             gameObject.x = dragX
             gameObject.y = dragY
             this.setActivePickedSlot(gameObject)
@@ -342,12 +328,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
 
         this.input.on('dragend', (pointer, gameObject: SlotContainer, dropped) => {
-            if (!dropped || this.draggedSlot.item.type !== gameObject.item.type)
-            {
+            if (!dropped || this.draggedSlot.item.type !== gameObject.item.type) {
                 gameObject.x = gameObject.input.dragStartX
                 gameObject.y = gameObject.input.dragStartY
             } else {
-                if (this.draggedSlot.slotTarget !== undefined ) {
+                if (this.draggedSlot.slotTarget !== undefined) {
                     this.draggedSlot.slotTarget.enable()
                 }
 
@@ -362,7 +347,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             }
             this.setReadyButton()
         })
-        
+
         this.input.on('dragenter', (pointer, gameObject, dropZone: Phaser.GameObjects.Zone) => {
             this.draggedSlot = dropZone.parentContainer as SelectedSlotContainer
         })
@@ -372,16 +357,18 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     setActivePickedSlot(gameObject: SlotBaseContainer) {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
-        const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
-        this.activatedPickedSlot = gameObject.item.type === ItemType.Weapon
-            ? activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>
-            : activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>
+        const [
+            activatedWeaponSlotContainer,
+            activatedAbilitySlotContainer,
+        ] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+        this.activatedPickedSlot =
+            gameObject.item.type === ItemType.Weapon
+                ? (activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>)
+                : (activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>)
     }
-    
+
     createBackground() {
-        this.background = this.add.image(0, 0, 'backgroundGalaxy5')
-            .setOrigin(0)
-            .setAlpha(1)
+        this.background = this.add.image(0, 0, 'backgroundGalaxy5').setOrigin(0).setAlpha(1)
     }
 
     createSlots(): void {
@@ -391,7 +378,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         const slotColumnCount = 8
         const slotMarginLeft = 80
         const abilitiesMarginTop = 20
-        
+
         const weaponContainerHeight = Math.max(
             2 * (slotSize + slotOffsetBetween),
             (Object.values(Config.weapons).length / slotColumnCount) * (slotSize + slotOffsetBetween)
@@ -402,10 +389,9 @@ export class PlayerSelectionScene extends Phaser.Scene {
             (Object.values(Config.abilities).length / slotColumnCount) * (slotSize + slotOffsetBetween)
         )
 
-        const slotContainerWidth =
-            (slotSize + slotOffsetBetween + slotMarginLeft) + (slotSize * slotColumnCount)
-        const slotContainerHeight = weaponContainerHeight + abilitiesContainerHeight + abilitiesMarginTop  
-        
+        const slotContainerWidth = slotSize + slotOffsetBetween + slotMarginLeft + slotSize * slotColumnCount
+        const slotContainerHeight = weaponContainerHeight + abilitiesContainerHeight + abilitiesMarginTop
+
         const [weaponsContainer, selectedWeapons] = createSlotsContainer(
             this,
             Config.weapons,
@@ -413,7 +399,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             slotSize,
             slotPadding,
             slotOffsetBetween,
-            slotColumnCount,
+            slotColumnCount
         )
         weaponsContainer.setPosition(0, 0)
         const [abilitiesContainer, selectedAbilities] = createSlotsContainer(
@@ -423,93 +409,102 @@ export class PlayerSelectionScene extends Phaser.Scene {
             slotSize,
             slotPadding,
             slotOffsetBetween,
-            slotColumnCount,
+            slotColumnCount
         )
         abilitiesContainer.setPosition(0, weaponContainerHeight + abilitiesMarginTop)
-        const selectedSlots = {...selectedWeapons, ...selectedAbilities}
+        const selectedSlots = { ...selectedWeapons, ...selectedAbilities }
 
-        const slotContainer = this.add.container(
-            slotMarginLeft, 0,
-            [
-                weaponsContainer,
-                abilitiesContainer
-            ]
-        )
+        const slotContainer = this.add.container(slotMarginLeft, 0, [weaponsContainer, abilitiesContainer])
 
-        const defaultWeponItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Weapon}
-        const defaultAbilityItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability}
-        
+        const defaultWeponItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Weapon }
+        const defaultAbilityItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability }
+
         const weaponPrimaryContainer = new SelectedSlotContainer(
-            this, 0, 0,
+            this,
+            0,
+            0,
             selectedSlots.weaponPrimary?.item || defaultWeponItem,
-            slotSize, slotPadding, selectedSlots.weaponPrimary, 
+            slotSize,
+            slotPadding,
+            selectedSlots.weaponPrimary
         )
         const weaponSecondaryContainer = new SelectedSlotContainer(
-            this, 0, slotSize + slotOffsetBetween,
+            this,
+            0,
+            slotSize + slotOffsetBetween,
             selectedSlots.weaponSecondary?.item || defaultWeponItem,
-            slotSize, slotPadding, selectedSlots.weaponSecondary
+            slotSize,
+            slotPadding,
+            selectedSlots.weaponSecondary
         )
         const ability1Container = new SelectedSlotContainer(
-            this, 0, (weaponContainerHeight + abilitiesMarginTop) + 0 * (slotSize + slotOffsetBetween),
-            selectedSlots.ability1?.item  || defaultAbilityItem,
-            slotSize, slotPadding, selectedSlots.ability1,
+            this,
+            0,
+            weaponContainerHeight + abilitiesMarginTop + 0 * (slotSize + slotOffsetBetween),
+            selectedSlots.ability1?.item || defaultAbilityItem,
+            slotSize,
+            slotPadding,
+            selectedSlots.ability1
         )
         const ability2Container = new SelectedSlotContainer(
-            this, 0, (weaponContainerHeight + abilitiesMarginTop) + 1 * (slotSize + slotOffsetBetween),
-            selectedSlots.ability2?.item  || defaultAbilityItem,
-            slotSize, slotPadding, selectedSlots.ability2,
+            this,
+            0,
+            weaponContainerHeight + abilitiesMarginTop + 1 * (slotSize + slotOffsetBetween),
+            selectedSlots.ability2?.item || defaultAbilityItem,
+            slotSize,
+            slotPadding,
+            selectedSlots.ability2
         )
         const ability3Container = new SelectedSlotContainer(
-            this, 0, (weaponContainerHeight + abilitiesMarginTop ) + 2 * (slotSize + slotOffsetBetween),
-            selectedSlots.ability3?.item  || defaultAbilityItem,
-            slotSize, slotPadding, selectedSlots.ability3,
+            this,
+            0,
+            weaponContainerHeight + abilitiesMarginTop + 2 * (slotSize + slotOffsetBetween),
+            selectedSlots.ability3?.item || defaultAbilityItem,
+            slotSize,
+            slotPadding,
+            selectedSlots.ability3
         )
         const ability4Container = new SelectedSlotContainer(
-            this, 0, (weaponContainerHeight + abilitiesMarginTop) + 3 * (slotSize + slotOffsetBetween),
-            selectedSlots.ability4?.item  || defaultAbilityItem,
-            slotSize, slotPadding, selectedSlots.ability4,
+            this,
+            0,
+            weaponContainerHeight + abilitiesMarginTop + 3 * (slotSize + slotOffsetBetween),
+            selectedSlots.ability4?.item || defaultAbilityItem,
+            slotSize,
+            slotPadding,
+            selectedSlots.ability4
         )
 
-        const activatedWeaponContainer = this.add.container(
-            0, 0,
-            [
-                weaponPrimaryContainer,
-                weaponSecondaryContainer,
-            ]
-        )
+        const activatedWeaponContainer = this.add.container(0, 0, [
+            weaponPrimaryContainer,
+            weaponSecondaryContainer,
+        ])
 
-        const activatedAbilitiesContainer = this.add.container(
-            0, 0,
-            [
-                ability1Container,
-                ability2Container,
-                ability3Container,
-                ability4Container,
-            ]
-        )
+        const activatedAbilitiesContainer = this.add.container(0, 0, [
+            ability1Container,
+            ability2Container,
+            ability3Container,
+            ability4Container,
+        ])
 
-        const activatedSlotContainer = this.add.container(
-            0, 0,
-            [activatedWeaponContainer, activatedAbilitiesContainer]
-        )
-        
-        this.slotContainer = this.add.container(
-            0, 0,
-            [
-                activatedSlotContainer,
-                slotContainer,
-            ]
-        ).setSize(slotContainerWidth, slotContainerHeight)
+        const activatedSlotContainer = this.add.container(0, 0, [
+            activatedWeaponContainer,
+            activatedAbilitiesContainer,
+        ])
+
+        this.slotContainer = this.add
+            .container(0, 0, [activatedSlotContainer, slotContainer])
+            .setSize(slotContainerWidth, slotContainerHeight)
     }
 
-    
     createPlayButton(): void {
         const buttonTemplate = `
 <button title="Drag And Drop slots" disabled class="button is-dark is-large">
   Enter The Arena
 </button>
 `
-        this.playButtonDOM = this.add.dom(0, 0).createFromHTML(buttonTemplate)
+        this.playButtonDOM = this.add
+            .dom(0, 0)
+            .createFromHTML(buttonTemplate)
             .setPosition(this.slotContainer.width / 2, this.slotContainer.height + 20)
 
         this.playButtonDOM.addListener('click')
@@ -521,20 +516,25 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     setReadyButton(): void {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
-        const [activatedWeaponSlotContainer, activatedAbilitySlotContainer] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
-        
-        const selectedWeaponCount =
-            activatedWeaponSlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
-        const selectedAbilityCount =
-            activatedAbilitySlotContainer.list.filter((slot: SelectedSlotContainer) => slot.slotTarget).length
+        const [
+            activatedWeaponSlotContainer,
+            activatedAbilitySlotContainer,
+        ] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+
+        const selectedWeaponCount = activatedWeaponSlotContainer.list.filter(
+            (slot: SelectedSlotContainer) => slot.slotTarget
+        ).length
+        const selectedAbilityCount = activatedAbilitySlotContainer.list.filter(
+            (slot: SelectedSlotContainer) => slot.slotTarget
+        ).length
 
         const el: any = this.playButtonDOM.node.children[0]
-        if((selectedWeaponCount + selectedAbilityCount) < 6) {
+        if (selectedWeaponCount + selectedAbilityCount < 6) {
             el.disabled = true
-            el.title='Drag And Drop slots'
+            el.title = 'Drag And Drop slots'
         } else {
             el.disabled = false
-            el.title=''
+            el.title = ''
         }
     }
 
@@ -547,14 +547,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.gameContainerHeight = this.slotContainer.height + this.playButtonDOM.height
         const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
         const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
-        
-        this.gameContainer = this.add.container(
-            0, 0,
-            [ this.slotContainer, this.playButtonDOM ]
-        ).setSize(
-            this.slotContainer.width,
-            this.playButtonDOM.height + this.playButtonDOM.height
-        ).setPosition(gameContainerX, gameContainerY)
+
+        this.gameContainer = this.add
+            .container(0, 0, [this.slotContainer, this.playButtonDOM])
+            .setSize(this.slotContainer.width, this.playButtonDOM.height + this.playButtonDOM.height)
+            .setPosition(gameContainerX, gameContainerY)
 
         if (this.game.debug) {
             window['menu'] = this
@@ -564,13 +561,15 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     start() {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
-        const [activatedWeaponSlotContainer, activatedAbilitySlotContainer]
-            = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+        const [
+            activatedWeaponSlotContainer,
+            activatedAbilitySlotContainer,
+        ] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
         const [weapons, abilities] = [
             activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>,
             activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
         ]
-        
+
         const playerConfUpdated = {
             ...this.playerConfig,
             weaponPrimaryKey: weapons[0].item.key,

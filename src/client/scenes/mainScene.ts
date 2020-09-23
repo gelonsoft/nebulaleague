@@ -17,13 +17,12 @@ import { Event } from '@shared/events'
 import { MyGame } from '../index'
 import { Client } from '~/client'
 import { PlayerAI } from '~/ai/playerAI'
-import { Player, ActionTimeInterface, } from '~/entities/player'
+import { Player, ActionTimeInterface } from '~/entities/player'
 import { MainControl, PlayerControl } from '~/controls'
 import { Consumable, RandomItem } from '~/entities/consumables'
 import { Projectiles, ProjectileInterface } from '~/entities/projectiles'
 import { Weapon, buildWeapons } from '~/entities/weapons'
 import { buildAbilities, Ability } from '~/entities/abilities'
-
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
@@ -45,28 +44,30 @@ export class MainScene extends Phaser.Scene {
     public playerConfig: PlayerConfig
     public playerPrevious: PlayerChanged | null
     public playerCurrent: PlayerChanged | null
-    public projectilesPrevious: Record<string, ProjectileChanged> 
-    public projectilesCurrent: Record<string, ProjectileChanged> 
-    
+    public projectilesPrevious: Record<string, ProjectileChanged>
+    public projectilesCurrent: Record<string, ProjectileChanged>
 
     constructor() {
         super({
-            key: "mainScene"
+            key: 'mainScene',
         })
     }
 
     public init(): void {
-        window.addEventListener('resize', () => {
-            this.backgroundImage.setDisplaySize(
-                this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
-                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor,
-            )
-        }, false)
+        window.addEventListener(
+            'resize',
+            () => {
+                this.backgroundImage.setDisplaySize(
+                    this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
+                    this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
+                )
+            },
+            false
+        )
         this.client = this.game.registry.get('client')
 
         this.randomTable = new RandomItem()
-        this.randomTable
-            .add('pill', 20)
+        this.randomTable.add('pill', 20)
         this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
         this.registerEvent()
 
@@ -80,7 +81,6 @@ export class MainScene extends Phaser.Scene {
         this.playerCurrent = null
         this.projectilesPrevious = {}
         this.projectilesCurrent = {}
-
     }
 
     public create(): void {
@@ -88,13 +88,18 @@ export class MainScene extends Phaser.Scene {
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
         this.playersAI = []
-        this.players = this.physics.add.group({
-            collideWorldBounds: true,
-            classType: Player,
-        }).addMultiple(Object.values(this.client.gameState.players).map((playerModel) => {
-            return new Player(this, playerModel)
-        }))
-        this.player = this.players.children.getArray()
+        this.players = this.physics.add
+            .group({
+                collideWorldBounds: true,
+                classType: Player,
+            })
+            .addMultiple(
+                Object.values(this.client.gameState.players).map((playerModel) => {
+                    return new Player(this, playerModel)
+                })
+            )
+        this.player = this.players.children
+            .getArray()
             .find((player: Player) => player.id === this.client.id) as Player
 
         this.settingCamera()
@@ -103,38 +108,37 @@ export class MainScene extends Phaser.Scene {
         this.mainControl = new MainControl(this)
     }
 
-
     public settingCamera(): void {
         this.mainCameraZoom = 0.5
         this.freeCamera = false
         this.cameras.main.setZoom(this.mainCameraZoom)
         this.cameras.main.setBounds(0, 0, Config.world.width, Config.world.height)
         this.physics.world.setBounds(
-            0, 0,
+            0,
+            0,
             Config.world.width,
-            Config.world.height - Config.hud.height - Config.player.size / 2)
+            Config.world.height - Config.hud.height - Config.player.size / 2
+        )
         this.cameras.main.startFollow(this.player, true)
     }
 
-
     public createBackground(): void {
-        this.backgroundImage = this.add.image(0, 0, 'backgroundGalaxy3')
+        this.backgroundImage = this.add
+            .image(0, 0, 'backgroundGalaxy3')
             .setScrollFactor(Config.world.paralaxScrollFactor, Config.world.paralaxScrollFactor)
             .setDisplaySize(
                 this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
-                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor,
+                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
             )
             .setOrigin(0.23, 0.23)
             .setAlpha(0.7)
             .setDepth(-1)
     }
 
-
     public createConsumables(): void {
         this.consumables = this.physics.add.staticGroup()
         this.consumables.addMultiple(this.randomTable.spawn(this))
     }
-
 
     public registerEvent(): void {
         this.game.events.on(Event.playerJoined, (playerModel: PlayerModel) => {
@@ -153,7 +157,6 @@ export class MainScene extends Phaser.Scene {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
                 this.player.move(playerAction.direction)
-                
             } else {
                 this.player.move(this.player.previousDirection)
             }
@@ -165,46 +168,55 @@ export class MainScene extends Phaser.Scene {
             }
             if (playerAction.action) {
                 const pointerVector = new Phaser.Math.Vector2(
-                    playerAction.pointerPosition.x, playerAction.pointerPosition.y
+                    playerAction.pointerPosition.x,
+                    playerAction.pointerPosition.y
                 )
                 this.player.action(playerAction.action, pointerVector)
             }
         })
 
         this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
-            this.projectilesCurrent[projectile.name] = projectile.getChanged()
+            // console.log('fired')
             // console.log(projectile)
-            // this.client.emitGameUpdated(this.getDiffGameState())
+            this.projectilesCurrent[projectile.name] = projectile.getChanged()
         })
 
         this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
+            // console.log('killed')
+            // console.log(projectile)
             delete this.projectilesCurrent[projectile.name]
         })
 
-        
         this.game.events.on(Event.gameUpdated, () => {
             const gameStateReceived = this.client.gameStateChangedRecieved
             // console.log(gameStateReceived)
 
-            if(gameStateReceived.updated !== undefined) {
-                if(gameStateReceived.updated.players !== undefined) {
-                    for (const [idModel, playerChanged] of Object.entries(gameStateReceived.updated.players)) {
+            if (gameStateReceived.updated !== undefined) {
+                if (gameStateReceived.updated.players !== undefined) {
+                    for (const [idModel, playerChanged] of Object.entries(
+                        gameStateReceived.updated.players
+                    )) {
                         const player = this.players.children.get('id', idModel as any)
                         Object.assign(player, playerChanged)
-                    }                                    
+                    }
                 }
 
-                if(gameStateReceived.updated.projectiles !== undefined) {
-                    for (const [idModel, projectileChanged] of Object.entries(gameStateReceived.updated.projectiles)) {
+                if (gameStateReceived.updated.projectiles !== undefined) {
+                    for (const [idModel, projectileChanged] of Object.entries(
+                        gameStateReceived.updated.projectiles
+                    )) {
                         const projectile = this.projectiles.getProjectile(idModel)
-                        // console.log(projectile)
-                        // Object.assign(projectile, projectileChanged)
+                        console.log(projectile)
+                        projectile.visble = true
+                        projectile.active = true
+                        // projectile.x = projectile.x
+                        projectile.y = 100
+                        Object.assign(projectile, projectileChanged)
                     }
                 }
             }
         })
     }
-
 
     public syncHealth(player: Player): void {
         if (player.id === this.player.id) {
@@ -212,7 +224,11 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public syncAbilitiesCooldown(player: Player, selectedAbilityKey: string, actionTime: ActionTimeInterface): void {
+    public syncAbilitiesCooldown(
+        player: Player,
+        selectedAbilityKey: string,
+        actionTime: ActionTimeInterface
+    ): void {
         if (player.id === this.player.id) {
             this.events.emit(Event.abilitiesCooldownChanged, selectedAbilityKey, actionTime)
         }
@@ -224,7 +240,11 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public syncWeaponCooldown(player: Player, selectedWeaponKey: string, actionTime: ActionTimeInterface): void {
+    public syncWeaponCooldown(
+        player: Player,
+        selectedWeaponKey: string,
+        actionTime: ActionTimeInterface
+    ): void {
         if (player.id === this.player.id) {
             this.events.emit(Event.weaponsCooldownChanged, selectedWeaponKey, actionTime)
         }
@@ -265,8 +285,8 @@ export class MainScene extends Phaser.Scene {
             this.cameras.main.setAlpha(1)
             this.time.addEvent({
                 delay: 0.2 * 1000,
-                callback: () => this.playerControl.active = true,
-                callbackScope: this
+                callback: () => (this.playerControl.active = true),
+                callbackScope: this,
             })
         }
     }
@@ -281,10 +301,9 @@ export class MainScene extends Phaser.Scene {
         const pointerFromWorld = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
         return {
             x: pointerFromWorld.x,
-            y: pointerFromWorld.y
+            y: pointerFromWorld.y,
         }
     }
-
 
     public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
         player2.body.velocity.scale(-1)
@@ -293,8 +312,8 @@ export class MainScene extends Phaser.Scene {
 
     public handleEnemyProjectileCollide(
         hittedPlayer: Player,
-        projectile: Phaser.GameObjects.Sprite & ProjectileInterface)
-        : void {
+        projectile: Phaser.GameObjects.Sprite & ProjectileInterface
+    ): void {
         if (hittedPlayer.id !== projectile.fromPlayerId) {
             projectile.actionOnCollision(hittedPlayer)
         }
@@ -302,7 +321,7 @@ export class MainScene extends Phaser.Scene {
 
     public handlePlayerConsumableOverlap(
         consumable: Phaser.GameObjects.Sprite & Consumable,
-        player: Player,
+        player: Player
     ): void {
         consumable.action(player)
         consumable.randomPosition()
@@ -322,9 +341,11 @@ export class MainScene extends Phaser.Scene {
 
     public getDiffGameState(): GameStateChanged {
         const playerChanged = diff(this.playerPrevious, this.playerCurrent) as Record<string, PlayerChanged>
-        const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<string, ProjectileChanged>
+        const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<
+            string,
+            ProjectileChanged
+        >
 
-        
         const isPlayersChanged = Object.keys(playerChanged).length > 0
         const isProjectilesChanged = Object.keys(projectilesChanged).length > 0
         const gameStatedUpdated: GameStateChanged = {}
@@ -332,57 +353,48 @@ export class MainScene extends Phaser.Scene {
         gameStatedUpdated.updated = {}
         gameStatedUpdated.deleted = {}
 
-        if(isProjectilesChanged) {
-            
-            const projectilesUpdated = pickBy(projectilesChanged, value => value !== undefined)
-            const projectilesDeleted = Object.keys(pickBy(projectilesChanged, value => value === undefined))
+        if (isProjectilesChanged) {
+            const projectilesUpdated = pickBy(projectilesChanged, (value) => value !== undefined)
+            const projectilesDeleted = Object.keys(pickBy(projectilesChanged, (value) => value === undefined))
 
-
-            if(Object.keys(projectilesUpdated).length > 0) {
+            if (Object.keys(projectilesUpdated).length > 0) {
                 gameStatedUpdated.updated.projectiles = projectilesUpdated
             }
 
-            if(projectilesDeleted.length > 0) {
+            if (projectilesDeleted.length > 0) {
                 gameStatedUpdated.deleted.projectiles = projectilesDeleted
             }
         }
 
         if (isPlayersChanged) {
             gameStatedUpdated.updated.players = {
-                [this.player.id]: playerChanged
+                [this.player.id]: playerChanged,
             }
         }
 
-        if(isEmpty(gameStatedUpdated.updated)) {
+        if (isEmpty(gameStatedUpdated.updated)) {
             delete gameStatedUpdated.updated
         }
-        if(isEmpty(gameStatedUpdated.deleted)) {
+        if (isEmpty(gameStatedUpdated.deleted)) {
             delete gameStatedUpdated.deleted
         }
-        
+
         return gameStatedUpdated
     }
-    
+
     public update(time: number, delta: number): void {
         this.playerCurrent = this.player.getChanged()
         for (const name of Object.keys(this.projectilesCurrent)) {
             this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name).getChanged()
         }
 
-        
         this.mainControl.update()
         this.playerControl.update()
 
         // this.playersAIUpdate()
 
         // collide with other players
-        this.physics.overlap(
-            this.players,
-            this.players,
-            this.handlePlayerPlayerCollide,
-            null,
-            this
-        )
+        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, null, this)
 
         // collide with projectiles
         this.physics.overlap(
@@ -399,7 +411,8 @@ export class MainScene extends Phaser.Scene {
         }
 
         // update players
-        this.players.getChildren()
+        this.players
+            .getChildren()
             .filter((player: Player) => player.active)
             .forEach((player: Player) => {
                 player.update()
@@ -407,7 +420,7 @@ export class MainScene extends Phaser.Scene {
 
         this.client.gameStateUpdatedCurrent = this.getDiffGameState()
         this.client.emitGameUpdated()
-        
+
         this.playerPrevious = this.playerCurrent
         this.projectilesPrevious = Object.assign({}, this.projectilesCurrent)
     }
