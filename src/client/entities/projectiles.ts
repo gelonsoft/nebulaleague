@@ -4,7 +4,7 @@ import { ProjectileModel, EffectModel, ProjectileChanged } from '@shared/models'
 import { MainScene } from '~/scenes/mainScene'
 import { Player } from '~/entities/player'
 
-export interface ProjectileInterface {
+export interface ProjectileInterface  {
     fire(position: Phaser.Math.Vector2, rotation: number): void
     actionOnCollision(hittedPlayer: Player): void
     kill(): void
@@ -17,6 +17,7 @@ export interface ProjectileInterface {
     rotation?: number
     visble?: boolean
     active?: boolean
+    body?: Phaser.Physics.Arcade.Body
 }
 
 export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {

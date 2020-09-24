@@ -209,8 +209,8 @@ export class MainScene extends Phaser.Scene {
                         console.log(projectile)
                         projectile.visble = true
                         projectile.active = true
-                        // projectile.x = projectile.x
-                        projectile.y = 100
+                        projectile.body.x = projectileChanged.x
+                        projectile.body.y = projectileChanged.y
                         Object.assign(projectile, projectileChanged)
                     }
                 }
