@@ -222,3 +222,10 @@ export interface GameState {
     players: Record<string, PlayerModel>
     projectiles: Record<string, ProjectileModel>
 }
+
+export class Test {
+    foo: number
+    constructor(foo: number) {
+        this.foo = foo
+    }
+}

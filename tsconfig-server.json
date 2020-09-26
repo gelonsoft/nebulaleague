@@ -4,21 +4,18 @@
         "module": "commonjs",
         "noImplicitAny": false,
         "sourceMap": true,
-        "noImplicitAny": false,
-        "allowJs": true,
         "strict": false,
         "baseUrl": ".",
+        "rootDir": "./src",
+        "outDir": "./dist",
         "paths": {
-            "~/*": ["src/server/*"],
+            "~/server/*": ["src/server/*"],
             "@shared/*": ["src/shared/*"]
-        },
+        }
     },
 	"typeRoots": [
 		"node_modules/@types",
 		"node_module/phaser/types"
-	],
-	"types": [
-		"phaser"
 	],
     "include": [
 	    "./src/server/**/*",

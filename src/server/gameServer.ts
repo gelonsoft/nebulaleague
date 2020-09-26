@@ -1,6 +1,10 @@
-import * as objectAssignDeep from "object-assign-deep"
-import { Socket } from "socket.io"
+import * as objectAssignDeep from 'object-assign-deep'
+import { Socket } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid'
+
+
+import { ServerEvent, ClientEvent } from '@shared/events'
+
 import {
     GameState,
     LobyState,
@@ -8,16 +12,9 @@ import {
     User,
     PlayerConfig,
     GameStateChanged,
-} from "../shared/models"
+} from '@shared/models'
 
-
-import { Config } from "../shared/config"
-
-import {
-    ServerEvent,
-    ClientEvent,
-} from "../shared/events"
-
+import { Config } from '@shared/config'
 
 
 export class GameServer {
@@ -41,7 +38,7 @@ export class GameServer {
     public initMainLoby() {
         this.lobyName = 'loby'
         this.roomToLobyState.set(this.lobyName, {
-            users: new Map()
+            users: new Map(),
         })
     }
 
@@ -51,34 +48,31 @@ export class GameServer {
         })
     }
 
-
     public attachListeners(socket: Socket): void {
         socket.on(ServerEvent.lobyInit, () => this.handleLobyInit(socket))
         socket.on(ServerEvent.lobyStart, (user: User) => this.handleLobyStart(socket, user))
         socket.on(ServerEvent.lobyEnd, () => this.handleLobyEnd(socket))
 
-        socket.on(ServerEvent.playerSelectionInit, (user: User) => this.handlePlayerSelectionInit(socket, user))
-        socket.on(
-            ServerEvent.playerSelectionStart,
-            (player: PlayerConfig) => this.handlePlayerSelectionStart(socket, player)
+        socket.on(ServerEvent.playerSelectionInit, (user: User) =>
+            this.handlePlayerSelectionInit(socket, user)
+        )
+        socket.on(ServerEvent.playerSelectionStart, (player: PlayerConfig) =>
+            this.handlePlayerSelectionStart(socket, player)
         )
         socket.on(ServerEvent.playerSelectionEnd, () => this.handlePlayerSelectionEnd(socket))
 
-        socket.on(
-            ServerEvent.gameInit,
-            (playerSelection: PlayerSelectionState) => this.handleGameInit(socket, playerSelection)
+        socket.on(ServerEvent.gameInit, (playerSelection: PlayerSelectionState) =>
+            this.handleGameInit(socket, playerSelection)
         )
         socket.on(ServerEvent.gameEnd, () => this.handleGameEnd(socket))
         socket.on(ServerEvent.gameJoined, () => this.handleGameJoined(socket))
         socket.on(ServerEvent.gameRefreshServer, () => this.handleGameRefresh(socket))
-        socket.on(
-            ServerEvent.gameUpdated,
-            (gameState: GameStateChanged) => this.handleGameUpdate(socket, gameState)
+        socket.on(ServerEvent.gameUpdated, (gameState: GameStateChanged) =>
+            this.handleGameUpdate(socket, gameState)
         )
         socket.on(ServerEvent.gameQuit, () => this.handleGameQuit(socket))
         socket.on(ServerEvent.disconnected, () => this.handleDisconnect(socket))
     }
-
 
     public handleDisconnect(socket: Socket): void {
         const room = this.clientToRoom.get(socket.id)
@@ -126,7 +120,6 @@ export class GameServer {
         this.clientToRoom.delete(socket.id)
     }
 
-
     public handlePlayerSelectionInit(socket, user: User) {
         const playerSelectionState = this.roomToPlayerSelectionState.get(user.playerSelectionRoom)
         socket.join(user.playerSelectionRoom)
@@ -150,7 +143,6 @@ export class GameServer {
         this.clientToRoom.delete(socket.id)
     }
 
-
     public handleGameInit(socket: Socket, playerSelectionState: PlayerSelectionState) {
         const gameState = this.roomToGameState.get(playerSelectionState.gameRoom)
         socket.join(playerSelectionState.gameRoom)
@@ -169,10 +161,10 @@ export class GameServer {
 
     public handleGameUpdate(socket: Socket, gameStateChanged: GameStateChanged) {
         const gameState = this.roomToGameState.get(this.clientToRoom.get(socket.id))
-        objectAssignDeep(gameState, gameStateChanged.created) 
+        objectAssignDeep(gameState, gameStateChanged.created)
         objectAssignDeep(gameState, gameStateChanged.updated)
 
-        if(gameStateChanged.deleted) {
+        if (gameStateChanged.deleted) {
             for (const [keyEntity, idKeys] of Object.entries(gameStateChanged.deleted)) {
                 for (const key of idKeys) {
                     delete gameState[keyEntity][key]
@@ -180,11 +172,14 @@ export class GameServer {
             }
         }
 
-        console.dir({
-            gameStateChanged,
-            gameState,
-        }, {depth: 4})
-        
+        console.dir(
+            {
+                gameStateChanged,
+                gameState,
+            },
+            { depth: 4 }
+        )
+
         socket.to(this.clientToRoom.get(socket.id)).emit(ClientEvent.gameUpdated, gameStateChanged)
     }
 
@@ -243,7 +238,6 @@ export class GameServer {
         return choosenRoom
     }
 
-
     public startPlayerSelectionRoom(socket: Socket, lobyUser: User): string {
         let choosenRoom: string | null = null
         if (lobyUser.gameMode === 'ffa') {
@@ -251,7 +245,6 @@ export class GameServer {
         }
         return choosenRoom
     }
-
 
     public leavePlayerSelectionRoom(socket: Socket) {
         const selectionRoom = this.clientToRoom.get(socket.id)
@@ -267,7 +260,6 @@ export class GameServer {
         }
     }
 
-
     public randomInt(low: number, high: number): number {
         return Math.floor(Math.random() * (high - low) + low)
     }
@@ -277,14 +269,17 @@ export class GameServer {
         const isFromPlayerSelection = this.roomToPlayerSelectionState.has(room)
         const isFromGame = this.roomToGameState.has(room)
 
-        console.dir({
-            room,
-            isFromLoby,
-            isFromPlayerSelection,
-            isFromGame,
-            roomToLobyState: this.roomToLobyState,
-            roomToPlayerSelectionState: this.roomToPlayerSelectionState,
-            roomToGameState: this.roomToGameState,
-        }, { depth: depth })
+        console.dir(
+            {
+                room,
+                isFromLoby,
+                isFromPlayerSelection,
+                isFromGame,
+                roomToLobyState: this.roomToLobyState,
+                roomToPlayerSelectionState: this.roomToPlayerSelectionState,
+                roomToGameState: this.roomToGameState,
+            },
+            { depth: depth }
+        )
     }
 }

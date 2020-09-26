@@ -3,7 +3,7 @@ import {
     ControlledBy,
     AbilityAction,
     AbilityDrawingStyle,
-} from '../shared/models'
+} from './models'
 
 
 export class Config {

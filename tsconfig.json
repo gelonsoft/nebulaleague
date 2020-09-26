@@ -8,12 +8,15 @@
         "allowJs": true,
         "strict": false,
         "baseUrl": ".",
+        "rootDir": "./src",
+        "outDir": "./dist",
         "paths": {
             "~/*": ["src/client/*"],
+            "~/server/*": ["src/server/*"],
             "@shared/*": ["src/shared/*"]
         },
     },
-	"typeRoots": [
+c	"typeRoots": [
 		"node_modules/@types",
 		"node_module/phaser/types"
 	],
