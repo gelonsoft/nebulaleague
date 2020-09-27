@@ -4,14 +4,15 @@
         "module": "commonjs",
         "sourceMap": true,
         "allowJs": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
         "strict": false,
         "baseUrl": ".",
         "baseUrl": "./src",
         "outDir": "./dist",
         "paths": {
-            "~/*": ["src/client/*"],
-            "@shared/*": ["src/shared/*"]
+            "~/*": ["client/*"],
+            "@shared/*": ["shared/*"]
         }
     },
 	"typeRoots": [
