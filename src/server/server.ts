@@ -3,7 +3,8 @@ import * as express from 'express'
 import * as path from 'path'
 import * as socketIO from 'socket.io'
 import { GameServer } from './gameServer'
-require('dotenv-flow').config()
+import * as DotenFlow from 'dotenv-flow'
+DotenFlow.config()
 
 const app = express()
 app.set('port', process.env.PORT || 3000)

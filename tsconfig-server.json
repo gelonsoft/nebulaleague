@@ -9,8 +9,8 @@
         "rootDir": "./src",
         "outDir": "./dist",
         "paths": {
-            "~/server/*": ["src/server/*"],
-            "@shared/*": ["src/shared/*"]
+            "~/server/*": ["server/*"],
+            "@shared/*": ["shared/*"]
         }
     },
 	"typeRoots": [

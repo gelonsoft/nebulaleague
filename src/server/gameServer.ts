@@ -27,7 +27,7 @@ export class GameServer {
 
     constructor(io: SocketIO.Server) {
         this.io = io
-        this.roomToLobyState = new Map()
+        this.roomToLobyState = new Map<string, LobyState>()
         this.roomToGameState = new Map()
         this.roomToPlayerSelectionState = new Map()
         this.clientToRoom = new Map()
