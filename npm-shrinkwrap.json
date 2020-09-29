@@ -90,7 +90,8 @@
         "@types/dotenv-flow": {
             "version": "3.1.0",
             "resolved": "https://registry.npmjs.org/@types/dotenv-flow/-/dotenv-flow-3.1.0.tgz",
-            "integrity": "sha512-qaWT42KDePdAGZFryYoV7EZnuuYZAO4KPVDWUV9OBOyJx7xCgKKERtVB7jBCM2mtKVI+OMMDK2ef11PWcHJz3g=="
+            "integrity": "sha512-qaWT42KDePdAGZFryYoV7EZnuuYZAO4KPVDWUV9OBOyJx7xCgKKERtVB7jBCM2mtKVI+OMMDK2ef11PWcHJz3g==",
+            "dev": true
         },
         "@types/engine.io": {
             "version": "3.1.4",
@@ -178,7 +179,8 @@
         "@types/object-assign-deep": {
             "version": "0.4.0",
             "resolved": "https://registry.npmjs.org/@types/object-assign-deep/-/object-assign-deep-0.4.0.tgz",
-            "integrity": "sha512-3D0F3rHRNDc8cQSXNzwF1jBrJi28Mdrhc10ZLlqbJWDPYRWTTWB9Tc8JoKrgBvLKioXoPoHT6Uzf3s2F7akCUg=="
+            "integrity": "sha512-3D0F3rHRNDc8cQSXNzwF1jBrJi28Mdrhc10ZLlqbJWDPYRWTTWB9Tc8JoKrgBvLKioXoPoHT6Uzf3s2F7akCUg==",
+            "dev": true
         },
         "@types/qs": {
             "version": "6.9.4",
@@ -221,7 +223,8 @@
         "@types/uuid": {
             "version": "8.3.0",
             "resolved": "https://registry.npmjs.org/@types/uuid/-/uuid-8.3.0.tgz",
-            "integrity": "sha512-eQ9qFW/fhfGJF8WKHGEHZEyVWfZxrT+6CLIJGBcZPfxUh/+BnEj+UCGYMlr9qZuX/2AltsvwrGqp0LhEW8D0zQ=="
+            "integrity": "sha512-eQ9qFW/fhfGJF8WKHGEHZEyVWfZxrT+6CLIJGBcZPfxUh/+BnEj+UCGYMlr9qZuX/2AltsvwrGqp0LhEW8D0zQ==",
+            "dev": true
         },
         "@typescript-eslint/eslint-plugin": {
             "version": "3.6.1",

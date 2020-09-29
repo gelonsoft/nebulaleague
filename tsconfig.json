@@ -3,16 +3,16 @@
         "target": "es2016",
         "module": "commonjs",
         "sourceMap": true,
-        "allowJs": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "strict": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
         "baseUrl": ".",
-        "baseUrl": "./src",
+        "rootDir": "./src",
         "outDir": "./dist",
+        "skipLibCheck": true,
         "paths": {
-            "~/*": ["client/*"],
-            "@shared/*": ["shared/*"]
+            "~/*": ["src/client/*"],
+            "~/server/*": ["src/server/*"],
+            "@shared/*": ["src/shared/*"]
         }
     },
 	"typeRoots": [
@@ -23,10 +23,11 @@
 		"phaser"
 	],
     "include": [
-	    "./src/client/**/*",
-	    "./src/shared/**/*"
+	    "./src/**/*",
     ],
     "exclude": [
-        "node_modules"
+        "node_module"
     ]
 }
+
+

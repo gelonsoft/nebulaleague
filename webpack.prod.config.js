@@ -34,7 +34,7 @@ module.exports = {
             use: {
                 loader: 'ts-loader',
                 options: {
-                    configFile: "tsconfig-client.json"
+                    configFile: "tsconfig.json"
                 },  
             },
             exclude: [
