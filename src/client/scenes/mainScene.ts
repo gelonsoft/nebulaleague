@@ -1,7 +1,7 @@
 // import { updatedDiff, diff } from 'deep-object-diff'
 // import { diff } from 'js-crud-diff'
 import { diff } from 'deep-object-diff'
-import { Config } from '@shared/config'
+import { Config } from '~/shared/config'
 import { pickBy, isEmpty } from 'lodash'
 import {
     Position,
@@ -12,17 +12,17 @@ import {
     ProjectileChanged,
     GameStateChanged,
     GameState,
-} from '@shared/models'
-import { Event } from '@shared/events'
+} from '~/shared/models'
+import { Event } from '~/shared/events'
 import { MyGame } from '../index'
-import { Client } from '~/client'
-import { PlayerAI } from '~/ai/playerAI'
-import { Player, ActionTimeInterface } from '~/entities/player'
-import { MainControl, PlayerControl } from '~/controls'
-import { Consumable, RandomItem } from '~/entities/consumables'
-import { Projectiles, ProjectileInterface } from '~/entities/projectiles'
-import { Weapon, buildWeapons } from '~/entities/weapons'
-import { buildAbilities, Ability } from '~/entities/abilities'
+import { Client } from '~/client/client'
+import { PlayerAI } from '~/client/ai/playerAI'
+import { Player, ActionTimeInterface } from '~/client/entities/player'
+import { MainControl, PlayerControl } from '~/client/controls'
+import { Consumable, RandomItem } from '~/client/entities/consumables'
+import { Projectiles, ProjectileInterface } from '~/client/entities/projectiles'
+import { Weapon, buildWeapons } from '~/client/entities/weapons'
+import { buildAbilities, Ability } from '~/client/entities/abilities'
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame

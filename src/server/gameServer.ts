@@ -3,7 +3,7 @@ import { Socket } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid'
 
 
-import { ServerEvent, ClientEvent } from '@shared/events'
+import { ServerEvent, ClientEvent } from '~/shared/events'
 
 import {
     GameState,
@@ -12,9 +12,9 @@ import {
     User,
     PlayerConfig,
     GameStateChanged,
-} from '@shared/models'
+} from '~/shared/models'
 
-import { Config } from '@shared/config'
+import { Config } from '~/shared/config'
 
 
 export class GameServer {

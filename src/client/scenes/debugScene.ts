@@ -1,8 +1,8 @@
-import { MainScene } from '~/scenes/mainScene'
-import { MyGame } from '~/index'
-import { DebugControl } from '~/controls'
-import { PlayerAI } from '~/ai/playerAI'
-import { Player } from '~/entities/player'
+import { MainScene } from '~/client/scenes/mainScene'
+import { MyGame } from '~/client/index'
+import { DebugControl } from '~/client/controls'
+import { PlayerAI } from '~/client/ai/playerAI'
+import { Player } from '~/client/entities/player'
 
 const formatCoord = function (x, y) {
     return '(' + x + ',' + y + ')'

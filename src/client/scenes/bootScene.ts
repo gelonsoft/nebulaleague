@@ -1,6 +1,6 @@
-import { AnimationHelper } from '~/helpers/animationHelper'
-import { MyGame } from '~/index'
-import { Client } from '~/client'
+import { AnimationHelper } from '~/client/helpers/animationHelper'
+import { MyGame } from '~/client/index'
+import { Client } from '~/client/client'
 
 export class BootScene extends Phaser.Scene {
     public game: MyGame

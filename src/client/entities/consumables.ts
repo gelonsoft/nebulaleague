@@ -1,6 +1,6 @@
-import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/entities/player'
-import { Config } from '@shared/config'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Player } from '~/client/entities/player'
+import { Config } from '~/shared/config'
 
 export interface ConsumableInterface {
     action: (player: Player) => void

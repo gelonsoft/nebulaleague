@@ -31,8 +31,7 @@ module.exports = {
         extensions: [".ts", ".js"],
         alias: {
             phaser: phaser,
-            "~": path.resolve(__dirname, 'src/client'),
-            "@shared": path.resolve(__dirname, 'src/shared'),
+            "~": path.resolve(__dirname, 'src'),
         }
     },
     module: {

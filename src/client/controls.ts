@@ -1,8 +1,8 @@
-import { Event } from '@shared/events'
-import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/entities/player'
-import { PlayerAction, PlayerDirection } from '@shared/models'
-import { DebugScene } from '~/scenes/debugScene'
+import { Event } from '~/shared/events'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Player } from '~/client/entities/player'
+import { PlayerAction, PlayerDirection } from '~/shared/models'
+import { DebugScene } from '~/client/scenes/debugScene'
 
 export class MainControl {
     public scene: MainScene

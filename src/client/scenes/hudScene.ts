@@ -1,11 +1,11 @@
-import { Config } from '@shared/config'
-import { Event } from '@shared/events'
-import { EffectModel } from '@shared/models'
-import { MyGame } from '~/index'
-import { Player, ActionTimeInterface } from '~/entities/player'
-import { MainScene } from '~/scenes/mainScene'
-import { HealthBar } from '~/entities/healthbar'
-import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
+import { Config } from '~/shared/config'
+import { Event } from '~/shared/events'
+import { EffectModel } from '~/shared/models'
+import { MyGame } from '~/client/index'
+import { Player, ActionTimeInterface } from '~/client/entities/player'
+import { MainScene } from '~/client/scenes/mainScene'
+import { HealthBar } from '~/client/entities/healthbar'
+import { createEffectIconsContainer, refreshEffectIcons } from '~/client/entities/effects'
 
 class SlotContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene

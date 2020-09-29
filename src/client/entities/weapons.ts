@@ -1,8 +1,8 @@
-import { WeaponModel } from '@shared/models'
-import { Config } from '@shared/config'
-import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/entities/player'
-import { Projectiles } from '~/entities/projectiles'
+import { WeaponModel } from '~/shared/models'
+import { Config } from '~/shared/config'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Player } from '~/client/entities/player'
+import { Projectiles } from '~/client/entities/projectiles'
 
 export class Weapon {
     public scene: MainScene

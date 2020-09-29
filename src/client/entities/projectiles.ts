@@ -1,8 +1,8 @@
-import { Config } from '@shared/config'
-import { Event } from '@shared/events'
-import { ProjectileModel, EffectModel, ProjectileChanged } from '@shared/models'
-import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/entities/player'
+import { Config } from '~/shared/config'
+import { Event } from '~/shared/events'
+import { ProjectileModel, EffectModel, ProjectileChanged } from '~/shared/models'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Player } from '~/client/entities/player'
 
 export interface ProjectileInterface  {
     fire(position: Phaser.Math.Vector2, rotation: number): void

@@ -1,8 +1,8 @@
-import { PlayerConfig } from '@shared/models'
-import { Config } from '@shared/config'
-import { Event } from '@shared/events'
-import { Client } from '~/client'
-import { MyGame } from '~/index'
+import { PlayerConfig } from '~/shared/models'
+import { Config } from '~/shared/config'
+import { Event } from '~/shared/events'
+import { Client } from '~/client/client'
+import { MyGame } from '~/client/index'
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444

@@ -10,9 +10,7 @@
         "outDir": "./dist",
         "skipLibCheck": true,
         "paths": {
-            "~/*": ["src/client/*"],
-            "~/server/*": ["src/server/*"],
-            "@shared/*": ["src/shared/*"]
+            "~/*": ["src/*"]
         }
     },
 	"typeRoots": [

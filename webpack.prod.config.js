@@ -25,7 +25,7 @@ module.exports = {
         alias: {
             phaser: phaser,
             "~": path.resolve(__dirname, 'src/client'),
-            "@shared": path.resolve(__dirname, 'src/shared'),
+            "~/shared": path.resolve(__dirname, 'src/shared'),
         }
     },
     module: {

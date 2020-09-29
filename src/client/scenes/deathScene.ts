@@ -1,7 +1,7 @@
-import { Event } from '@shared/events'
-import { MyGame } from '~/index'
-import { MainScene } from '~/scenes/mainScene'
-import { Player } from '~/entities/player'
+import { Event } from '~/shared/events'
+import { MyGame } from '~/client/index'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Player } from '~/client/entities/player'
 
 class TextContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene

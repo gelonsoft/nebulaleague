@@ -1,14 +1,14 @@
 import 'process'
 import './main.scss'
 
-import { MainScene } from '~/scenes/mainScene'
-import { HudScene } from '~/scenes/hudScene'
-import { BootScene } from '~/scenes/bootScene'
-import { DebugScene } from '~/scenes/debugScene'
-import { LobyScene } from '~/scenes/lobyScene'
-import { MainMenuScene } from '~/scenes/mainMenuScene'
-import { DeathScene } from '~/scenes/deathScene'
-import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
+import { MainScene } from '~/client/scenes/mainScene'
+import { HudScene } from '~/client/scenes/hudScene'
+import { BootScene } from '~/client/scenes/bootScene'
+import { DebugScene } from '~/client/scenes/debugScene'
+import { LobyScene } from '~/client/scenes/lobyScene'
+import { MainMenuScene } from '~/client/scenes/mainMenuScene'
+import { DeathScene } from '~/client/scenes/deathScene'
+import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {

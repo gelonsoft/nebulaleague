@@ -1,10 +1,10 @@
 import { isEmpty } from 'lodash'
 import * as objectAssignDeep from 'object-assign-deep'
 import * as io from 'socket.io-client'
-import { MyGame } from '~/index'
-import { PlayerSelectionScene } from '~/scenes/playerSelectionScene'
-import { LobyScene } from '~/scenes/lobyScene'
-import { MainScene } from '~/scenes/mainScene'
+import { MyGame } from '~/client/index'
+import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
+import { LobyScene } from '~/client/scenes/lobyScene'
+import { MainScene } from '~/client/scenes/mainScene'
 
 import {
     PlayerModel,
@@ -14,8 +14,8 @@ import {
     User,
     PlayerSelectionState,
     GameStateChanged,
-} from '@shared/models'
-import { ClientEvent, ServerEvent, Event } from '@shared/events'
+} from '~/shared/models'
+import { ClientEvent, ServerEvent, Event } from '~/shared/events'
 
 export class Client {
     public socket: SocketIOClient.Socket

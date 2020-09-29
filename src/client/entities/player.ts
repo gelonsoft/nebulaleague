@@ -1,6 +1,6 @@
 import 'phaser'
-import { MainScene } from '~/scenes/mainScene'
-import { Config } from '@shared/config'
+import { MainScene } from '~/client/scenes/mainScene'
+import { Config } from '~/shared/config'
 import {
     PlayerDirection,
     PlayerModel,
@@ -8,13 +8,13 @@ import {
     EffectKeys,
     EffectModel,
     PlayerChanged,
-} from '@shared/models'
-import { PlayerAI } from '~/ai/playerAI'
-import { Weapon } from '~/entities/weapons'
-import { Ability } from '~/entities/abilities'
-import { HealthBar } from '~/entities/healthbar'
+} from '~/shared/models'
+import { PlayerAI } from '~/client/ai/playerAI'
+import { Weapon } from '~/client/entities/weapons'
+import { Ability } from '~/client/entities/abilities'
+import { HealthBar } from '~/client/entities/healthbar'
 
-import { createEffectIconsContainer, refreshEffectIcons } from '~/entities/effects'
+import { createEffectIconsContainer, refreshEffectIcons } from '~/client/entities/effects'
 
 export interface PlayerMoveNextForce {
     acceleration: Phaser.Math.Vector2

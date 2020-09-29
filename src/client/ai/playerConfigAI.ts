@@ -1,4 +1,4 @@
-import { Wander } from '~/ai/steering'
+import { Wander } from '~/client/ai/steering'
 
 export interface PlayerAIConfig {
     wander: Wander

@@ -1,6 +1,6 @@
 import 'phaser'
-import { Config } from '@shared/config'
-import { EffectModel } from '@shared/models'
+import { Config } from '~/shared/config'
+import { EffectModel } from '~/shared/models'
 
 export class EffectIconContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene

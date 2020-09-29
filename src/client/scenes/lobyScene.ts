@@ -1,6 +1,6 @@
-import { MyGame } from '~/index'
-import { Client } from '~/client'
-import { Event } from '@shared/events'
+import { MyGame } from '~/client/index'
+import { Client } from '~/client/client'
+import { Event } from '~/shared/events'
 
 export interface LobySceneConfig {
     playerName: string
