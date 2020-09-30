@@ -2,7 +2,6 @@
     "name": "Nebulaleague",
     "version": "1.0.2",
     "description": "Nebulaleague",
-    "main": "src/client/index.ts",
     "engines": {
         "node": "12.18.3"
     },
@@ -16,7 +15,11 @@
         "predeploy": "npm run clean && npm install",
         "deploy": "env NODE_ENV=production npm-run-all build:client build:server",
         "postdeploy": "node dist/server/server.js",
-        "start": "npm run dev"
+        "start": "npm run dev",
+        "lint": "eslint src/**/**/*",
+        "lint:server": "eslint src/server/**/*",
+        "lint:shared": "eslint src/shared/**/*",
+        "lint:client": "eslint src/client/**/*"
     },
     "author": "edil3ra",
     "license": "MIT",
