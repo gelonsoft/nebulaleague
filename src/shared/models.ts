@@ -133,7 +133,7 @@ export interface ProjectileModel {
     damage: number
     lifespan: number
     radius: number
-    effects?: Array<any>
+    effects?: Array<EffectModel>
     frame?: string
     fillColor?: number
     strokeColor?: number

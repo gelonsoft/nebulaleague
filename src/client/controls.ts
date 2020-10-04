@@ -6,7 +6,7 @@ import { DebugScene } from '~/client/scenes/debugScene'
 
 export class MainControl {
     public scene: MainScene
-    public controls: any
+    public controls: Record<string, Phaser.Input.Keyboard.Key>
     public isDebugSceneActive: boolean
     constructor(scene: MainScene) {
         this.scene = scene
@@ -41,7 +41,7 @@ export class MainControl {
 
 export class PlayerControl {
     public scene: MainScene
-    public controls: any
+    public controls: Record<string, Phaser.Input.Keyboard.Key>
     public action: PlayerAction
     public player: Player
     public prevMoveLeft: boolean
@@ -189,8 +189,8 @@ export class PlayerControl {
 
 export class DebugControl {
     public scene: DebugScene
-    public controls: any
-    public cameraControls: any
+    public controls: Record<string, Phaser.Input.Keyboard.Key>
+    public cameraControls: Record<string, Phaser.Input.Keyboard.Key>
     public isFreeCamera: boolean
     public isPaused: boolean
     constructor(scene: DebugScene) {
