@@ -26,12 +26,12 @@ export class Config {
         },
         defaultModel: {
             id: '0',
-            name: 'anonymous',
             x: 0,
             y: 0,
             rotation: 0,
             controlledBy: ControlledBy.MainPlayer,
             selectedAbilityKey: null,
+            name: 'anonymous',
             weaponPrimaryKey: 'uncertainity',
             weaponSecondaryKey: 'uncertainity',
             abilityKey1: 'uncertainity',
