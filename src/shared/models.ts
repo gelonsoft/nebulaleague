@@ -1,5 +1,7 @@
 // GENERAL INTERFACE //
 
+import { Weapon } from "~/client/entities/weapons"
+
 export interface Position {
     x: number
     y: number
@@ -13,6 +15,10 @@ export enum ControlledBy {
     AIPlayer,
 }
 
+
+export type WeaponKeys = 'weaponPrimary' | 'weaponSecondary'
+export type AbilityKeys = 'ability1' | 'ability2' | 'ability3' | 'ability4'
+export type ActionKeys = WeaponKeys | AbilityKeys
 
 export interface PlayerModel {
     id: string
@@ -58,8 +64,8 @@ export interface PlayerDirection {
 export interface PlayerAction {
     direction?: PlayerDirection,
     rotation?: number,
-    selectAbility?: string,
-    action?: string,
+    selectAbility?: AbilityKeys,
+    action?: WeaponKeys
     pointerPosition?: {
         x: number,
         y: number

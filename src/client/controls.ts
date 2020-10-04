@@ -190,7 +190,7 @@ export class PlayerControl {
 export class DebugControl {
     public scene: DebugScene
     public controls: Record<string, Phaser.Input.Keyboard.Key>
-    public cameraControls: Record<string, Phaser.Input.Keyboard.Key>
+    public cameraControls: Phaser.Cameras.Controls.SmoothedKeyControl
     public isFreeCamera: boolean
     public isPaused: boolean
     constructor(scene: DebugScene) {

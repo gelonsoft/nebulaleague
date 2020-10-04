@@ -1,6 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
-import { EffectModel } from '~/shared/models'
+import { ActionKeys, EffectModel } from '~/shared/models'
 import { MyGame } from '~/client/index'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { MainScene } from '~/client/scenes/mainScene'
@@ -103,7 +103,7 @@ export class HudScene extends Phaser.Scene {
     public abilityContainer2: SlotContainer
     public abilityContainer3: SlotContainer
     public abilityContainer4: SlotContainer
-    public abilityToContainer: Record<string, SlotContainer>
+    public actionToContainer: Record<ActionKeys, SlotContainer>
     public effectIconsContainer: Phaser.GameObjects.Container
     public mainContainer: Phaser.GameObjects.Container
     public mainScene: MainScene
@@ -134,6 +134,7 @@ export class HudScene extends Phaser.Scene {
         this.mainScene = this.scene.get('mainScene') as MainScene
         this.player = this.mainScene.player
         this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
+        this.mainScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)
         this.mainScene.events.on(Event.abilitiesCooldownChanged, this.updateAbilitiesCooldown, this)
         this.mainScene.events.on(Event.abilitiesSelectedChanged, this.updateAbilitiesSelected, this)
         this.mainScene.events.on(Event.weaponsCooldownChanged, this.updateWeaponCooldown, this)
@@ -165,7 +166,9 @@ export class HudScene extends Phaser.Scene {
         this.abilityContainer2 = new SlotContainer(this, 380 + 62, 0, this.player.actions.ability2.frame)
         this.abilityContainer3 = new SlotContainer(this, 380 + 62 * 2, 0, this.player.actions.ability3.frame)
         this.abilityContainer4 = new SlotContainer(this, 380 + 62 * 3, 0, this.player.actions.ability4.frame)
-        this.abilityToContainer = {
+        this.actionToContainer = {
+            weaponPrimary: this.weaponPrimaryContainer,
+            weaponSecondary: this.weaponSecondaryContainer,
             ability1: this.abilityContainer1,
             ability2: this.abilityContainer2,
             ability3: this.abilityContainer3,
@@ -193,15 +196,16 @@ export class HudScene extends Phaser.Scene {
         this.healthBar.refresh(this.player.health)
     }
 
-    private updateAbilitiesCooldown(selectedAbilityKey: string, actionTime: ActionTimeInterface) {
-        const container = this.abilityToContainer[selectedAbilityKey]
+
+    private updateActionsCooldown(selectedActionKey: ActionKeys, actionTime: ActionTimeInterface) {
+        const container = this.actionToContainer[selectedActionKey]
         container.cooldown = actionTime.cooldown
         container.refresh()
     }
-
-    private updateAbilitiesSelected(selectedAbilityKey: string, selected: boolean) {
-        const container = this.abilityToContainer[selectedAbilityKey]
-        container.selected = selected
+    
+    private updateAbilitiesCooldown(selectedAbilityKey: string, actionTime: ActionTimeInterface) {
+        const container = this.actionToContainer[selectedAbilityKey]
+        container.cooldown = actionTime.cooldown
         container.refresh()
     }
 
@@ -220,6 +224,12 @@ export class HudScene extends Phaser.Scene {
         this.weaponPrimaryContainer.refresh()
         this.weaponSecondaryContainer.selected = selected
         this.weaponSecondaryContainer.refresh()
+    }
+
+    private updateAbilitiesSelected(selectedAbilityKey: string, selected: boolean) {
+        const container = this.actionToContainer[selectedAbilityKey]
+        container.selected = selected
+        container.refresh()
     }
 
     private updateEffectChanged(icons: Set<EffectModel>) {

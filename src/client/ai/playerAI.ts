@@ -2,7 +2,7 @@ import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } 
 import * as steering from '~/client/ai/steering'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
-import { PlayerDirection } from '~/shared/models'
+import { ActionKeys, PlayerDirection } from '~/shared/models'
 import { PlayerAIConfig } from '~/client/ai/playerConfigAI'
 import { Weapon } from '~/client/entities/weapons'
 import { Ability } from '~/client/entities/abilities'
@@ -24,7 +24,7 @@ enum Behaviour {
 
 interface PlayerAIActionsInterface {
     player: Player
-    actions: Array<string>
+    actions: Array<ActionKeys>
 }
 
 export class PlayerAI {
@@ -323,14 +323,14 @@ export class PlayerAI {
         }
     }
 
-    public shouldAttack(actionKey: string): boolean {
+    public shouldAttack(actionKey: ActionKeys): boolean {
         const [start, end] = this.actionsTriggerSecondRange[actionKey]
         const randomRatio = Phaser.Math.RND.realInRange(start, end) * Math.random() * 2
         const randomTime = this.player.actions[actionKey].cooldownDelay * randomRatio
         return randomTime <= this.scene.game.loop.delta / 1000
     }
 
-    public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: string): void {
+    public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: ActionKeys): void {
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 
@@ -353,7 +353,7 @@ export class PlayerAI {
             this.player.rotation = steering.facing(predictedPosition)
         } else {
             if (this.player.actions[choosenActionKey].name === 'blink') {
-                this.player.castAbility(
+                this.player.fire(
                     choosenActionKey,
                     Phaser.Math.Vector2.UP.clone()
                         .rotate(Phaser.Math.RND.normal() * Math.PI)
@@ -361,7 +361,7 @@ export class PlayerAI {
                         .add(this.player.body.center)
                 )
             } else {
-                this.player.castAbility(choosenActionKey, predictedPosition)
+                this.player.fire(choosenActionKey, predictedPosition)
             }
         }
     }

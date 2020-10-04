@@ -28,7 +28,7 @@ export class Client {
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
-    public gameStateChangedRecieved: GameStateChanged
+    public gameStateChangedReceived: GameStateChanged
     public gameStateUpdatedCurrent: GameStateChanged
     public isHost: boolean
     public isGameInit: boolean
@@ -45,7 +45,7 @@ export class Client {
         this.lobyUser = null
         this.playerSelectionState = null
         this.gameState = null
-        this.gameStateChangedRecieved = {}
+        this.gameStateChangedReceived = {}
         this.gameStateUpdatedCurrent = {}
         this.isHost = false
         this.isGameInit = false
@@ -142,7 +142,7 @@ export class Client {
         })
 
         this.socket.on(ClientEvent.gameUpdated, (gameState: GameStateChanged) => {
-            this.gameStateChangedRecieved = gameState
+            this.gameStateChangedReceived = gameState
             this.game.events.emit(Event.gameUpdated)
         })
 

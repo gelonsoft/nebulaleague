@@ -12,6 +12,9 @@ import {
     ProjectileChanged,
     GameStateChanged,
     GameState,
+    ActionKeys,
+    WeaponKeys,
+    AbilityKeys
 } from '~/shared/models'
 import { Event } from '~/shared/events'
 import { MyGame } from '../index'
@@ -32,8 +35,8 @@ export class MainScene extends Phaser.Scene {
     public playersAI: Array<PlayerAI>
     public consumables: Phaser.Physics.Arcade.StaticGroup
     public projectiles: Projectiles
-    public weapons: Record<string, Weapon>
-    public abilities: Record<string, Ability>
+    public weapons: Record<WeaponKeys, Weapon>
+    public abilities: Record<AbilityKeys, Ability>
     public randomTable: RandomItem
     public mainControl: MainControl
     public playerControl: PlayerControl
@@ -64,7 +67,7 @@ export class MainScene extends Phaser.Scene {
             },
             false
         )
-        this.client = this.game.registry.get('client')
+        this.client = this.game.registry.get('client') as Client
 
         this.randomTable = new RandomItem()
         this.randomTable.add('pill', 20)
@@ -188,7 +191,7 @@ export class MainScene extends Phaser.Scene {
         })
 
         this.game.events.on(Event.gameUpdated, () => {
-            const gameStateReceived = this.client.gameStateChangedRecieved
+            const gameStateReceived = this.client.gameStateChangedReceived
             // console.log(gameStateReceived)
 
             if (gameStateReceived.updated !== undefined) {
@@ -233,6 +236,17 @@ export class MainScene extends Phaser.Scene {
             this.events.emit(Event.abilitiesCooldownChanged, selectedAbilityKey, actionTime)
         }
     }
+
+    public syncActionCooldwon(
+        player: Player,
+        selectedActionKey: ActionKeys,
+        actionTime: ActionTimeInterface
+    ): void {
+        if (player.id === this.player.id) {
+            this.events.emit(Event.actionsCollodownChanged, selectedActionKey, actionTime)
+        }
+    }
+    
 
     public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
         if (player.id === this.player.id) {
