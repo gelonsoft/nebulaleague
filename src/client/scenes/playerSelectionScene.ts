@@ -1,4 +1,4 @@
-import { AbilityName, ActionName, PlayerConfig, WeaponName } from '~/shared/models'
+import { AbilityName, ActionModel, ActionName, PlayerConfig, WeaponName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { Client } from '~/client/client'
@@ -207,7 +207,7 @@ class SelectedSlotContainer extends SlotBaseContainer {
 
 export function createSlotsContainer(
     scene: PlayerSelectionScene,
-    itemsConfig: Record<string, any>,
+    itemsConfig: Record<string, ActionModel>,
     itemType: ItemType,
     size: number,
     padding: number,
@@ -217,10 +217,9 @@ export function createSlotsContainer(
     const slotsContainer = new Phaser.GameObjects.Container(scene, 0, 0)
     const slotActivated = {}
 
-    Object.values(itemsConfig).forEach((config, index) => {
+    Object.values(itemsConfig).forEach((config: ActionModel, index) => {
         const row = index % columnCount
         const column = Math.floor(index / columnCount)
-
         const slotContainer = new SlotContainer(
             scene,
             row * (size + offsetBetween),
@@ -288,12 +287,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
             },
             false
         )
-        this.client = this.game.registry.get('client')
+        this.client = this.game.registry.get('client') as Client
         this.client.emitPlayerSelectionInit()
-
         this.playerConfig = {
             ...Config.player.defaultConfig,
-            ...JSON.parse(window.localStorage.getItem('playerConfig')),
+            ...JSON.parse(window.localStorage.getItem('playerConfig')) as PlayerConfig,
             name: this.client.lobyUser.name,
         }
 
@@ -318,7 +316,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     }
 
     initDrag() {
-        this.input.on('drag', (pointer, gameObject: SlotBaseContainer, dragX, dragY) => {
+        this.input.on('drag', (pointer, gameObject: SlotBaseContainer, dragX: number, dragY: number) => {
             gameObject.x = dragX
             gameObject.y = dragY
             this.setActivePickedSlot(gameObject)
@@ -353,7 +351,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
 
         this.input.on('dragleave', () => {})
-    }
+    } 
 
     setActivePickedSlot(gameObject: SlotBaseContainer) {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
@@ -528,13 +526,13 @@ export class PlayerSelectionScene extends Phaser.Scene {
             (slot: SelectedSlotContainer) => slot.slotTarget
         ).length
 
-        const el: any = this.playButtonDOM.node.children[0]
+        const button  = this.playButtonDOM.node.children[0] as HTMLButtonElement
         if (selectedWeaponCount + selectedAbilityCount < 6) {
-            el.disabled = true
-            el.title = 'Drag And Drop slots'
+            button.disabled = true
+            button.title = 'Drag And Drop slots'
         } else {
-            el.disabled = false
-            el.title = ''
+            button.disabled = false
+            button.title = ''
         }
     }
 

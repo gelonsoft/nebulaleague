@@ -13,7 +13,7 @@ import {
 
 
 export class Config {
-    public static readonly playerDefaultModel: PlayerModel = {
+    private static readonly playerDefaultModel: PlayerModel = {
         name: 'anonymous',
         id: '0',
         x: 0,
@@ -23,7 +23,7 @@ export class Config {
         selectedAbilityKey: null,
     }
     
-    public static readonly playerDefaultConfig: PlayerConfig = {
+    private static readonly playerDefaultConfig: PlayerConfig = {
         name: 'anonymous',
     }
     

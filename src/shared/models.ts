@@ -2,7 +2,7 @@
 
 import { Weapon } from "~/client/entities/weapons"
 
-export interface Position {
+export type Position = {
     x: number
     y: number
 }
@@ -21,26 +21,26 @@ export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
 
 export type WeaponName =
-    | 'pistol' 
-    | 'ak47' 
-    | 'p90' 
-    | 'revolver' 
+    | 'pistol'
+    | 'ak47'
+    | 'p90'
+    | 'revolver'
     | 'thompson'
 
 
 export type AbilityName =
     | 'blink'
-    | 'flame' 
-    | 'rootTip' 
-    | 'chargedArrow' 
-    | 'frozenWave' 
-    | 'psychicWave' 
-    | 'lightningWave' 
-    | 'fireWave' 
+    | 'flame'
+    | 'rootTip'
+    | 'chargedArrow'
+    | 'frozenWave'
+    | 'psychicWave'
+    | 'lightningWave'
+    | 'fireWave'
 
 export type ActionName = WeaponName | AbilityName
 
-export interface PlayerModel {
+export type PlayerModel = {
     id: string
     name: string
     x: number
@@ -57,7 +57,7 @@ export interface PlayerModel {
 }
 
 
-export interface PlayerConfig {
+export type PlayerConfig = {
     name: string
     weaponPrimaryKey?: WeaponName
     weaponSecondaryKey?: WeaponName
@@ -67,7 +67,7 @@ export interface PlayerConfig {
     abilityKey4?: AbilityName
 }
 
-export interface PlayerChanged {
+export type PlayerChanged = {
     x?: number
     y?: number
     rotation?: number
@@ -75,13 +75,13 @@ export interface PlayerChanged {
 }
 
 
-export interface PlayerDirection {
+export type PlayerDirection = {
     x: number
     y: number
 }
 
 
-export interface PlayerAction {
+export type PlayerAction = {
     direction?: PlayerDirection,
     rotation?: number,
     selectAbility?: AbilityKey,
@@ -92,7 +92,7 @@ export interface PlayerAction {
     }
 }
 
-export interface PlayerMovement {
+export type PlayerMovement = {
     id: string
     x: number
     y: number
@@ -101,14 +101,14 @@ export interface PlayerMovement {
 
 
 // WEAPONS INTERFACE
-export interface LaserModel {
+export type LaserModel = {
     width: number
     color: number
     alpha: number
 }
 
-export interface WeaponModel {
-    name: string
+export type WeaponModel = {
+    name: WeaponName
     frame: string
     cooldownDelay: number
     projectileKey: string
@@ -130,8 +130,8 @@ export enum AbilityAction {
 }
 
 
-export interface AbilityModel {
-    name: string
+export type AbilityModel = {
+    name: AbilityName
     frame: string
     action: AbilityAction
     projectileKey?: string
@@ -149,10 +149,11 @@ export interface AbilityModel {
     rayDistanceAlpha?: number
 }
 
+export type ActionModel = WeaponModel | AbilityModel
 
 
 // PROJECTILE INTERFACE
-export interface ProjectileModel {
+export type ProjectileModel = {
     key: string
     name: string
     speed: number
@@ -170,7 +171,7 @@ export interface ProjectileModel {
 }
 
 
-export interface ProjectileChanged {
+export type ProjectileChanged = {
     x?: number
     y?: number
     fillColor?: number
@@ -193,7 +194,7 @@ export enum EffectKeys {
     Freeze = 'freezed',
 }
 
-export interface EffectModel {
+export type EffectModel = {
     name: EffectKeys
     value: number
     duration: number
@@ -202,23 +203,23 @@ export interface EffectModel {
 
 
 // SERVER INTERFACE
-export interface User {
+export type User = {
     name?: string
     gameMode?: string
     playerSelectionRoom?: string
 }
 
-export interface LobyState {
+export type LobyState = {
     users: Map<string, User>
 }
 
-export interface PlayerSelectionState {
+export type PlayerSelectionState = {
     gameMode: string
     players: Record<string, PlayerModel>
     gameRoom?: string
 }
 
-// export interface GameStateUpdated {
+// export type GameStateUpdated {
 //     players?: Record<string, PlayerChanged>
 //     projectiles?: Record<string, ProjectileChanged>
 //     toDelete?: {
@@ -226,7 +227,7 @@ export interface PlayerSelectionState {
 //     }
 // }
 
-export interface GameStateChanged {
+export type GameStateChanged = {
     created?: {
         players?: Record<string, PlayerModel>
         projectiles?: Record<string, ProjectileModel>
@@ -242,7 +243,7 @@ export interface GameStateChanged {
 }
 
 
-export interface GameState {
+export type GameState = {
     gameMode: string
     hostId?: string
     players: Record<string, PlayerModel>
