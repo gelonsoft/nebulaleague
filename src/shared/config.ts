@@ -3,10 +3,31 @@ import {
     ControlledBy,
     AbilityAction,
     AbilityDrawingStyle,
+    WeaponName,
+    WeaponModel,
+    AbilityName,
+    AbilityModel,
+    PlayerConfig,
+    PlayerModel
 } from './models'
 
 
 export class Config {
+    public static readonly playerDefaultModel: PlayerModel = {
+        name: 'anonymous',
+        id: '0',
+        x: 0,
+        y: 0,
+        rotation: 0,
+        controlledBy: ControlledBy.MainPlayer,
+        selectedAbilityKey: null,
+    }
+    
+    public static readonly playerDefaultConfig: PlayerConfig = {
+        name: 'anonymous',
+    }
+    
+    
     public static readonly player = {
         size: 52,
         accelerationSteady: 5000,
@@ -15,30 +36,8 @@ export class Config {
         defaultSpeed: 400,
         defaultHealth: 1000,
         toOtherDamage: 100,
-        defaultConfig: {
-            name: 'anonymous',
-            weaponPrimaryKey: 'uncertainity',
-            weaponSecondaryKey: 'uncertainity',
-            abilityKey1: 'uncertainity',
-            abilityKey2: 'uncertainity',
-            abilityKey3: 'uncertainity',
-            abilityKey4: 'uncertainity',
-        },
-        defaultModel: {
-            id: '0',
-            x: 0,
-            y: 0,
-            rotation: 0,
-            controlledBy: ControlledBy.MainPlayer,
-            selectedAbilityKey: null,
-            name: 'anonymous',
-            weaponPrimaryKey: 'uncertainity',
-            weaponSecondaryKey: 'uncertainity',
-            abilityKey1: 'uncertainity',
-            abilityKey2: 'uncertainity',
-            abilityKey3: 'uncertainity',
-            abilityKey4: 'uncertainity',
-        }
+        defaultConfig: Config.playerDefaultConfig,
+        defaultModel: Config.playerDefaultModel
     }
 
     public static readonly world = {
@@ -62,7 +61,7 @@ export class Config {
         background: 0x1313a8,
         backgroundItem: 0x000000,
         slotColorSelected: 0x3366e5,
-        slotColorUnselected: 0x5577d5 ,
+        slotColorUnselected: 0x5577d5,
     }
 
     public static readonly consumable = {
@@ -81,7 +80,7 @@ export class Config {
         }
     }
 
-    public static readonly weapons = {
+    public static readonly weapons: Record<WeaponName, WeaponModel> = {
         pistol: {
             name: 'pistol',
             frame: 'pistol-gun.png',
@@ -139,7 +138,7 @@ export class Config {
         }
     }
 
-    public static readonly abilities = {
+    public static readonly abilities: Record<AbilityName, AbilityModel> = {
         blink: {
             name: 'blink',
             frame: 'teleport.png',
@@ -219,7 +218,7 @@ export class Config {
             radiusDistance: 240,
         },
     }
-    
+
     public static readonly projectiles = {
         pistolBullet: {
             key: 'pistolBullet',

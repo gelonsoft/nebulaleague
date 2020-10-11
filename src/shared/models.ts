@@ -17,16 +17,28 @@ export enum ControlledBy {
 
 
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
-
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
 
-export type WeaponNames =
+export type WeaponName =
     | 'pistol' 
     | 'ak47' 
     | 'p90' 
     | 'revolver' 
-    | 'thompson' 
+    | 'thompson'
+
+
+export type AbilityName =
+    | 'blink'
+    | 'flame' 
+    | 'rootTip' 
+    | 'chargedArrow' 
+    | 'frozenWave' 
+    | 'psychicWave' 
+    | 'lightningWave' 
+    | 'fireWave' 
+
+export type ActionName = WeaponName | AbilityName
 
 export interface PlayerModel {
     id: string
@@ -35,24 +47,24 @@ export interface PlayerModel {
     y: number
     rotation: number
     controlledBy: ControlledBy
-    selectedAbilityKey: string | null
-    weaponPrimaryKey: string
-    weaponSecondaryKey: string
-    abilityKey1: string
-    abilityKey2: string
-    abilityKey3: string
-    abilityKey4: string
+    selectedAbilityKey: AbilityName
+    weaponPrimaryKey?: WeaponName
+    weaponSecondaryKey?: WeaponName
+    abilityKey1?: AbilityName
+    abilityKey2?: AbilityName
+    abilityKey3?: AbilityName
+    abilityKey4?: AbilityName
 }
 
 
 export interface PlayerConfig {
     name: string
-    weaponPrimaryKey: string
-    weaponSecondaryKey: string
-    abilityKey1: string
-    abilityKey2: string
-    abilityKey3: string
-    abilityKey4: string
+    weaponPrimaryKey?: WeaponName
+    weaponSecondaryKey?: WeaponName
+    abilityKey1?: AbilityName
+    abilityKey2?: AbilityName
+    abilityKey3?: AbilityName
+    abilityKey4?: AbilityName
 }
 
 export interface PlayerChanged {

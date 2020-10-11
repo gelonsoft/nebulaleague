@@ -1,4 +1,4 @@
-import { PlayerConfig } from '~/shared/models'
+import { AbilityName, ActionName, PlayerConfig, WeaponName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { Client } from '~/client/client'
@@ -16,7 +16,7 @@ enum ItemType {
 }
 
 interface Item {
-    key: string
+    key: ActionName | 'uncertainity'
     frame: string
     type: ItemType
 }
@@ -416,8 +416,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         const slotContainer = this.add.container(slotMarginLeft, 0, [weaponsContainer, abilitiesContainer])
 
-        const defaultWeponItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Weapon }
-        const defaultAbilityItem = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability }
+        const defaultWeponItem: Item = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Weapon }
+        const defaultAbilityItem: Item = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability }
 
         const weaponPrimaryContainer = new SelectedSlotContainer(
             this,
@@ -570,14 +570,14 @@ export class PlayerSelectionScene extends Phaser.Scene {
             activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
         ]
 
-        const playerConfUpdated = {
+        const playerConfUpdated: PlayerConfig = {
             ...this.playerConfig,
-            weaponPrimaryKey: weapons[0].item.key,
-            weaponSecondaryKey: weapons[1].item.key,
-            abilityKey1: abilities[0].item.key,
-            abilityKey2: abilities[1].item.key,
-            abilityKey3: abilities[2].item.key,
-            abilityKey4: abilities[3].item.key,
+            weaponPrimaryKey: weapons[0].item.key as WeaponName,
+            weaponSecondaryKey: weapons[1].item.key as WeaponName,
+            abilityKey1: abilities[0].item.key as AbilityName,
+            abilityKey2: abilities[1].item.key as AbilityName,
+            abilityKey3: abilities[2].item.key as AbilityName,
+            abilityKey4: abilities[3].item.key as AbilityName,
         }
         this.client.emitPlayerSelectionStart(playerConfUpdated)
     }
