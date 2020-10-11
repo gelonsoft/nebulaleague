@@ -8,9 +8,9 @@ import {
     EffectKeys,
     EffectModel,
     PlayerChanged,
-    WeaponKeys,
-    AbilityKeys,
-    ActionKeys,
+    WeaponKey,
+    AbilityKey,
+    ActionKey,
 } from '~/shared/models'
 import { PlayerAI } from '~/client/ai/playerAI'
 import { Weapon } from '~/client/entities/weapons'
@@ -74,7 +74,7 @@ export class Player extends Phaser.GameObjects.Container {
     public controlledByAI: PlayerAI | null
     public previousDirection: PlayerDirection
     public actions: ActionsInterface
-    public selectedAbilityKey: ActionKeys | null
+    public selectedAbilityKey: ActionKey | null
     public accelerationChange: number
     public accelerationSteady: number
     public actionTimes: ActionTimesInterface
@@ -124,7 +124,7 @@ export class Player extends Phaser.GameObjects.Container {
             ability2: this.scene.abilities[playerModel.abilityKey2],
             ability3: this.scene.abilities[playerModel.abilityKey3],
             ability4: this.scene.abilities[playerModel.abilityKey4],
-        }
+        } 
         this.selectedAbilityKey = null
         this.effects = new Set()
         this.burningTime = null
@@ -231,7 +231,7 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public action(selectedWeaponKey: WeaponKeys, pointerPosition: Phaser.Math.Vector2): void {
+    public action(selectedWeaponKey: WeaponKey, pointerPosition: Phaser.Math.Vector2): void {
         if (this.selectedAbilityKey) {
             this.fire(this.selectedAbilityKey, pointerPosition)
             this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
@@ -244,7 +244,7 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    public fire(selectedKey: ActionKeys, targetFirePosition: Phaser.Math.Vector2): void {
+    public fire(selectedKey: ActionKey, targetFirePosition: Phaser.Math.Vector2): void {
         const action = this.actions[selectedKey]
         const actionTime = this.actionTimes[selectedKey]
 
@@ -257,11 +257,6 @@ export class Player extends Phaser.GameObjects.Container {
             sourceFirePosition = this.body.center
         }
         
-        // const sourceFirePosition =
-        //     selectedKey === 'weaponPrimary'
-        //         ? this.getPrimaryWeaponPosition()
-        //         : this.getSecondaryWeaponPosition()
-
         if (actionTime.ready) {
             actionTime.ready = false
             action.trigger(this, sourceFirePosition, targetFirePosition)
@@ -290,74 +285,6 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    // public fire2(selectedWeaponKey: string, targetFirePosition: Phaser.Math.Vector2): void {
-    //     const weapon = this.actions[selectedWeaponKey]
-    //     const weaponTime = this.actionTimes[selectedWeaponKey]
-    //     const sourceFirePosition =
-    //         selectedWeaponKey === 'weaponPrimary'
-    //             ? this.getPrimaryWeaponPosition()
-    //             : this.getSecondaryWeaponPosition()
-
-    //     if (weaponTime.ready) {
-    //         weaponTime.ready = false
-    //         weapon.trigger(this, sourceFirePosition, targetFirePosition)
-    //         weaponTime.cooldown = weapon.cooldownDelay
-
-    //         weaponTime.timerEvent = this.scene.time.addEvent({
-    //             delay: 0.1 * 1000,
-    //             callback: () => {
-    //                 weaponTime.cooldown -= 0.1
-    //                 this.scene.syncWeaponCooldown(this, selectedWeaponKey, weaponTime)
-    //             },
-    //             callbackScope: this,
-    //             loop: true,
-    //         })
-
-    //         this.scene.time.addEvent({
-    //             delay: weapon.cooldownDelay * 1000,
-    //             callback: () => {
-    //                 weaponTime.ready = true
-    //                 weaponTime.cooldown = 0
-    //                 weaponTime.timerEvent.remove(false)
-    //                 weaponTime.timerEvent = null
-    //             },
-    //             callbackScope: this,
-    //         })
-    //     }
-    // }
-
-    // public castAbility(this.selectedAbilityKey: string, targetAbilityPosition: Phaser.Math.Vector2): void {
-    //     const ability = this.actions[this.selectedAbilityKey]
-    //     const actionTime = this.actionTimes[selectedAbilityKey]
-    //     const sourceAbilityPosition = this.body.center
-
-    //     if (actionTime.ready) {
-    //         actionTime.ready = false
-    //         ability.trigger(this, sourceAbilityPosition, targetAbilityPosition)
-    //         actionTime.cooldown = ability.cooldownDelay
-
-    //         actionTime.timerEvent = this.scene.time.addEvent({
-    //             delay: 0.1 * 1000,
-    //             callback: () => {
-    //                 actionTime.cooldown -= 0.1
-    //                 this.scene.syncAbilitiesCooldown(this, selectedAbilityKey, actionTime)
-    //             },
-    //             callbackScope: this,
-    //             loop: true,
-    //         })
-
-    //         this.scene.time.addEvent({
-    //             delay: ability.cooldownDelay * 1000,
-    //             callback: () => {
-    //                 actionTime.ready = true
-    //                 actionTime.cooldown = 0
-    //                 actionTime.timerEvent.remove(false)
-    //                 actionTime.timerEvent = null
-    //             },
-    //             callbackScope: this,
-    //         })
-    //     }
-    // }
 
     public castSelectedAbility(
         selectedAbilityKey: keyof ActionsInterface,

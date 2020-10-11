@@ -1,6 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
-import { ActionKeys, EffectModel } from '~/shared/models'
+import { ActionKey, EffectModel } from '~/shared/models'
 import { MyGame } from '~/client/index'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { MainScene } from '~/client/scenes/mainScene'
@@ -103,7 +103,7 @@ export class HudScene extends Phaser.Scene {
     public abilityContainer2: SlotContainer
     public abilityContainer3: SlotContainer
     public abilityContainer4: SlotContainer
-    public actionToContainer: Record<ActionKeys, SlotContainer>
+    public actionToContainer: Record<ActionKey, SlotContainer>
     public effectIconsContainer: Phaser.GameObjects.Container
     public mainContainer: Phaser.GameObjects.Container
     public mainScene: MainScene
@@ -197,7 +197,7 @@ export class HudScene extends Phaser.Scene {
     }
 
 
-    private updateActionsCooldown(selectedActionKey: ActionKeys, actionTime: ActionTimeInterface) {
+    private updateActionsCooldown(selectedActionKey: ActionKey, actionTime: ActionTimeInterface) {
         const container = this.actionToContainer[selectedActionKey]
         container.cooldown = actionTime.cooldown
         container.refresh()

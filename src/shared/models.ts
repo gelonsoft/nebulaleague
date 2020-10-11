@@ -16,9 +16,17 @@ export enum ControlledBy {
 }
 
 
-export type WeaponKeys = 'weaponPrimary' | 'weaponSecondary'
-export type AbilityKeys = 'ability1' | 'ability2' | 'ability3' | 'ability4'
-export type ActionKeys = WeaponKeys | AbilityKeys
+export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
+
+export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
+export type ActionKey = WeaponKey | AbilityKey
+
+export type WeaponNames =
+    | 'pistol' 
+    | 'ak47' 
+    | 'p90' 
+    | 'revolver' 
+    | 'thompson' 
 
 export interface PlayerModel {
     id: string
@@ -64,8 +72,8 @@ export interface PlayerDirection {
 export interface PlayerAction {
     direction?: PlayerDirection,
     rotation?: number,
-    selectAbility?: AbilityKeys,
-    action?: WeaponKeys
+    selectAbility?: AbilityKey,
+    action?: WeaponKey
     pointerPosition?: {
         x: number,
         y: number

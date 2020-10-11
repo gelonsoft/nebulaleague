@@ -2,7 +2,7 @@ import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } 
 import * as steering from '~/client/ai/steering'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
-import { ActionKeys, PlayerDirection } from '~/shared/models'
+import { ActionKey, PlayerDirection } from '~/shared/models'
 import { PlayerAIConfig } from '~/client/ai/playerConfigAI'
 import { Weapon } from '~/client/entities/weapons'
 import { Ability } from '~/client/entities/abilities'
@@ -24,7 +24,7 @@ enum Behaviour {
 
 interface PlayerAIActionsInterface {
     player: Player
-    actions: Array<ActionKeys>
+    actions: Array<ActionKey>
 }
 
 export class PlayerAI {
@@ -323,14 +323,14 @@ export class PlayerAI {
         }
     }
 
-    public shouldAttack(actionKey: ActionKeys): boolean {
+    public shouldAttack(actionKey: ActionKey): boolean {
         const [start, end] = this.actionsTriggerSecondRange[actionKey]
         const randomRatio = Phaser.Math.RND.realInRange(start, end) * Math.random() * 2
         const randomTime = this.player.actions[actionKey].cooldownDelay * randomRatio
         return randomTime <= this.scene.game.loop.delta / 1000
     }
 
-    public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: ActionKeys): void {
+    public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: ActionKey): void {
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 

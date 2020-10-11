@@ -12,9 +12,9 @@ import {
     ProjectileChanged,
     GameStateChanged,
     GameState,
-    ActionKeys,
-    WeaponKeys,
-    AbilityKeys
+    ActionKey,
+    WeaponKey,
+    AbilityKey
 } from '~/shared/models'
 import { Event } from '~/shared/events'
 import { MyGame } from '../index'
@@ -35,8 +35,8 @@ export class MainScene extends Phaser.Scene {
     public playersAI: Array<PlayerAI>
     public consumables: Phaser.Physics.Arcade.StaticGroup
     public projectiles: Projectiles
-    public weapons: Record<WeaponKeys, Weapon>
-    public abilities: Record<AbilityKeys, Ability>
+    public weapons: Record<string, Weapon>
+    public abilities: Record<string, Ability>
     public randomTable: RandomItem
     public mainControl: MainControl
     public playerControl: PlayerControl
@@ -239,7 +239,7 @@ export class MainScene extends Phaser.Scene {
 
     public syncActionCooldwon(
         player: Player,
-        selectedActionKey: ActionKeys,
+        selectedActionKey: ActionKey,
         actionTime: ActionTimeInterface
     ): void {
         if (player.id === this.player.id) {

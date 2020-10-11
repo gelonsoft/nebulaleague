@@ -76,7 +76,7 @@ export class Weapon {
 }
 
 export function buildWeapons(scene: MainScene): Record<string, Weapon> {
-    const weapons = {}
+    const weapons: Record<string, Weapon> = {}
     for (const [key, weaponConfig] of Object.entries(Config.weapons)) {
         weapons[key] = new Weapon(scene, weaponConfig)
     }
