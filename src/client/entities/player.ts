@@ -1,6 +1,7 @@
 import 'phaser'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Config } from '~/shared/config'
+import { values } from 'lodash'
 import {
     PlayerDirection,
     PlayerModel,
@@ -31,7 +32,7 @@ export interface ActionTimeInterface {
     timerEvent?: Phaser.Time.TimerEvent | null
 }
 
-interface ActionTimesInterface {
+type ActionTimesInterface = {
     weaponPrimary: ActionTimeInterface
     weaponSecondary: ActionTimeInterface
     ability1: ActionTimeInterface
@@ -297,7 +298,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
     }
 
-    public selectAbility(key) {
+    public selectAbility(key: AbilityKey) {
         if (this.actionTimes[key].cooldown === 0) {
             if (this.selectedAbilityKey === key) {
                 this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
@@ -343,12 +344,12 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public addEffects(recieveEffects: Array<EffectModel>): void {
-        for (const effect of recieveEffects) {
-            const appliedEffect = Object.assign(effect)
+        for (const effectTemplate of recieveEffects) {
+            const appliedEffect = {...effectTemplate}
             this.effects.add(appliedEffect)
             this.handleEffectCreated(appliedEffect)
             this.scene.time.addEvent({
-                delay: effect.duration * 1000,
+                delay: appliedEffect.duration * 1000,
                 callback: () => {
                     this.effects.delete(appliedEffect)
                     this.handleEffectRemoved(appliedEffect)
@@ -387,7 +388,7 @@ export class Player extends Phaser.GameObjects.Container {
         refreshEffectIcons(this.effects, this.effectIconsContainer)
     }
 
-    public handleEffectRemoved(effect) {
+    public handleEffectRemoved(effect: EffectModel) {
         const value = effect.value
         switch (effect.name) {
             case EffectKeys.Slow:
@@ -427,60 +428,72 @@ export class Player extends Phaser.GameObjects.Container {
         this.healthBar.refresh(this.health)
     }
 
-    public handleDeath() {
-        if (this.health <= 0 && this.active) {
-            this.body.setEnable(false)
-            this.setActive(false)
-            this.setVisible(false)
-            this.visible = false
-            this.healthBar.setVisible(false)
-            this.effectIconsContainer.setVisible(false)
-
-            this.health = this.maxHealth
-            this.scene.syncHealth(this)
-            this.healthBar.refresh(this.health)
-            for (const actionTime of Object.values(this.actionTimes)) {
-                actionTime.cooldown = 0
-            }
-
-            this.scene.startDeathTransition(this)
-
-            this.actionTimes.death.cooldown = this.deathCooldownDelay
-            this.actionTimes.death.timerEvent = this.scene.time.addEvent({
-                delay: 1 * 1000,
-                callback: () => {
-                    this.actionTimes.death.cooldown -= 1
-                    this.scene.syncDeathTextCooldown(this, this.actionTimes.death.cooldown)
-                },
-                callbackScope: this,
-                loop: true,
-            })
-
-            this.scene.time.addEvent({
-                delay: this.deathCooldownDelay * 1000,
-                callback: () => {
-                    this.actionTimes.death.cooldown = 0
-                    this.actionTimes.death.timerEvent.remove(false)
-                    this.actionTimes.death.timerEvent = null
-                    if (!this.active) {
-                        this.reset(this.scene.players)
-                        this.scene.stopDeathTransition(this)
-                    }
-                },
-                callbackScope: this,
-            })
-        }
+    public isDead(): boolean {
+        return (this.health <= 0 && this.active)
     }
+
 
     public update() {
         this.healthBar.x = this.body.center.x - this.healthBar.width / 2
         this.healthBar.y = this.body.top - this.healthBar.height - 6
         this.effectIconsContainer.x = this.body.center.x - this.healthBar.width / 2
         this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
-        this.handleDeath()
+        if(this.isDead()) {
+            this.handleDeath()
+            this.scene.syncHealth(this)
+            this.scene.startDeathTransition(this)
+        }
     }
 
-    public reset(otherPlayers: Phaser.Physics.Arcade.Group): void {
+
+    public handleDeath() {
+        this.setDeathState()
+
+
+        this.actionTimes.death.cooldown = this.deathCooldownDelay
+        this.actionTimes.death.timerEvent = this.scene.time.addEvent({
+            delay: 1 * 1000,
+            callback: () => {
+                this.actionTimes.death.cooldown -= 1
+                this.scene.syncDeathTextCooldown(this, this.actionTimes.death.cooldown)
+            },
+            callbackScope: this,
+            loop: true,
+        })
+
+        this.scene.time.addEvent({
+            delay: this.deathCooldownDelay * 1000,
+            callback: () => {
+                this.actionTimes.death.cooldown = 0
+                this.actionTimes.death.timerEvent.remove(false)
+                this.actionTimes.death.timerEvent = null
+                if (!this.active) {
+                    this.setAliveState(this.scene.players)
+                    this.scene.stopDeathTransition(this)
+                }
+            },
+            callbackScope: this,
+        })
+    }
+
+    
+    public setDeathState() {
+        this.body.setEnable(false)
+        this.setActive(false)
+        this.setVisible(false)
+        this.visible = false
+        this.healthBar.setVisible(false)
+        this.effectIconsContainer.setVisible(false)
+        this.health = this.maxHealth
+        this.healthBar.refresh(this.health)
+
+        
+        for (const actionTime of Object.values(this.actionTimes) ) {
+            actionTime.cooldown = 0
+        }
+    }
+
+    public setAliveState(otherPlayers: Phaser.Physics.Arcade.Group): void {
         let overlaping = true
         let x = 0
         let y = 0
@@ -505,6 +518,8 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.setVisible(false)
     }
 
+
+    
     public getChanged(): PlayerChanged {
         return {
             x: this.body.center.x,
