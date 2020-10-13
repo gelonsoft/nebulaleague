@@ -1,14 +1,10 @@
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
-import { Event } from '~/shared/events'
+import { Event as MyEvent } from '~/shared/events'
 
-export interface LobySceneConfig {
-    playerName: string
-}
 
 export class LobyScene extends Phaser.Scene {
     public game: MyGame
-    public playerName: string
     public client: Client
     public background: Phaser.GameObjects.Image
     public menuHTML: Phaser.GameObjects.DOMElement
@@ -16,7 +12,6 @@ export class LobyScene extends Phaser.Scene {
         super({
             key: 'lobyScene',
         })
-        this.playerName = ''
     }
 
     init(): void {
@@ -28,9 +23,9 @@ export class LobyScene extends Phaser.Scene {
             false
         )
 
-        this.client = this.game.registry.get('client')
+        this.client = this.game.registry.get('client') as Client
         this.client.emitLobyInit()
-        this.game.events.on(Event.lobyStart, () => {
+        this.game.events.on(MyEvent.lobyStart, () => {
             this.scene.start('playerSelectionScene')
             this.client.emitLobyEnd()
         })
@@ -57,23 +52,15 @@ export class LobyScene extends Phaser.Scene {
             .createFromCache('mainMenuHTML')
             .setPosition(this.scale.width / 2, this.scale.height / 2)
 
-        this.menuHTML.getChildByID('playerNameInput').addEventListener(
-            'keyup',
-            (event: any) => {
-                this.playerName = event.currentTarget.value
-            },
-            true
-        )
-        this.menuHTML.addListener('click')
-        this.menuHTML.addListener('keypress')
-        this.menuHTML.on('click', (event) => {
-            if (event.target.name === 'playButton') {
+        this.menuHTML.getChildByID('playButton').addEventListener(
+            'click',
+            (event: Event) => {
+                const payerName = (this.menuHTML.getChildByID('playerNameInput') as HTMLInputElement).value
                 this.client.emitLobyStart({
-                    name: this.playerName,
+                    name: payerName,
                     gameMode: 'ffa',
                 })
-            }
-        })
+            }) 
     }
 
     create(): void {

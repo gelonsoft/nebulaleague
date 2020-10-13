@@ -41,7 +41,7 @@ export class DeathScene extends Phaser.Scene {
         super({ key: 'deathScene' })
     }
 
-    public init(mainScene): void {
+    public init(mainScene: MainScene): void {
         this.mainScene = mainScene
         this.canResetAfterDelay = 1
         this.canResetAfterElapsed = 0

@@ -1,6 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
-import { ProjectileModel, EffectModel, ProjectileChanged } from '~/shared/models'
+import { ProjectileModel, EffectModel, ProjectileChanged, ProjectileName } from '~/shared/models'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
 
@@ -94,7 +94,6 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
             },
             callbackScope: this,
         })
-        console.log(this)
         this.scene.game.events.emit(Event.ProjectileFired, this)
     }
 
@@ -276,26 +275,24 @@ export class Projectiles {
     public projectileByIds: Map<string, Bullet | Block>
     public scene: MainScene
     constructor(scene: MainScene) {
-        this.projectiles = new Map()
-        this.projectileByIds = new Map()
-        this.scene = scene
-
-        this.addProjectile('pistolBullet', Config.projectiles.pistolBullet, 200)
-        this.addProjectile('ak47Bullet', Config.projectiles.ak47Bullet, 200)
-        this.addProjectile('p90Bullet', Config.projectiles.p90Bullet, 200)
-        this.addProjectile('revolverBullet', Config.projectiles.revolverBullet, 200)
-        this.addProjectile('thompsonBullet', Config.projectiles.thompsonBullet, 200)
-        this.addProjectile('chargedArrowProjectile', Config.projectiles.chargedArrowProjectile, 20)
-        this.addProjectile('flameProjectile', Config.projectiles.flameProjectile, 20)
-        this.addProjectile('rootTipProjectile', Config.projectiles.rootTipProjectile, 20)
-        this.addProjectile('frozenWaveProjectile', Config.projectiles.frozenWaveProjectile, 40)
-        this.addProjectile('psychicWaveProjectile', Config.projectiles.psychicWaveProjectile, 40)
-        this.addProjectile('lightningWaveProjectile', Config.projectiles.lightningWaveProjectile, 40)
-        this.addProjectile('fireWaveProjectile', Config.projectiles.fireWaveProjectile, 40)
+        this.projectiles = new Map<string, Phaser.Physics.Arcade.Group>()
+        this.projectileByIds = new Map<string, Bullet | Block>()
+        this.addProjectile(Config.projectiles.pistolBullet, 200)
+        this.addProjectile(Config.projectiles.ak47Bullet, 200)
+        this.addProjectile(Config.projectiles.p90Bullet, 200)
+        this.addProjectile(Config.projectiles.revolverBullet, 200)
+        this.addProjectile(Config.projectiles.thompsonBullet, 200)
+        this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
+        this.addProjectile(Config.projectiles.flameProjectile, 20)
+        this.addProjectile(Config.projectiles.rootTipProjectile, 20)
+        this.addProjectile(Config.projectiles.frozenWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.psychicWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.lightningWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.fireWaveProjectile, 40)
     }
 
-    public static getTimeToReachTarget(key: string, targetDistance: number) {
-        if (Config.projectiles[key]?.speed) {
+    public static getTimeToReachTarget(key: ProjectileName, targetDistance: number) {
+        if (Config.projectiles[key].speed) {
             return targetDistance / Config.projectiles[key].speed
         } else if (Config.projectiles[key]?.triggerAfter) {
             return Config.projectiles[key].triggerAfter
@@ -312,7 +309,7 @@ export class Projectiles {
         }[projectileKeyName]
     }
 
-    public static getDistance(key): number {
+    public static getDistance(key: ProjectileName): number {
         const projectileConfig = Config.projectiles[key]
         return projectileConfig.speed * projectileConfig.lifespan
     }
@@ -323,14 +320,14 @@ export class Projectiles {
         return projectile as ProjectileInterface
     }
 
-    public addProjectile(key: string, projectileConfig: any, length: number): void {
+    public addProjectile(projectileModel: ProjectileModel, length: number): void {
         const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
 
-        const keys = [...Array(length).keys()]
-        keys.forEach((index) => {
+        const indexes = [...Array(length).keys()]
+        indexes.forEach((index) => {
             const ClassName = Projectiles.getProjectileByClassName(projectileConfig.className)
             const projectile = new ClassName(this.scene, projectileConfig)
-            projectile.setName(`${key}-${index}`)
+            projectile.setName(`${projectileModel.name}-${index}`)
             group.add(projectile)
         })
         this.projectiles.set(key, group)

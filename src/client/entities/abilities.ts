@@ -1,4 +1,4 @@
-import { AbilityDrawingStyle, AbilityModel, AbilityAction } from '~/shared/models'
+import { AbilityDrawingStyle, AbilityModel, AbilityAction, ProjectileName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
@@ -12,7 +12,7 @@ export class Ability {
     public action: AbilityAction
     public cooldownDelay: number
     public drawingStyle: AbilityDrawingStyle
-    public projectileKey?: string
+    public projectileKey?: ProjectileName
     public rangeDistance: number
     public radiusDistance: number
     public triggerAfter: number

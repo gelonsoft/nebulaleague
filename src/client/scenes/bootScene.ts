@@ -50,7 +50,7 @@ export class BootScene extends Phaser.Scene {
         // delete bar graphics, when loading complete
         this.load.on(
             'complete',
-            function () {
+            () => {
                 this.progressBar.destroy()
                 this.loadingBar.destroy()
             },

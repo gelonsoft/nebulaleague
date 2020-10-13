@@ -1,6 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
-import { ActionKey, EffectModel } from '~/shared/models'
+import { ActionKey, EffectModel, WeaponKey } from '~/shared/models'
 import { MyGame } from '~/client/index'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { MainScene } from '~/client/scenes/mainScene'
@@ -203,13 +203,13 @@ export class HudScene extends Phaser.Scene {
         container.refresh()
     }
     
-    private updateAbilitiesCooldown(selectedAbilityKey: string, actionTime: ActionTimeInterface) {
+    private updateAbilitiesCooldown(selectedAbilityKey: ActionKey, actionTime: ActionTimeInterface) {
         const container = this.actionToContainer[selectedAbilityKey]
         container.cooldown = actionTime.cooldown
         container.refresh()
     }
 
-    private updateWeaponCooldown(selectedWeaponKey: string, actionTime: ActionTimeInterface) {
+    private updateWeaponCooldown(selectedWeaponKey: WeaponKey, actionTime: ActionTimeInterface) {
         const container =
             selectedWeaponKey === 'weaponPrimary'
                 ? this.weaponPrimaryContainer
@@ -226,7 +226,7 @@ export class HudScene extends Phaser.Scene {
         this.weaponSecondaryContainer.refresh()
     }
 
-    private updateAbilitiesSelected(selectedAbilityKey: string, selected: boolean) {
+    private updateAbilitiesSelected(selectedAbilityKey: ActionKey, selected: boolean) {
         const container = this.actionToContainer[selectedAbilityKey]
         container.selected = selected
         container.refresh()

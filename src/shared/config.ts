@@ -8,7 +8,9 @@ import {
     AbilityName,
     AbilityModel,
     PlayerConfig,
-    PlayerModel
+    PlayerModel,
+    ProjectileName,
+    ProjectileModel,
 } from './models'
 
 
@@ -219,9 +221,9 @@ export class Config {
         },
     }
 
-    public static readonly projectiles = {
+    public static readonly projectiles: Record<ProjectileName, ProjectileModel> = {
         pistolBullet: {
-            key: 'pistolBullet',
+            name: 'pistolBullet',
             className: 'Bullet',
             frame: 'beams-purple1.png',
             damage: 80,
@@ -230,7 +232,7 @@ export class Config {
             radius: 14,
         },
         ak47Bullet: {
-            key: 'ak47Bullet',
+            name: 'ak47Bullet',
             className: 'Bullet',
             frame: 'beams-purple1.png',
             damage: 70,
@@ -239,7 +241,7 @@ export class Config {
             radius: 14,
         },
         p90Bullet: {
-            key: 'p90Bullet',
+            name: 'p90Bullet',
             className: 'Bullet',
             frame: 'beams-purple1.png',
             damage: 40,
@@ -248,7 +250,7 @@ export class Config {
             radius: 14,
         },
         revolverBullet: {
-            key: 'revolverBullet',
+            name: 'revolverBullet',
             className: 'Bullet',
             frame: 'beams-purple1.png',
             damage: 450,
@@ -257,7 +259,7 @@ export class Config {
             radius: 16,
         },
         thompsonBullet: {
-            key: 'thompsonBullet',
+            name: 'thompsonBullet',
             className: 'Bullet',
             frame: 'beams-purple1.png',
             damage: 200,
@@ -266,7 +268,7 @@ export class Config {
             radius: 18,
         },
         chargedArrowProjectile: {
-            key: 'chargedArrowProjectile',
+            name: 'chargedArrowProjectile',
             className: 'Bullet',
             frame: 'charged_arrow_bullet.png',
             damage: 80,
@@ -280,7 +282,7 @@ export class Config {
             }]
         },
         flameProjectile: {
-            key: 'flameProjectile',
+            name: 'flameProjectile',
             className: 'BlockWithTick',
             radius: 50,
             lifespan: 1,
@@ -298,7 +300,7 @@ export class Config {
             }]
         },
         rootTipProjectile: {
-            key: 'rootTipProjectile',
+            name: 'rootTipProjectile',
             className: 'BlockWithDelay',
             radius: 60,
             damage: 30,
@@ -315,7 +317,7 @@ export class Config {
             }]
         },
         frozenWaveProjectile: {
-            key: 'frozenWaveProjectile',
+            name: 'frozenWaveProjectile',
             className: 'BlockWithDelay',
             radius: 320,
             damage: 10,
@@ -332,7 +334,7 @@ export class Config {
             }]
         },
         psychicWaveProjectile: {
-            key: 'psychicWaveProjectile',
+            name: 'psychicWaveProjectile',
             className: 'BlockWithDelay',
             radius: 230,
             damage: 0,
@@ -349,7 +351,7 @@ export class Config {
             }]
         },
         lightningWaveProjectile: {
-            key: 'lightningWaveProjectile',
+            name: 'lightningWaveProjectile',
             className: 'BlockWithDelay',
             radius: 260,
             damage: 10,
@@ -366,7 +368,7 @@ export class Config {
             }]
         },
         fireWaveProjectile: {
-            key: 'fireWaveProjectile',
+            name: 'fireWaveProjectile',
             className: 'BlockWithDelay',
             radius: 240,
             damage: 30,

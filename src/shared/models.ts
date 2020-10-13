@@ -38,6 +38,22 @@ export type AbilityName =
     | 'lightningWave'
     | 'fireWave'
 
+
+export type ProjectileName =
+    | 'pistolBullet'
+    | 'ak47Bullet'
+    | 'p90Bullet'
+    | 'revolverBullet'
+    | 'thompsonBullet'
+    | 'chargedArrowProjectile'
+    | 'flameProjectile'
+    | 'rootTipProjectile'
+    | 'frozenWaveProjectile'
+    | 'psychicWaveProjectile'
+    | 'lightningWaveProjectile'
+    | 'fireWaveProjectile'
+
+
 export type ActionName = WeaponName | AbilityName
 
 export type PlayerModel = {
@@ -111,10 +127,9 @@ export type WeaponModel = {
     name: WeaponName
     frame: string
     cooldownDelay: number
-    projectileKey: string
+    projectileKey: ProjectileName
     laser: LaserModel
 }
-
 
 
 // ABILITIES INTERFACE
@@ -134,7 +149,7 @@ export type AbilityModel = {
     name: AbilityName
     frame: string
     action: AbilityAction
-    projectileKey?: string
+    projectileKey?: ProjectileName
     cooldownDelay: number
     rangeDistance?: number
     drawingStyle: AbilityDrawingStyle
@@ -154,14 +169,14 @@ export type ActionModel = WeaponModel | AbilityModel
 
 // PROJECTILE INTERFACE
 export type ProjectileModel = {
-    key: string
     name: string
-    speed: number
+    className: string
     damage: number
     lifespan: number
     radius: number
-    effects?: Array<EffectModel>
     frame?: string
+    speed?: number
+    effects?: Array<EffectModel>
     fillColor?: number
     strokeColor?: number
     fillAlpha?: number
@@ -219,13 +234,6 @@ export type PlayerSelectionState = {
     gameRoom?: string
 }
 
-// export type GameStateUpdated {
-//     players?: Record<string, PlayerChanged>
-//     projectiles?: Record<string, ProjectileChanged>
-//     toDelete?: {
-//         projectiles?: Array<string>
-//     }
-// }
 
 export type GameStateChanged = {
     created?: {

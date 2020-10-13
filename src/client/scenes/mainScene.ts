@@ -26,6 +26,7 @@ import { Consumable, RandomItem } from '~/client/entities/consumables'
 import { Projectiles, ProjectileInterface } from '~/client/entities/projectiles'
 import { Weapon, buildWeapons } from '~/client/entities/weapons'
 import { buildAbilities, Ability } from '~/client/entities/abilities'
+import { GameObjects } from 'phaser'
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
@@ -179,27 +180,24 @@ export class MainScene extends Phaser.Scene {
         })
 
         this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
-            // console.log('fired')
-            // console.log(projectile)
             this.projectilesCurrent[projectile.name] = projectile.getChanged()
         })
 
         this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
-            // console.log('killed')
-            // console.log(projectile)
             delete this.projectilesCurrent[projectile.name]
         })
 
         this.game.events.on(Event.gameUpdated, () => {
             const gameStateReceived = this.client.gameStateChangedReceived
-            // console.log(gameStateReceived)
 
             if (gameStateReceived.updated !== undefined) {
                 if (gameStateReceived.updated.players !== undefined) {
-                    for (const [idModel, playerChanged] of Object.entries(
+                    for (const [playerIdChanged, playerChanged] of Object.entries(
                         gameStateReceived.updated.players
                     )) {
-                        const player = this.players.children.get('id', idModel as any)
+                        const player = this.players.getChildren()
+                            .find((player: Player) => player.id === playerIdChanged)
+                        console.log(player)
                         Object.assign(player, playerChanged)
                     }
                 }
@@ -246,7 +244,7 @@ export class MainScene extends Phaser.Scene {
             this.events.emit(Event.actionsCollodownChanged, selectedActionKey, actionTime)
         }
     }
-    
+
 
     public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
         if (player.id === this.player.id) {

@@ -1,4 +1,4 @@
-import { WeaponModel } from '~/shared/models'
+import { ProjectileName, WeaponModel } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
@@ -11,7 +11,7 @@ export class Weapon {
     public name: string
     public frame: string
     public laserGraphics: Phaser.GameObjects.Graphics
-    public projectileKey: string
+    public projectileKey: ProjectileName
     public cooldownDelay: number
     public canFire: boolean
     public rangeDistance: number
