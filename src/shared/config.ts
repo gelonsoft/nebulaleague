@@ -11,6 +11,7 @@ import {
     PlayerModel,
     ProjectileName,
     ProjectileModel,
+    ProjectileTemplate,
 } from './models'
 
 
@@ -221,7 +222,7 @@ export class Config {
         },
     }
 
-    public static readonly projectiles: Record<ProjectileName, ProjectileModel> = {
+    public static readonly projectiles: Record<ProjectileName, ProjectileTemplate> = {
         pistolBullet: {
             name: 'pistolBullet',
             className: 'Bullet',

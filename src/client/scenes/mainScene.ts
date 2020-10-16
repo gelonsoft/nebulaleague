@@ -207,7 +207,6 @@ export class MainScene extends Phaser.Scene {
                         gameStateReceived.updated.projectiles
                     )) {
                         const projectile = this.projectiles.getProjectile(idModel)
-                        console.log(projectile)
                         projectile.visble = true
                         projectile.active = true
                         projectile.body.x = projectileChanged.x

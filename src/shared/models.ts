@@ -167,10 +167,11 @@ export type AbilityModel = {
 export type ActionModel = WeaponModel | AbilityModel
 
 
+
 // PROJECTILE INTERFACE
-export type ProjectileModel = {
+
+export type Projectile = {
     name: string
-    className: string
     damage: number
     lifespan: number
     radius: number
@@ -184,6 +185,19 @@ export type ProjectileModel = {
     tick?: number
     triggerAfter?: number
 }
+
+
+
+export type ProjectileTemplate = Projectile & {
+    name: ProjectileName
+    className: 'Bullet' | 'BlockWithTick' | 'BlockWithDelay'
+}
+
+export type ProjectileModel = Projectile & {
+    fromGroup: ProjectileName
+
+}
+
 
 
 export type ProjectileChanged = {
