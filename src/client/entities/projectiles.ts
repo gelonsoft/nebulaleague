@@ -10,28 +10,89 @@ import {
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
 
-type Projectile = Bullet | Block
+type ProjectileComp = Bullet | Block | BlockWithDelay | BlockWithTick
 
-export interface ProjectileInterface {
-    fire(position: Phaser.Math.Vector2, rotation: number): void
-    actionOnCollision(hittedPlayer: Player): void
-    kill(): void
-    getChanged(): ProjectileChanged
-    // getModel(): ProjectileModel
-    fromPlayerId: string
-    name: string
-    x: number
-    y: number
-    rotation?: number
-    visble?: boolean
-    active?: boolean
-    body?: Phaser.Physics.Arcade.Body
+// export interface ProjectileInterface {
+//     fire(position: Phaser.Math.Vector2, rotation: number): void
+//     actionOnCollision(hittedPlayer: Player): void
+//     kill(): void
+//     getChanged(): ProjectileChanged
+//     // getModel(): ProjectileModel
+//     fromPlayerId: string
+//     name: string
+//     x: number
+//     y: number
+//     rotation?: number
+//     visble?: boolean
+//     active?: boolean
+//     body?: Phaser.Physics.Arcade.Body
+// }
+
+
+
+export class Projectile {
+    public projectileComp: ProjectileComp
+    public projectileTemplate: ProjectileTemplate
+    public name: string
+
+    public constructor(scene: MainScene, name:string, projectileTemplate: ProjectileTemplate) {
+        this.projectileTemplate = projectileTemplate
+        this.name = name
+        this.createProjectileCreate(scene, projectileTemplate)
+    }
+
+    public createProjectileCreate(scene: MainScene, projectileTemplate: ProjectileTemplate) {
+        switch (this.projectileTemplate.className) {
+            case 'Bullet':
+                this.projectileComp = new Bullet(scene, projectileTemplate)
+                break
+            case 'BlockWithTick':
+                this.projectileComp = new BlockWithTick(scene, projectileTemplate)
+                break
+            case 'BlockWithDelay':
+                this.projectileComp = new BlockWithDelay(scene, projectileTemplate)
+                break
+        }
+    }
+
+
+    public fire(initialPosition: Phaser.Math.Vector2, initialRotation?: number): void {
+        this.projectileComp.fire(initialPosition, initialRotation)
+    }
+    public actionOnCollision(hittedPlayer: Player): void {
+        this.projectileComp.actionOnCollision(hittedPlayer)
+    }
+    public kill(): void {
+        this.projectileComp.kill()
+    }
+
+    public getChanged(): ProjectileChanged {
+        return {
+            x: this.projectileComp.body.center.x,
+            y: this.projectileComp.body.center.y,
+        }
+    }
+
+    public setChanged(projectileChanged: ProjectileChanged): void {
+        Object.assign(
+            this.projectileComp,
+            {
+                ...projectileChanged,
+                ...{
+                    visble: true,
+                    active: true,
+                }
+            })
+    }
 }
 
-export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInterface {
+
+
+
+
+export class Bullet extends Phaser.GameObjects.Sprite  {
     public body: Phaser.Physics.Arcade.Body
     public scene: MainScene
-    public name: string
     public fromGroup: ProjectileName
     public lifespan: number
     public speed: number
@@ -45,12 +106,10 @@ export class Bullet extends Phaser.GameObjects.Sprite implements ProjectileInter
     public killEvent: Phaser.Time.TimerEvent
     public effects?: Array<EffectModel>
 
-    public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
+    public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
         super(scene, -10000, -10000, 'atlas', projectileTemplate.frame)
         this.scene = scene
         this.fromGroup = projectileTemplate.name
-        this.name = name
-        this.name = projectileTemplate.name
         this.lifespan = projectileTemplate.lifespan
         this.speed = projectileTemplate.speed
         this.damage = projectileTemplate.damage
@@ -152,7 +211,7 @@ export class Block extends Phaser.GameObjects.Graphics {
     public hittedPlayerIds: Set<string>
     public killedOnHit: boolean
 
-    public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
+    public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
         super(scene)
         this.fromPlayerId = 'unkown'
         this.fromGroup = projectileTemplate.name
@@ -224,11 +283,11 @@ export class Block extends Phaser.GameObjects.Graphics {
     }
 }
 
-export class BlockWithDelay extends Block implements ProjectileInterface {
+export class BlockWithDelay extends Block {
     public triggerAfter: number
     public active: boolean
-    public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(scene, name, projectileTemplate)
+    public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
+        super(scene, projectileTemplate)
         this.triggerAfter = projectileTemplate.triggerAfter
         this.active = false
     }
@@ -259,11 +318,11 @@ export class BlockWithDelay extends Block implements ProjectileInterface {
     }
 }
 
-export class BlockWithTick extends Block implements ProjectileInterface {
+export class BlockWithTick extends Block {
     public tick: number
     public tickTimer: number
-    public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(scene, name, projectileTemplate)
+    public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
+        super(scene, projectileTemplate)
         this.tick = projectileTemplate.tick
     }
 
@@ -289,7 +348,7 @@ export class Projectiles {
         this.projectiles = new Map<string, Phaser.Physics.Arcade.Group>()
         this.projectileByIds = new Map<string, Projectile>()
         this.scene = scene
-        
+
         this.addProjectile(Config.projectiles.pistolBullet, 200)
         this.addProjectile(Config.projectiles.ak47Bullet, 200)
         this.addProjectile(Config.projectiles.p90Bullet, 200)
@@ -305,25 +364,13 @@ export class Projectiles {
     }
 
     public addProjectile(projectileTemplate: ProjectileTemplate, length: number): void {
-        const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene)
+        const group = new Phaser.Physics.Arcade.Group(this.scene.physics.world, this.scene,)
 
         const indexes = [...Array(length).keys()]
         indexes.forEach((index) => {
-            let projectile
             const projectileName = `${projectileTemplate.name}-${index}`
-
-            switch (projectileTemplate.className) {
-                case 'Bullet':
-                    projectile = new Bullet(this.scene, projectileName, projectileTemplate)
-                    break
-                case 'BlockWithTick':
-                    projectile = new BlockWithTick(this.scene, projectileName, projectileTemplate)
-                    break
-                case 'BlockWithDelay':
-                    projectile = new BlockWithDelay(this.scene, projectileName, projectileTemplate)
-                    break
-            }
-            group.add(projectile)
+            const projectile = new Projectile(this.scene, projectileName, projectileTemplate)
+            group.add(projectile.projectileComp)
         })
         this.projectiles.set(projectileTemplate.name, group)
     }
@@ -345,10 +392,13 @@ export class Projectiles {
         return projectileConfig.speed * projectileConfig.lifespan
     }
 
-    public getProjectile(name: string): ProjectileInterface {
-        const fromProjectilesGroup = name.split('-')[0]
-        const projectile = this.projectiles.get(fromProjectilesGroup).children.get('name', name as any) as any
-        return projectile as ProjectileInterface
+    public getProjectile(projectileNameModel: string): Projectile {
+        const projectileNameGroup = projectileNameModel.split('-')[0]
+
+        const projectile = this.projectiles.get(projectileNameGroup).getChildren()
+            .find((projectile: ProjectileComp) => projectile.name === projectileNameModel).parent
+
+        return projectile
     }
 
     public fire(

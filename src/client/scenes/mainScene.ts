@@ -1,5 +1,3 @@
-// import { updatedDiff, diff } from 'deep-object-diff'
-// import { diff } from 'js-crud-diff'
 import { diff } from 'deep-object-diff'
 import { Config } from '~/shared/config'
 import { pickBy, isEmpty } from 'lodash'
@@ -10,6 +8,7 @@ import {
     PlayerConfig,
     PlayerChanged,
     ProjectileChanged,
+    Projectile,
     GameStateChanged,
     GameState,
     ActionKey,
@@ -102,8 +101,7 @@ export class MainScene extends Phaser.Scene {
                     return new Player(this, playerModel)
                 })
             )
-        this.player = this.players.children
-            .getArray()
+        this.player = this.players.getChildren()
             .find((player: Player) => player.id === this.client.id) as Player
 
         this.settingCamera()
@@ -179,11 +177,11 @@ export class MainScene extends Phaser.Scene {
             }
         })
 
-        this.game.events.on(Event.ProjectileFired, (projectile: ProjectileInterface) => {
+        this.game.events.on(Event.ProjectileFired, (projectile: Projectile) => {
             this.projectilesCurrent[projectile.name] = projectile.getChanged()
         })
 
-        this.game.events.on(Event.ProjectileKilled, (projectile: ProjectileInterface) => {
+        this.game.events.on(Event.ProjectileKilled, (projectile: Projectile) => {
             delete this.projectilesCurrent[projectile.name]
         })
 
@@ -197,16 +195,15 @@ export class MainScene extends Phaser.Scene {
                     )) {
                         const player = this.players.getChildren()
                             .find((player: Player) => player.id === playerIdChanged)
-                        console.log(player)
                         Object.assign(player, playerChanged)
                     }
                 }
 
                 if (gameStateReceived.updated.projectiles !== undefined) {
-                    for (const [idModel, projectileChanged] of Object.entries(
+                    for (const [projectileIdChanged, projectileChanged] of Object.entries(
                         gameStateReceived.updated.projectiles
                     )) {
-                        const projectile = this.projectiles.getProjectile(idModel)
+                        const projectile = this.projectiles.getProjectile(projectileIdChanged)
                         projectile.visble = true
                         projectile.active = true
                         projectile.body.x = projectileChanged.x
