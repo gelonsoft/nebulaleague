@@ -12,47 +12,35 @@ import { Player } from '~/client/entities/player'
 
 type ProjectileComp = Bullet | Block | BlockWithDelay | BlockWithTick
 
-// export interface ProjectileInterface {
-//     fire(position: Phaser.Math.Vector2, rotation: number): void
-//     actionOnCollision(hittedPlayer: Player): void
-//     kill(): void
-//     getChanged(): ProjectileChanged
-//     // getModel(): ProjectileModel
-//     fromPlayerId: string
-//     name: string
-//     x: number
-//     y: number
-//     rotation?: number
-//     visble?: boolean
-//     active?: boolean
-//     body?: Phaser.Physics.Arcade.Body
-// }
 
 
-
-export class Projectile {
+export class Projectile extends Phaser.GameObjects.Container {
     public projectileComp: ProjectileComp
-    public projectileTemplate: ProjectileTemplate
+    public readonly projectileTemplate: ProjectileTemplate
+    public scene: MainScene
     public name: string
 
     public constructor(scene: MainScene, name:string, projectileTemplate: ProjectileTemplate) {
-        this.projectileTemplate = projectileTemplate
+        super(scene)
+        this.scene = scene
         this.name = name
-        this.createProjectileCreate(scene, projectileTemplate)
+        this.projectileTemplate = projectileTemplate
+        this.addProjectileCompToContainer()
     }
 
-    public createProjectileCreate(scene: MainScene, projectileTemplate: ProjectileTemplate) {
+    public addProjectileCompToContainer(): void {
         switch (this.projectileTemplate.className) {
             case 'Bullet':
-                this.projectileComp = new Bullet(scene, projectileTemplate)
+                this.projectileComp = new Bullet(this.scene, this.projectileTemplate)
                 break
             case 'BlockWithTick':
-                this.projectileComp = new BlockWithTick(scene, projectileTemplate)
+                this.projectileComp = new BlockWithTick(this.scene, this.projectileTemplate)
                 break
             case 'BlockWithDelay':
-                this.projectileComp = new BlockWithDelay(scene, projectileTemplate)
+                this.projectileComp = new BlockWithDelay(this.scene, this.projectileTemplate)
                 break
         }
+        this.add(this.projectileComp)
     }
 
 
@@ -85,7 +73,6 @@ export class Projectile {
             })
     }
 }
-
 
 
 
@@ -396,7 +383,7 @@ export class Projectiles {
         const projectileNameGroup = projectileNameModel.split('-')[0]
 
         const projectile = this.projectiles.get(projectileNameGroup).getChildren()
-            .find((projectile: ProjectileComp) => projectile.name === projectileNameModel).parent
+            .find((projectile: Projectile) => projectile.name === projectileNameModel) as Projectile
 
         return projectile
     }

@@ -22,7 +22,7 @@ import { PlayerAI } from '~/client/ai/playerAI'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { MainControl, PlayerControl } from '~/client/controls'
 import { Consumable, RandomItem } from '~/client/entities/consumables'
-import { Projectiles, ProjectileInterface } from '~/client/entities/projectiles'
+import { Projectiles, Projectile } from '~/client/entities/projectiles'
 import { Weapon, buildWeapons } from '~/client/entities/weapons'
 import { buildAbilities, Ability } from '~/client/entities/abilities'
 import { GameObjects } from 'phaser'
@@ -204,7 +204,7 @@ export class MainScene extends Phaser.Scene {
                         gameStateReceived.updated.projectiles
                     )) {
                         const projectile = this.projectiles.getProjectile(projectileIdChanged)
-                        projectile.visble = true
+                        projectile.visible = true
                         projectile.active = true
                         projectile.body.x = projectileChanged.x
                         projectile.body.y = projectileChanged.y
@@ -320,7 +320,7 @@ export class MainScene extends Phaser.Scene {
 
     public handleEnemyProjectileCollide(
         hittedPlayer: Player,
-        projectile: Phaser.GameObjects.Sprite & ProjectileInterface
+        projectile: Projectile
     ): void {
         if (hittedPlayer.id !== projectile.fromPlayerId) {
             projectile.actionOnCollision(hittedPlayer)
