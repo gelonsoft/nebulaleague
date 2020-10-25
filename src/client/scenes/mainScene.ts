@@ -8,7 +8,7 @@ import {
     PlayerConfig,
     PlayerChanged,
     ProjectileChanged,
-    Projectile,
+    ProjectileModel,
     GameStateChanged,
     GameState,
     ActionKey,
