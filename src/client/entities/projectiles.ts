@@ -27,16 +27,17 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.scene = scene
         this.name = name
         this.projectileTemplate = projectileTemplate
-        this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-        this.x = -1000
-        this.y = -1000
-        this.body.setEnable(false)
-        this.setActive(false)
-        this.setVisible(false)
-        
+        this.initPhysics()
+        this.scene.add.existing(this)
         this.addProjectileCompToContainer()
     }
 
+    public initPhysics() {
+        this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
+        this.body.reset(-10000, -10000)
+        this.deactivate()        
+    }
+    
     public addProjectileCompToContainer(): void {
         switch (this.projectileTemplate.className) {
             case 'Bullet':
@@ -53,30 +54,63 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation?: number): void {
-        this.projectileComp.fire(initialPosition, initialRotation)
+        this.activate()
+        this.body.reset(initialPosition.x, initialPosition.y)
+        const ux = Math.cos(initialRotation)
+        const uy = Math.sin(initialRotation)
+        this.setRotation(initialRotation + Math.PI / 2)
+        this.body.velocity.x = ux * this.projectileTemplate.speed
+        this.body.velocity.y = uy * this.projectileTemplate.speed
+        this.scene.time.addEvent({
+            delay: this.projectileTemplate.lifespan * 1000,
+            callback: () => this.kill(),
+            callbackScope: this,
+        })
         this.scene.game.events.emit(Event.ProjectileFired, this)
     }
 
+
     public actionOnCollision(hittedPlayer: Player): void {
-        this.projectileComp.actionOnCollision(hittedPlayer)
+        hittedPlayer.health -= this.projectileTemplate.damage
+        this.kill()
+    }
+
+    public activate(): void {
+        this.setActive(true)
+        this.setVisible(true)
+        this.body.setEnable(true)
+    }
+
+    public deactivate(): void {
+        this.setActive(false)
+        this.setVisible(false)
+        this.body.setEnable(false)
+    }
+
+
+    public reset(): void {
+        this.deactivate()
+        this.body.reset(-10000, -10000)
     }
 
     public kill(): void {
-        this.projectileComp.kill()
+        this.reset()
         this.scene.game.events.emit(Event.ProjectileKilled, this)
     }
 
+
+    public setFromPlayerId(fromPlayerId: string): void {
+        this.fromPlayerId = fromPlayerId
+    }
+
+
     public getChanged(): ProjectileChanged {
         return {
-            x: this.projectileComp.body.center.x,
-            y: this.projectileComp.body.center.y,
+            x: this.body.center.x,
+            y: this.body.center.y,
         }
     }
 
-    public setFromPlayerId(fromPlayerId: string): void {
-        this.fromPlayerId = fromPlayerId 
-    }
-    
     public setChanged(projectileChanged: ProjectileChanged): void {
         Object.assign(this.projectileComp, {
             ...projectileChanged,
@@ -90,9 +124,14 @@ export class Projectile extends Phaser.GameObjects.Container {
 
 
 
+
+
 export class Bullet extends Phaser.GameObjects.Sprite {
     public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
-        super(scene, 0, 0, 'atlas', projectileTemplate.frame)
+        super(scene, 20, 20, 'atlas', projectileTemplate.frame)
+        // this.setDisplaySize(projectileTemplate.radius, projectileTemplate.radius)
+        // this.setSize(projectileTemplate.radius, projectileTemplate.radius)
+        // this.setVisible(true)
     }
 }
 
@@ -149,27 +188,27 @@ export class Bullet extends Phaser.GameObjects.Sprite {
 //             this.initialPosition.y + this.goalDistance
 //         )
 
-        this.killEvent = this.scene.time.addEvent({
-            repeat: -1,
-            callback: () => {
-                const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
-                if (currentDistance >= this.goalDistance) {
-                    this.body.x = this.goalPosition.x
-                    this.body.y = this.goalPosition.y
-                    this.body.setVelocity(0, 0)
-                    this.setVisible(false)
-                    this.scene.time.addEvent({
-                        callback: () => {
-                            this.kill()
-                        },
-                    })
-                    this.killEvent.destroy()
-                    this.killEvent = null
-                }
-            },
-            callbackScope: this,
-        })
-    }
+//     this.killEvent = this.scene.time.addEvent({
+//         repeat: -1,
+//         callback: () => {
+//             const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
+//             if (currentDistance >= this.goalDistance) {
+//                 this.body.x = this.goalPosition.x
+//                 this.body.y = this.goalPosition.y
+//                 this.body.setVelocity(0, 0)
+//                 this.setVisible(false)
+//                 this.scene.time.addEvent({
+//                     callback: () => {
+//                         this.kill()
+//                     },
+//                 })
+//                 this.killEvent.destroy()
+//                 this.killEvent = null
+//             }
+//         },
+//         callbackScope: this,
+//     })
+// }
 
 //     public actionOnCollision(hittedPlayer: Player) {
 //         const currentDistance = Math.round(this.body.center.distance(this.initialPosition))
@@ -205,7 +244,7 @@ export class Bullet extends Phaser.GameObjects.Sprite {
 //     public radius: number
 //     public lifespan: number
 //     public damage: number
-    
+
 //     public effects?: Array<EffectModel>
 //     public fillColor: number
 //     public strokeColor: number
@@ -354,13 +393,13 @@ export class Projectiles {
         this.addProjectile(Config.projectiles.p90Bullet, 200)
         this.addProjectile(Config.projectiles.revolverBullet, 200)
         this.addProjectile(Config.projectiles.thompsonBullet, 200)
-        this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
-        this.addProjectile(Config.projectiles.flameProjectile, 20)
-        this.addProjectile(Config.projectiles.rootTipProjectile, 20)
-        this.addProjectile(Config.projectiles.frozenWaveProjectile, 40)
-        this.addProjectile(Config.projectiles.psychicWaveProjectile, 40)
-        this.addProjectile(Config.projectiles.lightningWaveProjectile, 40)
-        this.addProjectile(Config.projectiles.fireWaveProjectile, 40)
+        // this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
+        // this.addProjectile(Config.projectiles.flameProjectile, 20)
+        // this.addProjectile(Config.projectiles.rootTipProjectile, 20)
+        // this.addProjectile(Config.projectiles.frozenWaveProjectile, 40)
+        // this.addProjectile(Config.projectiles.psychicWaveProjectile, 40)
+        // this.addProjectile(Config.projectiles.lightningWaveProjectile, 40)
+        // this.addProjectile(Config.projectiles.fireWaveProjectile, 40)
     }
 
     public addProjectile(projectileTemplate: ProjectileTemplate, length: number): void {
