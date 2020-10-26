@@ -6,19 +6,26 @@ import {
     ProjectileChanged,
     ProjectileName,
     ProjectileTemplate,
+    ProjectileDrawingSpriteModel
 } from '~/shared/models'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
 
 // type ProjectileComp = Bullet | Block | BlockWithDelay | BlockWithTick
-type ProjectileComp = Bullet
+// type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
+type ProjectileDrawing = ProjectileDrawingSprite
+
+// class ProjectileDrawingSpriteClass implements ProjectileDrawingSpriteModel { }
+// class ProjectileDrawingPrimitiveClass implements ProjectileDrawingPrimitiveModel { }
+
+
 
 export class Projectile extends Phaser.GameObjects.Container {
     public scene: MainScene
     public name: string
     public fromPlayerId = 'uknown'
     public readonly projectileTemplate: ProjectileTemplate
-    public projectileComp: ProjectileComp
+    public drawing: ProjectileDrawing
     public body: Phaser.Physics.Arcade.Body
 
 
@@ -29,28 +36,25 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.projectileTemplate = projectileTemplate
         this.initPhysics()
         this.scene.add.existing(this)
-        this.addProjectileCompToContainer()
+        this.addDrawing()
     }
 
     public initPhysics() {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.body.reset(-10000, -10000)
-        this.deactivate()        
+        this.deactivate()
     }
-    
-    public addProjectileCompToContainer(): void {
-        switch (this.projectileTemplate.className) {
-            case 'Bullet':
-                this.projectileComp = new Bullet(this.scene, this.projectileTemplate)
+
+    public addDrawing(): void {
+        switch (this.projectileTemplate.drawing.name) {
+            case "sprite":
+                this.drawing = new ProjectileDrawingSprite(
+                    this.scene,
+                    this.projectileTemplate.drawing as unknown as ProjectileDrawingSpriteModel
+                )
                 break
-            // case 'BlockWithTick':
-            //     this.projectileComp = new BlockWithTick(this.scene, this.projectileTemplate)
-            //     break
-            // case 'BlockWithDelay':
-            //     this.projectileComp = new BlockWithDelay(this.scene, this.projectileTemplate)
-            //     break
         }
-        this.add(this.projectileComp)
+        this.add(this.drawing)
     }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation?: number): void {
@@ -110,28 +114,15 @@ export class Projectile extends Phaser.GameObjects.Container {
             y: this.body.center.y,
         }
     }
-
-    public setChanged(projectileChanged: ProjectileChanged): void {
-        Object.assign(this.projectileComp, {
-            ...projectileChanged,
-            ...{
-                visble: true,
-                active: true,
-            },
-        })
-    }
 }
 
 
 
 
 
-export class Bullet extends Phaser.GameObjects.Sprite {
-    public constructor(scene: MainScene, projectileTemplate: ProjectileTemplate) {
-        super(scene, 20, 20, 'atlas', projectileTemplate.frame)
-        // this.setDisplaySize(projectileTemplate.radius, projectileTemplate.radius)
-        // this.setSize(projectileTemplate.radius, projectileTemplate.radius)
-        // this.setVisible(true)
+export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
+    public constructor(scene: MainScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
+        super(scene, 20, 20, 'atlas', ProjectileDrawingSprite.frame)
     }
 }
 

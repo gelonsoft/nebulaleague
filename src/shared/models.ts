@@ -169,22 +169,32 @@ export type ActionModel = WeaponModel | AbilityModel
 
 
 // PROJECTILE INTERFACE
-
 export type ProjectileBase = {
     name: string
     damage: number
     lifespan: number
     radius: number
-    frame?: string
     speed?: number
     effects?: Array<EffectModel>
-    fillColor?: number
-    strokeColor?: number
-    fillAlpha?: number
-    strokeAlpha?: number
     tick?: number
     triggerAfter?: number
+    drawing: ProjectileDrawingSpriteModel | ProjectileDrawingPrimitiveModel
 }
+
+export type ProjectileDrawingSpriteModel = {
+    name: 'sprite'
+    frame: string
+}
+
+
+export type ProjectileDrawingPrimitiveModel = {
+    name: 'primitive'
+    fillColor: number
+    strokeColor: number
+    fillAlpha: number
+    strokeAlpha: number
+}
+
 
 
 
