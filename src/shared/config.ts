@@ -231,7 +231,8 @@ export class Config {
             lifespan: 0.4,
             radius: 14,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 14,
                 frame: 'beams-purple1.png',
             },
         },
@@ -243,7 +244,8 @@ export class Config {
             lifespan: 0.45,
             radius: 14,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 14,
                 frame: 'beams-purple1.png',
             },
         },
@@ -255,7 +257,8 @@ export class Config {
             lifespan: 0.3,
             radius: 14,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 14,
                 frame: 'beams-purple1.png',
             },
         },
@@ -267,7 +270,8 @@ export class Config {
             lifespan: 10,
             radius: 16,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 16,
                 frame: 'beams-purple1.png',
             },
         },
@@ -279,7 +283,8 @@ export class Config {
             lifespan: 0.45,
             radius: 18,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 18,
                 frame: 'beams-purple1.png',
             }
         },
@@ -291,7 +296,8 @@ export class Config {
             lifespan: 0.5,
             radius: 25,
             drawing: {
-                name: 'sprite',
+                type: 'sprite',
+                radius: 25,
                 frame: 'charged_arrow_bullet.png',
             },
             effects: [{
@@ -308,7 +314,8 @@ export class Config {
             damage: 25,
             tick: 0.15,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 50,
                 fillColor: 0xaa0000,
                 strokeColor: 0xff0000,
                 fillAlpha: 0.6,
@@ -329,7 +336,8 @@ export class Config {
             lifespan: 0.6,
             triggerAfter: 0.4,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 60,
                 fillColor: 0x00aa00,
                 strokeColor: 0x00ff00,
                 fillAlpha: 0.6,
@@ -349,7 +357,8 @@ export class Config {
             lifespan: 0.6,
             triggerAfter: 0.2,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 320,
                 fillColor: 0x00aaff,
                 strokeColor: 0x00aaff,
                 fillAlpha: 0.6,
@@ -369,7 +378,8 @@ export class Config {
             lifespan: 0.6,
             triggerAfter: 0.2,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 230,
                 fillColor: 0x800080,
                 strokeColor: 0xa000a0,
                 fillAlpha: 0.6,
@@ -389,7 +399,8 @@ export class Config {
             lifespan: 0.6,
             triggerAfter: 0.2,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 260,
                 fillColor: 0xfdd023,
                 strokeColor: 0xfee034,
                 fillAlpha: 0.6,
@@ -409,7 +420,8 @@ export class Config {
             lifespan: 0.6,
             triggerAfter: 0.2,
             drawing: {
-                name: 'primitive',
+                type: 'primitive',
+                radius: 240,
                 fillColor: 0xe25822,
                 strokeColor: 0xe37a33,
                 fillAlpha: 0.6,

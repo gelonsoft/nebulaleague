@@ -182,13 +182,15 @@ export type ProjectileBase = {
 }
 
 export type ProjectileDrawingSpriteModel = {
-    name: 'sprite'
+    type: 'sprite'
+    radius: number
     frame: string
 }
 
 
 export type ProjectileDrawingPrimitiveModel = {
-    name: 'primitive'
+    type: 'primitive'
+    radius: number
     fillColor: number
     strokeColor: number
     fillAlpha: number

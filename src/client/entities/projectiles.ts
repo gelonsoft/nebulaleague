@@ -6,14 +6,13 @@ import {
     ProjectileChanged,
     ProjectileName,
     ProjectileTemplate,
-    ProjectileDrawingSpriteModel
+    ProjectileDrawingSpriteModel, ProjectileDrawingPrimitiveModel
 } from '~/shared/models'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
 
 // type ProjectileComp = Bullet | Block | BlockWithDelay | BlockWithTick
-// type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
-type ProjectileDrawing = ProjectileDrawingSprite
+type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
 
 // class ProjectileDrawingSpriteClass implements ProjectileDrawingSpriteModel { }
 // class ProjectileDrawingPrimitiveClass implements ProjectileDrawingPrimitiveModel { }
@@ -46,11 +45,17 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     public addDrawing(): void {
-        switch (this.projectileTemplate.drawing.name) {
+        switch (this.projectileTemplate.drawing.type) {
             case "sprite":
                 this.drawing = new ProjectileDrawingSprite(
                     this.scene,
                     this.projectileTemplate.drawing as unknown as ProjectileDrawingSpriteModel
+                )
+                break
+            case "primitive":
+                this.drawing = new ProjectileDrawingPrimitive(
+                    this.scene,
+                    this.projectileTemplate.drawing as unknown as ProjectileDrawingPrimitiveModel
                 )
                 break
         }
@@ -122,7 +127,23 @@ export class Projectile extends Phaser.GameObjects.Container {
 
 export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
     public constructor(scene: MainScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
-        super(scene, 20, 20, 'atlas', ProjectileDrawingSprite.frame)
+        super(
+            scene, ProjectileDrawingSprite.radius,
+            ProjectileDrawingSprite.radius,
+            'atlas',
+            ProjectileDrawingSprite.frame
+        )
+    }
+}
+
+export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
+    public constructor(scene: MainScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
+        super(scene)
+        this.clear()
+        this.fillStyle(ProjectileDrawingPrimitive.fillColor, ProjectileDrawingPrimitive.fillAlpha)
+        this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
+        this.lineStyle(2, ProjectileDrawingPrimitive.strokeColor, ProjectileDrawingPrimitive.strokeAlpha)
+        this.strokeCircle(0, 0, ProjectileDrawingPrimitive.radius)
     }
 }
 
@@ -384,13 +405,13 @@ export class Projectiles {
         this.addProjectile(Config.projectiles.p90Bullet, 200)
         this.addProjectile(Config.projectiles.revolverBullet, 200)
         this.addProjectile(Config.projectiles.thompsonBullet, 200)
-        // this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
-        // this.addProjectile(Config.projectiles.flameProjectile, 20)
-        // this.addProjectile(Config.projectiles.rootTipProjectile, 20)
-        // this.addProjectile(Config.projectiles.frozenWaveProjectile, 40)
-        // this.addProjectile(Config.projectiles.psychicWaveProjectile, 40)
-        // this.addProjectile(Config.projectiles.lightningWaveProjectile, 40)
-        // this.addProjectile(Config.projectiles.fireWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
+        this.addProjectile(Config.projectiles.flameProjectile, 20)
+        this.addProjectile(Config.projectiles.rootTipProjectile, 20)
+        this.addProjectile(Config.projectiles.frozenWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.psychicWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.lightningWaveProjectile, 40)
+        this.addProjectile(Config.projectiles.fireWaveProjectile, 40)
     }
 
     public addProjectile(projectileTemplate: ProjectileTemplate, length: number): void {
