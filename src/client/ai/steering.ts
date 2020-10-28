@@ -24,21 +24,21 @@ export function flee(source: Vector2, target: Vector2): Vector2 {
 }
 
 export function seekSteer(source: Body, target: Vector2) {
-    const seek = this.seek(source.position, target)
-    const desired = seek.normalize().scale(source.maxSpeed)
+    const seekVector = seek(source.position, target)
+    const desired = seekVector.normalize().scale(source.maxSpeed)
     const steer = desired.subtract(source.velocity)
     return steer
 }
 
 export function fleeSteer(source: Body, target: Vector2) {
-    const seek = this.flee(source.position, target)
-    const desired = seek.normalize().scale(source.maxSpeed)
+    const seekVector = flee(source.position, target)
+    const desired = seekVector.normalize().scale(source.maxSpeed)
     const steer = desired.subtract(source.velocity)
     return steer
 }
 
 export function arrivalSteer(source: Body, target: Vector2, slowingRadius = 50) {
-    const desired: Vector2 = this.seek(source, target)
+    const desired = seek(source.position, target)
     const distance = desired.length()
     if (distance < slowingRadius) {
         desired
@@ -56,7 +56,7 @@ export function pursuit(source: Body, target: Body) {
     const futurVelocityScaled = distance / target.maxSpeed
     const futurPosition = target.position.clone().add(target.velocity.clone().scale(futurVelocityScaled))
 
-    const desired = this.seek(source.position, futurPosition).normalize().scale(source.maxSpeed)
+    const desired = seek(source.position, futurPosition).normalize().scale(source.maxSpeed)
 
     const steer = desired.subtract(source.velocity)
     return steer
@@ -67,7 +67,7 @@ export function evade(source: Body, target: Body) {
     const futurVelocityScaled = distance / target.maxSpeed
     const futurPosition = target.position.clone().add(target.velocity.clone().scale(futurVelocityScaled))
 
-    const desired = this.flee(source.position, futurPosition).normalize().scale(source.maxSpeed)
+    const desired = flee(source.position, futurPosition).normalize().scale(source.maxSpeed)
 
     const steer = desired.subtract(source.velocity)
     return steer

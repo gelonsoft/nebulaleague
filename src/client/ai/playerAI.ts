@@ -146,7 +146,7 @@ export class PlayerAI {
     }
 
     public setPlayersInVisibleRange(): void {
-        const playersInRange = []
+        const playersInRange: Array<Player> = []
         const width = this.scene.cameras.main.displayWidth
         const height = this.scene.cameras.main.displayHeight
         const x = this.player.x - width / 2
@@ -176,7 +176,7 @@ export class PlayerAI {
         let angleStart = 0
         for (const i of [...Array(7).keys()]) {
             const index = i + 1
-            const angleEnd: number = ((index * Math.PI) / 4) as number
+            const angleEnd = ((index * Math.PI) / 4) 
             if (velocity.angle() >= angleStart && velocity.angle() <= angleEnd) {
                 choosenDirectionIndex = index
             }
@@ -190,20 +190,22 @@ export class PlayerAI {
     }
 
     public setPlayersInHittableRange(): void {
-        const playersInRange = []
+        const playersInRange: Array<PlayerAIActionsInterface> = []
         const actionsKeysReady = Object.keys(this.player.actions).filter(
-            (key) => this.player.actionTimes[key].ready
+            (key: ActionKey) => {
+                return this.player.actionTimes[key].ready
+            }
         )
 
         for (const playerInViewRange of this.playersInViewRange) {
             if (playerInViewRange.id !== this.player.id) {
-                const actionsInRange = actionsKeysReady.filter((key) => {
+                const actionsInRange = actionsKeysReady.filter((key: ActionKey) => {
                     return this.isInRangeCircle(
                         this.player.body.center,
                         playerInViewRange.body.center,
                         this.player.actions[key].rangeDistance
                     )
-                })
+                }) as Array<ActionKey>
                 playersInRange.push({
                     player: playerInViewRange,
                     actions: actionsInRange,
@@ -269,8 +271,8 @@ export class PlayerAI {
 
     public doMoveInCombat(choosenTarget: PlayerAIActionsInterface): void {
         const actionsKeyRange = Object.keys(this.player.actions)
-            .filter((key) => this.player.actionTimes[key].ready)
-            .map((key) => [key, this.player.actions[key].rangeDistance])
+            .filter((key: ActionKey) => this.player.actionTimes[key].ready)
+            .map((key: ActionKey) => [key, this.player.actions[key].rangeDistance] as unknown)
             .sort((action1, action2) => action2[1] - action1[1])
 
         const rondamFleeing =

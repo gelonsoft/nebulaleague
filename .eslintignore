@@ -1,3 +1,4 @@
 node_modules
 dist
 src/server/settingWebpackFormServer.ts
+src/client/scenes/debugScene.ts
