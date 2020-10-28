@@ -553,7 +553,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         if (this.game.debug) {
             window['menu'] = this
-            // this.start()
+            this.start()
         }
     }
 

@@ -75,7 +75,7 @@ export class MainScene extends Phaser.Scene {
         this.registerEvent()
 
         if (this.game.debug) {
-            // this.scene.run('debugScene', this)
+            this.scene.run('debugScene', this)
             window['p'] = this.player
             window['m'] = this
         }

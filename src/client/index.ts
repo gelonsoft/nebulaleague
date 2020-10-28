@@ -33,7 +33,7 @@ export class PhaserSpaceGame {
             PlayerSelectionScene,
         ]
         this.game = new MyGame({
-            type: Phaser.AUTO,
+            type: Phaser.CANVAS,
             title: 'nebulaleague',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,

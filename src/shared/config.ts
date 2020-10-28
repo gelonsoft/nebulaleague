@@ -233,7 +233,7 @@ export class Config {
             drawing: {
                 type: 'sprite',
                 radius: 14,
-                frame: 'beams-purple1.png',
+                frame: 'beams-blue1.png',
             },
         },
         ak47Bullet: {
@@ -244,9 +244,12 @@ export class Config {
             lifespan: 0.45,
             radius: 14,
             drawing: {
-                type: 'sprite',
+                type: 'primitive',
                 radius: 14,
-                frame: 'beams-purple1.png',
+                fillColor: 0x800080,
+                strokeColor: 0xa000a0,
+                fillAlpha: 0.6,
+                strokeAlpha: 0.8,
             },
         },
         p90Bullet: {

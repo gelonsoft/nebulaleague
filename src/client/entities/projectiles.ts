@@ -34,27 +34,32 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.name = name
         this.projectileTemplate = projectileTemplate
         this.initPhysics()
-        // this.body.setCircle(this.projectileTemplate.radius)
-        this.body.setSize(20, 20)
+        // this.setDisplaySize(30, 30)
+        // this.setSize(100, 100)
+        // this.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
+        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
+        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
         this.scene.add.existing(this)
-        this.addDrawing()
+        this.initDrawing()
     }
 
     public initPhysics() {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.body.reset(-10000, -10000)
-
+        this.body.setCircle(this.projectileTemplate.radius)
+        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
+        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
         this.deactivate()
     }
 
-    public addDrawing(): void {
+    public initDrawing(): void {
         switch (this.projectileTemplate.drawing.type) {
             case "sprite":
                 this.drawing = new ProjectileDrawingSprite(
                     this.scene,
                     this.projectileTemplate.drawing as unknown as ProjectileDrawingSpriteModel
                 )
-                // this.drawing.body.setCircle(this.projectileTemplate.radius)
+
                 break
             case "primitive":
                 this.drawing = new ProjectileDrawingPrimitive(
@@ -138,6 +143,7 @@ export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
             'atlas',
             ProjectileDrawingSprite.frame
         )
+        this.setOrigin(1, 1)
         // scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
     }
 }
