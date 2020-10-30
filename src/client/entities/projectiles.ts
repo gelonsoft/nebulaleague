@@ -34,21 +34,18 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.name = name
         this.projectileTemplate = projectileTemplate
         this.initPhysics()
-        // this.setDisplaySize(30, 30)
-        // this.setSize(100, 100)
-        // this.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
-        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
-        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
-        this.scene.add.existing(this)
         this.initDrawing()
+        this.scene.add.existing(this)
     }
 
     public initPhysics() {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.body.reset(-10000, -10000)
-        this.body.setCircle(this.projectileTemplate.radius)
-        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
-        // this.body.setSize(this.projectileTemplate.radius, this.projectileTemplate.radius)
+        this.body.setCircle(
+            this.projectileTemplate.radius,
+            - this.projectileTemplate.radius,
+            - this.projectileTemplate.radius,
+        )
         this.deactivate()
     }
 
@@ -135,28 +132,27 @@ export class Projectile extends Phaser.GameObjects.Container {
 
 
 export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
-    // public body: Phaser.Physics.Arcade.Body
     public constructor(scene: MainScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
         super(
-            scene, ProjectileDrawingSprite.radius,
-            ProjectileDrawingSprite.radius,
+            scene,
+            0,
+            0,
             'atlas',
             ProjectileDrawingSprite.frame
         )
-        this.setOrigin(1, 1)
-        // scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
+        this.setSize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
+        this.setDisplaySize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
     }
 }
 
 export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
-    // public body: Phaser.Physics.Arcade.Body
     public constructor(scene: MainScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
         super(scene)
-        this.clear()
         this.fillStyle(ProjectileDrawingPrimitive.fillColor, ProjectileDrawingPrimitive.fillAlpha)
         this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
         this.lineStyle(2, ProjectileDrawingPrimitive.strokeColor, ProjectileDrawingPrimitive.strokeAlpha)
         this.strokeCircle(0, 0, ProjectileDrawingPrimitive.radius)
+        // this.setOrigin(1, 1)
     }
 }
 
@@ -413,11 +409,11 @@ export class Projectiles {
         this.projectileByIds = new Map<string, Projectile>()
         this.scene = scene
 
-        this.addProjectile(Config.projectiles.pistolBullet, 200)
-        this.addProjectile(Config.projectiles.ak47Bullet, 200)
-        this.addProjectile(Config.projectiles.p90Bullet, 200)
-        this.addProjectile(Config.projectiles.revolverBullet, 200)
-        this.addProjectile(Config.projectiles.thompsonBullet, 200)
+        this.addProjectile(Config.projectiles.pistolBullet, 100)
+        this.addProjectile(Config.projectiles.ak47Bullet, 100)
+        this.addProjectile(Config.projectiles.p90Bullet, 100)
+        this.addProjectile(Config.projectiles.revolverBullet, 100)
+        this.addProjectile(Config.projectiles.thompsonBullet, 100)
         this.addProjectile(Config.projectiles.chargedArrowProjectile, 20)
         this.addProjectile(Config.projectiles.flameProjectile, 20)
         this.addProjectile(Config.projectiles.rootTipProjectile, 20)
