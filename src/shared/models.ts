@@ -140,8 +140,8 @@ export enum AbilityDrawingStyle {
 
 export enum AbilityAction {
     Blink,
-    Projectile,
-    ProjectileWithRotation,
+    ProjectileFromPlayer,
+    ProjectileFromPointer,
 }
 
 

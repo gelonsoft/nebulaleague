@@ -155,7 +155,7 @@ export class Config {
         flame: {
             name: 'flame',
             frame: 'fire-zone.png',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPointer,
             projectileKey: 'flameProjectile',
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 20,
@@ -166,7 +166,7 @@ export class Config {
             name: 'rootTip',
             frame: 'root-tip.png',
             projectileKey: 'rootTipProjectile',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPointer,
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 15,
             rangeDistance: 450,
@@ -175,7 +175,7 @@ export class Config {
         chargedArrow: {
             name: 'chargedArrow',
             frame: 'charged-arrow.png',
-            action: AbilityAction.ProjectileWithRotation,
+            action: AbilityAction.ProjectileFromPlayer,
             projectileKey: 'chargedArrowProjectile',
             drawingStyle: AbilityDrawingStyle.Ray,
             cooldownDelay: 10,
@@ -183,7 +183,7 @@ export class Config {
         frozenWave: {
             name: 'frozenWave',
             frame: 'frozen-body.png',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPlayer,
             projectileKey: 'frozenWaveProjectile',
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 5,
@@ -193,7 +193,7 @@ export class Config {
         psychicWave: {
             name: 'psychicWave',
             frame: 'psychic-waves.png',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPlayer,
             projectileKey: 'psychicWaveProjectile',
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 10,
@@ -203,7 +203,7 @@ export class Config {
         lightningWave: {
             name: 'lightningWave',
             frame: 'lightning-shout.png',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPlayer,
             projectileKey: 'lightningWaveProjectile',
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 8,
@@ -213,7 +213,7 @@ export class Config {
         fireWave: {
             name: 'fireWave',
             frame: 'fire-wave.png',
-            action: AbilityAction.Projectile,
+            action: AbilityAction.ProjectileFromPlayer,
             projectileKey: 'fireWaveProjectile',
             drawingStyle: AbilityDrawingStyle.Zone,
             cooldownDelay: 3,

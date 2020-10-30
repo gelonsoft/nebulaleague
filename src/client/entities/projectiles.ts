@@ -11,11 +11,7 @@ import {
 import { MainScene } from '~/client/scenes/mainScene'
 import { Player } from '~/client/entities/player'
 
-// type ProjectileComp = Bullet | Block | BlockWithDelay | BlockWithTick
 type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
-
-// class ProjectileDrawingSpriteClass implements ProjectileDrawingSpriteModel { }
-// class ProjectileDrawingPrimitiveClass implements ProjectileDrawingPrimitiveModel { }
 
 
 
@@ -40,11 +36,10 @@ export class Projectile extends Phaser.GameObjects.Container {
 
     public initPhysics() {
         this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-        this.body.reset(-10000, -10000)
         this.body.setCircle(
             this.projectileTemplate.radius,
-            - this.projectileTemplate.radius,
-            - this.projectileTemplate.radius,
+                -this.projectileTemplate.radius,
+                -this.projectileTemplate.radius,
         )
         this.deactivate()
     }
@@ -68,14 +63,26 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.add(this.drawing)
     }
 
-    public fire(initialPosition: Phaser.Math.Vector2, initialRotation?: number): void {
+    public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
         this.activate()
+
+        const isSpeed = this.projectileTemplate.speed !== undefined
+        const isTick = this.projectileTemplate.tick !== undefined
+        const isTriggerAfter = this.projectileTemplate.triggerAfter !== undefined
+
+
         this.body.reset(initialPosition.x, initialPosition.y)
-        const ux = Math.cos(initialRotation)
-        const uy = Math.sin(initialRotation)
-        this.setRotation(initialRotation + Math.PI / 2)
-        this.body.velocity.x = ux * this.projectileTemplate.speed
-        this.body.velocity.y = uy * this.projectileTemplate.speed
+        if(isSpeed) {
+            const ux = Math.cos(initialRotation)
+            const uy = Math.sin(initialRotation)
+            this.setRotation(initialRotation + Math.PI / 2)
+            this.body.velocity.x = ux * this.projectileTemplate.speed
+            this.body.velocity.y = uy * this.projectileTemplate.speed
+        }
+      
+
+        
+        
         this.scene.time.addEvent({
             delay: this.projectileTemplate.lifespan * 1000,
             callback: () => this.kill(),
@@ -100,16 +107,12 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.setActive(false)
         this.setVisible(false)
         this.body.setEnable(false)
-    }
-
-
-    public reset(): void {
-        this.deactivate()
         this.body.reset(-10000, -10000)
     }
 
+
     public kill(): void {
-        this.reset()
+        this.deactivate()
         this.scene.game.events.emit(Event.ProjectileKilled, this)
     }
 

@@ -129,31 +129,13 @@ export class Ability {
             .add(player.body.center)
     }
 
-    public triggerProjectile(
-        player: Player,
-        sourcePosition: Phaser.Math.Vector2,
-        pointerPosition: Phaser.Math.Vector2,
-        withRotation = false
-    ): void {
-        if (withRotation) {
-            const rotationPlayer = Phaser.Math.Angle.Between(
-                sourcePosition.x,
-                sourcePosition.y,
-                pointerPosition.x,
-                pointerPosition.y
-            )
-            this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
-        } else {
-            this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
-        }
-    }
 
     public trigger(
         player: Player,
         sourcePosition: Phaser.Math.Vector2,
         pointerPosition: Phaser.Math.Vector2
     ): void {
-        const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition)
+        const targetPosition = this.isInRangeToTrigger(sourcePosition, pointerPosition)
             ? pointerPosition
             : this.getMaxRadiusPosition(player)
 
@@ -175,11 +157,17 @@ export class Ability {
                     },
                 })
                 break
-            case AbilityAction.Projectile:
-                this.triggerProjectile(player, sourcePosition, targetPosition)
+            case AbilityAction.ProjectileFromPlayer:
+                const rotationFromPlayer = Phaser.Math.Angle.Between(
+                    sourcePosition.x,
+                    sourcePosition.y,
+                    pointerPosition.x,
+                    pointerPosition.y
+                )
+                this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationFromPlayer)
                 break
-            case AbilityAction.ProjectileWithRotation:
-                this.triggerProjectile(player, sourcePosition, targetPosition, true)
+            case AbilityAction.ProjectileFromPointer:
+                this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
                 break
         }
     }
