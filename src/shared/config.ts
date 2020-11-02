@@ -73,7 +73,7 @@ export class Config {
     }
 
     public static readonly projectile = {
-        defaultTick: 0.2
+        defaultTickAfter: 0.2
     }
     
 
@@ -316,7 +316,7 @@ export class Config {
             radius: 50,
             lifespan: 1,
             damage: 25,
-            tick: 0.15,
+            tickAfter: 0.15,
             collidingBehaviour: 'multiple',
             drawing: {
                 type: 'primitive',

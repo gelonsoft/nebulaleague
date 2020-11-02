@@ -20,7 +20,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     public name: string
     public fromPlayerId = 'uknown'
     public hittedPlayerIds: Set<string>
-    public tick: number
+    public tickAfter: number
     public tickTimer: number
     public readonly projectileTemplate: ProjectileTemplate
     public drawing: ProjectileDrawing
@@ -33,7 +33,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.scene = scene
         this.name = name
         this.projectileTemplate = projectileTemplate
-        this.tick = projectileTemplate.tick || Config.projectile.defaultTick
+        this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
         this.tickTimer = 0
         this.initPhysics()
         this.initDrawing()
@@ -74,7 +74,7 @@ export class Projectile extends Phaser.GameObjects.Container {
 
         const isSpeed = this.projectileTemplate.speed !== undefined
         const isTriggerAfter = this.projectileTemplate.triggerAfter !== undefined
-        const isTick = this.projectileTemplate.tick !== undefined
+        const isTick = this.projectileTemplate.tickAfter !== undefined
 
         this.body.reset(initialPosition.x, initialPosition.y)
 
@@ -127,7 +127,7 @@ export class Projectile extends Phaser.GameObjects.Container {
                 break
             case "multiple":
                 this.tickTimer += this.scene.game.loop.delta / 1000
-                if (this.tickTimer >= this.tick) {
+                if (this.tickTimer >= this.tickAfter) {
                     this.tickTimer = 0
                     hittedPlayer.hit(this.damage, this.effects)
                 }
@@ -137,7 +137,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     public activate(): void {
-        this.tickTimer = this.tick
+        this.tickTimer = this.tickAfter
         this.setActive(true)
         this.setVisible(true)
         this.body.setEnable(true)

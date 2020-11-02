@@ -176,7 +176,7 @@ export type ProjectileBase = {
     radius: number
     speed?: number
     effects?: Array<EffectModel>
-    tick?: number
+    tickAfter?: number
     triggerAfter?: number
     collidingBehaviour: CollidingBehaviour
     drawing: ProjectileDrawingSpriteModel | ProjectileDrawingPrimitiveModel
