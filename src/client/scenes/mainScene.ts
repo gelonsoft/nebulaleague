@@ -399,7 +399,7 @@ export class MainScene extends Phaser.Scene {
         this.mainControl.update()
         this.playerControl.update()
 
-        // this.playersAIUpdate()
+        this.playersAIUpdate()
 
         // collide with other players
         this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, null, this)

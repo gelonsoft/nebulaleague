@@ -178,6 +178,7 @@ export type ProjectileBase = {
     effects?: Array<EffectModel>
     tick?: number
     triggerAfter?: number
+    collidingBehaviour: CollidingBehaviour
     drawing: ProjectileDrawingSpriteModel | ProjectileDrawingPrimitiveModel
 }
 
@@ -197,17 +198,15 @@ export type ProjectileDrawingPrimitiveModel = {
     strokeAlpha: number
 }
 
-
+export type CollidingBehaviour = 'kill' | 'single' | 'multiple'
 
 
 export type ProjectileTemplate = ProjectileBase & {
     name: ProjectileName
-    className: 'Bullet' | 'BlockWithTick' | 'BlockWithDelay'
 }
 
 export type ProjectileModel = ProjectileBase & {
     fromGroup: ProjectileName
-
 }
 
 

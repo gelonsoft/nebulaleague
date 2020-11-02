@@ -19,9 +19,13 @@ export class Projectile extends Phaser.GameObjects.Container {
     public scene: MainScene
     public name: string
     public fromPlayerId = 'uknown'
+    public hittedPlayerIds: Set<string>
+    public tick: number
+    public tickTimer: number
     public readonly projectileTemplate: ProjectileTemplate
     public drawing: ProjectileDrawing
     public body: Phaser.Physics.Arcade.Body
+    
 
 
     public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
@@ -29,6 +33,8 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.scene = scene
         this.name = name
         this.projectileTemplate = projectileTemplate
+        this.tick = projectileTemplate.tick || Config.projectile.defaultTick
+        this.tickTimer = 0
         this.initPhysics()
         this.initDrawing()
         this.scene.add.existing(this)
@@ -67,11 +73,27 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.activate()
 
         const isSpeed = this.projectileTemplate.speed !== undefined
-        const isTick = this.projectileTemplate.tick !== undefined
         const isTriggerAfter = this.projectileTemplate.triggerAfter !== undefined
-
+        const isTick = this.projectileTemplate.tick !== undefined
 
         this.body.reset(initialPosition.x, initialPosition.y)
+
+        if(isTriggerAfter) {
+            this.scene.tweens.add({
+                targets: this,
+                alpha: { from: 0.2, to: 1 },
+                duration: this.projectileTemplate.triggerAfter * 1000,
+                ease: 'Cubic.easeIn',
+                onStart: (tween, targets, gameObject) => {
+                    this.body.setEnable(false)
+                },
+                onComplete: (tween, targets, gameObject) => {
+                    this.body.setEnable(true)
+                },
+            })
+        }
+
+        
         if(isSpeed) {
             const ux = Math.cos(initialRotation)
             const uy = Math.sin(initialRotation)
@@ -80,7 +102,6 @@ export class Projectile extends Phaser.GameObjects.Container {
             this.body.velocity.y = uy * this.projectileTemplate.speed
         }
       
-
         
         
         this.scene.time.addEvent({
@@ -93,11 +114,30 @@ export class Projectile extends Phaser.GameObjects.Container {
 
 
     public actionOnCollision(hittedPlayer: Player): void {
-        hittedPlayer.health -= this.projectileTemplate.damage
-        this.kill()
+        switch (this.projectileTemplate.collidingBehaviour) {
+            case "kill":
+                hittedPlayer.hit(this.damage, this.effects)
+                this.kill()
+                break
+            case "single":
+                if (!this.hittedPlayerIds.has(hittedPlayer.id)) {
+                    hittedPlayer.hit(this.damage, this.effects)
+                    this.hittedPlayerIds.add(hittedPlayer.id)
+                }
+                break
+            case "multiple":
+                this.tickTimer += this.scene.game.loop.delta / 1000
+                if (this.tickTimer >= this.tick) {
+                    this.tickTimer = 0
+                    hittedPlayer.hit(this.damage, this.effects)
+                }
+                break
+        }
+        
     }
 
     public activate(): void {
+        this.tickTimer = this.tick
         this.setActive(true)
         this.setVisible(true)
         this.body.setEnable(true)
@@ -132,8 +172,6 @@ export class Projectile extends Phaser.GameObjects.Container {
 
 
 
-
-
 export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
     public constructor(scene: MainScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
         super(
@@ -155,7 +193,6 @@ export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
         this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
         this.lineStyle(2, ProjectileDrawingPrimitive.strokeColor, ProjectileDrawingPrimitive.strokeAlpha)
         this.strokeCircle(0, 0, ProjectileDrawingPrimitive.radius)
-        // this.setOrigin(1, 1)
     }
 }
 

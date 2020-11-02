@@ -129,7 +129,6 @@ export class Ability {
             .add(player.body.center)
     }
 
-
     public trigger(
         player: Player,
         sourcePosition: Phaser.Math.Vector2,
@@ -157,7 +156,7 @@ export class Ability {
                     },
                 })
                 break
-            case AbilityAction.ProjectileFromPlayer:
+            case AbilityAction.ProjectileFromPlayer: {
                 const rotationFromPlayer = Phaser.Math.Angle.Between(
                     sourcePosition.x,
                     sourcePosition.y,
@@ -166,6 +165,7 @@ export class Ability {
                 )
                 this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationFromPlayer)
                 break
+            }
             case AbilityAction.ProjectileFromPointer:
                 this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
                 break

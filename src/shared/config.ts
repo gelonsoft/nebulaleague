@@ -72,6 +72,11 @@ export class Config {
         height: 30,
     }
 
+    public static readonly projectile = {
+        defaultTick: 0.2
+    }
+    
+
     public static readonly effect = {
         toFrameName: {
             slowed: 'snail.png',
@@ -225,11 +230,11 @@ export class Config {
     public static readonly projectiles: Record<ProjectileName, ProjectileTemplate> = {
         pistolBullet: {
             name: 'pistolBullet',
-            className: 'Bullet',
             damage: 80,
             speed: 1400,
             lifespan: 0.4,
             radius: 5,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 5,
@@ -238,11 +243,11 @@ export class Config {
         },
         ak47Bullet: {
             name: 'ak47Bullet',
-            className: 'Bullet',
             damage: 70,
             speed: 1200,
             lifespan: 0.45,
             radius: 5,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 5,
@@ -251,11 +256,11 @@ export class Config {
         },
         p90Bullet: {
             name: 'p90Bullet',
-            className: 'Bullet',
             damage: 40,
             speed: 1500,
             lifespan: 0.3,
             radius: 7,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 7,
@@ -264,11 +269,11 @@ export class Config {
         },
         revolverBullet: {
             name: 'revolverBullet',
-            className: 'Bullet',
             damage: 450,
             speed: 100,
             lifespan: 10,
             radius: 8,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 8,
@@ -277,11 +282,11 @@ export class Config {
         },
         thompsonBullet: {
             name: 'thompsonBullet',
-            className: 'Bullet',
             damage: 200,
             speed: 1700,
             lifespan: 0.45,
             radius: 9,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 9,
@@ -290,11 +295,11 @@ export class Config {
         },
         chargedArrowProjectile: {
             name: 'chargedArrowProjectile',
-            className: 'Bullet',
             damage: 80,
             speed: 1200,
             lifespan: 0.5,
             radius: 12,
+            collidingBehaviour: 'kill',
             drawing: {
                 type: 'sprite',
                 radius: 12,
@@ -308,11 +313,11 @@ export class Config {
         },
         flameProjectile: {
             name: 'flameProjectile',
-            className: 'BlockWithTick',
             radius: 50,
             lifespan: 1,
             damage: 25,
             tick: 0.15,
+            collidingBehaviour: 'multiple',
             drawing: {
                 type: 'primitive',
                 radius: 50,
@@ -330,11 +335,11 @@ export class Config {
         },
         rootTipProjectile: {
             name: 'rootTipProjectile',
-            className: 'BlockWithDelay',
             radius: 60,
             damage: 30,
-            lifespan: 0.6,
+            lifespan:1.5,
             triggerAfter: 0.4,
+            collidingBehaviour: 'single',
             drawing: {
                 type: 'primitive',
                 radius: 60,
@@ -351,11 +356,11 @@ export class Config {
         },
         frozenWaveProjectile: {
             name: 'frozenWaveProjectile',
-            className: 'BlockWithDelay',
             radius: 320,
             damage: 10,
             lifespan: 0.6,
             triggerAfter: 0.2,
+            collidingBehaviour: 'single',
             drawing: {
                 type: 'primitive',
                 radius: 320,
@@ -372,11 +377,11 @@ export class Config {
         },
         psychicWaveProjectile: {
             name: 'psychicWaveProjectile',
-            className: 'BlockWithDelay',
             radius: 230,
             damage: 0,
             lifespan: 0.6,
             triggerAfter: 0.2,
+            collidingBehaviour: 'single',
             drawing: {
                 type: 'primitive',
                 radius: 230,
@@ -393,11 +398,11 @@ export class Config {
         },
         lightningWaveProjectile: {
             name: 'lightningWaveProjectile',
-            className: 'BlockWithDelay',
             radius: 260,
             damage: 10,
             lifespan: 0.6,
             triggerAfter: 0.2,
+            collidingBehaviour: 'single',
             drawing: {
                 type: 'primitive',
                 radius: 260,
@@ -414,11 +419,11 @@ export class Config {
         },
         fireWaveProjectile: {
             name: 'fireWaveProjectile',
-            className: 'BlockWithDelay',
             radius: 240,
             damage: 30,
             lifespan: 0.6,
             triggerAfter: 0.2,
+            collidingBehaviour: 'single',
             drawing: {
                 type: 'primitive',
                 radius: 240,
