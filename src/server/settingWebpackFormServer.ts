@@ -1,11 +1,9 @@
 import * as path from 'path'
-import { Express }  from 'express'
+import { Express } from 'express'
 
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const hotMiddleware = require('webpack-hot-middleware')
-
-
 
 export default function settingWebpackFormServer(app: Express): void {
     const config = require(path.resolve('./webpack.dev.config.js'))
@@ -18,5 +16,5 @@ export default function settingWebpackFormServer(app: Express): void {
             serverSideRender: true,
         })
     )
-    app.use(hotMiddleware(compiler))    
+    app.use(hotMiddleware(compiler))
 }

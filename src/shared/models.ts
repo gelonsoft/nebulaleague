@@ -1,13 +1,11 @@
 // GENERAL INTERFACE //
 
-import { Weapon } from "~/client/entities/weapons"
+import { Weapon } from '~/client/entities/weapons'
 
 export type Position = {
     x: number
     y: number
 }
-
-
 
 // PLAYER INTERFACE //
 export enum ControlledBy {
@@ -15,18 +13,11 @@ export enum ControlledBy {
     AIPlayer,
 }
 
-
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
 
-export type WeaponName =
-    | 'pistol'
-    | 'ak47'
-    | 'p90'
-    | 'revolver'
-    | 'thompson'
-
+export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
 
 export type AbilityName =
     | 'blink'
@@ -37,7 +28,6 @@ export type AbilityName =
     | 'psychicWave'
     | 'lightningWave'
     | 'fireWave'
-
 
 export type ProjectileName =
     | 'pistolBullet'
@@ -52,7 +42,6 @@ export type ProjectileName =
     | 'psychicWaveProjectile'
     | 'lightningWaveProjectile'
     | 'fireWaveProjectile'
-
 
 export type ActionName = WeaponName | AbilityName
 
@@ -72,7 +61,6 @@ export type PlayerModel = {
     abilityKey4?: AbilityName
 }
 
-
 export type PlayerConfig = {
     name: string
     weaponPrimaryKey?: WeaponName
@@ -90,20 +78,18 @@ export type PlayerChanged = {
     health?: number
 }
 
-
 export type PlayerDirection = {
     x: number
     y: number
 }
 
-
 export type PlayerAction = {
-    direction?: PlayerDirection,
-    rotation?: number,
-    selectAbility?: AbilityKey,
+    direction?: PlayerDirection
+    rotation?: number
+    selectAbility?: AbilityKey
     action?: WeaponKey
     pointerPosition?: {
-        x: number,
+        x: number
         y: number
     }
 }
@@ -114,7 +100,6 @@ export type PlayerMovement = {
     y: number
     rotation?: number
 }
-
 
 // WEAPONS INTERFACE
 export type LaserModel = {
@@ -131,7 +116,6 @@ export type WeaponModel = {
     laser: LaserModel
 }
 
-
 // ABILITIES INTERFACE
 export enum AbilityDrawingStyle {
     Zone,
@@ -143,7 +127,6 @@ export enum AbilityAction {
     ProjectileFromPlayer,
     ProjectileFromPointer,
 }
-
 
 export type AbilityModel = {
     name: AbilityName
@@ -166,8 +149,6 @@ export type AbilityModel = {
 
 export type ActionModel = WeaponModel | AbilityModel
 
-
-
 // PROJECTILE INTERFACE
 export type ProjectileBase = {
     name: string
@@ -188,7 +169,6 @@ export type ProjectileDrawingSpriteModel = {
     frame: string
 }
 
-
 export type ProjectileDrawingPrimitiveModel = {
     type: 'primitive'
     radius: number
@@ -200,7 +180,6 @@ export type ProjectileDrawingPrimitiveModel = {
 
 export type CollidingBehaviour = 'kill' | 'single' | 'multiple'
 
-
 export type ProjectileTemplate = ProjectileBase & {
     name: ProjectileName
 }
@@ -208,8 +187,6 @@ export type ProjectileTemplate = ProjectileBase & {
 export type ProjectileModel = ProjectileBase & {
     fromGroup: ProjectileName
 }
-
-
 
 export type ProjectileChanged = {
     x?: number
@@ -221,8 +198,6 @@ export type ProjectileChanged = {
     tick?: number
     triggerAfter?: number
 }
-
-
 
 // EFFECT INTERFACE
 export enum EffectKeys {
@@ -241,7 +216,6 @@ export type EffectModel = {
     tick?: number
 }
 
-
 // SERVER INTERFACE
 export type User = {
     name?: string
@@ -259,22 +233,20 @@ export type PlayerSelectionState = {
     gameRoom?: string
 }
 
-
 export type GameStateChanged = {
     created?: {
         players?: Record<string, PlayerModel>
         projectiles?: Record<string, ProjectileModel>
-    },
+    }
     updated?: {
         players?: Record<string, PlayerChanged>
         projectiles?: Record<string, ProjectileChanged>
-    },
+    }
     deleted?: {
         players?: Array<string>
         projectiles?: Array<string>
     }
 }
-
 
 export type GameState = {
     gameMode: string

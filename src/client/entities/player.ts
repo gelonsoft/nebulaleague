@@ -125,7 +125,7 @@ export class Player extends Phaser.GameObjects.Container {
             ability2: this.scene.abilities[playerModel.abilityKey2],
             ability3: this.scene.abilities[playerModel.abilityKey3],
             ability4: this.scene.abilities[playerModel.abilityKey4],
-        } 
+        }
         this.selectedAbilityKey = null
         this.effects = new Set()
         this.burningTime = null
@@ -250,14 +250,14 @@ export class Player extends Phaser.GameObjects.Container {
         const actionTime = this.actionTimes[selectedKey]
 
         let sourceFirePosition: Phaser.Math.Vector2
-        if(selectedKey === 'weaponPrimary') {
+        if (selectedKey === 'weaponPrimary') {
             sourceFirePosition = this.getPrimaryWeaponPosition()
-        } else if(selectedKey === 'weaponSecondary') {
+        } else if (selectedKey === 'weaponSecondary') {
             sourceFirePosition = this.getSecondaryWeaponPosition()
         } else {
             sourceFirePosition = this.body.center
         }
-        
+
         if (actionTime.ready) {
             actionTime.ready = false
             action.trigger(this, sourceFirePosition, targetFirePosition)
@@ -285,7 +285,6 @@ export class Player extends Phaser.GameObjects.Container {
             })
         }
     }
-
 
     public castSelectedAbility(
         selectedAbilityKey: keyof ActionsInterface,
@@ -345,7 +344,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     public addEffects(recieveEffects: Array<EffectModel>): void {
         for (const effectTemplate of recieveEffects) {
-            const appliedEffect = {...effectTemplate}
+            const appliedEffect = { ...effectTemplate }
             this.effects.add(appliedEffect)
             this.handleEffectCreated(appliedEffect)
             this.scene.time.addEvent({
@@ -429,26 +428,23 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public isDead(): boolean {
-        return (this.health <= 0 && this.active)
+        return this.health <= 0 && this.active
     }
-
 
     public update() {
         this.healthBar.x = this.body.center.x - this.healthBar.width / 2
         this.healthBar.y = this.body.top - this.healthBar.height - 6
         this.effectIconsContainer.x = this.body.center.x - this.healthBar.width / 2
         this.effectIconsContainer.y = this.body.top - this.healthBar.height - 36
-        if(this.isDead()) {
+        if (this.isDead()) {
             this.handleDeath()
             this.scene.syncHealth(this)
             this.scene.startDeathTransition(this)
         }
     }
 
-
     public handleDeath() {
         this.setDeathState()
-
 
         this.actionTimes.death.cooldown = this.deathCooldownDelay
         this.actionTimes.death.timerEvent = this.scene.time.addEvent({
@@ -476,7 +472,6 @@ export class Player extends Phaser.GameObjects.Container {
         })
     }
 
-    
     public setDeathState() {
         this.body.setEnable(false)
         this.setActive(false)
@@ -487,8 +482,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.health = this.maxHealth
         this.healthBar.refresh(this.health)
 
-        
-        for (const actionTime of Object.values(this.actionTimes) ) {
+        for (const actionTime of Object.values(this.actionTimes)) {
             actionTime.cooldown = 0
         }
     }
@@ -518,8 +512,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.setVisible(false)
     }
 
-
-    
     public getChanged(): PlayerChanged {
         return {
             x: this.body.center.x,

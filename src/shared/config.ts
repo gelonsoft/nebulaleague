@@ -14,7 +14,6 @@ import {
     ProjectileTemplate,
 } from './models'
 
-
 export class Config {
     private static readonly playerDefaultModel: PlayerModel = {
         name: 'anonymous',
@@ -30,7 +29,6 @@ export class Config {
         name: 'anonymous',
     }
 
-
     public static readonly player = {
         size: 52,
         accelerationSteady: 5000,
@@ -40,7 +38,7 @@ export class Config {
         defaultHealth: 1000,
         toOtherDamage: 100,
         defaultConfig: Config.playerDefaultConfig,
-        defaultModel: Config.playerDefaultModel
+        defaultModel: Config.playerDefaultModel,
     }
 
     public static readonly world = {
@@ -73,9 +71,8 @@ export class Config {
     }
 
     public static readonly projectile = {
-        defaultTickAfter: 0.2
+        defaultTickAfter: 0.2,
     }
-    
 
     public static readonly effect = {
         toFrameName: {
@@ -85,7 +82,7 @@ export class Config {
             stunned: 'brain-freeze.png',
             burned: 'flame.png',
             freezed: 'frozen-block.png',
-        }
+        },
     }
 
     public static readonly weapons: Record<WeaponName, WeaponModel> = {
@@ -98,7 +95,7 @@ export class Config {
                 color: 0xff5252,
                 width: 3,
                 alpha: 0.9,
-            }
+            },
         },
         ak47: {
             name: 'ak47',
@@ -109,7 +106,7 @@ export class Config {
                 color: 0x00f8f8,
                 width: 3,
                 alpha: 0.9,
-            }
+            },
         },
         p90: {
             name: 'p90',
@@ -120,7 +117,7 @@ export class Config {
                 color: 0x00ff00,
                 width: 3,
                 alpha: 0.9,
-            }
+            },
         },
         revolver: {
             name: 'revolver',
@@ -131,7 +128,7 @@ export class Config {
                 color: 0x00ff00,
                 width: 3,
                 alpha: 0.9,
-            }
+            },
         },
         thompson: {
             name: 'thompson',
@@ -142,8 +139,8 @@ export class Config {
                 color: 0x0000ff,
                 width: 3,
                 alpha: 0.9,
-            }
-        }
+            },
+        },
     }
 
     public static readonly abilities: Record<AbilityName, AbilityModel> = {
@@ -291,7 +288,7 @@ export class Config {
                 type: 'sprite',
                 radius: 9,
                 frame: 'beams-purple1.png',
-            }
+            },
         },
         chargedArrowProjectile: {
             name: 'chargedArrowProjectile',
@@ -305,11 +302,13 @@ export class Config {
                 radius: 12,
                 frame: 'charged_arrow_bullet.png',
             },
-            effects: [{
-                name: EffectKeys.Slow,
-                value: 0.8,
-                duration: 2,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Slow,
+                    value: 0.8,
+                    duration: 2,
+                },
+            ],
         },
         flameProjectile: {
             name: 'flameProjectile',
@@ -326,18 +325,20 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Burn,
-                value: 10,
-                duration: 3,
-                tick: 0.5,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Burn,
+                    value: 10,
+                    duration: 3,
+                    tick: 0.5,
+                },
+            ],
         },
         rootTipProjectile: {
             name: 'rootTipProjectile',
             radius: 60,
             damage: 30,
-            lifespan:1.5,
+            lifespan: 1.5,
             triggerAfter: 0.4,
             collidingBehaviour: 'single',
             drawing: {
@@ -348,11 +349,13 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Paralyze,
-                value: 0.8,
-                duration: 3,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Paralyze,
+                    value: 0.8,
+                    duration: 3,
+                },
+            ],
         },
         frozenWaveProjectile: {
             name: 'frozenWaveProjectile',
@@ -369,11 +372,13 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Freeze,
-                value: 0.8,
-                duration: 4,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Freeze,
+                    value: 0.8,
+                    duration: 4,
+                },
+            ],
         },
         psychicWaveProjectile: {
             name: 'psychicWaveProjectile',
@@ -390,11 +395,13 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Stun,
-                value: 0.8,
-                duration: 1.5,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Stun,
+                    value: 0.8,
+                    duration: 1.5,
+                },
+            ],
         },
         lightningWaveProjectile: {
             name: 'lightningWaveProjectile',
@@ -411,11 +418,13 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Paralyze,
-                value: 0.8,
-                duration: 2.5,
-            }]
+            effects: [
+                {
+                    name: EffectKeys.Paralyze,
+                    value: 0.8,
+                    duration: 2.5,
+                },
+            ],
         },
         fireWaveProjectile: {
             name: 'fireWaveProjectile',
@@ -432,12 +441,14 @@ export class Config {
                 fillAlpha: 0.6,
                 strokeAlpha: 0.8,
             },
-            effects: [{
-                name: EffectKeys.Burn,
-                value: 10,
-                duration: 1,
-                tick: 0.5,
-            }]
-        }
+            effects: [
+                {
+                    name: EffectKeys.Burn,
+                    value: 10,
+                    duration: 1,
+                    tick: 0.5,
+                },
+            ],
+        },
     }
 }

@@ -13,7 +13,7 @@ import {
     GameState,
     ActionKey,
     WeaponKey,
-    AbilityKey
+    AbilityKey,
 } from '~/shared/models'
 import { Event } from '~/shared/events'
 import { MyGame } from '../index'
@@ -101,7 +101,8 @@ export class MainScene extends Phaser.Scene {
                     return new Player(this, playerModel)
                 })
             )
-        this.player = this.players.getChildren()
+        this.player = this.players
+            .getChildren()
             .find((player: Player) => player.id === this.client.id) as Player
 
         this.settingCamera()
@@ -193,7 +194,8 @@ export class MainScene extends Phaser.Scene {
                     for (const [playerIdChanged, playerChanged] of Object.entries(
                         gameStateReceived.updated.players
                     )) {
-                        const player = this.players.getChildren()
+                        const player = this.players
+                            .getChildren()
                             .find((player: Player) => player.id === playerIdChanged)
                         Object.assign(player, playerChanged)
                     }
@@ -240,7 +242,6 @@ export class MainScene extends Phaser.Scene {
             this.events.emit(Event.actionsCollodownChanged, selectedActionKey, actionTime)
         }
     }
-
 
     public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
         if (player.id === this.player.id) {
@@ -318,10 +319,7 @@ export class MainScene extends Phaser.Scene {
         player2.hit(Config.player.toOtherDamage)
     }
 
-    public handleEnemyProjectileCollide(
-        hittedPlayer: Player,
-        projectile: Projectile
-    ): void {
+    public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
         if (hittedPlayer.id !== projectile.fromPlayerId) {
             projectile.actionOnCollision(hittedPlayer)
         }

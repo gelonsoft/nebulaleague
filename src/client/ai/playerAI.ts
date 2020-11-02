@@ -176,7 +176,7 @@ export class PlayerAI {
         let angleStart = 0
         for (const i of [...Array(7).keys()]) {
             const index = i + 1
-            const angleEnd = ((index * Math.PI) / 4) 
+            const angleEnd = (index * Math.PI) / 4
             if (velocity.angle() >= angleStart && velocity.angle() <= angleEnd) {
                 choosenDirectionIndex = index
             }
@@ -191,11 +191,9 @@ export class PlayerAI {
 
     public setPlayersInHittableRange(): void {
         const playersInRange: Array<PlayerAIActionsInterface> = []
-        const actionsKeysReady = Object.keys(this.player.actions).filter(
-            (key: ActionKey) => {
-                return this.player.actionTimes[key].ready
-            }
-        )
+        const actionsKeysReady = Object.keys(this.player.actions).filter((key: ActionKey) => {
+            return this.player.actionTimes[key].ready
+        })
 
         for (const playerInViewRange of this.playersInViewRange) {
             if (playerInViewRange.id !== this.player.id) {

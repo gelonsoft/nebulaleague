@@ -1,42 +1,40 @@
 export class ServerEvent {
-    public static readonly connected = "connection"
-    public static readonly disconnected = "disconnect"
-    public static readonly lobyInit = "loby:init:server"
-    public static readonly lobyEnd = "loby:end:server"
-    public static readonly lobyStart = "loby:start:server"
-    public static readonly playerSelectionInit = "playerSelection:init:server"
-    public static readonly playerSelectionEnd = "playerSelection:end:server"
-    public static readonly playerSelectionStart = "playerSelection:start:server"
-    public static readonly gameInit = "game:init:server"
-    public static readonly gameEnd = "game:end:server"
-    public static readonly gameStart = "game:start:server"
-    public static readonly gameUpdated = "game:updated:server"
-    public static readonly gameRefreshServer = "game:refreshServer:server"
-    public static readonly gameQuit = "game:quit:server"
-    public static readonly gameJoined = "game:joined:server"
-    public static readonly gameAction = "game:action:server"
-    public static readonly gameNewHost = "game:newHost:server"
-    
+    public static readonly connected = 'connection'
+    public static readonly disconnected = 'disconnect'
+    public static readonly lobyInit = 'loby:init:server'
+    public static readonly lobyEnd = 'loby:end:server'
+    public static readonly lobyStart = 'loby:start:server'
+    public static readonly playerSelectionInit = 'playerSelection:init:server'
+    public static readonly playerSelectionEnd = 'playerSelection:end:server'
+    public static readonly playerSelectionStart = 'playerSelection:start:server'
+    public static readonly gameInit = 'game:init:server'
+    public static readonly gameEnd = 'game:end:server'
+    public static readonly gameStart = 'game:start:server'
+    public static readonly gameUpdated = 'game:updated:server'
+    public static readonly gameRefreshServer = 'game:refreshServer:server'
+    public static readonly gameQuit = 'game:quit:server'
+    public static readonly gameJoined = 'game:joined:server'
+    public static readonly gameAction = 'game:action:server'
+    public static readonly gameNewHost = 'game:newHost:server'
 }
 
 export class ClientEvent {
-    public static readonly lobyInit = "loby:init:client"
-    public static readonly lobyEnd = "loby:end:client"
-    public static readonly lobyStart = "loby:start:client"
-    public static readonly playerSelectionInit = "playerSelection:init:client"
-    public static readonly playerSelectionEnd = "playerSelection:end:client"
-    public static readonly playerSelectionStart = "playerSelection:start:client"
-    public static readonly gameInit = "game:init:client"
-    public static readonly gameEnd = "game:end:client"
-    public static readonly gameStart = "game:start:client"
-    public static readonly gameUpdated = "game:updated:client"
-    public static readonly gameRefreshServer = "game:refreshServer:client"
-    public static readonly gameQuit = "game:quit:client"
-    public static readonly gameJoined = "game:joined:client"
-    public static readonly gameAction = "game:action:client"
-    public static readonly gameNewHost = "game:newHost:client"
+    public static readonly lobyInit = 'loby:init:client'
+    public static readonly lobyEnd = 'loby:end:client'
+    public static readonly lobyStart = 'loby:start:client'
+    public static readonly playerSelectionInit = 'playerSelection:init:client'
+    public static readonly playerSelectionEnd = 'playerSelection:end:client'
+    public static readonly playerSelectionStart = 'playerSelection:start:client'
+    public static readonly gameInit = 'game:init:client'
+    public static readonly gameEnd = 'game:end:client'
+    public static readonly gameStart = 'game:start:client'
+    public static readonly gameUpdated = 'game:updated:client'
+    public static readonly gameRefreshServer = 'game:refreshServer:client'
+    public static readonly gameQuit = 'game:quit:client'
+    public static readonly gameJoined = 'game:joined:client'
+    public static readonly gameAction = 'game:action:client'
+    public static readonly gameNewHost = 'game:newHost:client'
 }
-
 
 export class Event {
     public static readonly gameReady = 'gameReady'
@@ -56,5 +54,4 @@ export class Event {
     public static readonly deathCooldownChanged = 'deathCooldownChanged'
     public static readonly ProjectileFired = 'projectileFired'
     public static readonly ProjectileKilled = 'projectileKilled'
-    
 }

@@ -1,4 +1,4 @@
-// @ts-nocheck 
+// @ts-nocheck
 import 'module-alias/register'
 import * as http from 'http'
 import * as express from 'express'
@@ -10,13 +10,11 @@ import settingWebpackFormServer from './settingWebpackFormServer'
 import { GameServer } from './gameServer'
 DotenFlow.config()
 
-
 const app = express()
 app.set('port', process.env.PORT || 3000)
 app.set('debug', process.env.DEBUG == 'true' || false)
 
 const httpServer = new http.Server(app)
-
 
 if (app.get('debug')) {
     settingWebpackFormServer(app)

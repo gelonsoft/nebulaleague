@@ -2,7 +2,6 @@ import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
 import { Event as MyEvent } from '~/shared/events'
 
-
 export class LobyScene extends Phaser.Scene {
     public game: MyGame
     public client: Client
@@ -53,15 +52,13 @@ export class LobyScene extends Phaser.Scene {
             .createFromCache('mainMenuHTML')
             .setPosition(this.scale.width / 2, this.scale.height / 2)
 
-        this.menuHTML.getChildByID('playButton').addEventListener(
-            'click',
-            (event: Event) => {
-                const payerName = (this.menuHTML.getChildByID('playerNameInput') as HTMLInputElement).value
-                this.client.emitLobyStart({
-                    name: payerName,
-                    gameMode: 'ffa',
-                })
-            }) 
+        this.menuHTML.getChildByID('playButton').addEventListener('click', (event: Event) => {
+            const payerName = (this.menuHTML.getChildByID('playerNameInput') as HTMLInputElement).value
+            this.client.emitLobyStart({
+                name: payerName,
+                gameMode: 'ffa',
+            })
+        })
     }
 
     create(): void {

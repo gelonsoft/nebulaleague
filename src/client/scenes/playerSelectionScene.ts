@@ -291,7 +291,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.client.emitPlayerSelectionInit()
         this.playerConfig = {
             ...Config.player.defaultConfig,
-            ...JSON.parse(window.localStorage.getItem('playerConfig')) as PlayerConfig,
+            ...(JSON.parse(window.localStorage.getItem('playerConfig')) as PlayerConfig),
             name: this.client.lobyUser.name,
         }
 
@@ -351,7 +351,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
 
         this.input.on('dragleave', () => {})
-    } 
+    }
 
     setActivePickedSlot(gameObject: SlotBaseContainer) {
         const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
@@ -414,8 +414,16 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         const slotContainer = this.add.container(slotMarginLeft, 0, [weaponsContainer, abilitiesContainer])
 
-        const defaultWeponItem: Item = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Weapon }
-        const defaultAbilityItem: Item = { key: 'uncertainity', frame: 'uncertainty.png', type: ItemType.Ability }
+        const defaultWeponItem: Item = {
+            key: 'uncertainity',
+            frame: 'uncertainty.png',
+            type: ItemType.Weapon,
+        }
+        const defaultAbilityItem: Item = {
+            key: 'uncertainity',
+            frame: 'uncertainty.png',
+            type: ItemType.Ability,
+        }
 
         const weaponPrimaryContainer = new SelectedSlotContainer(
             this,
@@ -526,7 +534,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             (slot: SelectedSlotContainer) => slot.slotTarget
         ).length
 
-        const button  = this.playButtonDOM.node.children[0] as HTMLButtonElement
+        const button = this.playButtonDOM.node.children[0] as HTMLButtonElement
         if (selectedWeaponCount + selectedAbilityCount < 6) {
             button.disabled = true
             button.title = 'Drag And Drop slots'
