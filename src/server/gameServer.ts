@@ -11,6 +11,7 @@ import {
     User,
     PlayerConfig,
     GameStateChanged,
+    GameStateEntities,
 } from '~/shared/models'
 
 import { Config } from '~/shared/config'
@@ -165,7 +166,7 @@ export class GameServer {
         if (gameStateChanged.deleted) {
             for (const [keyEntity, idKeys] of Object.entries(gameStateChanged.deleted)) {
                 for (const key of idKeys) {
-                    delete (gameState[keyEntity] as Record<string, unknown>)[key]
+                    delete gameState[keyEntity as keyof GameStateEntities][key]
                 }
             }
         }

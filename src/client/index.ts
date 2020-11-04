@@ -19,6 +19,7 @@ export class MyGame extends Phaser.Game {
     }
 }
 
+
 export class PhaserSpaceGame {
     private game: MyGame
     constructor() {
@@ -62,8 +63,6 @@ export class PhaserSpaceGame {
         })
 
         this.game.scene.start('bootScene')
-        window['a'] = this.game
-
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight)
         })

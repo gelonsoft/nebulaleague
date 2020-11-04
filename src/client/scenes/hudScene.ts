@@ -113,9 +113,6 @@ export class HudScene extends Phaser.Scene {
     }
 
     public init(): void {
-        if (this.game.debug) {
-            window['h'] = this
-        }
         window.addEventListener(
             'resize',
             () => {

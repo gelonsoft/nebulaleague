@@ -3,7 +3,7 @@
         "target": "es2016",
         "module": "commonjs",
         "sourceMap": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictNullChecks": false,
         "baseUrl": ".",
         "rootDir": "./src",
@@ -24,8 +24,7 @@
 	    "./src/**/*",
     ],
     "exclude": [
-        "node_module",
-        "./src/client/ai/**/*.ts"
+        "node_module"
     ]
 }
 

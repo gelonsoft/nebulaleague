@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { ProjectileName, WeaponModel } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { MainScene } from '~/client/scenes/mainScene'
@@ -72,13 +73,9 @@ export class Weapon {
         this.laserGraphics.clear()
         this.laserGraphics.strokeLineShape(line)
     }
-    public clearDraw() {}
+    public clearDraw() { }
 }
 
 export function buildWeapons(scene: MainScene): Record<string, Weapon> {
-    const weapons: Record<string, Weapon> = {}
-    for (const [key, weaponConfig] of Object.entries(Config.weapons)) {
-        weapons[key] = new Weapon(scene, weaponConfig)
-    }
-    return weapons
+    return _.mapValues(Config.weapons, config => new Weapon(scene, config))
 }

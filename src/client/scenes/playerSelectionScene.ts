@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { AbilityName, ActionModel, ActionName, PlayerConfig, WeaponName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
@@ -215,7 +216,7 @@ export function createSlotsContainer(
     columnCount: number
 ): [Phaser.GameObjects.Container, Record<string, SlotContainer>] {
     const slotsContainer = new Phaser.GameObjects.Container(scene, 0, 0)
-    const slotActivated = {}
+    const slotActivated: Record<string, SlotContainer> = {}
 
     Object.values(itemsConfig).forEach((config: ActionModel, index) => {
         const row = index % columnCount
@@ -239,13 +240,13 @@ export function createSlotsContainer(
             ability4: scene.playerConfig.abilityKey4,
         }
 
-        for (const [key, value] of Object.entries(weaponKeys)) {
+        for (const [key, value] of _.entries(weaponKeys)) {
             if (value === config.name) {
                 slotActivated[key] = slotContainer
                 slotContainer.disable()
             }
         }
-        for (const [key, value] of Object.entries(abilityKeys)) {
+        for (const [key, value] of _.entries(abilityKeys)) {
             if (value === config.name) {
                 slotActivated[key] = slotContainer
                 slotContainer.disable()
@@ -309,46 +310,55 @@ export class PlayerSelectionScene extends Phaser.Scene {
             this.scene.sleep()
         })
         this.initDrag()
-
-        if (this.game.debug) {
-            window['playerSelectionMenu'] = this
-        }
     }
 
     initDrag() {
-        this.input.on('drag', (pointer, gameObject: SlotBaseContainer, dragX: number, dragY: number) => {
-            gameObject.x = dragX
-            gameObject.y = dragY
-            this.setActivePickedSlot(gameObject)
-            for (const slot of this.activatedPickedSlot) {
-                slot.handleDragOn()
-            }
-        })
-
-        this.input.on('dragend', (pointer, gameObject: SlotContainer, dropped) => {
-            if (!dropped || this.draggedSlot.item.type !== gameObject.item.type) {
-                gameObject.x = gameObject.input.dragStartX
-                gameObject.y = gameObject.input.dragStartY
-            } else {
-                if (this.draggedSlot.slotTarget !== undefined) {
-                    this.draggedSlot.slotTarget.enable()
+        this.input.on(
+            'drag',
+            (_pointer: Phaser.Math.Vector2, gameObject: SlotBaseContainer, dragX: number, dragY: number) => {
+                gameObject.x = dragX
+                gameObject.y = dragY
+                this.setActivePickedSlot(gameObject)
+                for (const slot of this.activatedPickedSlot) {
+                    slot.handleDragOn()
                 }
-
-                gameObject.x = gameObject.initialX
-                gameObject.y = gameObject.initialY
-                gameObject.disable()
-
-                this.draggedSlot.syncTarget(gameObject)
             }
-            for (const slot of this.activatedPickedSlot) {
-                slot.handleDragOff()
-            }
-            this.setReadyButton()
-        })
+        )
 
-        this.input.on('dragenter', (pointer, gameObject, dropZone: Phaser.GameObjects.Zone) => {
-            this.draggedSlot = dropZone.parentContainer as SelectedSlotContainer
-        })
+        this.input.on(
+            'dragend',
+            (_pointer: Phaser.Math.Vector2, gameObject: SlotContainer, dropped: boolean) => {
+                if (!dropped || this.draggedSlot.item.type !== gameObject.item.type) {
+                    gameObject.x = gameObject.input.dragStartX
+                    gameObject.y = gameObject.input.dragStartY
+                } else {
+                    if (this.draggedSlot.slotTarget !== undefined) {
+                        this.draggedSlot.slotTarget.enable()
+                    }
+
+                    gameObject.x = gameObject.initialX
+                    gameObject.y = gameObject.initialY
+                    gameObject.disable()
+
+                    this.draggedSlot.syncTarget(gameObject)
+                }
+                for (const slot of this.activatedPickedSlot) {
+                    slot.handleDragOff()
+                }
+                this.setReadyButton()
+            }
+        )
+
+        this.input.on(
+            'dragenter',
+            (
+                _pointer: Phaser.Math.Vector2,
+                _gameObject: SlotBaseContainer,
+                dropZone: Phaser.GameObjects.Zone
+            ) => {
+                this.draggedSlot = dropZone.parentContainer as SelectedSlotContainer
+            }
+        )
 
         this.input.on('dragleave', () => {})
     }
@@ -514,7 +524,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .setPosition(this.slotContainer.width / 2, this.slotContainer.height + 20)
 
         this.playButtonDOM.addListener('click')
-        this.playButtonDOM.on('click', (event) => {
+        this.playButtonDOM.on('click', (_event: Event) => {
             this.start()
         })
         this.setReadyButton()
@@ -560,7 +570,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .setPosition(gameContainerX, gameContainerY)
 
         if (this.game.debug) {
-            window['menu'] = this
             this.start()
         }
     }

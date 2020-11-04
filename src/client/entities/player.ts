@@ -1,7 +1,7 @@
 import 'phaser'
+import * as _ from 'lodash'
 import { MainScene } from '~/client/scenes/mainScene'
 import { Config } from '~/shared/config'
-import { values } from 'lodash'
 import {
     PlayerDirection,
     PlayerModel,
@@ -42,7 +42,6 @@ type ActionTimesInterface = {
     death: ActionTimeInterface
 }
 
-type ActionType = Weapon | Ability
 interface ActionsInterface {
     weaponPrimary: Weapon
     weaponSecondary: Weapon
@@ -52,12 +51,6 @@ interface ActionsInterface {
     ability4: Ability
 }
 
-export interface ActionInterface {
-    draw(sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2, isLaserReady?: boolean)
-    cleaDraw(): void
-    trigger(player: Player, sourcePosition: Phaser.Math.Vector2, pointerPosition: Phaser.Math.Vector2): void
-    rangeDistance: number
-}
 
 export class Player extends Phaser.GameObjects.Container {
     public body: Phaser.Physics.Arcade.Body
@@ -129,10 +122,6 @@ export class Player extends Phaser.GameObjects.Container {
         this.selectedAbilityKey = null
         this.effects = new Set()
         this.burningTime = null
-
-        if (this.scene.game.debug) {
-            window[`${this.id}`] = this
-        }
     }
 
     public initPlayer(): void {
@@ -481,8 +470,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.effectIconsContainer.setVisible(false)
         this.health = this.maxHealth
         this.healthBar.refresh(this.health)
-
-        for (const actionTime of Object.values(this.actionTimes)) {
+        for (const actionTime of _.values(this.actionTimes)) {
             actionTime.cooldown = 0
         }
     }

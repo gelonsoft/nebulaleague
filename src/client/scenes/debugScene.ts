@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { MainScene } from '~/client/scenes/mainScene'
 import { MyGame } from '~/client/index'
 import { DebugControl } from '~/client/controls'

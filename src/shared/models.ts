@@ -1,7 +1,4 @@
 // GENERAL INTERFACE //
-
-import { Weapon } from '~/client/entities/weapons'
-
 export type Position = {
     x: number
     y: number
@@ -248,11 +245,14 @@ export type GameStateChanged = {
     }
 }
 
-export type GameState = {
-    gameMode: string
-    hostId?: string
+export type GameStateEntities = {
     players: Record<string, PlayerModel>
     projectiles: Record<string, ProjectileModel>
+}
+
+export type GameState =  GameStateEntities & {
+    gameMode: string
+    hostId?: string
 }
 
 export class Test {

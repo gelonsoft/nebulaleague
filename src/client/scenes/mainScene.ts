@@ -1,6 +1,6 @@
+import * as _ from 'lodash'
 import { diff } from 'deep-object-diff'
 import { Config } from '~/shared/config'
-import { pickBy, isEmpty } from 'lodash'
 import {
     Position,
     PlayerModel,
@@ -8,12 +8,8 @@ import {
     PlayerConfig,
     PlayerChanged,
     ProjectileChanged,
-    ProjectileModel,
     GameStateChanged,
-    GameState,
     ActionKey,
-    WeaponKey,
-    AbilityKey,
 } from '~/shared/models'
 import { Event } from '~/shared/events'
 import { MyGame } from '../index'
@@ -25,7 +21,6 @@ import { Consumable, RandomItem } from '~/client/entities/consumables'
 import { Projectiles, Projectile } from '~/client/entities/projectiles'
 import { Weapon, buildWeapons } from '~/client/entities/weapons'
 import { buildAbilities, Ability } from '~/client/entities/abilities'
-import { GameObjects } from 'phaser'
 
 export class MainScene extends Phaser.Scene {
     public game: MyGame
@@ -76,8 +71,6 @@ export class MainScene extends Phaser.Scene {
 
         if (this.game.debug) {
             this.scene.run('debugScene', this)
-            window['p'] = this.player
-            window['m'] = this
         }
 
         this.playerPrevious = null
@@ -352,18 +345,18 @@ export class MainScene extends Phaser.Scene {
             ProjectileChanged
         >
 
-        const isPlayersChanged = Object.keys(playerChanged).length > 0
-        const isProjectilesChanged = Object.keys(projectilesChanged).length > 0
+        const isPlayersChanged = _.keys(playerChanged).length > 0
+        const isProjectilesChanged = _.keys(projectilesChanged).length > 0
         const gameStatedUpdated: GameStateChanged = {}
 
         gameStatedUpdated.updated = {}
         gameStatedUpdated.deleted = {}
 
         if (isProjectilesChanged) {
-            const projectilesUpdated = pickBy(projectilesChanged, (value) => value !== undefined)
-            const projectilesDeleted = Object.keys(pickBy(projectilesChanged, (value) => value === undefined))
+            const projectilesUpdated = _.pickBy(projectilesChanged, (value) => value !== undefined)
+            const projectilesDeleted = _.keys(_.pickBy(projectilesChanged, (value) => value === undefined))
 
-            if (Object.keys(projectilesUpdated).length > 0) {
+            if (_.keys(projectilesUpdated).length > 0) {
                 gameStatedUpdated.updated.projectiles = projectilesUpdated
             }
 
@@ -378,19 +371,19 @@ export class MainScene extends Phaser.Scene {
             }
         }
 
-        if (isEmpty(gameStatedUpdated.updated)) {
+        if (_.isEmpty(gameStatedUpdated.updated)) {
             delete gameStatedUpdated.updated
         }
-        if (isEmpty(gameStatedUpdated.deleted)) {
+        if (_.isEmpty(gameStatedUpdated.deleted)) {
             delete gameStatedUpdated.deleted
         }
 
         return gameStatedUpdated
     }
 
-    public update(time: number, delta: number): void {
+    public update(): void {
         this.playerCurrent = this.player.getChanged()
-        for (const name of Object.keys(this.projectilesCurrent)) {
+        for (const name of _.keys(this.projectilesCurrent)) {
             this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name).getChanged()
         }
 
@@ -428,6 +421,6 @@ export class MainScene extends Phaser.Scene {
         this.client.emitGameUpdated()
 
         this.playerPrevious = this.playerCurrent
-        this.projectilesPrevious = Object.assign({}, this.projectilesCurrent)
+        this.projectilesPrevious = _.clone(this.projectilesCurrent)
     }
 }

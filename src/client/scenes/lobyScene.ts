@@ -30,7 +30,6 @@ export class LobyScene extends Phaser.Scene {
         })
 
         if (this.game.debug) {
-            window['menu'] = this
             this.client.emitLobyStart({
                 name: 'defaultName',
                 gameMode: 'ffa',

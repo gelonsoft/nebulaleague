@@ -7,6 +7,8 @@ import { PlayerAIConfig } from '~/client/ai/playerConfigAI'
 import { Weapon } from '~/client/entities/weapons'
 import { Ability } from '~/client/entities/abilities'
 import { Projectiles } from '~/client/entities/projectiles'
+import * as _ from 'lodash'
+
 
 export const SEEK_BEHAVIOUR = 'seek'
 export const FLEE_BEHAVIOUR = 'flee'
@@ -85,10 +87,6 @@ export class PlayerAI {
             },
             loop: true,
         })
-
-        if (this.scene.game.debug) {
-            window[`ia-${player.id}`] = this
-        }
     }
 
     public buildTree(): IBehaviorTreeNode {
@@ -268,10 +266,12 @@ export class PlayerAI {
     }
 
     public doMoveInCombat(choosenTarget: PlayerAIActionsInterface): void {
-        const actionsKeyRange = Object.keys(this.player.actions)
+        // TODO: lodash refactoring
+        const actionsKeyRange: Array<Array<number>> = Object.keys(this.player.actions)
             .filter((key: ActionKey) => this.player.actionTimes[key].ready)
-            .map((key: ActionKey) => [key, this.player.actions[key].rangeDistance] as unknown)
-            .sort((action1, action2) => action2[1] - action1[1])
+            .map((key: ActionKey) => [key, this.player.actions[key].rangeDistance])
+            .sort((action1: [ActionKey, number], action2: [ActionKey, number]) => action2[1] - action1[1]) as Array<Array<number>>
+        
 
         const rondamFleeing =
             Phaser.Math.RND.realInRange(...this.fleeAfterSecondRange) * Math.random() * 2 <=

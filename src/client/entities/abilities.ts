@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { AbilityDrawingStyle, AbilityModel, AbilityAction, ProjectileName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { MainScene } from '~/client/scenes/mainScene'
@@ -174,9 +175,5 @@ export class Ability {
 }
 
 export function buildAbilities(scene: MainScene): Record<string, Ability> {
-    const abilities = {}
-    for (const [key, config] of Object.entries(Config.abilities)) {
-        abilities[key] = new Ability(scene, config)
-    }
-    return abilities
+    return _.mapValues(Config.abilities, config => new Ability(scene, config))
 }

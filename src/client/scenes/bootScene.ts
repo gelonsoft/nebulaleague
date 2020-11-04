@@ -13,10 +13,6 @@ export class BootScene extends Phaser.Scene {
     }
 
     init(): void {
-        if (this.game.debug) {
-            window['b'] = this
-        }
-
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault()
         }
@@ -34,7 +30,7 @@ export class BootScene extends Phaser.Scene {
         // pass value to change the loading bar fill
         this.load.on(
             'progress',
-            (value) => {
+            (value: number) => {
                 this.progressBar.clear()
                 this.progressBar.fillStyle(0x88e453, 1)
                 this.progressBar.fillRect(
