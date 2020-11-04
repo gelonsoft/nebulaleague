@@ -4,6 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
 
 
@@ -24,8 +25,7 @@ module.exports = {
         extensions: ['.ts', '.js'],
         alias: {
             phaser: phaser,
-            "~": path.resolve(__dirname, 'src/client'),
-            "~/shared": path.resolve(__dirname, 'src/shared'),
+            "~": path.resolve(__dirname, 'src'),
         }
     },
     module: {
@@ -82,5 +82,9 @@ module.exports = {
             DEBUG: process.env.DEBUG || false
         }),
         new MiniCssExtractPlugin({filename: 'css/mystyles.css'}),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+        }),
     ]
 }

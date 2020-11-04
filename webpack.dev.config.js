@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
 const phaser = path.join(pathToPhaser, "dist/phaser.js")
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('dotenv-flow').config()
 
 
@@ -89,5 +90,10 @@ module.exports = {
             DEBUG: process.env.DEBUG || true
         }),
         new MiniCssExtractPlugin({filename: 'css/mystyles.css'}),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'server',
+            port: 8888,
+            openAnalyzer: false,
+        }),
     ]
 }
