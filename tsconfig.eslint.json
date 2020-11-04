@@ -4,12 +4,12 @@
     "compilerOptions": {
         // ensure that nobody can accidentally use this config for a build
         "noEmit": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictNullChecks": false
         
     },
     "include": [
         // whatever paths you intend to lint
-        "src/**/*.ts"
+	    "./src/**/*",
     ]
 }
