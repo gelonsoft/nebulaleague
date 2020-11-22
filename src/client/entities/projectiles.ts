@@ -1,8 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import {
-    ProjectileModel,
-    EffectModel,
     ProjectileChanged,
     ProjectileName,
     ProjectileTemplate,
@@ -69,28 +67,24 @@ export class Projectile extends Phaser.GameObjects.Container {
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
         this.activate()
 
-        const isSpeed = this.projectileTemplate.speed !== undefined
-        const isTriggerAfter = this.projectileTemplate.triggerAfter !== undefined
-        const isTick = this.projectileTemplate.tickAfter !== undefined
-
         this.body.reset(initialPosition.x, initialPosition.y)
 
-        if (isTriggerAfter) {
+        if (this.projectileTemplate.triggerAfter) {
             this.scene.tweens.add({
                 targets: this,
                 alpha: { from: 0.2, to: 1 },
                 duration: this.projectileTemplate.triggerAfter * 1000,
                 ease: 'Cubic.easeIn',
-                onStart: (tween, targets, gameObject) => {
+                onStart: (_tween, _targets, _gameObject) => {
                     this.body.setEnable(false)
                 },
-                onComplete: (tween, targets, gameObject) => {
+                onComplete: (_tween, _targets, _gameObject) => {
                     this.body.setEnable(true)
                 },
             })
         }
 
-        if (isSpeed) {
+        if (this.projectileTemplate.speed) {
             const ux = Math.cos(initialRotation)
             const uy = Math.sin(initialRotation)
             this.setRotation(initialRotation + Math.PI / 2)
@@ -182,8 +176,8 @@ export class Projectiles {
     public projectileByIds: Map<string, Projectile>
     public scene: MainScene
     constructor(scene: MainScene) {
-        this.projectiles = new Map<string, Phaser.Physics.Arcade.Group>()
-        this.projectileByIds = new Map<string, Projectile>()
+        this.projectiles = new Map<ProjectileName, Phaser.Physics.Arcade.Group>()
+        this.projectileByIds = new Map<ProjectileName, Projectile>()
         this.scene = scene
 
         this.addProjectile(Config.projectiles.pistolBullet, 100)
@@ -229,9 +223,9 @@ export class Projectiles {
 
     public getProjectile(projectileNameModel: string): Projectile {
         const projectileNameGroup = projectileNameModel.split('-')[0]
-
+        this.projectiles
         const projectile = this.projectiles
-            .get(projectileNameGroup)
+            .get(projectileNameGroup)!
             .getChildren()
             .find((projectile: Projectile) => projectile.name === projectileNameModel) as Projectile
 
@@ -244,11 +238,11 @@ export class Projectiles {
         position: Phaser.Math.Vector2,
         rotation?: number
     ): void {
-        const projectileGroup = this.projectiles.get(fromProjectilesGroup)
+        const projectileGroup = this.projectiles.get(fromProjectilesGroup)!
         const projectile = projectileGroup.getFirstDead() as Projectile
         projectile.setFromPlayerId(fromPlayerId)
         this.projectileByIds.set(projectile.name, projectile)
-        projectile.fire(position, rotation)
+        projectile.fire(position, rotation || 0)
     }
 
     public getAll(): Array<Phaser.Physics.Arcade.Group> {
