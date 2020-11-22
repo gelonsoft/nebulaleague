@@ -292,7 +292,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.client.emitPlayerSelectionInit()
         this.playerConfig = {
             ...Config.player.defaultConfig,
-            ...(JSON.parse(window.localStorage.getItem('playerConfig')) as PlayerConfig),
+            ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerConfig),
             name: this.client.lobyUser.name,
         }
 
@@ -303,8 +303,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
 
         this.game.events.on(Event.gameReady, () => {
-            // this.client.emitGameJoined()
-
             this.scene.get('mainScene').scene.restart()
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()

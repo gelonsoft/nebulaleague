@@ -215,7 +215,7 @@ export type EffectModel = {
 
 // SERVER INTERFACE
 export type User = {
-    name?: string
+    name: string
     gameMode?: string
     playerSelectionRoom?: string
 }

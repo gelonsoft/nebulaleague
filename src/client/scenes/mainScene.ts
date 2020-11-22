@@ -40,8 +40,8 @@ export class MainScene extends Phaser.Scene {
     public mainCameraZoom: number
     public backgroundImage: Phaser.GameObjects.Image
     public playerConfig: PlayerConfig
-    public playerPrevious: PlayerChanged | null
-    public playerCurrent: PlayerChanged | null
+    public playerPrevious: PlayerChanged
+    public playerCurrent: PlayerChanged
     public projectilesPrevious: Record<string, ProjectileChanged>
     public projectilesCurrent: Record<string, ProjectileChanged>
 
@@ -73,8 +73,8 @@ export class MainScene extends Phaser.Scene {
             this.scene.run('debugScene', this)
         }
 
-        this.playerPrevious = null
-        this.playerCurrent = null
+        this.playerPrevious = {}
+        this.playerCurrent = {}
         this.projectilesPrevious = {}
         this.projectilesCurrent = {}
     }
@@ -164,8 +164,8 @@ export class MainScene extends Phaser.Scene {
             }
             if (playerAction.action) {
                 const pointerVector = new Phaser.Math.Vector2(
-                    playerAction.pointerPosition.x,
-                    playerAction.pointerPosition.y
+                    playerAction.pointerPosition!.x,
+                    playerAction.pointerPosition!.y
                 )
                 this.player.action(playerAction.action, pointerVector)
             }
@@ -201,8 +201,8 @@ export class MainScene extends Phaser.Scene {
                         const projectile = this.projectiles.getProjectile(projectileIdChanged)
                         projectile.visible = true
                         projectile.active = true
-                        projectile.body.x = projectileChanged.x
-                        projectile.body.y = projectileChanged.y
+                        projectile.body.x = projectileChanged.x!
+                        projectile.body.y = projectileChanged.y!
                         Object.assign(projectile, projectileChanged)
                     }
                 }
@@ -307,7 +307,7 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
+    public handlePlayerPlayerCollide(_player1: Player, player2: Player): void {
         player2.body.velocity.scale(-1)
         player2.hit(Config.player.toOtherDamage)
     }
@@ -384,7 +384,7 @@ export class MainScene extends Phaser.Scene {
     public update(): void {
         this.playerCurrent = this.player.getChanged()
         for (const name of _.keys(this.projectilesCurrent)) {
-            this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name).getChanged()
+            this.projectilesCurrent[name] = this.projectiles.projectileByIds.get(name)!.getChanged()
         }
 
         this.mainControl.update()
@@ -393,15 +393,13 @@ export class MainScene extends Phaser.Scene {
         this.playersAIUpdate()
 
         // collide with other players
-        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, null, this)
+        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
 
         // collide with projectiles
         this.physics.overlap(
             this.players,
             this.projectiles.getAll(),
             this.handleEnemyProjectileCollide,
-            null,
-            this
         )
 
         // draw weapon and skills
