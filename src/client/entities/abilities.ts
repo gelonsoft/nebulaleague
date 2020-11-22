@@ -76,7 +76,7 @@ export class Ability {
                 ? pointerPosition
                 : this.getMaxRadiusPosition(player)
 
-            this.radiusGraphics.fcillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
+            this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
             this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)

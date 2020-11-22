@@ -29,7 +29,7 @@ export interface PlayerMoveNextForce {
 export interface ActionTimeInterface {
     cooldown: number
     ready: boolean
-    timerEvent?: Phaser.Time.TimerEvent | null
+    timerEvent?: Phaser.Time.TimerEvent
 }
 
 type ActionTimesInterface = {
@@ -267,8 +267,7 @@ export class Player extends Phaser.GameObjects.Container {
                 callback: () => {
                     actionTime.ready = true
                     actionTime.cooldown = 0
-                    actionTime.timerEvent.remove(false)
-                    actionTime.timerEvent = null
+                    actionTime.timerEvent!.remove(false)
                 },
                 callbackScope: this,
             })
@@ -362,7 +361,7 @@ export class Player extends Phaser.GameObjects.Container {
             case EffectKeys.Burn:
                 if (!this.burningTime) {
                     this.burningTime = this.scene.time.addEvent({
-                        delay: effect.tick * 1000,
+                        delay: effect.tick! * 1000,
                         callback: () => {
                             this.health -= value
                         },
@@ -450,8 +449,7 @@ export class Player extends Phaser.GameObjects.Container {
             delay: this.deathCooldownDelay * 1000,
             callback: () => {
                 this.actionTimes.death.cooldown = 0
-                this.actionTimes.death.timerEvent.remove(false)
-                this.actionTimes.death.timerEvent = null
+                this.actionTimes.death.timerEvent!.remove(false)
                 if (!this.active) {
                     this.setAliveState(this.scene.players)
                     this.scene.stopDeathTransition(this)
