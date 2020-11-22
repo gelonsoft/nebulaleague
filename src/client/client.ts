@@ -1,5 +1,4 @@
 import { isEmpty } from 'lodash'
-import * as objectAssignDeep from 'object-assign-deep'
 import * as io from 'socket.io-client'
 import { MyGame } from '~/client/index'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
@@ -23,7 +22,6 @@ export class Client {
     public mainScene: MainScene
     public playerSelectionScene: PlayerSelectionScene
     public lobyScene: LobyScene
-    public player: PlayerModel
     public players: PlayerModel[]
     public lobyUser: User
     public playerSelectionState: PlayerSelectionState
@@ -40,11 +38,7 @@ export class Client {
         this.mainScene = this.game.scene.getScene('mainScene') as MainScene
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
-        this.player = null
         this.players = []
-        this.lobyUser = null
-        this.playerSelectionState = null
-        this.gameState = null
         this.gameStateChangedReceived = {}
         this.gameStateUpdatedCurrent = {}
         this.isHost = false

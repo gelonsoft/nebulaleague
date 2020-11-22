@@ -335,13 +335,13 @@ export class PlayerAI {
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
 
         const timeToReachTarget = Projectiles.getTimeToReachTarget(
-            choosenAction.projectileKey,
+            choosenAction.projectileKey!,
             choosenPlayer.body.center.clone().distance(this.player.body.center)
         )
 
         const playerToTarget = choosenPlayer.body.center
             .clone()
-            .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget))
+            .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget!))
 
         const handicapPrecisionAngle =
             Phaser.Math.RND.normal() * Math.PI * (this.weaponPrecisionHandicap / 360)
