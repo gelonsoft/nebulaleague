@@ -168,7 +168,7 @@ export class Ability {
                 break
             }
             case AbilityAction.ProjectileFromPointer:
-                this.projectiles.fire(this.projectileKey!, player.id, pointerPosition)
+                this.projectiles.fire(this.projectileKey!, player.id, targetPosition)
                 break
         }
     }

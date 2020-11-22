@@ -65,10 +65,6 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
-        this.activate()
-
-        this.body.reset(initialPosition.x, initialPosition.y)
-
         if (this.projectileTemplate.triggerAfter) {
             this.scene.tweens.add({
                 targets: this,
@@ -76,12 +72,17 @@ export class Projectile extends Phaser.GameObjects.Container {
                 duration: this.projectileTemplate.triggerAfter * 1000,
                 ease: 'Cubic.easeIn',
                 onStart: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(false)
+                    this.body.setEnable(true)
+                    this.body.reset(initialPosition.x, initialPosition.y)
+                    this.activate()
                 },
                 onComplete: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(true)
+                    this.body.setEnable(false)
                 },
             })
+        } else {
+            this.body.reset(initialPosition.x, initialPosition.y)
+            this.activate()
         }
 
         if (this.projectileTemplate.speed) {
