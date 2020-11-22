@@ -49,7 +49,6 @@ export type PlayerModel = {
     y: number
     rotation: number
     controlledBy: ControlledBy
-    selectedAbilityKey: AbilityName
     weaponPrimaryKey: WeaponName
     weaponSecondaryKey: WeaponName
     abilityKey1: AbilityName

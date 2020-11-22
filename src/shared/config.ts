@@ -10,7 +10,6 @@ import {
     PlayerConfig,
     PlayerModel,
     ProjectileName,
-    ProjectileModel,
     ProjectileTemplate,
 } from './models'
 
@@ -22,7 +21,12 @@ export class Config {
         y: 0,
         rotation: 0,
         controlledBy: ControlledBy.MainPlayer,
-        selectedAbilityKey: null,
+        weaponPrimaryKey: 'pistol',
+        weaponSecondaryKey: 'ak47',
+        abilityKey1: 'blink',
+        abilityKey2: 'flame',
+        abilityKey3: 'rootTip',
+        abilityKey4: 'chargedArrow',
     }
 
     private static readonly playerDefaultConfig: PlayerConfig = {
