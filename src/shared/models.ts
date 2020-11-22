@@ -152,7 +152,7 @@ export type ProjectileBase = {
     damage: number
     lifespan: number
     radius: number
-    speed: number
+    speed?: number
     effects?: Array<EffectModel>
     tickAfter?: number
     triggerAfter?: number

@@ -208,9 +208,7 @@ export class Projectiles {
 
     public static getTimeToReachTarget(fromProjectilesGroup: ProjectileName, targetDistance: number) {
         if (Config.projectiles[fromProjectilesGroup].speed) {
-            return targetDistance / Config.projectiles[fromProjectilesGroup].speed
-        } else if (Config.projectiles[fromProjectilesGroup]?.triggerAfter) {
-            return Config.projectiles[fromProjectilesGroup].triggerAfter
+            return targetDistance / Config.projectiles[fromProjectilesGroup].speed!
         } else {
             return 0
         }
@@ -218,7 +216,11 @@ export class Projectiles {
 
     public static getDistance(fromProjectilesGroup: ProjectileName): number {
         const projectileConfig = Config.projectiles[fromProjectilesGroup]
-        return projectileConfig.speed * projectileConfig.lifespan
+        if(projectileConfig.speed) {
+            return projectileConfig.speed * projectileConfig.lifespan
+        } else {
+            return 0
+        }
     }
 
     public getProjectile(projectileNameModel: string): Projectile {
