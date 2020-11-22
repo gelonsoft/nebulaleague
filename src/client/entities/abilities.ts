@@ -18,7 +18,7 @@ export class Ability {
     public radiusDistance: number
     public triggerAfter: number
     public raySize: number
-    public rayColor?: number
+    public rayColor: number
     public rangeDistanceColor: number
     public radiusDistanceColor: number
     public rangeDistanceAlpha: number
@@ -55,7 +55,7 @@ export class Ability {
                 break
 
             case AbilityDrawingStyle.Ray:
-                this.rangeDistance = Projectiles.getDistance(this.projectileKey)
+                this.rangeDistance = Projectiles.getDistance(this.projectileKey!)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break
@@ -76,7 +76,7 @@ export class Ability {
                 ? pointerPosition
                 : this.getMaxRadiusPosition(player)
 
-            this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
+            this.radiusGraphics.fcillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
             this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
@@ -164,11 +164,11 @@ export class Ability {
                     pointerPosition.x,
                     pointerPosition.y
                 )
-                this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationFromPlayer)
+                this.projectiles.fire(this.projectileKey!, player.id, sourcePosition, rotationFromPlayer)
                 break
             }
             case AbilityAction.ProjectileFromPointer:
-                this.projectiles.fire(this.projectileKey, player.id, pointerPosition)
+                this.projectiles.fire(this.projectileKey!, player.id, pointerPosition)
                 break
         }
     }
