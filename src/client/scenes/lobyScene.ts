@@ -30,10 +30,10 @@ export class LobyScene extends Phaser.Scene {
         })
 
         if (this.game.debug) {
-            this.client.emitLobyStart({
-                name: 'defaultName',
-                gameMode: 'ffa',
-            })
+            // this.client.emitLobyStart({
+            //     name: 'defaultName',
+            //     gameMode: 'ffa',
+            // })
         }
     }
 
