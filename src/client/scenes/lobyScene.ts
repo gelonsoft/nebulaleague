@@ -1,6 +1,7 @@
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
 import { Event as MyEvent } from '~/shared/events'
+import { GameModeButton } from '~/client/ui/buttons'
 
 export class LobyScene extends Phaser.Scene {
     public game: MyGame
@@ -14,13 +15,13 @@ export class LobyScene extends Phaser.Scene {
     }
 
     init(): void {
-        window.addEventListener(
-            'resize',
-            () => {
-                this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
-            },
-            false
-        )
+        // window.addEventListener(
+        //     'resize',
+        //     () => {
+        //         this.menuHTML.setPosition(this.scale.width / 2, this.scale.height / 2)
+        //     },
+        //     false
+        // )
 
         this.client = this.game.registry.get('client') as Client
         this.client.emitLobyInit()
@@ -45,6 +46,19 @@ export class LobyScene extends Phaser.Scene {
             .setAlpha(0.5)
     }
 
+    createModeButton() {
+        const button = new GameModeButton(this, 400, 250, 'organigram.png', 'Ffa etuhoethuo')
+        const button2 = new GameModeButton(this, 600, 250, 'organigram.png', 'Ffa etuhoethuo')
+    }
+
+    createModeButtons() {
+
+    }
+    
+
+
+    
+    
     createMenu() {
         this.menuHTML = this.add
             .dom(0, 0)
@@ -62,6 +76,7 @@ export class LobyScene extends Phaser.Scene {
 
     create(): void {
         this.createBackground()
-        this.createMenu()
+        this.createModeButton()
+        // this.createMenu()
     }
 }
