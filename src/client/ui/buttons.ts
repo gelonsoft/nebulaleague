@@ -1,5 +1,10 @@
-
 type GameModeButtonState = 'focus' | 'active' | 'hover'
+
+const TEXT_SIZE = 48
+const TEXT_PADDING_BOTTOM = 12
+const IMAGE_SIZE = 128
+const CONTAINER_WIDTH = IMAGE_SIZE
+const CONTAINER_HEIGHT = TEXT_SIZE + IMAGE_SIZE + TEXT_PADDING_BOTTOM
 
 export class GameModeButton extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -10,7 +15,7 @@ export class GameModeButton extends Phaser.GameObjects.Container {
     private upAlpha: number
     private downAlpha: number
     private overAlpha: number
-    
+    private outAlpha: number
 
     constructor(scene: Phaser.Scene, x: number, y: number, frame: string, text: string) {
         super(scene, x, y)
@@ -19,42 +24,47 @@ export class GameModeButton extends Phaser.GameObjects.Container {
         this.image = new Phaser.GameObjects.Image(scene, 0, 0, 'atlas', frame)
         this.text = new Phaser.GameObjects.Text(scene, 0, 0, text, {})
 
-        this.setSize(96 + 32 + 8, 96 + 32 + 8)
-        this.image.setDisplaySize(96, 96)
-        this.image.setOrigin(0, 0)
-        // this.text.setDisplaySize(32, 32)
-        this.text.setPosition(96 / 2, 96 + 8)
+        this.image.setDisplaySize(IMAGE_SIZE, IMAGE_SIZE)
+        this.text.setPosition(0, (IMAGE_SIZE / 2) + + TEXT_PADDING_BOTTOM)
         this.text.setOrigin(0.5, 0.5)
         this.add([this.image, this.text])
+        this.setSize(CONTAINER_WIDTH, CONTAINER_HEIGHT)
+        this.setDisplaySize(CONTAINER_WIDTH, CONTAINER_HEIGHT)
 
         this.upAlpha = 1
-        this.downAlpha = 0.7
-        this.overAlpha = 0.5
+        this.downAlpha = 0.9
+        this.overAlpha = 0.9
+        this.outAlpha = 0.6
+        this.setAlpha(this.outAlpha)
 
-        this.image.setInteractive()
+        this.setInteractive({ cursor: 'pointer' })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, this.handleUp, this)
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, this.handleOut, this)
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, this.handleDown, this)
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, this.handleOver, this)
     }
 
-
-
-    private handleUp(pointer: Phaser.Input.Pointer) {
-        this.handleOver(pointer)
+    static get contaierWidth() {
+        return CONTAINER_WIDTH
     }
 
-    private handleOut(pointer: Phaser.Input.Pointer) {
-        console.log('hello')
+    static get contaierHeight() {
+        return CONTAINER_HEIGHT
+    }
+
+    private handleUp(pointer: Phaser.Input.Pointer) {
         this.setAlpha(this.upAlpha)
     }
 
     private handleDown(pointer: Phaser.Input.Pointer) {
-        console.log('hello')
         this.setAlpha(this.downAlpha)
     }
 
-    private handleOver(pointer: Phaser.Input.Pointer) {
+    private handleOver(_pointer: Phaser.Input.Pointer) {
         this.setAlpha(this.overAlpha)
+    }
+
+    private handleOut(_pointer: Phaser.Input.Pointer) {
+        this.setAlpha(this.outAlpha)
     }
 }
