@@ -35,6 +35,7 @@ export class PhaserSpaceGame {
         ]
         this.game = new MyGame({
             type: Phaser.CANVAS,
+            // type: Phaser.WEBGL,
             title: 'nebulaleague',
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,

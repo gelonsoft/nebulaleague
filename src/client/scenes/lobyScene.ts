@@ -49,21 +49,39 @@ export class LobyScene extends Phaser.Scene {
             .setAlpha(0.5)
     }
 
+    startMode(mode: string) {
+        this.client.emitLobyStart({
+            name: 'anonymous',
+            gameMode: mode,
+        })
+    }
+
     createModeButtonContainer() {
         const offestWidth = 30
         const buttonWidth = GameModeButton.contaierWidth + offestWidth
         const buttonHeight = GameModeButton.contaierHeight
-        
-        this.ffaButton = new GameModeButton(this, buttonWidth, 0, 'organigram.png', 'Ffa Mode')
-        this.trainingButton = new GameModeButton(this, 0, 0, 'gamepad.png', 'Training Mode')
-        
-        
-        this.gameModeContainer = this.add.container(0, 0, [this.ffaButton, this.trainingButton])
+
+        this.ffaButton = new GameModeButton(
+            this,
+            buttonWidth,
+            0,
+            'organigram.png',
+            'Ffa Mode',
+            (_pointer: Phaser.Input.Pointer) => this.startMode('ffa')
+        )
+        this.trainingButton = new GameModeButton(
+            this,
+            0,
+            0,
+            'gamepad.png',
+            'Training Mode',
+            (_pointer: Phaser.Input.Pointer) => this.startMode('default')
+        )
+
+        this.gameModeContainer = this.add
+            .container(0, 0, [this.ffaButton, this.trainingButton])
             .setSize(buttonWidth * 2, buttonHeight)
-            .setPosition(
-                this.scale.width / 2 - (buttonWidth * 2) / 2,
-                this.scale.height / 2 - 200,
-            )
+            .setPosition(this.scale.width / 2 - (buttonWidth * 2) / 2, this.scale.height / 2 - 200)
     }
 
     createMenu() {
