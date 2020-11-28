@@ -1,54 +1,44 @@
-import { isEmpty } from 'lodash'
-import * as io from 'socket.io-client'
 import { MyGame } from '~/client/index'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { LobyScene } from '~/client/scenes/lobyScene'
-import { GameScene } from '~/client/scenes/gameScene'
 
 import {
-    PlayerModel,
     PlayerConfig,
     GameState,
-    PlayerAction,
     User,
     PlayerSelectionState,
-    GameStateChanged,
+    ControlledBy,
 } from '~/shared/models'
-import { ClientEvent, ServerEvent, Event } from '~/shared/events'
+import { ClientEvent, Event } from '~/shared/events'
+import { GameDemoScene, GameFfaScene } from './scenes/gameScene'
 
 export class Client {
-    public socket: SocketIOClient.Socket
     public game: MyGame
-    public mainScene: GameScene
     public playerSelectionScene: PlayerSelectionScene
     public lobyScene: LobyScene
-    public players: PlayerModel[]
+    public gameFfaScene: GameFfaScene
+    public gameDemoScene: GameDemoScene
     public lobyUser: User
+    public playerConfig: PlayerConfig
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
-    public gameStateChangedReceived: GameStateChanged
-    public gameStateUpdatedCurrent: GameStateChanged
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
 
     constructor(game: MyGame) {
         this.game = game
-        this.socket = io.connect()
-        this.mainScene = this.game.scene.getScene('mainScene') as GameScene
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
-        this.players = []
-        this.gameStateChangedReceived = {}
-        this.gameStateUpdatedCurrent = {}
+        this.gameFfaScene = this.game.scene.getScene('gameFfaScene') as GameFfaScene
+        this.gameDemoScene = this.game.scene.getScene('gameDemoScene') as GameDemoScene
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
-        this.attachListeners()
     }
 
     get id(): string {
-        return this.socket.id
+        return 'offline'
     }
 
     get isGameReady(): boolean {
@@ -56,26 +46,45 @@ export class Client {
     }
 
     public emitLobyInit(): void {
-        this.socket.emit(ServerEvent.lobyInit)
+        console.log('emitLobyInit')
     }
 
     public emitLobyEnd(): void {
-        this.socket.emit(ServerEvent.lobyEnd)
+        console.log('emitLobyEnd')
     }
 
     public emitLobyStart(user: User): void {
-        this.socket.emit(ServerEvent.lobyStart, user)
+        this.lobyUser = user
+        this.playerSelectionScene.scene.start()
+        this.lobyScene.scene.sleep()
     }
 
     public emitPlayerSelectionInit(): void {
-        this.socket.emit(ServerEvent.playerSelectionInit, this.lobyUser)
+        console.log('emitPlayerSelectionInit')
     }
 
     public emitPlayerSelectionEnd(): void {
-        this.socket.emit(ServerEvent.playerSelectionEnd)
+        console.log('emitPlayerSelectionEnd')
     }
 
     public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
+        this.playerConfig = playerConfig
+        this.gameState = {
+            players: {
+                offline: {
+                    id: this.id,
+                    x: 0,
+                    y: 0,
+                    rotation: 0,
+                    controlledBy: ControlledBy.MainPlayer,
+                    ...this.playerConfig                    
+                }
+            },
+            projectiles: {},
+            gameMode: this.lobyUser.gameMode || 'default',
+            hostId: 'hello'
+        }
+        
         window.localStorage.setItem(
             'playerConfig',
             JSON.stringify({
@@ -87,75 +96,24 @@ export class Client {
                 abilityKey4: playerConfig.abilityKey4,
             })
         )
-        this.socket.emit(ServerEvent.playerSelectionStart, playerConfig)
+        if(this.lobyUser.gameMode === 'ffa') {
+            this.gameDemoScene.scene.restart()
+        } else if (this.lobyUser.gameMode === 'demo') {
+            this.gameFfaScene.scene.restart()
+        }
+
+        this.playerSelectionScene.scene.sleep()
     }
 
     public emitGameInit() {
-        this.socket.emit(ServerEvent.gameInit, this.playerSelectionState)
+        console.log('emitGameInit')
     }
 
     public emitGameJoined() {
-        this.socket.emit(ServerEvent.gameJoined)
+        console.log('emitGameJoined')
     }
 
     public emitGameRefresh() {
-        this.socket.emit(ServerEvent.gameRefreshServer)
-    }
-
-    public emitGameUpdated() {
-        if (!isEmpty(this.gameStateUpdatedCurrent)) {
-            this.socket.emit(ServerEvent.gameUpdated, this.gameStateUpdatedCurrent)
-        }
-    }
-
-    public attachListeners(): void {
-        this.addLobyListener()
-        this.addPlayerSelectionListener()
-        this.addGameListener()
-    }
-
-    public addLobyListener(): void {
-        this.socket.on(ClientEvent.lobyStart, (user: User) => {
-            this.lobyUser = user
-            this.game.events.emit(Event.lobyStart, this.lobyUser)
-        })
-    }
-
-    public addPlayerSelectionListener(): void {
-        this.socket.on(ClientEvent.playerSelectionStart, (playerSelectionState: PlayerSelectionState) => {
-            this.playerSelectionState = playerSelectionState
-            this.game.events.emit(Event.playerSelectionStart)
-        })
-    }
-
-    public addGameListener(): void {
-        this.socket.on(ClientEvent.gameInit, (gameState: GameState) => {
-            this.gameState = gameState
-            this.isHost = gameState.hostId === this.id
-            this.game.events.emit(Event.gameReady)
-        })
-
-        this.socket.on(ClientEvent.gameUpdated, (gameState: GameStateChanged) => {
-            this.gameStateChangedReceived = gameState
-            this.game.events.emit(Event.gameUpdated)
-        })
-
-        this.socket.on(ClientEvent.gameJoined, (playerReceive: PlayerModel) => {
-            this.game.events.emit(Event.playerJoined, playerReceive)
-        })
-
-        this.socket.on(ClientEvent.gameNewHost, (hostId: string) => {
-            if (this.id === hostId) {
-                this.isHost = true
-            }
-        })
-
-        this.socket.on(ClientEvent.gameQuit, (playerReceive: PlayerModel) => {
-            this.game.events.emit(Event.playerQuit, playerReceive.id)
-        })
-
-        this.socket.on(ClientEvent.gameAction, (action: PlayerAction) => {
-            this.game.events.emit(Event.playerAction, action)
-        })
+        console.log('emitGameRefresh')
     }
 }

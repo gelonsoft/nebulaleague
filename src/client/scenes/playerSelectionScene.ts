@@ -296,17 +296,21 @@ export class PlayerSelectionScene extends Phaser.Scene {
             name: this.client.lobyUser.name,
         }
 
-        this.game.events.on(Event.playerSelectionStart, () => {
-            this.client.emitPlayerSelectionEnd()
-            this.client.emitGameInit()
-            this.client.emitGameJoined()
-        })
+        if (this.game.debug) {
+            // this.start()
+        }
+        
+        // this.game.events.on(Event.playerSelectionStart, () => {
+        //     this.client.emitPlayerSelectionEnd()
+        //     this.client.emitGameInit()
+        //     this.client.emitGameJoined()
+        // })
 
-        this.game.events.on(Event.gameReady, () => {
-            this.scene.get('gameDemoScene').scene.restart()
-            this.scene.get('hudScene').scene.restart()
-            this.scene.sleep()
-        })
+        // this.game.events.on(Event.gameReady, () => {
+        //     this.scene.get('gameDemoScene').scene.restart()
+        //     this.scene.get('hudScene').scene.restart()
+        //     this.scene.sleep()
+        // })
         this.initDrag()
     }
 
@@ -567,9 +571,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .setSize(this.slotContainer.width, this.playButtonDOM.height + this.playButtonDOM.height)
             .setPosition(gameContainerX, gameContainerY)
 
-        if (this.game.debug) {
-            this.start()
-        }
     }
 
     start() {

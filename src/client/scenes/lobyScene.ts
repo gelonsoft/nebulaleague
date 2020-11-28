@@ -28,17 +28,9 @@ export class LobyScene extends Phaser.Scene {
 
         this.client = this.game.registry.get('client') as Client
         this.client.emitLobyInit()
-        this.game.events.on(MyEvent.lobyStart, () => {
-            this.scene.start('playerSelectionScene')
-            this.client.emitLobyEnd()
-        })
-
-        if (this.game.debug) {
-            // this.client.emitLobyStart({
-            //     name: 'defaultName',
-            //     gameMode: 'ffa',
-            // })
-        }
+        // if (this.game.debug) {
+        //     this.startMode('ffa')
+        // }
     }
 
     createBackground() {
@@ -49,7 +41,7 @@ export class LobyScene extends Phaser.Scene {
             .setAlpha(0.5)
     }
 
-    startMode(mode: string) {
+    start(mode: string) {
         this.client.emitLobyStart({
             name: 'anonymous',
             gameMode: mode,
@@ -67,7 +59,7 @@ export class LobyScene extends Phaser.Scene {
             0,
             'organigram.png',
             'Ffa Mode',
-            (_pointer: Phaser.Input.Pointer) => this.startMode('ffa')
+            (_pointer: Phaser.Input.Pointer) => this.start('ffa')
         )
         this.trainingButton = new GameModeButton(
             this,
@@ -75,7 +67,7 @@ export class LobyScene extends Phaser.Scene {
             0,
             'gamepad.png',
             'Training Mode',
-            (_pointer: Phaser.Input.Pointer) => this.startMode('default')
+            (_pointer: Phaser.Input.Pointer) => this.start('demo')
         )
 
         this.gameModeContainer = this.add

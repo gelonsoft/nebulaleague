@@ -1,11 +1,5 @@
 import {
     Position,
-    PlayerModel,
-    PlayerAction,
-    PlayerConfig,
-    PlayerChanged,
-    ProjectileChanged,
-    GameStateChanged,
     ActionKey,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
@@ -31,6 +25,7 @@ export class GameScene extends Phaser.Scene {
     public playerControl: PlayerControl
     public freeCamera: boolean
     public mainCameraZoom: number
+    public backgroundImageKey: string
     
     constructor(gameKey: string) {
         super({
@@ -41,8 +36,9 @@ export class GameScene extends Phaser.Scene {
     public init(): void {
         this.client = this.game.registry.get('client') as Client
         if (this.game.debug) {
-            this.scene.run('debugScene', this)
+            // this.scene.run('debugScene', this)
         }
+        this.backgroundImageKey = 'backgroundGalaxy3'
     }
 
     public create(): void {
@@ -65,10 +61,25 @@ export class GameScene extends Phaser.Scene {
             .find((player: Player) => player.id === this.client.id) as Player
         
         this.settingCamera()
+        this.game.scene.getScene('hudScene').scene.start() // 
+        this.createBackground()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
     }
 
+    public createBackground(): void {
+        this.add
+            .image(0, 0, this.backgroundImageKey)
+            .setScrollFactor(Config.world.paralaxScrollFactor, Config.world.paralaxScrollFactor)
+            .setDisplaySize(
+                this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
+                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
+            )
+            .setOrigin(0.23, 0.23)
+            .setAlpha(0.7)
+            .setDepth(-1)
+    }
+    
 
     public syncHealth(player: Player): void {
         if (player.id === this.player.id) {

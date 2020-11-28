@@ -59,12 +59,12 @@ export type PlayerModel = {
 
 export type PlayerConfig = {
     name: string
-    weaponPrimaryKey?: WeaponName
-    weaponSecondaryKey?: WeaponName
-    abilityKey1?: AbilityName
-    abilityKey2?: AbilityName
-    abilityKey3?: AbilityName
-    abilityKey4?: AbilityName
+    weaponPrimaryKey: WeaponName
+    weaponSecondaryKey: WeaponName
+    abilityKey1: AbilityName
+    abilityKey2: AbilityName
+    abilityKey3: AbilityName
+    abilityKey4: AbilityName
 }
 
 export type PlayerChanged = {

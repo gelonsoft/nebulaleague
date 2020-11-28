@@ -78,7 +78,6 @@ export class GameFfaScene extends GameScene {
     public create(): void {
         super.create()
         this.playersAI = []
-        this.createBackground()
     }
 
 
@@ -115,28 +114,9 @@ export class GameFfaScene extends GameScene {
             .forEach((player: Player) => {
                 player.update()
             })
-
-        this.client.gameStateUpdatedCurrent = this.getDiffGameState()
-        this.client.emitGameUpdated()
-
-        this.playerPrevious = this.playerCurrent
-        this.projectilesPrevious = _.clone(this.projectilesCurrent)
     }   
 
     
-    public createBackground(): void {
-        this.backgroundImage = this.add
-            .image(0, 0, 'backgroundGalaxy3')
-            .setScrollFactor(Config.world.paralaxScrollFactor, Config.world.paralaxScrollFactor)
-            .setDisplaySize(
-                this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
-                this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
-            )
-            .setOrigin(0.23, 0.23)
-            .setAlpha(0.7)
-            .setDepth(-1)
-    }
-
     public createConsumables(): void {
         this.consumables = this.physics.add.staticGroup()
         this.consumables.addMultiple(this.randomTable.spawn(this))
@@ -184,36 +164,6 @@ export class GameFfaScene extends GameScene {
         this.game.events.on(Event.ProjectileKilled, (projectile: Projectile) => {
             delete this.projectilesCurrent[projectile.name]
         })
-
-        this.game.events.on(Event.gameUpdated, () => {
-            const gameStateReceived = this.client.gameStateChangedReceived
-
-            if (gameStateReceived.updated !== undefined) {
-                if (gameStateReceived.updated.players !== undefined) {
-                    for (const [playerIdChanged, playerChanged] of Object.entries(
-                        gameStateReceived.updated.players
-                    )) {
-                        const player = this.players
-                            .getChildren()
-                            .find((player: Player) => player.id === playerIdChanged)
-                        Object.assign(player, playerChanged)
-                    }
-                }
-
-                if (gameStateReceived.updated.projectiles !== undefined) {
-                    for (const [projectileIdChanged, projectileChanged] of Object.entries(
-                        gameStateReceived.updated.projectiles
-                    )) {
-                        const projectile = this.projectiles.getProjectile(projectileIdChanged)
-                        projectile.visible = true
-                        projectile.active = true
-                        projectile.body.x = projectileChanged.x!
-                        projectile.body.y = projectileChanged.y!
-                        Object.assign(projectile, projectileChanged)
-                    }
-                }
-            }
-        })
     }
 
 
@@ -248,48 +198,5 @@ export class GameFfaScene extends GameScene {
         }
     }
 
-    public getDiffGameState(): GameStateChanged {
-        const playerChanged = diff(this.playerPrevious, this.playerCurrent) as Record<string, PlayerChanged>
-        const projectilesChanged = diff(this.projectilesPrevious, this.projectilesCurrent) as Record<
-            string,
-        ProjectileChanged
-        >
-
-        const isPlayersChanged = _.keys(playerChanged).length > 0
-        const isProjectilesChanged = _.keys(projectilesChanged).length > 0
-        const gameStatedUpdated: GameStateChanged = {}
-
-        gameStatedUpdated.updated = {}
-        gameStatedUpdated.deleted = {}
-
-        if (isProjectilesChanged) {
-            const projectilesUpdated = _.pickBy(projectilesChanged, (value) => value !== undefined)
-            const projectilesDeleted = _.keys(_.pickBy(projectilesChanged, (value) => value === undefined))
-
-            if (_.keys(projectilesUpdated).length > 0) {
-                gameStatedUpdated.updated.projectiles = projectilesUpdated
-            }
-
-            if (projectilesDeleted.length > 0) {
-                gameStatedUpdated.deleted.projectiles = projectilesDeleted
-            }
-        }
-
-        if (isPlayersChanged) {
-            gameStatedUpdated.updated.players = {
-                [this.player.id]: playerChanged,
-            }
-        }
-
-        if (_.isEmpty(gameStatedUpdated.updated)) {
-            delete gameStatedUpdated.updated
-        }
-        if (_.isEmpty(gameStatedUpdated.deleted)) {
-            delete gameStatedUpdated.deleted
-        }
-
-        return gameStatedUpdated
-    }
-    
 }
 

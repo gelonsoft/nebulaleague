@@ -31,6 +31,12 @@ export class Config {
 
     private static readonly playerDefaultConfig: PlayerConfig = {
         name: 'anonymous',
+        weaponPrimaryKey: 'pistol',
+        weaponSecondaryKey: 'ak47',
+        abilityKey1: 'blink',
+        abilityKey2: 'flame',
+        abilityKey3: 'rootTip',
+        abilityKey4: 'chargedArrow',
     }
 
     public static readonly player = {

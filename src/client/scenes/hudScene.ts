@@ -128,7 +128,7 @@ export class HudScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.mainScene = this.scene.get('mainScene') as GameScene
+        this.mainScene = this.scene.get('gameFfaScene') as GameScene
         this.player = this.mainScene.player
         this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
         this.mainScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)
@@ -142,7 +142,7 @@ export class HudScene extends Phaser.Scene {
         this.background = this.add.graphics()
         this.background.fillStyle(Config.hud.background, 0.2)
         this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
-
+        console.log(this.player)
         this.healthBar = new HealthBar(
             this,
             0,
