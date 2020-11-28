@@ -3,7 +3,7 @@ import * as io from 'socket.io-client'
 import { MyGame } from '~/client/index'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { LobyScene } from '~/client/scenes/lobyScene'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 
 import {
     PlayerModel,
@@ -19,7 +19,7 @@ import { ClientEvent, ServerEvent, Event } from '~/shared/events'
 export class Client {
     public socket: SocketIOClient.Socket
     public game: MyGame
-    public mainScene: MainScene
+    public mainScene: GameScene
     public playerSelectionScene: PlayerSelectionScene
     public lobyScene: LobyScene
     public players: PlayerModel[]
@@ -35,7 +35,7 @@ export class Client {
     constructor(game: MyGame) {
         this.game = game
         this.socket = io.connect()
-        this.mainScene = this.game.scene.getScene('mainScene') as MainScene
+        this.mainScene = this.game.scene.getScene('mainScene') as GameScene
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.players = []

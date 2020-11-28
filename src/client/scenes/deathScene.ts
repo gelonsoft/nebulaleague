@@ -1,6 +1,6 @@
 import { Event } from '~/shared/events'
 import { MyGame } from '~/client/index'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 
 class TextContainer extends Phaser.GameObjects.Container {
@@ -31,7 +31,7 @@ class TextContainer extends Phaser.GameObjects.Container {
 
 export class DeathScene extends Phaser.Scene {
     public game: MyGame
-    public mainScene: MainScene
+    public mainScene: GameScene
     public followedPlayer: Player
     public textContainer: TextContainer
     public canResetAfterDelay: number
@@ -41,7 +41,7 @@ export class DeathScene extends Phaser.Scene {
         super({ key: 'deathScene' })
     }
 
-    public init(mainScene: MainScene): void {
+    public init(mainScene: GameScene): void {
         this.mainScene = mainScene
         this.canResetAfterDelay = 1
         this.canResetAfterElapsed = 0

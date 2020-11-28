@@ -1,5 +1,3 @@
-import 'phaser'
-
 type Body = Phaser.Physics.Arcade.Body
 type Vector2 = Phaser.Math.Vector2
 type Point = Phaser.Geom.Point

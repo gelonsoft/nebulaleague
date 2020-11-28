@@ -84,19 +84,6 @@ export class LobyScene extends Phaser.Scene {
             .setPosition(this.scale.width / 2 - (buttonWidth * 2) / 2, this.scale.height / 2 - 200)
     }
 
-    createMenu() {
-        // this.menuHTML = this.add
-        //     .dom(0, 0)
-        //     .createFromCache('mainMenuHTML')
-        //     .setPosition(this.scale.width / 2, this.scale.height / 2)
-        // this.menuHTML.getChildByID('playButton').addEventListener('click', (event: Event) => {
-        //     const payerName = (this.menuHTML.getChildByID('playerNameInput') as HTMLInputElement).value
-        //     this.client.emitLobyStart({
-        //         name: payerName,
-        //         gameMode: 'ffa',
-        //     })
-        // })
-    }
 
     create(): void {
         this.createBackground()

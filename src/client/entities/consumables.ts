@@ -1,4 +1,4 @@
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 import { Config } from '~/shared/config'
 
@@ -23,7 +23,7 @@ export class RandomItem {
         return this.entries[index]
     }
 
-    public spawn(scene: MainScene): Array<Consumable> {
+    public spawn(scene: GameScene): Array<Consumable> {
         const consumables: Array<Consumable> = []
 
         for (const key of this.entries) {

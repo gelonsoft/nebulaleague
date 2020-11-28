@@ -1,7 +1,8 @@
 import 'process'
+import 'phaser'
 import './main.scss'
 
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene, GameFfaScene, GameDemoScene } from '~/client/scenes/gameScene'
 import { HudScene } from '~/client/scenes/hudScene'
 import { BootScene } from '~/client/scenes/bootScene'
 import { DebugScene } from '~/client/scenes/debugScene'
@@ -26,12 +27,15 @@ export class PhaserSpaceGame {
         const scenes = [
             BootScene,
             LobyScene,
-            MainScene,
             HudScene,
             DebugScene,
             MainMenuScene,
             DeathScene,
             PlayerSelectionScene,
+            // GameScene,
+            GameFfaScene,
+            GameDemoScene,
+            
         ]
         this.game = new MyGame({
             type: Phaser.CANVAS,

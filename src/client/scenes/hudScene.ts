@@ -3,7 +3,7 @@ import { Event } from '~/shared/events'
 import { ActionKey, EffectModel, WeaponKey } from '~/shared/models'
 import { MyGame } from '~/client/index'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { HealthBar } from '~/client/entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '~/client/entities/effects'
 
@@ -106,7 +106,7 @@ export class HudScene extends Phaser.Scene {
     public actionToContainer: Record<ActionKey, SlotContainer>
     public effectIconsContainer: Phaser.GameObjects.Container
     public mainContainer: Phaser.GameObjects.Container
-    public mainScene: MainScene
+    public mainScene: GameScene
 
     constructor() {
         super({ key: 'hudScene' })
@@ -128,7 +128,7 @@ export class HudScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.mainScene = this.scene.get('mainScene') as MainScene
+        this.mainScene = this.scene.get('mainScene') as GameScene
         this.player = this.mainScene.player
         this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
         this.mainScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)

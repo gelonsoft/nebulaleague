@@ -1,14 +1,14 @@
 import { Event } from '~/shared/events'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 import { PlayerAction, PlayerDirection } from '~/shared/models'
 import { DebugScene } from '~/client/scenes/debugScene'
 
 export class MainControl {
-    public scene: MainScene
+    public scene: GameScene
     public controls: Record<string, Phaser.Input.Keyboard.Key>
     public isDebugSceneActive: boolean
-    constructor(scene: MainScene) {
+    constructor(scene: GameScene) {
         this.scene = scene
         this.controls = {
             toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
@@ -40,7 +40,7 @@ export class MainControl {
 }
 
 export class PlayerControl {
-    public scene: MainScene
+    public scene: GameScene
     public controls: Record<string, Phaser.Input.Keyboard.Key>
     public action: PlayerAction
     public player: Player
@@ -56,7 +56,7 @@ export class PlayerControl {
     public previousMouseRotation: number
     public currentMouseRotation: number
 
-    constructor(scene: MainScene, player: Player) {
+    constructor(scene: GameScene, player: Player) {
         this.scene = scene
         this.player = player
         this.previousDirection = { x: 0, y: 0 }
@@ -88,8 +88,8 @@ export class PlayerControl {
         const right = this.controls.moveRightDvorak.isDown || this.controls.moveRightQwerty.isDown ? 1 : 0
         const up =
             this.controls.moveUpDvorak.isDown ||
-            this.controls.moveUpQwerty.isDown ||
-            this.controls.moveUpAzerty.isDown
+                this.controls.moveUpQwerty.isDown ||
+                this.controls.moveUpAzerty.isDown
                 ? -1
                 : 0
         const down = this.controls.moveDownDvorak.isDown || this.controls.moveDownQwerty.isDown ? 1 : 0
@@ -262,7 +262,7 @@ export class DebugControl {
     }
 }
 
-export function settingCameraControl(scene: MainScene): Phaser.Cameras.Controls.SmoothedKeyControl {
+export function settingCameraControl(scene: GameScene): Phaser.Cameras.Controls.SmoothedKeyControl {
     const cursors = scene.input.keyboard.createCursorKeys()
     const controlConfig = {
         camera: scene.cameras.main,

@@ -1,6 +1,6 @@
 import { BehaviorTreeBuilder, BehaviorTreeStatus, TimeData, IBehaviorTreeNode } from 'ts-behavior-tree'
 import * as steering from '~/client/ai/steering'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 import { ActionKey, PlayerDirection } from '~/shared/models'
 import { PlayerAIConfig } from '~/client/ai/playerConfigAI'
@@ -30,7 +30,7 @@ interface PlayerAIActionsInterface {
 }
 
 export class PlayerAI {
-    public scene: MainScene
+    public scene: GameScene
     public player: Player
     public players: Array<Player>
     public playersInHittableRange: Array<PlayerAIActionsInterface>
@@ -56,7 +56,7 @@ export class PlayerAI {
         ability4: [number, number]
     }
     public tree: IBehaviorTreeNode
-    constructor(scene: MainScene, player: Player, players: Array<Player>, playerConfig: PlayerAIConfig) {
+    constructor(scene: GameScene, player: Player, players: Array<Player>, playerConfig: PlayerAIConfig) {
         this.scene = scene
         this.player = player
         this.player.controlledByAI = this

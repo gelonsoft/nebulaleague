@@ -1,6 +1,6 @@
 import 'phaser'
 import * as _ from 'lodash'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Config } from '~/shared/config'
 import {
     PlayerDirection,
@@ -54,7 +54,7 @@ interface ActionsInterface {
 
 export class Player extends Phaser.GameObjects.Container {
     public body: Phaser.Physics.Arcade.Body
-    public scene: MainScene
+    public scene: GameScene
     public id: string
     public health: number
     public maxHealth: number
@@ -77,7 +77,7 @@ export class Player extends Phaser.GameObjects.Container {
     public deathCooldownDelay: number
     public playerModel: PlayerModel
 
-    constructor(scene: MainScene, playerModel: PlayerModel) {
+    constructor(scene: GameScene, playerModel: PlayerModel) {
         super(scene)
         this.scene = scene
         this.playerModel = playerModel

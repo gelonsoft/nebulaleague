@@ -303,7 +303,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
 
         this.game.events.on(Event.gameReady, () => {
-            this.scene.get('mainScene').scene.restart()
+            this.scene.get('gameDemoScene').scene.restart()
             this.scene.get('hudScene').scene.restart()
             this.scene.sleep()
         })

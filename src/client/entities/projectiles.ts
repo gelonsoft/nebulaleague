@@ -7,13 +7,13 @@ import {
     ProjectileDrawingSpriteModel,
     ProjectileDrawingPrimitiveModel,
 } from '~/shared/models'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 
 type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
 
 export class Projectile extends Phaser.GameObjects.Container {
-    public scene: MainScene
+    public scene: GameScene
     public name: string
     public fromPlayerId = 'uknown'
     public hittedPlayerIds: Set<string>
@@ -23,7 +23,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     public drawing: ProjectileDrawing
     public body: Phaser.Physics.Arcade.Body
 
-    public constructor(scene: MainScene, name: string, projectileTemplate: ProjectileTemplate) {
+    public constructor(scene: GameScene, name: string, projectileTemplate: ProjectileTemplate) {
         super(scene)
         this.scene = scene
         this.name = name
@@ -155,7 +155,7 @@ export class Projectile extends Phaser.GameObjects.Container {
 }
 
 export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
-    public constructor(scene: MainScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
+    public constructor(scene: GameScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
         super(scene, 0, 0, 'atlas', ProjectileDrawingSprite.frame)
         this.setSize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
         this.setDisplaySize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
@@ -163,7 +163,7 @@ export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
 }
 
 export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
-    public constructor(scene: MainScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
+    public constructor(scene: GameScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
         super(scene)
         this.fillStyle(ProjectileDrawingPrimitive.fillColor, ProjectileDrawingPrimitive.fillAlpha)
         this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
@@ -175,8 +175,8 @@ export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
 export class Projectiles {
     public projectiles: Map<string, Phaser.Physics.Arcade.Group>
     public projectileByIds: Map<string, Projectile>
-    public scene: MainScene
-    constructor(scene: MainScene) {
+    public scene: GameScene
+    constructor(scene: GameScene) {
         this.projectiles = new Map<ProjectileName, Phaser.Physics.Arcade.Group>()
         this.projectileByIds = new Map<ProjectileName, Projectile>()
         this.scene = scene

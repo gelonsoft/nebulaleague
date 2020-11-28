@@ -1,12 +1,12 @@
 import * as _ from 'lodash'
 import { AbilityDrawingStyle, AbilityModel, AbilityAction, ProjectileName } from '~/shared/models'
 import { Config } from '~/shared/config'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 import { Projectiles } from '~/client/entities/projectiles'
 
 export class Ability {
-    public scene: MainScene
+    public scene: GameScene
     public projectiles: Projectiles
     public name: string
     public frame: string
@@ -28,7 +28,7 @@ export class Ability {
     public radiusGraphics?: Phaser.GameObjects.Graphics
     public rayGraphics?: Phaser.GameObjects.Graphics
 
-    constructor(scene: MainScene, config: AbilityModel) {
+    constructor(scene: GameScene, config: AbilityModel) {
         this.scene = scene
         this.projectiles = this.scene.projectiles
         this.name = config.name
@@ -174,6 +174,6 @@ export class Ability {
     }
 }
 
-export function buildAbilities(scene: MainScene): Record<string, Ability> {
+export function buildAbilities(scene: GameScene): Record<string, Ability> {
     return _.mapValues(Config.abilities, config => new Ability(scene, config))
 }

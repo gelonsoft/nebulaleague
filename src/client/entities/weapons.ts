@@ -1,12 +1,12 @@
 import * as _ from 'lodash'
 import { ProjectileName, WeaponModel } from '~/shared/models'
 import { Config } from '~/shared/config'
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 import { Projectiles } from '~/client/entities/projectiles'
 
 export class Weapon {
-    public scene: MainScene
+    public scene: GameScene
     public player: Player
     public projectiles: Projectiles
     public name: string
@@ -18,7 +18,7 @@ export class Weapon {
     public rangeDistance: number
     public weaponTimerEvent: Phaser.Time.TimerEvent | null
 
-    constructor(scene: MainScene, weaponModel: WeaponModel) {
+    constructor(scene: GameScene, weaponModel: WeaponModel) {
         this.scene = scene
         this.projectiles = scene.projectiles
         this.name = weaponModel.name
@@ -76,6 +76,6 @@ export class Weapon {
     public clearDraw() { }
 }
 
-export function buildWeapons(scene: MainScene): Record<string, Weapon> {
+export function buildWeapons(scene: GameScene): Record<string, Weapon> {
     return _.mapValues(Config.weapons, config => new Weapon(scene, config))
 }

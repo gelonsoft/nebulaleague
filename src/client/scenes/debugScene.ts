@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { MainScene } from '~/client/scenes/mainScene'
+import { GameScene } from '~/client/scenes/gameScene'
 import { MyGame } from '~/client/index'
 import { DebugControl } from '~/client/controls'
 import { PlayerAI } from '~/client/ai/playerAI'
@@ -23,7 +23,7 @@ export class DebugScene extends Phaser.Scene {
     public showDirectionAngles: boolean
     public gameDelay: number
     public gameDelayText: Phaser.GameObjects.Text
-    public mainScene: MainScene
+    public mainScene: GameScene
     public directions: Array<any>
     public cornerCoords: Array<any>
     public helpText: Array<any>
