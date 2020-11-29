@@ -2,6 +2,7 @@ import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
 import { Event as MyEvent } from '~/shared/events'
 import { GameModeButton } from '~/client/ui/buttons'
+import { GameMode } from '~/shared/models'
 
 export class LobyScene extends Phaser.Scene {
     public game: MyGame
@@ -41,7 +42,7 @@ export class LobyScene extends Phaser.Scene {
             .setAlpha(0.5)
     }
 
-    start(mode: string) {
+    start(mode: GameMode) {
         this.client.emitLobyStart({
             name: 'anonymous',
             gameMode: mode,
@@ -67,7 +68,7 @@ export class LobyScene extends Phaser.Scene {
             0,
             'gamepad.png',
             'Training Mode',
-            (_pointer: Phaser.Input.Pointer) => this.start('demo')
+            (_pointer: Phaser.Input.Pointer) => this.start('training')
         )
 
         this.gameModeContainer = this.add

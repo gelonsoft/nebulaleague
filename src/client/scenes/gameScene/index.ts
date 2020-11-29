@@ -1,10 +1,10 @@
 import { GameFfaScene } from "./GameFfaScene"
-import { GameDemoScene } from "./GameDemoScene"
+import { GameTrainingScene } from "./GameTrainingScene"
 import { GameScene } from "./GameScene"
 
 export {
     GameFfaScene,
-    GameDemoScene,
+    GameTrainingScene,
     GameScene,
 }
 

@@ -2,7 +2,7 @@ import 'process'
 import 'phaser'
 import './main.scss'
 
-import { GameScene, GameFfaScene, GameDemoScene } from '~/client/scenes/gameScene'
+import { GameScene, GameFfaScene, GameTrainingScene } from '~/client/scenes/gameScene'
 import { HudScene } from '~/client/scenes/hudScene'
 import { BootScene } from '~/client/scenes/bootScene'
 import { DebugScene } from '~/client/scenes/debugScene'
@@ -32,9 +32,8 @@ export class PhaserSpaceGame {
             MainMenuScene,
             DeathScene,
             PlayerSelectionScene,
-            // GameScene,
             GameFfaScene,
-            GameDemoScene,
+            GameTrainingScene,
             
         ]
         this.game = new MyGame({

@@ -13,8 +13,23 @@ export enum ControlledBy {
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
-
 export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
+export type GameMode = 'training' | 'ffa'
+
+
+export type sceneGameKey =
+    | 'gameFfaScene'
+    | 'gameTrainingScene'
+
+export type sceneKey =
+    | sceneGameKey
+    | 'bootScene'
+    | 'deathScene'
+    | 'debugScene'
+    | 'hudScene'
+    | 'lobyScene'
+    | 'mainMenuScene'
+    | 'playerSelectionScene'
 
 export type AbilityName =
     | 'blink'
@@ -215,7 +230,7 @@ export type EffectModel = {
 // SERVER INTERFACE
 export type User = {
     name: string
-    gameMode?: string
+    gameMode?: GameMode
     playerSelectionRoom?: string
 }
 
@@ -224,8 +239,8 @@ export type LobyState = {
 }
 
 export type PlayerSelectionState = {
-    gameMode: string
     players: Record<string, PlayerModel>
+    gameMode: GameMode
     gameRoom?: string
 }
 
@@ -249,8 +264,8 @@ export type GameStateEntities = {
     projectiles: Record<string, ProjectileModel>
 }
 
-export type GameState =  GameStateEntities & {
-    gameMode: string
+export type GameState = GameStateEntities & {
+    gameMode: GameMode
     hostId?: string
 }
 

@@ -10,14 +10,15 @@ import {
     ControlledBy,
 } from '~/shared/models'
 import { ClientEvent, Event } from '~/shared/events'
-import { GameDemoScene, GameFfaScene } from './scenes/gameScene'
+import { GameTrainingScene, GameFfaScene, GameScene } from '~/client/scenes/gameScene'
+import { Config } from '~/shared/config'
 
 export class Client {
     public game: MyGame
     public playerSelectionScene: PlayerSelectionScene
     public lobyScene: LobyScene
     public gameFfaScene: GameFfaScene
-    public gameDemoScene: GameDemoScene
+    public gameTrainingScene: GameTrainingScene
     public lobyUser: User
     public playerConfig: PlayerConfig
     public playerSelectionState: PlayerSelectionState
@@ -31,7 +32,7 @@ export class Client {
         this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
         this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
         this.gameFfaScene = this.game.scene.getScene('gameFfaScene') as GameFfaScene
-        this.gameDemoScene = this.game.scene.getScene('gameDemoScene') as GameDemoScene
+        this.gameTrainingScene = this.game.scene.getScene('GameTrainingScene') as GameTrainingScene
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
@@ -81,7 +82,7 @@ export class Client {
                 }
             },
             projectiles: {},
-            gameMode: this.lobyUser.gameMode || 'default',
+            gameMode: this.lobyUser.gameMode || 'training',
             hostId: 'hello'
         }
         
@@ -96,13 +97,13 @@ export class Client {
                 abilityKey4: playerConfig.abilityKey4,
             })
         )
-        if(this.lobyUser.gameMode === 'ffa') {
-            this.gameDemoScene.scene.restart()
-        } else if (this.lobyUser.gameMode === 'demo') {
-            this.gameFfaScene.scene.restart()
-        }
-
+        this.gameScene.scene.restart()
         this.playerSelectionScene.scene.sleep()
+    }
+
+    public get gameScene(): GameScene {
+        const gameKey = Config.modeToGameKey[this.gameState.gameMode]
+        return this.game.scene.getScene(gameKey) as GameScene
     }
 
     public emitGameInit() {

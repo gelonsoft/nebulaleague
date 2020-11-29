@@ -6,6 +6,7 @@ import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { GameScene } from '~/client/scenes/gameScene'
 import { HealthBar } from '~/client/entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '~/client/entities/effects'
+import { Client } from '../client'
 
 class SlotContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -106,7 +107,7 @@ export class HudScene extends Phaser.Scene {
     public actionToContainer: Record<ActionKey, SlotContainer>
     public effectIconsContainer: Phaser.GameObjects.Container
     public mainContainer: Phaser.GameObjects.Container
-    public mainScene: GameScene
+    public gameScene: GameScene
 
     constructor() {
         super({ key: 'hudScene' })
@@ -128,21 +129,21 @@ export class HudScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.mainScene = this.scene.get('gameFfaScene') as GameScene
-        this.player = this.mainScene.player
-        this.mainScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
-        this.mainScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)
-        this.mainScene.events.on(Event.abilitiesCooldownChanged, this.updateAbilitiesCooldown, this)
-        this.mainScene.events.on(Event.abilitiesSelectedChanged, this.updateAbilitiesSelected, this)
-        this.mainScene.events.on(Event.weaponsCooldownChanged, this.updateWeaponCooldown, this)
-        this.mainScene.events.on(Event.weaponSelectedChanged, this.updateWeaponSelected, this)
-        this.mainScene.events.on(Event.effectsChanged, this.updateEffectChanged, this)
+        const client = this.registry.get('client') as Client 
+        this.gameScene = client.gameScene
+        this.player = this.gameScene.player
+        this.gameScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
+        this.gameScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)
+        this.gameScene.events.on(Event.abilitiesCooldownChanged, this.updateAbilitiesCooldown, this)
+        this.gameScene.events.on(Event.abilitiesSelectedChanged, this.updateAbilitiesSelected, this)
+        this.gameScene.events.on(Event.weaponsCooldownChanged, this.updateWeaponCooldown, this)
+        this.gameScene.events.on(Event.weaponSelectedChanged, this.updateWeaponSelected, this)
+        this.gameScene.events.on(Event.effectsChanged, this.updateEffectChanged, this)
 
         const top = this.scale.height - Config.hud.height
         this.background = this.add.graphics()
         this.background.fillStyle(Config.hud.background, 0.2)
         this.background.fillRect(0, 0, this.scale.width, Config.hud.height)
-        console.log(this.player)
         this.healthBar = new HealthBar(
             this,
             0,

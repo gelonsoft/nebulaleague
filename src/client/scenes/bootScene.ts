@@ -1,5 +1,6 @@
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
+import { Config } from '~/shared/config'
 
 export class BootScene extends Phaser.Scene {
     public game: MyGame
@@ -8,7 +9,7 @@ export class BootScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: 'bootScene',
+            key: Config.scenes.boot.key,
         })
     }
 
@@ -32,7 +33,7 @@ export class BootScene extends Phaser.Scene {
             'progress',
             (value: number) => {
                 this.progressBar.clear()
-                this.progressBar.fillStyle(0x88e453, 1)
+                this.progressBar.fillStyle(Config.scenes.boot.cameraBackgroundColor, 1)
                 this.progressBar.fillRect(
                     this.cameras.main.width / 4,
                     this.cameras.main.height / 2 - 16,
