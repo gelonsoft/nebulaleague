@@ -1,9 +1,10 @@
+import { Config } from "~/shared/config"
 import { GameScene } from "./GameScene"
 
 
 export class GameTrainingScene extends GameScene {
     constructor() {
-        super('gameTrainingScene')
+        super(Config.scenes.gameTraining.key)
     }
 }
 

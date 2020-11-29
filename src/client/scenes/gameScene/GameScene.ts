@@ -1,6 +1,7 @@
 import {
     Position,
     ActionKey,
+    sceneGameKey,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
@@ -27,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     public mainCameraZoom: number
     public backgroundImageKey: string
     
-    constructor(gameKey: string) {
+    constructor(gameKey: sceneGameKey) {
         super({
             key: gameKey,
         })
@@ -59,12 +60,12 @@ export class GameScene extends Phaser.Scene {
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.client.id) as Player
-        
+
         this.settingCamera()
-        this.game.scene.getScene('hudScene').scene.start() // 
         this.createBackground()
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
+
     }
 
     public createBackground(): void {
@@ -76,7 +77,7 @@ export class GameScene extends Phaser.Scene {
                 this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
             )
             .setOrigin(0.23, 0.23)
-            .setAlpha(0.7)
+            // .setAlpha(0.7)
             .setDepth(-1)
     }
     

@@ -44,7 +44,7 @@ export class GameFfaScene extends GameScene {
 
 
     constructor() {
-        super('gameFfaScene')
+        super(Config.scenes.gameFfa.key)
     }
 
 

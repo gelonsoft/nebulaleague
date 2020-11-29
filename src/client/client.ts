@@ -8,6 +8,7 @@ import {
     User,
     PlayerSelectionState,
     ControlledBy,
+    sceneGameKey,
 } from '~/shared/models'
 import { ClientEvent, Event } from '~/shared/events'
 import { GameTrainingScene, GameFfaScene, GameScene } from '~/client/scenes/gameScene'
@@ -57,7 +58,6 @@ export class Client {
     public emitLobyStart(user: User): void {
         this.lobyUser = user
         this.playerSelectionScene.scene.start()
-        this.lobyScene.scene.sleep()
     }
 
     public emitPlayerSelectionInit(): void {
@@ -97,13 +97,18 @@ export class Client {
                 abilityKey4: playerConfig.abilityKey4,
             })
         )
-        this.gameScene.scene.restart()
-        this.playerSelectionScene.scene.sleep()
+        this.playerSelectionScene.scene.stop()
+        this.game.scene.getScene('hudScene').scene.launch()
+        this.gameScene.scene.launch()
     }
 
+
+    public get gameKey(): sceneGameKey {
+        return Config.modeToGameKey[this.gameState.gameMode]
+    }
+    
     public get gameScene(): GameScene {
-        const gameKey = Config.modeToGameKey[this.gameState.gameMode]
-        return this.game.scene.getScene(gameKey) as GameScene
+        return this.game.scene.getScene(this.gameKey) as GameScene
     }
 
     public emitGameInit() {
