@@ -17,12 +17,12 @@ export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
 export type GameMode = 'training' | 'ffa'
 
 
-export type sceneGameKey =
+export type SceneGameKey =
     | 'gameFfaScene'
     | 'gameTrainingScene'
 
-export type sceneKey =
-    | sceneGameKey
+export type SceneKey =
+    | SceneGameKey
     | 'bootScene'
     | 'deathScene'
     | 'debugScene'

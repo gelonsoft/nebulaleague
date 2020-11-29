@@ -1,8 +1,8 @@
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
-import { Event as MyEvent } from '~/shared/events'
 import { GameModeButton } from '~/client/ui/buttons'
 import { GameMode } from '~/shared/models'
+import { Config } from '~/shared/config'
 
 export class LobyScene extends Phaser.Scene {
     public game: MyGame
@@ -14,7 +14,7 @@ export class LobyScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: 'lobyScene',
+            key: Config.scenes.loby.key,
         })
     }
 

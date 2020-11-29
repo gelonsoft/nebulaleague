@@ -8,11 +8,12 @@ import {
     User,
     PlayerSelectionState,
     ControlledBy,
-    sceneGameKey,
+    SceneGameKey,
 } from '~/shared/models'
 import { ClientEvent, Event } from '~/shared/events'
 import { GameTrainingScene, GameFfaScene, GameScene } from '~/client/scenes/gameScene'
 import { Config } from '~/shared/config'
+import { HudScene } from '~/client/scenes/hudScene'
 
 export class Client {
     public game: MyGame
@@ -20,9 +21,9 @@ export class Client {
     public lobyScene: LobyScene
     public gameFfaScene: GameFfaScene
     public gameTrainingScene: GameTrainingScene
-    public lobyUser: User
-    public playerConfig: PlayerConfig
     public playerSelectionState: PlayerSelectionState
+    public hudScene: HudScene
+    public lobyUser: User
     public gameState: GameState
     public isHost: boolean
     public isGameInit: boolean
@@ -30,10 +31,13 @@ export class Client {
 
     constructor(game: MyGame) {
         this.game = game
-        this.lobyScene = this.game.scene.getScene('lobyScene') as LobyScene
-        this.playerSelectionScene = this.game.scene.getScene('playerSelectionScene') as PlayerSelectionScene
-        this.gameFfaScene = this.game.scene.getScene('gameFfaScene') as GameFfaScene
-        this.gameTrainingScene = this.game.scene.getScene('GameTrainingScene') as GameTrainingScene
+        this.lobyScene = this.game.scene.getScene(Config.scenes.loby.key) as LobyScene
+        this.playerSelectionScene = this.game.scene.getScene(
+            Config.scenes.playerSelection.key
+        ) as PlayerSelectionScene
+        this.gameFfaScene = this.game.scene.getScene(Config.scenes.gameFfa.key) as GameFfaScene
+        this.gameTrainingScene = this.game.scene.getScene(Config.scenes.gameTraining.key) as GameTrainingScene
+        this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
         this.isHost = false
         this.isGameInit = false
         this.isGameJoined = false
@@ -57,7 +61,7 @@ export class Client {
 
     public emitLobyStart(user: User): void {
         this.lobyUser = user
-        this.playerSelectionScene.scene.start()
+        this.lobyScene.scene.start(Config.scenes.playerSelection.key)
     }
 
     public emitPlayerSelectionInit(): void {
@@ -69,7 +73,6 @@ export class Client {
     }
 
     public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
-        this.playerConfig = playerConfig
         this.gameState = {
             players: {
                 offline: {
@@ -78,35 +81,23 @@ export class Client {
                     y: 0,
                     rotation: 0,
                     controlledBy: ControlledBy.MainPlayer,
-                    ...this.playerConfig                    
-                }
+                    ...playerConfig,
+                },
             },
             projectiles: {},
             gameMode: this.lobyUser.gameMode || 'training',
-            hostId: 'hello'
+            hostId: 'hello',
         }
-        
-        window.localStorage.setItem(
-            'playerConfig',
-            JSON.stringify({
-                weaponPrimaryKey: playerConfig.weaponPrimaryKey,
-                weaponSecondaryKey: playerConfig.weaponSecondaryKey,
-                abilityKey1: playerConfig.abilityKey1,
-                abilityKey2: playerConfig.abilityKey2,
-                abilityKey3: playerConfig.abilityKey3,
-                abilityKey4: playerConfig.abilityKey4,
-            })
-        )
-        this.playerSelectionScene.scene.stop()
-        this.game.scene.getScene('hudScene').scene.launch()
-        this.gameScene.scene.launch()
+
+        window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
+        this.playerSelectionScene.scene.start(this.gameKey)
+        this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
     }
 
-
-    public get gameKey(): sceneGameKey {
+    public get gameKey(): SceneGameKey {
         return Config.modeToGameKey[this.gameState.gameMode]
     }
-    
+
     public get gameScene(): GameScene {
         return this.game.scene.getScene(this.gameKey) as GameScene
     }

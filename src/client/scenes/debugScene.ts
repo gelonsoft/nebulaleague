@@ -1,10 +1,11 @@
 // @ts-nocheck
-
+import { Config } from '~/shared/config'
 import { GameScene } from '~/client/scenes/gameScene'
 import { MyGame } from '~/client/index'
 import { DebugControl } from '~/client/controls'
 import { PlayerAI } from '~/client/ai/playerAI'
 import { Player } from '~/client/entities/player'
+
 
 const formatCoord = function (x, y) {
     return '(' + x + ',' + y + ')'
@@ -36,7 +37,7 @@ export class DebugScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: 'debugScene',
+            key: Config.scenes.death.debug,
             active: false,
         })
 

@@ -273,7 +273,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
     public gameContainerHeight: number
     constructor() {
         super({
-            key: 'playerSelectionScene',
+            key: Config.scenes.playerSelection.key,
         })
     }
 

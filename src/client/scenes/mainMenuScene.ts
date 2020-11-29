@@ -1,11 +1,12 @@
 import { MyGame } from '~/client/index'
+import { Config } from '~/shared/config'
 
 export class MainMenuScene extends Phaser.Scene {
     public game: MyGame
     public menuHTML: Phaser.GameObjects.DOMElement
 
     constructor() {
-        super({ key: 'mainMenuScene' })
+        super({ key: Config.scenes.mainMenu.key })
     }
 
     create() {

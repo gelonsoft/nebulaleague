@@ -110,7 +110,7 @@ export class HudScene extends Phaser.Scene {
     public gameScene: GameScene
 
     constructor() {
-        super({ key: 'hudScene' })
+        super({ key: Config.scenes.hud.key })
     }
 
     public init(): void {
@@ -185,7 +185,7 @@ export class HudScene extends Phaser.Scene {
             this.abilityContainer3,
             this.abilityContainer4,
             this.effectIconsContainer,
-        ]).setDepth(10)
+        ])
         this.updateHealth()
         this.updateWeaponSelected(true)
     }

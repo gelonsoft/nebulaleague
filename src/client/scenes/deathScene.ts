@@ -1,3 +1,4 @@
+import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { MyGame } from '~/client/index'
 import { GameScene } from '~/client/scenes/gameScene'
@@ -38,7 +39,7 @@ export class DeathScene extends Phaser.Scene {
     public canResetAfterElapsed: number
 
     constructor() {
-        super({ key: 'deathScene' })
+        super({ key: Config.scenes.death.key })
     }
 
     public init(mainScene: GameScene): void {

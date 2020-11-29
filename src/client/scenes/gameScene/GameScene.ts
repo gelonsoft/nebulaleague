@@ -1,7 +1,7 @@
 import {
     Position,
     ActionKey,
-    sceneGameKey,
+    SceneGameKey,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
@@ -28,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     public mainCameraZoom: number
     public backgroundImageKey: string
     
-    constructor(gameKey: sceneGameKey) {
+    constructor(gameKey: SceneGameKey) {
         super({
             key: gameKey,
         })
@@ -77,7 +77,7 @@ export class GameScene extends Phaser.Scene {
                 this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
             )
             .setOrigin(0.23, 0.23)
-            // .setAlpha(0.7)
+            .setAlpha(0.9)
             .setDepth(-1)
     }
     

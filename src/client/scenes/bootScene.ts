@@ -8,9 +8,7 @@ export class BootScene extends Phaser.Scene {
     private progressBar: Phaser.GameObjects.Graphics
 
     constructor() {
-        super({
-            key: Config.scenes.boot.key,
-        })
+        super({ key: Config.scenes.boot.key })
     }
 
     init(): void {
@@ -64,7 +62,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     update(): void {
-        this.scene.start('lobyScene')
+        this.scene.start(Config.scenes.loby.key)
     }
 
     private createLoadingGraphics(): void {

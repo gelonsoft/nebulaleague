@@ -8,9 +8,8 @@ import {
     PlayerModel,
     ProjectileName,
     ProjectileTemplate,
-    sceneKey,
     GameMode,
-    sceneGameKey,
+    SceneGameKey,
 } from '../models'
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
@@ -48,14 +47,14 @@ export class Config {
             
         },
         gameTraining: {
-            key: 'gameTrainingScene' as sceneGameKey,
+            key: 'gameTrainingScene' as SceneGameKey,
         },
         gameFfa: {
-            key: 'gameFfaScene' as sceneGameKey,
+            key: 'gameFfaScene' as SceneGameKey,
         }
     }
 
-    public static readonly modeToGameKey: Record<GameMode, sceneGameKey> = {
+    public static readonly modeToGameKey: Record<GameMode, SceneGameKey> = {
         training: Config.scenes.gameTraining.key,
         ffa: Config.scenes.gameFfa.key,
     }
