@@ -2,12 +2,13 @@ import {
     Position,
     ActionKey,
     SceneGameKey,
+    PlayerAction,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
-import { Projectiles } from '~/client/entities/projectiles'
+import { Projectile, Projectiles } from '~/client/entities/projectiles'
 import { buildWeapons, Weapon } from '~/client/entities/weapons'
 import { Ability, buildAbilities } from '~/client/entities/abilities'
 import { Event } from '~/shared/events'
@@ -40,6 +41,9 @@ export class GameScene extends Phaser.Scene {
             // this.scene.run('debugScene', this)
         }
         this.backgroundImageKey = 'backgroundGalaxy3'
+        this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
+        this.registerEvent()
+        
     }
 
     public create(): void {
@@ -194,8 +198,64 @@ export class GameScene extends Phaser.Scene {
             Config.world.height - Config.hud.height - Config.player.size / 2
         )
     }
+
+    public handlePlayerPlayerCollide(_player1: Player, player2: Player): void {
+        player2.body.velocity.scale(-1)
+        player2.hit(Config.player.toOtherDamage)
+    }
+
+    public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
+        if (hittedPlayer.id !== projectile.fromPlayerId) {
+            projectile.actionOnCollision(hittedPlayer)
+        }
+    }
+
+
+    public registerEvent(): void {
+        this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
+            if (playerAction.direction) {
+                this.player.move(playerAction.direction)
+            } else {
+                this.player.move(this.player.previousDirection)
+            }
+            if (playerAction.rotation) {
+                this.player.rotateFromPointer(playerAction.rotation)
+            }
+            if (playerAction.selectAbility) {
+                this.player.selectAbility(playerAction.selectAbility)
+            }
+            if (playerAction.action) {
+                const pointerVector = new Phaser.Math.Vector2(
+                    playerAction.pointerPosition!.x,
+                    playerAction.pointerPosition!.y
+                )
+                this.player.action(playerAction.action, pointerVector)
+            }
+        })
+    }
     
     public update(): void {
+        this.mainControl.update()
+        this.playerControl.update()
+        
+        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
+        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
+        this.physics.overlap(
+            this.players,
+            this.projectiles.getAll(),
+            this.handleEnemyProjectileCollide,
+        )
+        
+        if (this.player.active) {
+            this.player.draw()
+        }
 
+        this.players
+            .getChildren()
+            .filter((player: Player) => player.active)
+            .forEach((player: Player) => {
+                player.update()
+            })
+        
     }
 }
