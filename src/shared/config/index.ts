@@ -70,7 +70,7 @@ export class Config {
     }
 
     
-    private static readonly playerDefaultModel: PlayerModel = {
+    public static readonly playerDefaultModel: PlayerModel = {
         name: 'anonymous',
         id: '0',
         x: 0,

@@ -15,6 +15,23 @@ import { GameTrainingScene, GameFfaScene, GameScene } from '~/client/scenes/game
 import { Config } from '~/shared/config'
 import { HudScene } from '~/client/scenes/hudScene'
 
+const otherPlayers = {
+    playerAI1: Config.playerDefaultModel,
+    playerAI2: Config.playerDefaultModel,
+    playerAI3: Config.playerDefaultModel,
+    playerAI4: Config.playerDefaultModel,
+    playerAI5: Config.playerDefaultModel,
+    playerAI6: Config.playerDefaultModel,
+    playerAI7: Config.playerDefaultModel,
+    playerAI8: Config.playerDefaultModel,
+    playerAI9: Config.playerDefaultModel,
+}
+
+
+
+
+
+
 export class Client {
     public game: MyGame
     public playerSelectionScene: PlayerSelectionScene
@@ -83,6 +100,7 @@ export class Client {
                     controlledBy: ControlledBy.MainPlayer,
                     ...playerConfig,
                 },
+                ...otherPlayers
             },
             projectiles: {},
             gameMode: this.lobyUser.gameMode || 'training',
