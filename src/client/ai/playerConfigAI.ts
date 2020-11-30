@@ -1,6 +1,6 @@
 import { Wander } from '~/client/ai/steering'
 
-export interface PlayerAIConfig {
+export type  PlayerAIConfig = {
     wander: Wander
     weaponPrecisionHandicap: number
     fleeForSecondRange: [number, number]
@@ -17,14 +17,7 @@ export interface PlayerAIConfig {
     }
 }
 
-export const playerAI1 = {
-    id: 'playerAI1',
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI1: PlayerAIConfig = {
     wander: {
         radialMag: 200,
         distanceExtension: 100,
@@ -46,14 +39,7 @@ export const playerAI1 = {
     },
 }
 
-export const playerAI2 = {
-    id: 'playerAI2',
-    weaponPrimaryKey: 'p90',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI2: PlayerAIConfig = {
     wander: {
         radialMag: 100,
         distanceExtension: 150,
@@ -75,14 +61,7 @@ export const playerAI2 = {
     },
 }
 
-export const playerAI3 = {
-    id: 'playerAI3',
-    weaponPrimaryKey: 'revolver',
-    weaponSecondaryKey: 'thompson',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI3: PlayerAIConfig = {
     wander: {
         radialMag: 300,
         distanceExtension: 200,
@@ -104,14 +83,7 @@ export const playerAI3 = {
     },
 }
 
-export const playerAI4 = {
-    id: 'playerAI4',
-    weaponPrimaryKey: 'p90',
-    weaponSecondaryKey: 'revolver',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI4: PlayerAIConfig = {
     wander: {
         radialMag: 400,
         distanceExtension: 600,
@@ -133,14 +105,7 @@ export const playerAI4 = {
     },
 }
 
-export const playerAI5 = {
-    id: 'playerAI5',
-    weaponPrimaryKey: 'p90',
-    weaponSecondaryKey: 'thompson',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI5: PlayerAIConfig = {
     wander: {
         radialMag: 100,
         distanceExtension: 100,
@@ -162,14 +127,7 @@ export const playerAI5 = {
     },
 }
 
-export const playerAI6 = {
-    id: 'playerAI6',
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI6: PlayerAIConfig = {
     wander: {
         radialMag: 400,
         distanceExtension: 500,
@@ -191,14 +149,7 @@ export const playerAI6 = {
     },
 }
 
-export const playerAI7 = {
-    id: 'playerAI7',
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI7: PlayerAIConfig = {
     wander: {
         radialMag: 189,
         distanceExtension: 170,
@@ -220,14 +171,7 @@ export const playerAI7 = {
     },
 }
 
-export const playerAI8 = {
-    id: 'playerAI8',
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI8: PlayerAIConfig = {
     wander: {
         radialMag: 400,
         distanceExtension: 300,
@@ -249,14 +193,7 @@ export const playerAI8 = {
     },
 }
 
-export const playerAI9 = {
-    id: 'playerAI9',
-    weaponPrimaryKey: 'pistol',
-    weaponSecondaryKey: 'ak47',
-    abilityKey1: 'chargedArrow',
-    abilityKey2: 'flame',
-    abilityKey3: 'blink',
-    abilityKey4: 'rootTip',
+export const playerAI9: PlayerAIConfig = {
     wander: {
         radialMag: 1000,
         distanceExtension: 200,
@@ -278,7 +215,7 @@ export const playerAI9 = {
     },
 }
 
-export const playersAIConfig = [
+export const playersAIConfig: Array<PlayerAIConfig> = [
     playerAI1,
     playerAI2,
     playerAI3,

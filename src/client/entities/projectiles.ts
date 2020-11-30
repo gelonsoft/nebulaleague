@@ -27,6 +27,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         super(scene)
         this.scene = scene
         this.name = name
+        this.hittedPlayerIds = new Set()
         this.projectileTemplate = projectileTemplate
         this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
         this.tickTimer = 0

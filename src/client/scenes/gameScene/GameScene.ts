@@ -239,7 +239,6 @@ export class GameScene extends Phaser.Scene {
         this.playerControl.update()
         
         this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
-        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
         this.physics.overlap(
             this.players,
             this.projectiles.getAll(),
@@ -256,6 +255,5 @@ export class GameScene extends Phaser.Scene {
             .forEach((player: Player) => {
                 player.update()
             })
-        
     }
 }

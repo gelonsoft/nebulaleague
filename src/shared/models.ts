@@ -6,8 +6,8 @@ export type Position = {
 
 // PLAYER INTERFACE //
 export enum ControlledBy {
-    MainPlayer,
-    AIPlayer,
+    Human,
+    AI,
 }
 
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
@@ -129,8 +129,9 @@ export type WeaponModel = {
 
 // ABILITIES INTERFACE
 export enum AbilityDrawingStyle {
-    Zone,
-    Ray,
+    ZoneToPointer,
+    ZoneFromPlayer,
+    RayFromPlayer,
 }
 
 export enum AbilityAction {

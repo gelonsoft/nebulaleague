@@ -49,12 +49,17 @@ export class Ability {
         this.rayDistanceAlpha = config.radiusDistanceAlpha || 1
 
         switch (config.drawingStyle) {
-            case AbilityDrawingStyle.Zone:
+            case AbilityDrawingStyle.ZoneToPointer:
                 this.rangeGraphics = this.scene.add.graphics()
                 this.radiusGraphics = this.scene.add.graphics()
                 break
 
-            case AbilityDrawingStyle.Ray:
+            case AbilityDrawingStyle.ZoneFromPlayer:
+                this.radiusGraphics = this.scene.add.graphics()
+                this.rangeDistance = this.radiusDistance
+                break
+
+            case AbilityDrawingStyle.RayFromPlayer:
                 this.rangeDistance = Projectiles.getDistance(this.projectileKey!)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
@@ -62,24 +67,24 @@ export class Ability {
         }
     }
     public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
-        if (this.rangeGraphics) {
-            this.rangeGraphics.clear()
-            this.rangeGraphics.fillStyle(this.rangeDistanceColor, this.rangeDistanceAlpha)
-            this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
-            this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, this.rangeDistanceAlpha)
-            this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
-        }
-
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
             const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition)
                 ? pointerPosition
                 : this.getMaxRadiusPosition(player)
 
-            this.radiusGraphics.fillStyle(this.rangeDistanceColor, this.radiusDistanceAlpha)
+            this.radiusGraphics.fillStyle(this.radiusDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.fillCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
-            this.radiusGraphics.lineStyle(2, this.rangeDistanceColor, this.radiusDistanceAlpha)
+            this.radiusGraphics.lineStyle(2, this.radiusDistanceColor, this.radiusDistanceAlpha)
             this.radiusGraphics.strokeCircle(targetPosition.x, targetPosition.y, this.radiusDistance)
+        }
+
+        if (this.rangeGraphics) {
+            this.rangeGraphics.clear()
+            this.rangeGraphics.fillStyle(this.rangeDistanceColor, this.rangeDistanceAlpha)
+            this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
+            this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, this.rangeDistanceAlpha)
+            this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
         }
 
         if (this.rayGraphics) {

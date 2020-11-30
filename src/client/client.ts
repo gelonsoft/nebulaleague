@@ -16,19 +16,16 @@ import { Config } from '~/shared/config'
 import { HudScene } from '~/client/scenes/hudScene'
 
 const otherPlayers = {
-    playerAI1: Config.playerDefaultModel,
-    playerAI2: Config.playerDefaultModel,
-    playerAI3: Config.playerDefaultModel,
-    playerAI4: Config.playerDefaultModel,
-    playerAI5: Config.playerDefaultModel,
-    playerAI6: Config.playerDefaultModel,
-    playerAI7: Config.playerDefaultModel,
-    playerAI8: Config.playerDefaultModel,
-    playerAI9: Config.playerDefaultModel,
+    playerAI1: { ...Config.playerDefaultModel, x: 100 * 10, y: 100 * 7, controlledBy: ControlledBy.AI },
+    playerAI2: { ...Config.playerDefaultModel, x: 100 * 12, y: 100 * 3, controlledBy: ControlledBy.AI },
+    playerAI3: { ...Config.playerDefaultModel, x: 100 * 13, y: 100 * 19, controlledBy: ControlledBy.AI },
+    playerAI4: { ...Config.playerDefaultModel, x: 100 * 14, y: 100 * 11, controlledBy: ControlledBy.AI },
+    playerAI5: { ...Config.playerDefaultModel, x: 100 * 15, y: 100 * 4, controlledBy: ControlledBy.AI },
+    playerAI6: { ...Config.playerDefaultModel, x: 100 * 18, y: 100 * 5, controlledBy: ControlledBy.AI },
+    playerAI7: { ...Config.playerDefaultModel, x: 100 * 19, y: 100 * 2, controlledBy: ControlledBy.AI },
+    playerAI8: { ...Config.playerDefaultModel, x: 100 * 11, y: 100 * 9, controlledBy: ControlledBy.AI },
+    playerAI9: { ...Config.playerDefaultModel, x: 100 * 20, y: 100 * 12, controlledBy: ControlledBy.AI },
 }
-
-
-
 
 
 
@@ -97,7 +94,7 @@ export class Client {
                     x: 0,
                     y: 0,
                     rotation: 0,
-                    controlledBy: ControlledBy.MainPlayer,
+                    controlledBy: ControlledBy.Human,
                     ...playerConfig,
                 },
                 ...otherPlayers
@@ -131,4 +128,5 @@ export class Client {
     public emitGameRefresh() {
         console.log('emitGameRefresh')
     }
+
 }

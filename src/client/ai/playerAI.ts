@@ -196,6 +196,7 @@ export class PlayerAI {
         for (const playerInViewRange of this.playersInViewRange) {
             if (playerInViewRange.id !== this.player.id) {
                 const actionsInRange = actionsKeysReady.filter((key: ActionKey) => {
+                    console.log(this.player.actions[key].rangeDistance)
                     return this.isInRangeCircle(
                         this.player.body.center,
                         playerInViewRange.body.center,
@@ -333,36 +334,30 @@ export class PlayerAI {
     public doAttack(choosenTarget: PlayerAIActionsInterface, choosenActionKey: ActionKey): void {
         const choosenPlayer: Player = choosenTarget.player
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
+        let predictedPosition = new Phaser.Math.Vector2()
+        if(choosenAction.projectileKey) {
+            const timeToReachTarget = Projectiles.getTimeToReachTarget(
+                choosenAction.projectileKey,
+                choosenPlayer.body.center.clone().distance(this.player.body.center)
+            )
+            const playerToTarget = choosenPlayer.body.center
+                .clone()
+                .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget))
 
-        const timeToReachTarget = Projectiles.getTimeToReachTarget(
-            choosenAction.projectileKey!,
-            choosenPlayer.body.center.clone().distance(this.player.body.center)
-        )
+            const handicapPrecisionAngle =
+                Phaser.Math.RND.normal() * Math.PI * (this.weaponPrecisionHandicap / 360)
+            predictedPosition = playerToTarget.clone().rotate(handicapPrecisionAngle)
+            
+        } else {
+            predictedPosition = this.player.body.position
+        }
 
-        const playerToTarget = choosenPlayer.body.center
-            .clone()
-            .add(choosenPlayer.body.velocity.clone().scale(timeToReachTarget!))
-
-        const handicapPrecisionAngle =
-            Phaser.Math.RND.normal() * Math.PI * (this.weaponPrecisionHandicap / 360)
-
-        const predictedPosition = playerToTarget.clone().rotate(handicapPrecisionAngle)
 
         if (choosenAction instanceof Weapon) {
             this.player.fire(choosenActionKey, predictedPosition)
             this.player.rotation = steering.facing(predictedPosition)
         } else {
-            if (this.player.actions[choosenActionKey].name === 'blink') {
-                this.player.fire(
-                    choosenActionKey,
-                    Phaser.Math.Vector2.UP.clone()
-                        .rotate(Phaser.Math.RND.normal() * Math.PI)
-                        .scale(this.player.actions[choosenActionKey].rangeDistance)
-                        .add(this.player.body.center)
-                )
-            } else {
-                this.player.fire(choosenActionKey, predictedPosition)
-            }
+            this.player.fire(choosenActionKey, predictedPosition)
         }
     }
 }

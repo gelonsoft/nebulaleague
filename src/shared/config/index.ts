@@ -76,23 +76,23 @@ export class Config {
         x: 0,
         y: 0,
         rotation: 0,
-        controlledBy: ControlledBy.MainPlayer,
+        controlledBy: ControlledBy.Human,
         weaponPrimaryKey: 'pistol',
         weaponSecondaryKey: 'ak47',
-        abilityKey1: 'blink',
-        abilityKey2: 'flame',
-        abilityKey3: 'rootTip',
-        abilityKey4: 'chargedArrow',
+        abilityKey1: 'psychicWave',
+        abilityKey2: 'psychicWave',
+        abilityKey3: 'psychicWave',
+        abilityKey4: 'psychicWave',
     }
 
     private static readonly playerDefaultConfig: PlayerConfig = {
         name: 'anonymous',
         weaponPrimaryKey: 'pistol',
         weaponSecondaryKey: 'ak47',
-        abilityKey1: 'blink',
-        abilityKey2: 'flame',
-        abilityKey3: 'rootTip',
-        abilityKey4: 'chargedArrow',
+        abilityKey1: 'psychicWave',
+        abilityKey2: 'psychicWave',
+        abilityKey3: 'psychicWave',
+        abilityKey4: 'psychicWave',
     }
 
     public static readonly player = {
