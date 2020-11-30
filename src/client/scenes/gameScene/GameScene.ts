@@ -47,6 +47,9 @@ export class GameScene extends Phaser.Scene {
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
 
+        this.settingCamera()
+        this.createBackground()
+        
         this.players = this.physics.add
             .group({
                 collideWorldBounds: true,
@@ -60,11 +63,10 @@ export class GameScene extends Phaser.Scene {
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.client.id) as Player
-
-        this.settingCamera()
-        this.createBackground()
+        
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
+        this.cameras.main.startFollow(this.player, true)
 
     }
 
@@ -191,7 +193,6 @@ export class GameScene extends Phaser.Scene {
             Config.world.width,
             Config.world.height - Config.hud.height - Config.player.size / 2
         )
-        this.cameras.main.startFollow(this.player, true)
     }
     
     public update(): void {

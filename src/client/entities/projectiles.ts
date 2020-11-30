@@ -252,3 +252,8 @@ export class Projectiles {
         return Array.from(this.projectiles.values())
     }
 }
+
+export function buildProjectiles(scene: GameScene): Projectiles  {
+    return new Projectiles(scene)
+}
+

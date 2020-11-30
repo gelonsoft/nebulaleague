@@ -29,9 +29,9 @@ export class LobyScene extends Phaser.Scene {
 
         this.client = this.game.registry.get('client') as Client
         this.client.emitLobyInit()
-        // if (this.game.debug) {
-        //     this.startMode('ffa')
-        // }
+        if (Config.debug.lobyTo && this.game.debug) {
+            this.start(Config.debug.lobyTo)
+        }
     }
 
     createBackground() {

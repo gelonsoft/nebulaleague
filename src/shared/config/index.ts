@@ -15,9 +15,19 @@ import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
 import abilitiesConfig from './abilitiesConfig'
 
+type Debug = {
+    lobyTo: GameMode | undefined
+    playerSelectionSkip: boolean
+}
+
 
 
 export class Config {
+    public static readonly debug: Debug = {
+        lobyTo: 'training',
+        playerSelectionSkip: true
+    }
+    
     public static readonly scenes = {
         boot: {
             key: 'bootScene',

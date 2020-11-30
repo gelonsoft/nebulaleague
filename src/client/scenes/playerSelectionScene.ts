@@ -296,21 +296,10 @@ export class PlayerSelectionScene extends Phaser.Scene {
             name: this.client.lobyUser.name,
         }
 
-        if (this.game.debug) {
-            // this.start()
-        }
+        if (Config.debug.playerSelectionSkip && this.game.debug) {
+            this.client.emitPlayerSelectionStart(this.playerConfig)
+        }        
         
-        // this.game.events.on(Event.playerSelectionStart, () => {
-        //     this.client.emitPlayerSelectionEnd()
-        //     this.client.emitGameInit()
-        //     this.client.emitGameJoined()
-        // })
-
-        // this.game.events.on(Event.gameReady, () => {
-        //     this.scene.get('gameDemoScene').scene.restart()
-        //     this.scene.get('hudScene').scene.restart()
-        //     this.scene.sleep()
-        // })
         this.initDrag()
     }
 
