@@ -196,7 +196,6 @@ export class PlayerAI {
         for (const playerInViewRange of this.playersInViewRange) {
             if (playerInViewRange.id !== this.player.id) {
                 const actionsInRange = actionsKeysReady.filter((key: ActionKey) => {
-                    console.log(this.player.actions[key].rangeDistance)
                     return this.isInRangeCircle(
                         this.player.body.center,
                         playerInViewRange.body.center,

@@ -14,18 +14,21 @@ import {
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
 import abilitiesConfig from './abilitiesConfig'
+import { ClientMode } from '~/shared/models'
 
 type Debug = {
     lobyTo: GameMode | undefined
     playerSelectionSkip: boolean
+    defaultClient: ClientMode
 }
 
 
 
 export class Config {
     public static readonly debug: Debug = {
-        lobyTo: 'training',
-        playerSelectionSkip: true
+        lobyTo: undefined,
+        playerSelectionSkip: false,
+        defaultClient: 'colyseus'
     }
     
     public static readonly scenes = {
