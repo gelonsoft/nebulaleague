@@ -73,10 +73,15 @@ export class Config {
         ffa: Config.scenes.gameFfa.key,
     }
 
-    public static readonly userDefault: User = new User({
+    // public static readonly userDefault: User = new User({
+    //     gameMode: 'ffa',
+    //     name: 'anonymous',
+    // })
+    
+    public static readonly userDefault = {
         gameMode: 'ffa',
         name: 'anonymous',
-    })
+    }
 
     public static readonly playerDefaultModel: PlayerModel = {
         name: 'anonymous',
