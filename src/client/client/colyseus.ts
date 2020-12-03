@@ -9,6 +9,7 @@ import {
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 import * as Colyseus from "colyseus.js"
+import { LobbyState } from '~/server/gameServer/lobbyRoom'
 
 
 export class ColyseusClient extends Client {
@@ -18,6 +19,7 @@ export class ColyseusClient extends Client {
     public isGameInit: boolean
     public isGameJoined: boolean
     public colyseus: Colyseus.Client
+    public lobyRoom: Colyseus.Room<LobbyState>
 
     constructor(game: MyGame) {
         super(game)
@@ -33,9 +35,32 @@ export class ColyseusClient extends Client {
         return 'colyseus'
     }
 
+    
+    public async emitLobyInit() {
+        this.lobyRoom = await this.colyseus.joinOrCreate('loby', Config.userDefault)
+        this.lobyRoom.state.users.onChange = (user: User, clientId: string) => {
+            console.log('onChange')
+            console.log(user)
+            console.log(clientId)
+        }
+        
+        this.lobyRoom.state.users.onAdd = (user: User, clientId: string) => {
+            console.log('onAdd')
+            console.log(user)
+            console.log(clientId)
+        }
+        
+    }
 
+
+    public async emitLobyEnd() {
+        
+    }
+    
+    
     public emitLobyStart(user: User): void {
         this.lobyUser = user
+        // this.lobyRoom.send("updateUser", user)
         this.lobyScene.scene.start(Config.scenes.playerSelection.key)
     }
 
