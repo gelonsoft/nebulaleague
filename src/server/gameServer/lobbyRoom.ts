@@ -1,51 +1,41 @@
 import { Schema, type, MapSchema } from '@colyseus/schema'
 import { Client, LobbyRoom as ColyseusLobbyRoom } from 'colyseus'
 import { LobbyOptions } from 'colyseus/lib/rooms/LobbyRoom'
-import { GameMode } from '~/shared/models'
+import { GameMode, User } from '~/shared/models'
 
-type Options = {
-    name: string
-    gameMode: GameMode
-}
 
-export class User extends Schema {
+export class UserSchema extends Schema implements User  {
     @type('string')
     name: string
 
     @type('string')
     gameMode: GameMode
 
-    constructor(options: Options) {
-        super()
-        this.name = options.name
-        this.gameMode = options.gameMode
-    }
+    @type('boolean')
+    ready: boolean
 }
 
-export class LobbyState extends Schema {
-    @type({ map: User })
+export class LobbySchema extends Schema {
+    @type({ map: UserSchema })
     users = new MapSchema<User>()
 }
 
-export class LobbyRoom extends ColyseusLobbyRoom {
-    state: LobbyState
+export class LobbyStateRoom extends ColyseusLobbyRoom {
+    state: LobbySchema
     
-    async onCreate(options: Options) {
-        await super.onCreate(options)
-        // console.log(options)
-        this.onMessage('updateUser', (client: Client, options: Options) => {
+    async onCreate(_userOption: User) {
+        await super.onCreate({})
+        this.onMessage('userReady', (client: Client, userOption: User) => {
             const user = this.state.users.get(client.sessionId)
-            Object.assign(user, options)
+            Object.assign(user, userOption)
         })
 
-        this.setState(new LobbyState())
+        this.setState(new LobbySchema())
     }
 
-    onJoin(client: Client, options: Options & LobbyOptions) {
-        super.onJoin(client, options)
-        this.state.users.set(client.sessionId, new User(options))
-        // console.log(options)
-        // console.log(this.state.users)
+    onJoin(client: Client, userOption: User & LobbyOptions) {
+        super.onJoin(client, userOption)
+        this.state.users.set(client.sessionId, new UserSchema().assign(userOption))
     }
 
     onLeave(client: Client) {

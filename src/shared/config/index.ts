@@ -14,8 +14,8 @@ import {
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
 import abilitiesConfig from './abilitiesConfig'
-import { ClientMode } from '~/shared/models'
-import { User } from '~/server/gameServer/lobbyRoom'
+import { ClientMode, User } from '~/shared/models'
+
 
 type Debug = {
     lobyTo: GameMode | undefined
@@ -73,14 +73,10 @@ export class Config {
         ffa: Config.scenes.gameFfa.key,
     }
 
-    // public static readonly userDefault: User = new User({
-    //     gameMode: 'ffa',
-    //     name: 'anonymous',
-    // })
-    
-    public static readonly userDefault = {
+    public static readonly userDefault: User = {
         gameMode: 'ffa',
         name: 'anonymous',
+        ready: false
     }
 
     public static readonly playerDefaultModel: PlayerModel = {

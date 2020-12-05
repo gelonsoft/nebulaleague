@@ -234,8 +234,8 @@ export type EffectModel = {
 // SERVER INTERFACE
 export type User = {
     name: string
-    gameMode?: GameMode
-    playerSelectionRoom?: string
+    gameMode: GameMode
+    ready: boolean
 }
 
 export type LobyState = {

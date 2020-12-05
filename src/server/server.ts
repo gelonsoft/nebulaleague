@@ -6,7 +6,7 @@ import * as path from 'path'
 import * as DotenFlow from 'dotenv-flow'
 import { Server } from "colyseus"
 import { monitor } from "@colyseus/monitor"
-import { LobbyRoom } from '~/server/gameServer/lobbyRoom'
+import { LobbyStateRoom } from '~/server/gameServer/lobbyRoom'
 import { PlayerSelectionRoom } from '~/server/gameServer/playerSelectionRoom'
 
 import settingWebpackFormServer from './settingWebpackFormServer'
@@ -36,7 +36,7 @@ app.get('/', (_req: express.Request, res: express.Response) => {
     res.sendFile(path.resolve('./public/index.html'))
 })
 
-server.define('loby', LobbyRoom)
+server.define('loby', LobbyStateRoom)
 server.define('playerSelection', PlayerSelectionRoom)
 void server.listen(app.get('port'))
 console.info(`Server running at http://127.0.0.1:${app.get('port')}`)

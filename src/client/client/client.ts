@@ -42,10 +42,10 @@ export abstract class Client {
 
     
     public abstract get id(): string
-    public emitLobyInit(): void  {}
+    public emitLobyInit() {}
     public emitLobyEnd(): void {}
     public abstract emitLobyStart(user: User): void 
-    public emitPlayerSelectionInit(): void {}
+    public emitPlayerSelectionInit() {}
     public emitPlayerSelectionEnd(): void {}
     public abstract emitPlayerSelectionStart(playerConfig: PlayerConfig): void
     public emitGameInit(): void {}

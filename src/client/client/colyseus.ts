@@ -1,16 +1,14 @@
 import { MyGame } from '~/client/index'
 import { Client } from '.'
 
-import {
-    PlayerConfig,
-    GameState,
-    User,
-    ControlledBy,
-} from '~/shared/models'
-import { Config } from '~/shared/config'
-import * as Colyseus from "colyseus.js"
-import { LobbyState } from '~/server/gameServer/lobbyRoom'
+import { PlayerConfig, GameState, User, ControlledBy, LobyState } from '~/shared/models'
 
+import { UserSchema } from '~/server/gameServer/lobbyRoom'
+
+import { Config } from '~/shared/config'
+import * as Colyseus from 'colyseus.js'
+import { LobbySchema } from '~/server/gameServer/lobbyRoom'
+import { PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
 
 export class ColyseusClient extends Client {
     public lobyUser: User
@@ -19,51 +17,76 @@ export class ColyseusClient extends Client {
     public isGameInit: boolean
     public isGameJoined: boolean
     public colyseus: Colyseus.Client
-    public lobyRoom: Colyseus.Room<LobbyState>
+    public lobyRoom: Colyseus.Room<LobbySchema>
+    public playerSelectionRoom: Colyseus.Room<PlayerSelectionStateSchema>
 
     constructor(game: MyGame) {
         super(game)
         const host = window.document.location.host.replace(/:.*/, '')
         this.colyseus = new Colyseus.Client(
-            location.protocol.replace("http", "ws")
-            + "//" + host +
-            (window.document.location.port ? ':' + window.document.location.port : ''))
+            location.protocol.replace('http', 'ws') +
+                '//' +
+                host +
+                (window.document.location.port ? ':' + window.document.location.port : '')
+        )
         console.log(this.colyseus)
     }
 
-    get id(): string {
-        return 'colyseus'
-    }
 
+    get id(): string {
+        return 'offline'
+    }
     
+    get lobyRoomId(): string {
+        return this.lobyRoom.sessionId
+    }
+    get playerSelectionRoomId(): string {
+        return this.playerSelectionRoom.sessionId
+    }
+    
+
     public async emitLobyInit() {
         this.lobyRoom = await this.colyseus.joinOrCreate('loby', Config.userDefault)
-        this.lobyRoom.state.users.onChange = (user: User, clientId: string) => {
-            console.log('onChange')
-            console.log(user)
-            console.log(clientId)
+        this.lobyRoom.state.users.onAdd = (user: UserSchema, userId: string) => {
+            user.onChange = (changes) => {
+                changes.forEach(change => {
+                    if(userId === this.lobyRoom.sessionId) {
+                        if(change.field === 'ready' && change.value === true) {
+                            console.log('ready')
+                        }
+                    }                    
+                })
+            }
         }
-        
-        this.lobyRoom.state.users.onAdd = (user: User, clientId: string) => {
-            console.log('onAdd')
-            console.log(user)
-            console.log(clientId)
-        }
-        
-    }
 
+        this.lobyRoom.state.users.onRemove = (user, key) => {
+            console.log(user, 'has been removed at', key)
+        }
+
+        this.lobyRoom.onMessage('*', (message: LobyState) => {
+            // console.log(message)
+        })
+    }
 
     public async emitLobyEnd() {
-        
-    }
-    
-    
-    public emitLobyStart(user: User): void {
-        this.lobyUser = user
-        // this.lobyRoom.send("updateUser", user)
-        this.lobyScene.scene.start(Config.scenes.playerSelection.key)
+
     }
 
+    public emitLobyStart(user: User): void {
+        this.lobyUser = user
+        this.lobyRoom.send('userReady', user)
+        this.lobyScene.scene.start(Config.scenes.playerSelection.key)
+
+    }
+
+    public async emitPlayerSelectionInit() {
+        this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {})
+        console.log(this.playerSelectionRoom)
+    }
+
+    
+    public emitPlayerSelectionEnd(): void {}
+    
     public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
         this.gameState = {
             players: {
@@ -85,5 +108,4 @@ export class ColyseusClient extends Client {
         this.playerSelectionScene.scene.start(this.gameKey)
         this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
     }
-
 }

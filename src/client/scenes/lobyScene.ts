@@ -46,6 +46,7 @@ export class LobyScene extends Phaser.Scene {
         this.client.emitLobyStart({
             name: 'anonymous',
             gameMode: mode,
+            ready: true,
         })
     }
 
