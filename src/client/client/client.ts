@@ -2,7 +2,7 @@ import { MyGame } from '~/client/index'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { LobyScene } from '~/client/scenes/lobyScene'
 import { GameFfaScene, GameScene, GameTrainingScene } from '~/client/scenes/gameScene'
-import { GameState, PlayerConfig, PlayerModel, PlayerSelectionState, SceneGameKey, User } from '~/shared/models'
+import { GameState, PlayerConfig, PlayerSelectionState, SceneGameKey, User } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { HudScene } from '../scenes/hudScene'
 
@@ -11,8 +11,8 @@ export abstract class Client {
     public mainScene: GameScene
     public playerSelectionScene: PlayerSelectionScene
     public lobyScene: LobyScene
-    public players: PlayerModel[]
     public lobyUser: User
+    public playerConfig: PlayerConfig
     public playerSelectionState: PlayerSelectionState
     public gameState: GameState
     public gameFfaScene: GameFfaScene
@@ -28,12 +28,15 @@ export abstract class Client {
         this.gameFfaScene = this.game.scene.getScene(Config.scenes.gameFfa.key) as GameFfaScene
         this.gameTrainingScene = this.game.scene.getScene(Config.scenes.gameTraining.key) as GameTrainingScene
         this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
+        this.lobyUser = Config.userDefault
+        this.playerConfig = Config.playerConfigDefault
+        this.gameState = Config.gameStateDefault
     }
 
 
 
     public get gameKey(): SceneGameKey {
-        return Config.modeToGameKey[this.gameState.gameMode]
+        return Config.modeToGameKey[this.lobyUser.gameMode]
     }
 
     public get gameScene(): GameScene {

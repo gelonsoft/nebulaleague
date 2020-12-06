@@ -23,7 +23,7 @@ export class GameTrainingScene extends GameScene {
         const players = this.players.getChildren() as Player[]
         let indexAI = 0
         for (const player of players) {
-            if (player.controlledBy === ControlledBy.AI) {
+            if (player.controlledBy === 'ai') {
                 const playerAI = new PlayerAI(
                     this,
                     player,

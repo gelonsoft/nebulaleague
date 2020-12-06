@@ -8,11 +8,11 @@ export type Position = {
 }
 
 // PLAYER INTERFACE //
-export enum ControlledBy {
-    Human,
-    AI,
-}
-
+// export enum ControlledBy {
+//     Human,
+//     AI,
+// }
+export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
@@ -60,12 +60,9 @@ export type ProjectileName =
 
 export type ActionName = WeaponName | AbilityName
 
-export type PlayerModel = {
-    id: string
+
+export type PlayerConfig = {
     name: string
-    x: number
-    y: number
-    rotation: number
     controlledBy: ControlledBy
     weaponPrimaryKey: WeaponName
     weaponSecondaryKey: WeaponName
@@ -73,17 +70,18 @@ export type PlayerModel = {
     abilityKey2: AbilityName
     abilityKey3: AbilityName
     abilityKey4: AbilityName
+    ready: boolean
 }
 
-export type PlayerConfig = {
-    name: string
-    weaponPrimaryKey: WeaponName
-    weaponSecondaryKey: WeaponName
-    abilityKey1: AbilityName
-    abilityKey2: AbilityName
-    abilityKey3: AbilityName
-    abilityKey4: AbilityName
+
+export type PlayerModel = PlayerConfig & {
+    id: string
+    x: number
+    y: number
+    rotation: number
 }
+
+
 
 export type PlayerChanged = {
     x?: number
@@ -270,7 +268,6 @@ export type GameStateEntities = {
 
 export type GameState = GameStateEntities & {
     gameMode: GameMode
-    hostId?: string
 }
 
 export class Test {

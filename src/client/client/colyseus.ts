@@ -1,14 +1,14 @@
 import { MyGame } from '~/client/index'
 import { Client } from '.'
 
-import { PlayerConfig, GameState, User, ControlledBy, LobyState } from '~/shared/models'
+import { PlayerModel, GameState, User, ControlledBy, LobyState } from '~/shared/models'
 
 import { UserSchema } from '~/server/gameServer/lobbyRoom'
 
 import { Config } from '~/shared/config'
 import * as Colyseus from 'colyseus.js'
 import { LobbySchema } from '~/server/gameServer/lobbyRoom'
-import { PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
+import { PlayerConfigSchema, PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
 
 export class ColyseusClient extends Client {
     public lobyUser: User
@@ -20,6 +20,7 @@ export class ColyseusClient extends Client {
     public lobyRoom: Colyseus.Room<LobbySchema>
     public playerSelectionRoom: Colyseus.Room<PlayerSelectionStateSchema>
 
+
     constructor(game: MyGame) {
         super(game)
         const host = window.document.location.host.replace(/:.*/, '')
@@ -29,7 +30,6 @@ export class ColyseusClient extends Client {
                 host +
                 (window.document.location.port ? ':' + window.document.location.port : '')
         )
-        console.log(this.colyseus)
     }
 
 
@@ -46,13 +46,14 @@ export class ColyseusClient extends Client {
     
 
     public async emitLobyInit() {
-        this.lobyRoom = await this.colyseus.joinOrCreate('loby', Config.userDefault)
+        this.lobyRoom = await this.colyseus.joinOrCreate('loby', {})
         this.lobyRoom.state.users.onAdd = (user: UserSchema, userId: string) => {
             user.onChange = (changes) => {
                 changes.forEach(change => {
                     if(userId === this.lobyRoom.sessionId) {
                         if(change.field === 'ready' && change.value === true) {
                             this.lobyRoom.leave()
+                            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
                         }
                     }                    
                 })
@@ -69,39 +70,41 @@ export class ColyseusClient extends Client {
     public emitLobyStart(user: User): void {
         this.lobyUser = user
         this.lobyRoom.send('userReady', user)
-        this.lobyScene.scene.start(Config.scenes.playerSelection.key)
-
     }
 
     public async emitPlayerSelectionInit() {
         this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {
             gameMode: this.lobyUser.gameMode,
+            player: this.playerConfig,
         })
-        console.log(this.playerSelectionRoom)
+
+        this.playerSelectionRoom.state.players.onAdd = (playerConfig: PlayerConfigSchema, playerId: string) => {
+            playerConfig.onChange = (changes) => {
+                changes.forEach(change => {
+                    if(playerId === this.playerSelectionRoom.sessionId) {
+                        if(change.field === 'ready' && change.value === true) {
+                            this.playerSelectionRoom.leave()
+                            this.gameState.players[this.id] = {
+                                ...playerConfig,
+                                id: this.id,
+                                x: 0,
+                                y: 0,
+                                rotation: 0,
+                                controlledBy: 'human',
+                            }
+                            this.playerSelectionScene.scene.start(this.gameKey)
+                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+                        }
+                    }                    
+                })
+            }
+        }
     }
 
-    
-    public emitPlayerSelectionEnd(): void {}
-    
-    public emitPlayerSelectionStart(playerConfig: PlayerConfig): void {
-        this.gameState = {
-            players: {
-                offline: {
-                    id: this.id,
-                    x: 0,
-                    y: 0,
-                    rotation: 0,
-                    controlledBy: ControlledBy.Human,
-                    ...playerConfig,
-                },
-            },
-            projectiles: {},
-            gameMode: this.lobyUser.gameMode || 'training',
-            hostId: 'hello',
-        }
-
+    public emitPlayerSelectionStart(playerConfig: PlayerModel): void {
         window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
-        this.playerSelectionScene.scene.start(this.gameKey)
-        this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+        this.playerConfig = playerConfig
+        this.playerSelectionRoom.send('playerReady', this.playerConfig)
+       
     }
 }

@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { AbilityName, ActionModel, ActionName, PlayerConfig, WeaponName } from '~/shared/models'
+import { AbilityName, ActionModel, ActionName, ControlledBy, PlayerModel, WeaponName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { Client } from '~/client/client'
@@ -262,7 +262,7 @@ export function createSlotsContainer(
 export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
     public client: Client
-    public playerConfig: PlayerConfig
+    public playerConfig: PlayerModel
     public background: Phaser.GameObjects.Image
     public slotContainer: Phaser.GameObjects.Container
     public gameContainer: Phaser.GameObjects.Container
@@ -292,7 +292,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         this.client.emitPlayerSelectionInit()
         this.playerConfig = {
             ...Config.player.defaultConfig,
-            ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerConfig),
+            ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
             name: this.client.lobyUser.name,
         }
 
@@ -573,7 +573,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
         ]
 
-        const playerConfUpdated: PlayerConfig = {
+        const playerConfUpdated: PlayerModel = {
             ...this.playerConfig,
             weaponPrimaryKey: weapons[0].item.key as WeaponName,
             weaponSecondaryKey: weapons[1].item.key as WeaponName,
@@ -581,6 +581,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
             abilityKey2: abilities[1].item.key as AbilityName,
             abilityKey3: abilities[2].item.key as AbilityName,
             abilityKey4: abilities[3].item.key as AbilityName,
+            controlledBy: 'human',
+            ready: true,
         }
         this.client.emitPlayerSelectionStart(playerConfUpdated)
     }

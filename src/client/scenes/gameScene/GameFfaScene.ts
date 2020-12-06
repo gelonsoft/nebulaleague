@@ -1,25 +1,20 @@
 import { GameScene } from "./GameScene"
 import * as _ from 'lodash'
-import { diff } from 'deep-object-diff'
 import { Config } from '~/shared/config'
 import {
-    Position,
-    PlayerModel,
     PlayerAction,
-    PlayerConfig,
+    PlayerModel,
     PlayerChanged,
     ProjectileChanged,
-    GameStateChanged,
-    ActionKey,
 } from '~/shared/models'
 import { Event } from '~/shared/events'
 import { PlayerAI } from '~/client/ai/playerAI'
-import { Player, ActionTimeInterface } from '~/client/entities/player'
+import { Player } from '~/client/entities/player'
 import { MainControl, PlayerControl } from '~/client/controls'
 import { Consumable, RandomItem } from '~/client/entities/consumables'
 import { Projectiles, Projectile } from '~/client/entities/projectiles'
-import { Weapon, buildWeapons } from '~/client/entities/weapons'
-import { buildAbilities, Ability } from '~/client/entities/abilities'
+import { Weapon } from '~/client/entities/weapons'
+import { Ability } from '~/client/entities/abilities'
 
 
 
@@ -36,7 +31,7 @@ export class GameFfaScene extends GameScene {
     public freeCamera: boolean
     public mainCameraZoom: number
     public backgroundImage: Phaser.GameObjects.Image
-    public playerConfig: PlayerConfig
+    public playerConfig: PlayerModel
     public playerPrevious: PlayerChanged
     public playerCurrent: PlayerChanged
     public projectilesPrevious: Record<string, ProjectileChanged>

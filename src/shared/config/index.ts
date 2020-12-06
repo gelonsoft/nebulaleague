@@ -1,15 +1,17 @@
 import {
-    ControlledBy,
-    WeaponName,
-    WeaponModel,
     AbilityName,
     AbilityModel,
-    PlayerConfig,
-    PlayerModel,
+    ControlledBy,
     ProjectileName,
     ProjectileTemplate,
+    PlayerConfig,
+    PlayerModel,
     GameMode,
+    GameState,
     SceneGameKey,
+    WeaponName,
+    WeaponModel,
+
 } from '../models'
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
@@ -79,30 +81,34 @@ export class Config {
         ready: false
     }
 
-    public static readonly playerDefaultModel: PlayerModel = {
+
+    public static readonly playerConfigDefault: PlayerConfig = {
         name: 'anonymous',
-        id: '0',
+        controlledBy: 'ai',
+        weaponPrimaryKey: 'pistol',
+        weaponSecondaryKey: 'ak47',
+        abilityKey1: 'psychicWave',
+        abilityKey2: 'psychicWave',
+        abilityKey3: 'psychicWave',
+        abilityKey4: 'psychicWave',
+        ready: false
+    }
+    
+    public static readonly playerDefaultModel: PlayerModel = {
+        ...Config.playerConfigDefault,
+        id: '',
         x: 0,
         y: 0,
         rotation: 0,
-        controlledBy: ControlledBy.Human,
-        weaponPrimaryKey: 'pistol',
-        weaponSecondaryKey: 'ak47',
-        abilityKey1: 'psychicWave',
-        abilityKey2: 'psychicWave',
-        abilityKey3: 'psychicWave',
-        abilityKey4: 'psychicWave',
     }
 
-    private static readonly playerDefaultConfig: PlayerConfig = {
-        name: 'anonymous',
-        weaponPrimaryKey: 'pistol',
-        weaponSecondaryKey: 'ak47',
-        abilityKey1: 'psychicWave',
-        abilityKey2: 'psychicWave',
-        abilityKey3: 'psychicWave',
-        abilityKey4: 'psychicWave',
+
+    public static readonly gameStateDefault: GameState = {
+        gameMode: 'ffa',
+        players: {},
+        projectiles: {},
     }
+
 
     public static readonly player = {
         size: 52,
@@ -112,7 +118,7 @@ export class Config {
         defaultSpeed: 400,
         defaultHealth: 1000,
         toOtherDamage: 100,
-        defaultConfig: Config.playerDefaultConfig,
+        defaultConfig: Config.playerConfigDefault,
         defaultModel: Config.playerDefaultModel,
     }
 
