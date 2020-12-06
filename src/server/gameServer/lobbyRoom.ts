@@ -39,6 +39,7 @@ export class LobbyStateRoom extends ColyseusLobbyRoom {
     }
 
     onLeave(client: Client) {
+        console.log('call on leave')
         super.onLeave(client)
     }
 }

@@ -52,7 +52,7 @@ export class ColyseusClient extends Client {
                 changes.forEach(change => {
                     if(userId === this.lobyRoom.sessionId) {
                         if(change.field === 'ready' && change.value === true) {
-                            console.log('ready')
+                            this.lobyRoom.leave()
                         }
                     }                    
                 })
@@ -60,16 +60,10 @@ export class ColyseusClient extends Client {
         }
 
         this.lobyRoom.state.users.onRemove = (user, key) => {
-            console.log(user, 'has been removed at', key)
+            
         }
 
-        this.lobyRoom.onMessage('*', (message: LobyState) => {
-            // console.log(message)
-        })
-    }
-
-    public async emitLobyEnd() {
-
+        this.lobyRoom.onMessage('*', (_message: LobyState) => {})
     }
 
     public emitLobyStart(user: User): void {
@@ -80,7 +74,9 @@ export class ColyseusClient extends Client {
     }
 
     public async emitPlayerSelectionInit() {
-        this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {})
+        this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {
+            gameMode: this.lobyUser.gameMode,
+        })
         console.log(this.playerSelectionRoom)
     }
 
