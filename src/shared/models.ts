@@ -7,11 +7,6 @@ export type Position = {
     y: number
 }
 
-// PLAYER INTERFACE //
-// export enum ControlledBy {
-//     Human,
-//     AI,
-// }
 export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
@@ -176,14 +171,25 @@ export type ProjectileBase = {
     drawing: ProjectileDrawingSpriteModel | ProjectileDrawingPrimitiveModel
 }
 
-export type ProjectileDrawingSpriteModel = {
-    type: 'sprite'
+
+export type ProjectileDrawingBaseModel = {
+    style: string
+    radius?: number
+    frame?: string
+    fillColor?: number
+    strokeColor?: number
+    fillAlpha?: number
+    strokeAlpha?: number
+}
+
+export type ProjectileDrawingSpriteModel = ProjectileDrawingBaseModel & {
+    style: 'sprite'
     radius: number
     frame: string
 }
 
-export type ProjectileDrawingPrimitiveModel = {
-    type: 'primitive'
+export type ProjectileDrawingPrimitiveModel = ProjectileDrawingBaseModel & {
+    style: 'primitive'
     radius: number
     fillColor: number
     strokeColor: number
@@ -191,14 +197,18 @@ export type ProjectileDrawingPrimitiveModel = {
     strokeAlpha: number
 }
 
+
+
 export type CollidingBehaviour = 'kill' | 'single' | 'multiple'
 
 export type ProjectileTemplate = ProjectileBase & {
     name: ProjectileName
 }
 
-export type ProjectileModel = ProjectileBase & {
-    fromGroup: ProjectileName
+export type ProjectileModel = {
+    projectileTemplate: ProjectileTemplate
+    x: number
+    y: number
 }
 
 export type ProjectileChanged = {
@@ -268,11 +278,4 @@ export type GameStateEntities = {
 
 export type GameState = GameStateEntities & {
     gameMode: GameMode
-}
-
-export class Test {
-    foo: number
-    constructor(foo: number) {
-        this.foo = foo
-    }
 }

@@ -6,13 +6,14 @@ import {
     ProjectileTemplate,
     ProjectileDrawingSpriteModel,
     ProjectileDrawingPrimitiveModel,
+    ProjectileModel,
 } from '~/shared/models'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 
 type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
 
-export class Projectile extends Phaser.GameObjects.Container {
+export class Projectile extends Phaser.GameObjects.Container implements ProjectileModel {
     public scene: GameScene
     public name: string
     public fromPlayerId = 'uknown'
@@ -47,7 +48,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     public initDrawing(): void {
-        switch (this.projectileTemplate.drawing.type) {
+        switch (this.projectileTemplate.drawing.style) {
             case 'sprite':
                 this.drawing = new ProjectileDrawingSprite(
                     this.scene,

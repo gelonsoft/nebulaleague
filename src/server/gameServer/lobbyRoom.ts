@@ -15,13 +15,13 @@ export class UserSchema extends Schema implements User  {
     ready: boolean
 }
 
-export class LobbySchema extends Schema {
+export class LobbyStateSchema extends Schema {
     @type({ map: UserSchema })
     users = new MapSchema<User>()
 }
 
-export class LobbyStateRoom extends ColyseusLobbyRoom {
-    state: LobbySchema
+export class LobbyRoom extends ColyseusLobbyRoom {
+    state: LobbyStateSchema
     
     async onCreate(_userOption: User) {
         await super.onCreate({})
@@ -30,7 +30,7 @@ export class LobbyStateRoom extends ColyseusLobbyRoom {
             Object.assign(user, userOption)
         })
 
-        this.setState(new LobbySchema())
+        this.setState(new LobbyStateSchema())
     }
 
     onJoin(client: Client, userOption: User & LobbyOptions) {

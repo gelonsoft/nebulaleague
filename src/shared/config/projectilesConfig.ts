@@ -14,7 +14,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 5,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 5,
             frame: 'beams-blue1.png',
         },
@@ -27,7 +27,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 5,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 5,
             frame: 'beam-yellow1.png',
         },
@@ -40,7 +40,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 7,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 7,
             frame: 'beams-purple1.png',
         },
@@ -53,7 +53,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 8,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 8,
             frame: 'beams-purple1.png',
         },
@@ -66,7 +66,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 9,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 9,
             frame: 'beams-purple1.png',
         },
@@ -79,7 +79,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         radius: 12,
         collidingBehaviour: 'kill',
         drawing: {
-            type: 'sprite',
+            style: 'sprite',
             radius: 12,
             frame: 'charged_arrow_bullet.png',
         },
@@ -99,7 +99,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         tickAfter: 0.15,
         collidingBehaviour: 'multiple',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 50,
             fillColor: 0xaa0000,
             strokeColor: 0x880000,
@@ -123,7 +123,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         triggerAfter: 0.4,
         collidingBehaviour: 'single',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 60,
             fillColor: 0x00aa00,
             strokeColor: 0x00ff00,
@@ -146,7 +146,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         triggerAfter: 0.2,
         collidingBehaviour: 'single',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 320,
             fillColor: 0x00aaff,
             strokeColor: 0x00aaff,
@@ -169,7 +169,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         triggerAfter: 0.2,
         collidingBehaviour: 'single',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 230,
             fillColor: 0x800080,
             strokeColor: 0xa000a0,
@@ -192,7 +192,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         triggerAfter: 0.2,
         collidingBehaviour: 'single',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 260,
             fillColor: 0xfdd023,
             strokeColor: 0xfee034,
@@ -215,7 +215,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         triggerAfter: 0.2,
         collidingBehaviour: 'single',
         drawing: {
-            type: 'primitive',
+            style: 'primitive',
             radius: 240,
             fillColor: 0xe25822,
             strokeColor: 0xe37a33,

@@ -7,7 +7,7 @@ import { UserSchema } from '~/server/gameServer/lobbyRoom'
 
 import { Config } from '~/shared/config'
 import * as Colyseus from 'colyseus.js'
-import { LobbySchema } from '~/server/gameServer/lobbyRoom'
+import { LobbyStateSchema } from '~/server/gameServer/lobbyRoom'
 import { PlayerConfigSchema, PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
 
 export class ColyseusClient extends Client {
@@ -17,7 +17,7 @@ export class ColyseusClient extends Client {
     public isGameInit: boolean
     public isGameJoined: boolean
     public colyseus: Colyseus.Client
-    public lobyRoom: Colyseus.Room<LobbySchema>
+    public lobyRoom: Colyseus.Room<LobbyStateSchema>
     public playerSelectionRoom: Colyseus.Room<PlayerSelectionStateSchema>
 
 
