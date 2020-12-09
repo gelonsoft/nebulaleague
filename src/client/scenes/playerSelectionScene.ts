@@ -300,14 +300,9 @@ export class PlayerSelectionScene extends Phaser.Scene {
         }        
         
         this.initDrag()
-        return
     }
 
-    async create() {
-        await this.client.emitPlayerSelectionInit()
-        this.client.playerSelectionState.players.forEach((player) => {
-            console.log(player)
-        })
+    create() {
         this.playerConfig = {
             ...Config.player.defaultConfig,
             ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),

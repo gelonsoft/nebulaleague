@@ -50,9 +50,11 @@ export abstract class Client {
     public emitLobyInit() {}
     public emitLobyEnd(): void {}
     public abstract emitLobyStart(user: User): void 
-    public emitPlayerSelectionInit(): Promise<PlayerSelectionState> {
-        return Promise.resolve(this.playerSelectionState)
-    }
+    // public emitPlayerSelectionInit(): Promise<PlayerSelectionState> {
+    //     return Promise.resolve(this.playerSelectionState)
+    // }
+    public emitPlayerSelectionInit(): void {}
+    
     public emitPlayerSelectionEnd(): void {}
     public abstract emitPlayerSelectionStart(playerConfig: PlayerConfig): void
     public emitGameInit(): void {}

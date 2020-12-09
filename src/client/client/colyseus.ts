@@ -50,13 +50,19 @@ export class ColyseusClient extends Client {
 
     public async emitLobyInit() {
         this.lobyRoom = await this.colyseus.joinOrCreate('loby', {})
+
+        this.lobyRoom.onStateChange.once((state: LobyState) => {
+            this.lobyScene = state
+            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
+        });
+        
         this.lobyRoom.state.users.onAdd = (user: UserSchema, userId: string) => {
             user.onChange = (changes) => {
                 changes.forEach(change => {
                     if(userId === this.lobyRoom.sessionId) {
                         if(change.field === 'ready' && change.value === true) {
                             this.lobyRoom.leave()
-                            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
+                            void this.emitPlayerSelectionInit()
                         }
                     }                    
                 })
@@ -75,11 +81,17 @@ export class ColyseusClient extends Client {
         this.lobyRoom.send('userReady', user)
     }
 
-    public async emitPlayerSelectionInit(): Promise<PlayerSelectionState> {
+    public async emitPlayerSelectionInit() {
         this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {
             gameMode: this.lobyUser.gameMode,
             player: this.playerConfig,
         })
+
+        this.playerSelectionRoom.onStateChange.once((state: PlayerSelectionState) => {
+            this.playerSelectionState = state
+            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
+        });
+
 
         this.playerSelectionRoom.state.players.onAdd = (playerConfig: PlayerConfigSchema, playerId: string) => {
             playerConfig.onChange = (changes) => {
@@ -95,19 +107,13 @@ export class ColyseusClient extends Client {
                                 rotation: 0,
                                 controlledBy: 'human',
                             }
-                            this.game.scene.start(Config.scenes.playerSelection.key)
-                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack() // 
+                            this.playerSelectionScene.scene.start(Config.scenes.playerSelection.key)
+                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
                         }
                     }                    
                 })
             }
         }
-
-        this.playerSelectionRoom.o
-        this.playerSelectionState = this.playerSelectionRoom.state
-        console.log(this.playerSelectionRoom.state)
-        console.log(this.playerSelectionRoom.state.players.values())
-        return this.playerSelectionState
     }
 
     public emitPlayerSelectionStart(playerConfig: PlayerModel): void {
