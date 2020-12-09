@@ -2,7 +2,6 @@ import { MapSchema } from '@colyseus/schema'
 import {
     AbilityName,
     AbilityModel,
-    ControlledBy,
     ProjectileName,
     ProjectileTemplate,
     PlayerConfig,
@@ -13,14 +12,13 @@ import {
     WeaponName,
     WeaponModel,
     PlayerSelectionState,
-
-} from '../models'
+    ProjectileModel,
+    ClientMode,
+    User,
+} from '~/shared/models'
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
 import abilitiesConfig from './abilitiesConfig'
-import { ClientMode, User } from '~/shared/models'
-import { PlayerConfigSchema } from '~/server/gameServer/playerSelectionRoom'
-
 
 type Debug = {
     lobyTo: GameMode | undefined
@@ -28,15 +26,13 @@ type Debug = {
     defaultClient: ClientMode
 }
 
-
-
 export class Config {
     public static readonly debug: Debug = {
         lobyTo: undefined,
         playerSelectionSkip: false,
-        defaultClient: 'colyseus'
+        defaultClient: 'colyseus',
     }
-    
+
     public static readonly scenes = {
         boot: {
             key: 'bootScene',
@@ -62,15 +58,13 @@ export class Config {
         playerSelection: {
             key: 'playerSelectionScene',
         },
-        game: {
-            
-        },
+        game: {},
         gameTraining: {
             key: 'gameTrainingScene' as SceneGameKey,
         },
         gameFfa: {
             key: 'gameFfaScene' as SceneGameKey,
-        }
+        },
     }
 
     public static readonly modeToGameKey: Record<GameMode, SceneGameKey> = {
@@ -78,14 +72,13 @@ export class Config {
         ffa: Config.scenes.gameFfa.key,
     }
 
-    public static readonly userDefault: User = {
+    public static readonly defaultUser: User = {
         gameMode: 'ffa',
         name: 'anonymous',
-        ready: false
+        ready: false,
     }
 
-
-    public static readonly playerConfigDefault: PlayerConfig = {
+    public static readonly defaultPlayerConfig: PlayerConfig = {
         name: 'anonymous',
         controlledBy: 'ai',
         weaponPrimaryKey: 'pistol',
@@ -94,30 +87,25 @@ export class Config {
         abilityKey2: 'psychicWave',
         abilityKey3: 'psychicWave',
         abilityKey4: 'psychicWave',
-        ready: false
+        ready: false,
     }
-    
-    public static readonly playerDefaultModel: PlayerModel = {
-        ...Config.playerConfigDefault,
+
+    public static readonly defaultPlayerModel: PlayerModel = {
+        ...Config.defaultPlayerConfig,
         id: '',
         x: 0,
         y: 0,
         rotation: 0,
     }
 
-    public static readonly playerSelectionState: PlayerSelectionState = {
-        gameMode: 'ffa',
-        players: new MapSchema<PlayerConfigSchema>(),
-        gameRoom: '',
-    }
-    
-
-    public static readonly gameStateDefault: GameState = {
-        gameMode: 'ffa',
-        players: {},
-        projectiles: {},
+    public static readonly defaultPlayerSelectionState: PlayerSelectionState = {
+        players: new MapSchema<PlayerConfig>(),
     }
 
+    public static readonly defaultGameState: GameState = {
+        players: new MapSchema<PlayerModel>(),
+        projectiles: new MapSchema<ProjectileModel>(),
+    }
 
     public static readonly player = {
         size: 52,
@@ -127,8 +115,8 @@ export class Config {
         defaultSpeed: 400,
         defaultHealth: 1000,
         toOtherDamage: 100,
-        defaultConfig: Config.playerConfigDefault,
-        defaultModel: Config.playerDefaultModel,
+        defaultConfig: Config.defaultPlayerConfig,
+        defaultModel: Config.defaultPlayerModel,
     }
 
     public static readonly world = {

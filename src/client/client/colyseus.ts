@@ -1,16 +1,20 @@
 import { MyGame } from '~/client/index'
 import { Client } from '.'
-
-import { PlayerModel, GameState, User, ControlledBy, LobyState, PlayerSelectionState } from '~/shared/models'
-
-import { UserSchema } from '~/server/gameServer/lobbyRoom'
+import {
+    PlayerModel,
+    User,
+    LobbyState,
+    PlayerSelectionState,
+    UserSchema,
+    LobbyStateSchema,
+    GameStateSchema,
+    PlayerSelectionStateSchema,
+    PlayerConfig,
+    PlayerConfigSchema,
+} from '~/shared/models'
 
 import { Config } from '~/shared/config'
 import * as Colyseus from 'colyseus.js'
-import { LobbyStateSchema } from '~/server/gameServer/lobbyRoom'
-import { PlayerConfigSchema, PlayerSelectionRoom, PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
-import { GameStateSchema } from '~/server/gameServer/gameRoom'
-
 
 export class ColyseusClient extends Client {
     public lobyUser: User
@@ -21,8 +25,6 @@ export class ColyseusClient extends Client {
     public lobyRoom: Colyseus.Room<LobbyStateSchema>
     public playerSelectionRoom: Colyseus.Room<PlayerSelectionStateSchema>
     public gameRoom: Colyseus.Room<GameStateSchema>
-
-
 
     constructor(game: MyGame) {
         super(game)
@@ -35,45 +37,40 @@ export class ColyseusClient extends Client {
         )
     }
 
-
     get id(): string {
         return this.playerSelectionRoom.sessionId
     }
-    
+
     get lobyRoomId(): string {
         return this.lobyRoom.sessionId
     }
     get playerSelectionRoomId(): string {
         return this.playerSelectionRoom.sessionId
     }
-    
 
     public async emitLobyInit() {
         this.lobyRoom = await this.colyseus.joinOrCreate('loby', {})
 
-        this.lobyRoom.onStateChange.once((state: LobyState) => {
-            this.lobyScene = state
-            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
-        });
-        
+        this.lobyRoom.onStateChange.once((state: LobbyState) => {
+            this.lobbyState = state
+        })
+
         this.lobyRoom.state.users.onAdd = (user: UserSchema, userId: string) => {
             user.onChange = (changes) => {
-                changes.forEach(change => {
-                    if(userId === this.lobyRoom.sessionId) {
-                        if(change.field === 'ready' && change.value === true) {
+                changes.forEach((change) => {
+                    if (userId === this.lobyRoom.sessionId) {
+                        if (change.field === 'ready' && change.value === true) {
                             this.lobyRoom.leave()
                             void this.emitPlayerSelectionInit()
                         }
-                    }                    
+                    }
                 })
             }
         }
 
-        this.lobyRoom.state.users.onRemove = (user, key) => {
-            
-        }
+        this.lobyRoom.state.users.onRemove = (user, key) => {}
 
-        this.lobyRoom.onMessage('*', (_message: LobyState) => {})
+        this.lobyRoom.onMessage('*', (_message: LobbyState) => {})
     }
 
     public emitLobyStart(user: User): void {
@@ -86,31 +83,21 @@ export class ColyseusClient extends Client {
             gameMode: this.lobyUser.gameMode,
             player: this.playerConfig,
         })
-
         this.playerSelectionRoom.onStateChange.once((state: PlayerSelectionState) => {
             this.playerSelectionState = state
-            this.lobyScene.scene.start(Config.scenes.playerSelection.key)
-        });
-
+            this.lobbyScene.scene.start(Config.scenes.playerSelection.key)
+        })
 
         this.playerSelectionRoom.state.players.onAdd = (playerConfig: PlayerConfigSchema, playerId: string) => {
             playerConfig.onChange = (changes) => {
-                changes.forEach(change => {
-                    if(playerId === this.playerSelectionRoom.sessionId) {
-                        if(change.field === 'ready' && change.value === true) {
+                changes.forEach((change) => {
+                    if (playerId === this.playerSelectionRoom.sessionId) {
+                        if (change.field === 'ready' && change.value === true) {
                             this.playerSelectionRoom.leave()
-                            this.gameState.players[this.id] = {
-                                ...playerConfig,
-                                id: this.id,
-                                x: 0,
-                                y: 0,
-                                rotation: 0,
-                                controlledBy: 'human',
-                            }
                             this.playerSelectionScene.scene.start(Config.scenes.playerSelection.key)
                             this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
                         }
-                    }                    
+                    }
                 })
             }
         }
@@ -120,6 +107,5 @@ export class ColyseusClient extends Client {
         window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
         this.playerConfig = playerConfig
         this.playerSelectionRoom.send('playerReady', this.playerConfig)
-       
     }
 }

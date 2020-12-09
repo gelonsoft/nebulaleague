@@ -4,7 +4,7 @@ import { GameModeButton } from '~/client/ui/buttons'
 import { GameMode } from '~/shared/models'
 import { Config } from '~/shared/config'
 
-export class LobyScene extends Phaser.Scene {
+export class LobbyScene extends Phaser.Scene {
     public game: MyGame
     public client: Client
     public background: Phaser.GameObjects.Image

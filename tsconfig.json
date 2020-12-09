@@ -9,6 +9,7 @@
         "rootDir": "./src",
         "outDir": "./dist",
         "skipLibCheck": true,
+        "isolatedModules": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "paths": {

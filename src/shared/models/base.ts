@@ -1,14 +1,6 @@
-// GENERAL INTERFACE //
-
-export type ClientMode = 'offline' | 'colyseus'
 import { MapSchema } from '@colyseus/schema'
-import { PlayerConfigSchema } from '~/server/gameServer/playerSelectionRoom'
-
-export type Position = {
-    x: number
-    y: number
-}
-
+export type ClientMode = 'offline' | 'colyseus'
+export type Position = { x: number; y: number }
 export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
@@ -16,10 +8,7 @@ export type ActionKey = WeaponKey | AbilityKey
 export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
 export type GameMode = 'training' | 'ffa'
 
-
-export type SceneGameKey =
-    | 'gameFfaScene'
-    | 'gameTrainingScene'
+export type SceneGameKey = 'gameFfaScene' | 'gameTrainingScene'
 
 export type SceneKey =
     | SceneGameKey
@@ -57,7 +46,6 @@ export type ProjectileName =
 
 export type ActionName = WeaponName | AbilityName
 
-
 export type PlayerConfig = {
     name: string
     controlledBy: ControlledBy
@@ -70,15 +58,12 @@ export type PlayerConfig = {
     ready: boolean
 }
 
-
 export type PlayerModel = PlayerConfig & {
     id: string
     x: number
     y: number
     rotation: number
 }
-
-
 
 export type PlayerChanged = {
     x?: number
@@ -173,7 +158,6 @@ export type ProjectileBase = {
     drawing: ProjectileDrawingSpriteModel | ProjectileDrawingPrimitiveModel
 }
 
-
 export type ProjectileDrawingBaseModel = {
     style: string
     radius?: number
@@ -198,8 +182,6 @@ export type ProjectileDrawingPrimitiveModel = ProjectileDrawingBaseModel & {
     fillAlpha: number
     strokeAlpha: number
 }
-
-
 
 export type CollidingBehaviour = 'kill' | 'single' | 'multiple'
 
@@ -241,43 +223,22 @@ export type EffectModel = {
     tick?: number
 }
 
-// SERVER INTERFACE
 export type User = {
     name: string
     gameMode: GameMode
+    gameRoom?: string
     ready: boolean
 }
 
-export type LobyState = {
-    users: Map<string, User>
+export type LobbyState = {
+    users: MapSchema<User>
 }
 
 export type PlayerSelectionState = {
-    players: MapSchema<PlayerConfigSchema>
-    gameMode: GameMode
-    gameRoom?: string
+    players: MapSchema<PlayerConfig>
 }
 
-export type GameStateChanged = {
-    created?: {
-        players?: Record<string, PlayerModel>
-        projectiles?: Record<string, ProjectileModel>
-    }
-    updated?: {
-        players?: Record<string, PlayerChanged>
-        projectiles?: Record<string, ProjectileChanged>
-    }
-    deleted?: {
-        players?: Array<string>
-        projectiles?: Array<string>
-    }
-}
-
-export type GameStateEntities = {
-    players: Record<string, PlayerModel>
-    projectiles: Record<string, ProjectileModel>
-}
-
-export type GameState = GameStateEntities & {
-    gameMode: GameMode
+export type GameState = {
+    players: MapSchema<PlayerModel>
+    projectiles: MapSchema<ProjectileModel>
 }

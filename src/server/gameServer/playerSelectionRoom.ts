@@ -1,52 +1,15 @@
-import { Schema, type, MapSchema } from '@colyseus/schema'
 import { Client, Room } from 'colyseus'
 import {
-    AbilityName,
-    ControlledBy,
-    WeaponName,
-    PlayerConfig,
     GameMode,
+    PlayerConfig,
 } from '~/shared/models'
 
-export class PlayerConfigSchema extends Schema implements PlayerConfig {
-    @type('string')
-    name: string
+import {
+    PlayerSelectionStateSchema,
+    PlayerConfigSchema
+} from '~/shared/models/schemas/playerSelectionSchemas'
 
-    @type('string')
-    controlledBy: ControlledBy
 
-    @type('string')
-    weaponPrimaryKey: WeaponName
-
-    @type('string')
-    weaponSecondaryKey: WeaponName
-
-    @type('string')
-    abilityKey1: AbilityName
-
-    @type('string')
-    abilityKey2: AbilityName
-
-    @type('string')
-    abilityKey3: AbilityName
-
-    @type('string')
-    abilityKey4: AbilityName
-
-    @type('boolean')
-    ready = false
-}
-
-export class PlayerSelectionStateSchema extends Schema {
-    @type('string')
-    gameMode: GameMode
-
-    @type('string')
-    gameRoom = ''
-
-    @type({ map: PlayerConfigSchema })
-    players = new MapSchema<PlayerConfigSchema>()
-}
 
 type Option = {
     gameMode: GameMode
@@ -73,7 +36,6 @@ export class PlayerSelectionRoom extends Room<PlayerSelectionStateSchema> {
     }
     
     onJoin(client: Client, option: Option) {
-        this.state.gameMode = option.gameMode
         this.state.players.set(
             client.sessionId,
             new PlayerConfigSchema().assign(option.player)

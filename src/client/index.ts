@@ -6,7 +6,7 @@ import { GameScene, GameFfaScene, GameTrainingScene } from '~/client/scenes/game
 import { HudScene } from '~/client/scenes/hudScene'
 import { BootScene } from '~/client/scenes/bootScene'
 import { DebugScene } from '~/client/scenes/debugScene'
-import { LobyScene } from '~/client/scenes/lobyScene'
+import { LobbyScene } from '~/client/scenes/lobbyScene'
 import { MainMenuScene } from '~/client/scenes/mainMenuScene'
 import { DeathScene } from '~/client/scenes/deathScene'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
@@ -26,7 +26,7 @@ export class PhaserSpaceGame {
     constructor() {
         const scenes = [
             BootScene,
-            LobyScene,
+            LobbyScene,
             HudScene,
             DebugScene,
             MainMenuScene,
