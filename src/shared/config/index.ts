@@ -1,3 +1,4 @@
+import { MapSchema } from '@colyseus/schema'
 import {
     AbilityName,
     AbilityModel,
@@ -11,12 +12,14 @@ import {
     SceneGameKey,
     WeaponName,
     WeaponModel,
+    PlayerSelectionState,
 
 } from '../models'
 import weaponsConfig from './weaponsConfig'
 import projectilesConfig from './projectilesConfig'
 import abilitiesConfig from './abilitiesConfig'
 import { ClientMode, User } from '~/shared/models'
+import { PlayerConfigSchema } from '~/server/gameServer/playerSelectionRoom'
 
 
 type Debug = {
@@ -102,6 +105,12 @@ export class Config {
         rotation: 0,
     }
 
+    public static readonly playerSelectionState: PlayerSelectionState = {
+        gameMode: 'ffa',
+        players: new MapSchema<PlayerConfigSchema>(),
+        gameRoom: '',
+    }
+    
 
     public static readonly gameStateDefault: GameState = {
         gameMode: 'ffa',

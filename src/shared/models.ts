@@ -1,6 +1,8 @@
 // GENERAL INTERFACE //
 
 export type ClientMode = 'offline' | 'colyseus'
+import { MapSchema } from '@colyseus/schema'
+import { PlayerConfigSchema } from '~/server/gameServer/playerSelectionRoom'
 
 export type Position = {
     x: number
@@ -251,7 +253,7 @@ export type LobyState = {
 }
 
 export type PlayerSelectionState = {
-    players: Record<string, PlayerModel>
+    players: MapSchema<PlayerConfigSchema>
     gameMode: GameMode
     gameRoom?: string
 }

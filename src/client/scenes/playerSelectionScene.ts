@@ -277,7 +277,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         })
     }
 
-    init(): void {
+    init() {
         window.addEventListener(
             'resize',
             () => {
@@ -289,19 +289,71 @@ export class PlayerSelectionScene extends Phaser.Scene {
             false
         )
         this.client = this.game.registry.get('client') as Client
-        this.client.emitPlayerSelectionInit()
-        this.playerConfig = {
-            ...Config.player.defaultConfig,
-            ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
-            name: this.client.lobyUser.name,
-        }
+        // this.playerConfig = {
+        //     ...Config.player.defaultConfig,
+        //     ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
+        //     name: this.client.lobyUser.name,
+        // }
 
         if (Config.debug.playerSelectionSkip && this.game.debug) {
             this.client.emitPlayerSelectionStart(this.playerConfig)
         }        
         
         this.initDrag()
+        return
     }
+
+    async create() {
+        await this.client.emitPlayerSelectionInit()
+        this.client.playerSelectionState.players.forEach((player) => {
+            console.log(player)
+        })
+        this.playerConfig = {
+            ...Config.player.defaultConfig,
+            ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
+            name: this.client.lobyUser.name,
+        }
+        
+        this.createBackground()
+        this.createSlots()
+        this.createPlayButton()
+
+        this.gameContainerWidth = this.slotContainer.width
+        this.gameContainerHeight = this.slotContainer.height + this.playButtonDOM.height
+        const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
+        const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
+
+        this.gameContainer = this.add
+            .container(0, 0, [this.slotContainer, this.playButtonDOM])
+            .setSize(this.slotContainer.width, this.playButtonDOM.height + this.playButtonDOM.height)
+            .setPosition(gameContainerX, gameContainerY)
+        return Promise.resolve({})
+    }
+
+    start() {
+        const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
+        const [
+            activatedWeaponSlotContainer,
+            activatedAbilitySlotContainer,
+        ] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
+        const [weapons, abilities] = [
+            activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>,
+            activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
+        ]
+
+        const playerConfUpdated: PlayerModel = {
+            ...this.playerConfig,
+            weaponPrimaryKey: weapons[0].item.key as WeaponName,
+            weaponSecondaryKey: weapons[1].item.key as WeaponName,
+            abilityKey1: abilities[0].item.key as AbilityName,
+            abilityKey2: abilities[1].item.key as AbilityName,
+            abilityKey3: abilities[2].item.key as AbilityName,
+            abilityKey4: abilities[3].item.key as AbilityName,
+            controlledBy: 'human',
+            ready: true,
+        }
+        this.client.emitPlayerSelectionStart(playerConfUpdated)
+    }    
 
     initDrag() {
         this.input.on(
@@ -543,47 +595,5 @@ export class PlayerSelectionScene extends Phaser.Scene {
             button.disabled = false
             button.title = ''
         }
-    }
-
-    create(): void {
-        this.createBackground()
-        this.createSlots()
-        this.createPlayButton()
-
-        this.gameContainerWidth = this.slotContainer.width
-        this.gameContainerHeight = this.slotContainer.height + this.playButtonDOM.height
-        const gameContainerX = this.scale.width / 2 - this.gameContainerWidth / 2
-        const gameContainerY = this.scale.height / 2 - this.gameContainerHeight / 2
-
-        this.gameContainer = this.add
-            .container(0, 0, [this.slotContainer, this.playButtonDOM])
-            .setSize(this.slotContainer.width, this.playButtonDOM.height + this.playButtonDOM.height)
-            .setPosition(gameContainerX, gameContainerY)
-
-    }
-
-    start() {
-        const [activatedSlotContainer] = this.slotContainer.list as Array<Phaser.GameObjects.Container>
-        const [
-            activatedWeaponSlotContainer,
-            activatedAbilitySlotContainer,
-        ] = activatedSlotContainer.list as Array<Phaser.GameObjects.Container>
-        const [weapons, abilities] = [
-            activatedWeaponSlotContainer.list as Array<SelectedSlotContainer>,
-            activatedAbilitySlotContainer.list as Array<SelectedSlotContainer>,
-        ]
-
-        const playerConfUpdated: PlayerModel = {
-            ...this.playerConfig,
-            weaponPrimaryKey: weapons[0].item.key as WeaponName,
-            weaponSecondaryKey: weapons[1].item.key as WeaponName,
-            abilityKey1: abilities[0].item.key as AbilityName,
-            abilityKey2: abilities[1].item.key as AbilityName,
-            abilityKey3: abilities[2].item.key as AbilityName,
-            abilityKey4: abilities[3].item.key as AbilityName,
-            controlledBy: 'human',
-            ready: true,
-        }
-        this.client.emitPlayerSelectionStart(playerConfUpdated)
     }
 }

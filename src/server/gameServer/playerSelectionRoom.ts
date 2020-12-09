@@ -73,10 +73,13 @@ export class PlayerSelectionRoom extends Room<PlayerSelectionStateSchema> {
     }
     
     onJoin(client: Client, option: Option) {
+        this.state.gameMode = option.gameMode
         this.state.players.set(
             client.sessionId,
             new PlayerConfigSchema().assign(option.player)
         )
+        console.log('on join')
+        console.log(this.state.players.values())
     }
 
     onLeave(client: Client) {

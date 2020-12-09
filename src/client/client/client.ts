@@ -28,9 +28,11 @@ export abstract class Client {
         this.gameFfaScene = this.game.scene.getScene(Config.scenes.gameFfa.key) as GameFfaScene
         this.gameTrainingScene = this.game.scene.getScene(Config.scenes.gameTraining.key) as GameTrainingScene
         this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
+        this.playerSelectionState = Config.playerSelectionState
         this.lobyUser = Config.userDefault
         this.playerConfig = Config.playerConfigDefault
         this.gameState = Config.gameStateDefault
+
     }
 
 
@@ -48,7 +50,9 @@ export abstract class Client {
     public emitLobyInit() {}
     public emitLobyEnd(): void {}
     public abstract emitLobyStart(user: User): void 
-    public emitPlayerSelectionInit() {}
+    public emitPlayerSelectionInit(): Promise<PlayerSelectionState> {
+        return Promise.resolve(this.playerSelectionState)
+    }
     public emitPlayerSelectionEnd(): void {}
     public abstract emitPlayerSelectionStart(playerConfig: PlayerConfig): void
     public emitGameInit(): void {}

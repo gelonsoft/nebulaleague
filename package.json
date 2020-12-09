@@ -7,7 +7,7 @@
     },
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
-        "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node --inspect dist/server/server.js\"",
+        "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node dist/server/server.js\"",
         "dev:client": "webpack-dev-server --config client/webpack/dev.config.js",
         "build:client": "webpack --config webpack.prod.config.js",
         "build:server": "tsc",

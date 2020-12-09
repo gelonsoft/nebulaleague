@@ -1,24 +1,27 @@
 import { MyGame } from '~/client/index'
 import { Client } from '.'
 
-import { PlayerModel, GameState, User, ControlledBy, LobyState } from '~/shared/models'
+import { PlayerModel, GameState, User, ControlledBy, LobyState, PlayerSelectionState } from '~/shared/models'
 
 import { UserSchema } from '~/server/gameServer/lobbyRoom'
 
 import { Config } from '~/shared/config'
 import * as Colyseus from 'colyseus.js'
 import { LobbyStateSchema } from '~/server/gameServer/lobbyRoom'
-import { PlayerConfigSchema, PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
+import { PlayerConfigSchema, PlayerSelectionRoom, PlayerSelectionStateSchema } from '~/server/gameServer/playerSelectionRoom'
+import { GameStateSchema } from '~/server/gameServer/gameRoom'
+
 
 export class ColyseusClient extends Client {
     public lobyUser: User
-    public gameState: GameState
     public isHost: boolean
     public isGameInit: boolean
     public isGameJoined: boolean
     public colyseus: Colyseus.Client
     public lobyRoom: Colyseus.Room<LobbyStateSchema>
     public playerSelectionRoom: Colyseus.Room<PlayerSelectionStateSchema>
+    public gameRoom: Colyseus.Room<GameStateSchema>
+
 
 
     constructor(game: MyGame) {
@@ -34,7 +37,7 @@ export class ColyseusClient extends Client {
 
 
     get id(): string {
-        return 'offline'
+        return this.playerSelectionRoom.sessionId
     }
     
     get lobyRoomId(): string {
@@ -72,7 +75,7 @@ export class ColyseusClient extends Client {
         this.lobyRoom.send('userReady', user)
     }
 
-    public async emitPlayerSelectionInit() {
+    public async emitPlayerSelectionInit(): Promise<PlayerSelectionState> {
         this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {
             gameMode: this.lobyUser.gameMode,
             player: this.playerConfig,
@@ -92,13 +95,19 @@ export class ColyseusClient extends Client {
                                 rotation: 0,
                                 controlledBy: 'human',
                             }
-                            this.playerSelectionScene.scene.start(this.gameKey)
-                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+                            this.game.scene.start(Config.scenes.playerSelection.key)
+                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack() // 
                         }
                     }                    
                 })
             }
         }
+
+        this.playerSelectionRoom.o
+        this.playerSelectionState = this.playerSelectionRoom.state
+        console.log(this.playerSelectionRoom.state)
+        console.log(this.playerSelectionRoom.state.players.values())
+        return this.playerSelectionState
     }
 
     public emitPlayerSelectionStart(playerConfig: PlayerModel): void {
