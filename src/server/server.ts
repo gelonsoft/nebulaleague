@@ -37,9 +37,9 @@ app.get('/', (_req: express.Request, res: express.Response) => {
     res.sendFile(path.resolve('./public/index.html'))
 })
 
-server.define('loby', LobbyRoom)
-server.define('playerSelection', PlayerSelectionRoom)
-server.define('game', GameRoom)
+server.define('lobyRoom', LobbyRoom)
+server.define('playerSelectionRoom', PlayerSelectionRoom)
+server.define('gameRoom', GameRoom)
 void server.listen(app.get('port'))
 console.info(`Server running at http://127.0.0.1:${app.get('port')}`)
 

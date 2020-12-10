@@ -9,7 +9,6 @@ import {
     LobbyStateSchema,
     GameStateSchema,
     PlayerSelectionStateSchema,
-    PlayerConfig,
     PlayerConfigSchema,
 } from '~/shared/models'
 
@@ -38,7 +37,7 @@ export class ColyseusClient extends Client {
     }
 
     get id(): string {
-        return this.playerSelectionRoom.sessionId
+        return this.gameRoom.sessionId
     }
 
     get lobyRoomId(): string {
@@ -49,7 +48,7 @@ export class ColyseusClient extends Client {
     }
 
     public async emitLobyInit() {
-        this.lobyRoom = await this.colyseus.joinOrCreate('loby', {})
+        this.lobyRoom = await this.colyseus.joinOrCreate('lobyRoom', {})
 
         this.lobyRoom.onStateChange.once((state: LobbyState) => {
             this.lobbyState = state
@@ -69,7 +68,6 @@ export class ColyseusClient extends Client {
         }
 
         this.lobyRoom.state.users.onRemove = (user, key) => {}
-
         this.lobyRoom.onMessage('*', (_message: LobbyState) => {})
     }
 
@@ -79,7 +77,7 @@ export class ColyseusClient extends Client {
     }
 
     public async emitPlayerSelectionInit() {
-        this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelection', {
+        this.playerSelectionRoom = await this.colyseus.joinOrCreate('playerSelectionRoom', {
             gameMode: this.lobyUser.gameMode,
             player: this.playerConfig,
         })
@@ -94,8 +92,7 @@ export class ColyseusClient extends Client {
                     if (playerId === this.playerSelectionRoom.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
                             this.playerSelectionRoom.leave()
-                            this.playerSelectionScene.scene.start(Config.scenes.playerSelection.key)
-                            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+                            void this.emitGameInit()
                         }
                     }
                 })
@@ -107,5 +104,19 @@ export class ColyseusClient extends Client {
         window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
         this.playerConfig = playerConfig
         this.playerSelectionRoom.send('playerReady', this.playerConfig)
+    }
+
+    public async emitGameInit() {
+        this.gameRoom = await this.colyseus.joinOrCreate('gameRoom', {
+            playerConfig: this.playerConfig,
+        })
+
+        this.gameRoom.onStateChange.once((state: GameStateSchema) => {
+            this.gameState = state
+            this.playerSelectionScene.scene.start(this.gameKey)
+            this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+        })
+
+        
     }
 }

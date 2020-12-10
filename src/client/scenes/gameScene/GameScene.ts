@@ -28,6 +28,7 @@ export class GameScene extends Phaser.Scene {
     public freeCamera: boolean
     public mainCameraZoom: number
     public backgroundImageKey: string
+    public backgroundImage: Phaser.GameObjects.Image
     
     constructor(gameKey: SceneGameKey) {
         super({
@@ -36,6 +37,18 @@ export class GameScene extends Phaser.Scene {
     }
 
     public init(): void {
+        window.addEventListener(
+            'resize',
+            () => {
+                this.backgroundImage.setDisplaySize(
+                    this.cameras.main.displayWidth + Config.world.width * Config.world.paralaxScrollFactor,
+                    this.cameras.main.displayHeight + Config.world.height * Config.world.paralaxScrollFactor
+                )
+            },
+            false
+        )
+
+        
         this.client = this.game.registry.get('client') as Client
         if (this.game.debug) {
             // this.scene.run('debugScene', this)
@@ -53,16 +66,18 @@ export class GameScene extends Phaser.Scene {
 
         this.settingCamera()
         this.createBackground()
-        
+
+        const existingPlayers = Array.from(this.client.gameState.players.values()).map((playerModel) => {
+            return new Player(this, playerModel)
+        })
+
         this.players = this.physics.add
             .group({
                 collideWorldBounds: true,
                 classType: Player,
             })
             .addMultiple(
-                Object.values(this.client.gameState.players).map((playerModel) => {
-                    return new Player(this, playerModel)
-                })
+                existingPlayers
             )
         this.player = this.players
             .getChildren()
@@ -71,7 +86,6 @@ export class GameScene extends Phaser.Scene {
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
         this.cameras.main.startFollow(this.player, true)
-
     }
 
     public createBackground(): void {
