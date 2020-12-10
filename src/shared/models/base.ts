@@ -63,14 +63,12 @@ export type PlayerModel = PlayerConfig & {
     x: number
     y: number
     rotation: number
+    health: number
 }
 
-export type PlayerChanged = {
-    x?: number
-    y?: number
-    rotation?: number
-    health?: number
-}
+
+export type PlayerChanged = Partial<PlayerModel>
+
 
 export type PlayerDirection = {
     x: number

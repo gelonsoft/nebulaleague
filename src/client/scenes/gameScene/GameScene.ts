@@ -3,6 +3,7 @@ import {
     ActionKey,
     SceneGameKey,
     PlayerAction,
+    PlayerChanged,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
@@ -60,6 +61,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public create(): void {
+        console.log('create')
         this.projectiles = new Projectiles(this)
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
@@ -87,6 +89,7 @@ export class GameScene extends Phaser.Scene {
         this.mainControl = new MainControl(this)
         this.cameras.main.startFollow(this.player, true)
     }
+
 
     public createBackground(): void {
         this.add
@@ -229,9 +232,11 @@ export class GameScene extends Phaser.Scene {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
                 this.player.move(playerAction.direction)
+                
             } else {
                 this.player.move(this.player.previousDirection)
             }
+            
             if (playerAction.rotation) {
                 this.player.rotateFromPointer(playerAction.rotation)
             }
@@ -245,6 +250,7 @@ export class GameScene extends Phaser.Scene {
                 )
                 this.player.action(playerAction.action, pointerVector)
             }
+            this.client.gameSendPlayerUpdated(this.player.getChanged())
         })
     }
     

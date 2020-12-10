@@ -1,6 +1,7 @@
 import { Client, Room } from 'colyseus'
 
 import {
+    PlayerChanged,
     PlayerConfig,
     
 } from '~/shared/models'
@@ -18,6 +19,11 @@ export class GameRoom extends Room<GameStateSchema> {
 
     onCreate(_option: Option) {
         this.setState(new GameStateSchema())
+
+        this.onMessage("playerChanged", (client, playerChanged: PlayerChanged) => {
+            Object.assign(this.state.players.get(client.sessionId), playerChanged)
+        })
+        
     }
 
     onJoin(client: Client, option: Option) {

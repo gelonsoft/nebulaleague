@@ -10,10 +10,13 @@ import {
     GameStateSchema,
     PlayerSelectionStateSchema,
     PlayerConfigSchema,
+    PlayerChanged,
+    PlayerModelSchema,
 } from '~/shared/models'
 
 import { Config } from '~/shared/config'
 import * as Colyseus from 'colyseus.js'
+import { Player } from '../entities/player'
 
 export class ColyseusClient extends Client {
     public lobyUser: User
@@ -106,17 +109,34 @@ export class ColyseusClient extends Client {
         this.playerSelectionRoom.send('playerReady', this.playerConfig)
     }
 
+    
     public async emitGameInit() {
+        let isStarted = false
         this.gameRoom = await this.colyseus.joinOrCreate('gameRoom', {
             playerConfig: this.playerConfig,
         })
-
+        
         this.gameRoom.onStateChange.once((state: GameStateSchema) => {
             this.gameState = state
             this.playerSelectionScene.scene.start(this.gameKey)
             this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
+            isStarted = true
         })
 
-        
+        this.gameRoom.state.players.onAdd = (playerModel: PlayerModelSchema, playerId: string) => {
+            if(isStarted) {
+                this.gameScene.players.add(new Player(this.gameScene, playerModel))
+            }
+            playerModel.onChange = (_changes) => {
+                const targetedPlayer = this.gameScene.players.getChildren().
+                    find((player: Player) => player.id === playerId) as Player
+                Object.assign(targetedPlayer, playerModel)
+            }
+        }
     }
+
+    public gameSendPlayerUpdated(playerChanged: PlayerChanged): void {
+        this.gameRoom.send('playerChanged', playerChanged)
+    }
+    
 }

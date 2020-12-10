@@ -96,6 +96,7 @@ export class Config {
         x: 0,
         y: 0,
         rotation: 0,
+        health: 0
     }
 
     public static readonly defaultPlayerSelectionState: PlayerSelectionState = {

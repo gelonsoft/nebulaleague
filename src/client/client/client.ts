@@ -2,7 +2,7 @@ import { MyGame } from '~/client/index'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { LobbyScene } from '~/client/scenes/lobbyScene'
 import { GameFfaScene, GameScene, GameTrainingScene } from '~/client/scenes/gameScene'
-import { GameState, LobbyState, PlayerConfig, PlayerSelectionState, SceneGameKey, User } from '~/shared/models'
+import { GameState, LobbyState, PlayerChanged, PlayerConfig, PlayerSelectionState, SceneGameKey, User } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { HudScene } from '~/client/scenes/hudScene'
 
@@ -61,5 +61,6 @@ export abstract class Client {
     public emitGameJoined(): void {}
     public emitGameRefresh(): void {}
     public emitGameUpdated(): void {}
-
+    public gameSendPlayerUpdated(_playerChanged: PlayerChanged): void {}
+    
 }

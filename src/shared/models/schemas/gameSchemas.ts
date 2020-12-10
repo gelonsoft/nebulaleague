@@ -55,6 +55,9 @@ export class PlayerModelSchema extends Schema implements PlayerModel {
 
     @type('number')
     rotation: number
+    
+    @type('number')
+    health: number
 }
 
 
