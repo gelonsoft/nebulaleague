@@ -257,11 +257,11 @@ export class GameScene extends Phaser.Scene {
     public update(): void {
         this.mainControl.update()
         this.playerControl.update()
-        
+        console.log(this.game.loop.actualFps)
         this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
         this.physics.overlap(
             this.players,
-            this.projectiles.getAll(),
+            this.projectiles.projectiles,
             this.handleEnemyProjectileCollide,
         )
         

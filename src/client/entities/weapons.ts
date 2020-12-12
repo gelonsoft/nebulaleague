@@ -44,6 +44,7 @@ export class Weapon {
             pointerPosition.y
         )
         this.projectiles.fire(this.projectileKey, player.id, sourcePosition, rotationPlayer)
+
     }
 
     public draw(
