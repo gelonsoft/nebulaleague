@@ -1,0 +1,335 @@
+{
+	"textures": [
+		{
+			"image": "entities.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 501,
+				"h": 254
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "spaceShips_007.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 172,
+						"h": 151
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 172,
+						"h": 151
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 172,
+						"h": 151
+					}
+				},
+				{
+					"filename": "spaceShips_006.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 94,
+						"h": 148
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 94,
+						"h": 148
+					},
+					"frame": {
+						"x": 175,
+						"y": 1,
+						"w": 94,
+						"h": 148
+					}
+				},
+				{
+					"filename": "spaceShips_004.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 126,
+						"h": 108
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 126,
+						"h": 108
+					},
+					"frame": {
+						"x": 271,
+						"y": 1,
+						"w": 126,
+						"h": 108
+					}
+				},
+				{
+					"filename": "spaceShips_002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 101,
+						"h": 74
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 101,
+						"h": 74
+					},
+					"frame": {
+						"x": 399,
+						"y": 1,
+						"w": 101,
+						"h": 74
+					}
+				},
+				{
+					"filename": "spaceShips_005.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 136,
+						"h": 84
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 136,
+						"h": 84
+					},
+					"frame": {
+						"x": 1,
+						"y": 154,
+						"w": 136,
+						"h": 84
+					}
+				},
+				{
+					"filename": "spaceShips_009.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 114,
+						"h": 82
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 114,
+						"h": 82
+					},
+					"frame": {
+						"x": 271,
+						"y": 111,
+						"w": 114,
+						"h": 82
+					}
+				},
+				{
+					"filename": "spaceShips_003.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 94
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 94
+					},
+					"frame": {
+						"x": 399,
+						"y": 77,
+						"w": 100,
+						"h": 94
+					}
+				},
+				{
+					"filename": "spaceShips_008.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 82
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 82
+					},
+					"frame": {
+						"x": 139,
+						"y": 154,
+						"w": 100,
+						"h": 82
+					}
+				},
+				{
+					"filename": "spaceShips_001.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 106,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 106,
+						"h": 80
+					},
+					"frame": {
+						"x": 387,
+						"y": 173,
+						"w": 106,
+						"h": 80
+					}
+				},
+				{
+					"filename": "beams-blue1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 21,
+						"h": 19
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 19
+					},
+					"frame": {
+						"x": 241,
+						"y": 151,
+						"w": 21,
+						"h": 19
+					}
+				},
+				{
+					"filename": "beams-red1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 20,
+						"h": 19
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 19
+					},
+					"frame": {
+						"x": 241,
+						"y": 172,
+						"w": 20,
+						"h": 19
+					}
+				},
+				{
+					"filename": "beams-cyan1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 18
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 18
+					},
+					"frame": {
+						"x": 241,
+						"y": 193,
+						"w": 19,
+						"h": 18
+					}
+				},
+				{
+					"filename": "beam-yellow1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 18
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 18
+					},
+					"frame": {
+						"x": 241,
+						"y": 213,
+						"w": 18,
+						"h": 18
+					}
+				},
+				{
+					"filename": "beams-green1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 17
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 17
+					},
+					"frame": {
+						"x": 262,
+						"y": 195,
+						"w": 18,
+						"h": 17
+					}
+				},
+				{
+					"filename": "beams-purple1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 17
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 17
+					},
+					"frame": {
+						"x": 282,
+						"y": 195,
+						"w": 18,
+						"h": 17
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:046d940feb44435af1586409c3009843:7145c5d5898b4c3657d7d341a5f39cb7:d80676a5e85c5032e708efda4f84d8e3$"
+	}
+}

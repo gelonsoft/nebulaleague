@@ -31,7 +31,7 @@ class SlotContainer extends Phaser.GameObjects.Container {
         this.innerWidth = this.width - Config.hud.padding
         this.innerHeight = this.height - Config.hud.padding
         this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(scene, 9, 9, 'atlas', frame)
+        this.image = new Phaser.GameObjects.Image(scene, 9, 9, Config.textureKeys.icons, frame)
         this.textCooldown = new Phaser.GameObjects.Text(scene, 0, 0, '', {})
         this.add([this.graphic, this.image, this.textCooldown])
         this.create()

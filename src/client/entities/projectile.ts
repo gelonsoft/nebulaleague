@@ -160,7 +160,7 @@ export class Projectile extends Phaser.GameObjects.Container implements Projecti
 
 class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
     public constructor(scene: GameScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
-        super(scene, 0, 0, 'atlas', ProjectileDrawingSprite.frame)
+        super(scene, 0, 0, ProjectileDrawingSprite.texture, ProjectileDrawingSprite.frame)
         this.setSize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
         this.setDisplaySize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
     }

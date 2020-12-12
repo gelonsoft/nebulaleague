@@ -16,6 +16,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 5,
+            texture: 'entities',
             frame: 'beams-blue1.png',
         },
     },
@@ -29,6 +30,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 5,
+            texture: 'entities',
             frame: 'beam-yellow1.png',
         },
     },
@@ -42,6 +44,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 7,
+            texture: 'entities',
             frame: 'beams-purple1.png',
         },
     },
@@ -55,6 +58,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 8,
+            texture: 'entities',
             frame: 'beams-purple1.png',
         },
     },
@@ -68,6 +72,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 9,
+            texture: 'entities',
             frame: 'beams-purple1.png',
         },
     },
@@ -81,6 +86,7 @@ const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {
         drawing: {
             style: 'sprite',
             radius: 12,
+            texture: 'entities',
             frame: 'charged_arrow_bullet.png',
         },
         effects: [

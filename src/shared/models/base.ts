@@ -169,6 +169,7 @@ export type ProjectileDrawingBaseModel = {
 export type ProjectileDrawingSpriteModel = ProjectileDrawingBaseModel & {
     style: 'sprite'
     radius: number
+    texture: string
     frame: string
 }
 

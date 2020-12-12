@@ -67,6 +67,11 @@ export class Config {
         },
     }
 
+    public static readonly textureKeys = {
+        entities: 'entities',
+        icons: 'icons',
+    }
+
     public static readonly modeToGameKey: Record<GameMode, SceneGameKey> = {
         training: Config.scenes.gameTraining.key,
         ffa: Config.scenes.gameFfa.key,

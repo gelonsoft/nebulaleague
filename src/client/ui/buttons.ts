@@ -1,3 +1,5 @@
+import { Config } from "~/shared/config"
+
 type GameModeButtonState = 'focus' | 'active' | 'hover'
 
 const TEXT_SIZE = 48
@@ -30,7 +32,7 @@ export class GameModeButton extends Phaser.GameObjects.Container {
         this.scene = scene
         this.onClick = onClick
         this.scene.add.existing(this)
-        this.image = new Phaser.GameObjects.Image(scene, 0, 0, 'atlas', frame)
+        this.image = new Phaser.GameObjects.Image(scene, 0, 0, Config.textureKeys.icons , frame)
         this.text = new Phaser.GameObjects.Text(scene, 0, 0, text, {})
 
         this.image.setDisplaySize(IMAGE_SIZE, IMAGE_SIZE)

@@ -19,6 +19,7 @@ enum ItemType {
 interface Item {
     key: ActionName | 'uncertainity'
     frame: string
+    texture: string
     type: ItemType
 }
 
@@ -52,10 +53,13 @@ class SlotBaseContainer extends Phaser.GameObjects.Container {
         this.innerSize = this.size - this.padding
 
         this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(scene, 0, 0, 'atlas', this.item.frame).setDisplaySize(
-            this.innerSize,
-            this.innerSize
-        )
+        this.image = new Phaser.GameObjects.Image(
+            scene,
+            0,
+            0,
+            this.item.texture,
+            this.item.frame
+        ).setDisplaySize(this.innerSize, this.innerSize)
         this.add([this.graphic, this.image])
         this.setSize(this.size, this.size)
     }
@@ -225,7 +229,7 @@ export function createSlotsContainer(
             scene,
             row * (size + offsetBetween),
             column * (size + offsetBetween),
-            { key: config.name, frame: config.frame, type: itemType },
+            { key: config.name, texture: Config.textureKeys.icons, frame: config.frame, type: itemType },
             size,
             padding
         )
@@ -297,8 +301,8 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         if (Config.debug.playerSelectionSkip && this.game.debug) {
             this.client.emitPlayerSelectionStart(this.playerConfig)
-        }        
-        
+        }
+
         this.initDrag()
     }
 
@@ -308,7 +312,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
             name: this.client.lobyUser.name,
         }
-        
+
         this.createBackground()
         this.createSlots()
         this.createPlayButton()
@@ -348,7 +352,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             ready: true,
         }
         this.client.emitPlayerSelectionStart(playerConfUpdated)
-    }    
+    }
 
     initDrag() {
         this.input.on(
@@ -464,11 +468,13 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
         const defaultWeponItem: Item = {
             key: 'uncertainity',
+            texture: Config.textureKeys.icons,
             frame: 'uncertainty.png',
             type: ItemType.Weapon,
         }
         const defaultAbilityItem: Item = {
             key: 'uncertainity',
+            texture: Config.textureKeys.icons,
             frame: 'uncertainty.png',
             type: ItemType.Ability,
         }

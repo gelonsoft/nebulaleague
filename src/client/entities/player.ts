@@ -126,7 +126,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     public initPlayer(): void {
         this.playerSprite = this.scene.add
-            .sprite(0, 0, 'atlas', 'playerShip1_blue.png')
+            .sprite(0, 0, Config.textureKeys.entities, 'spaceShips_001.png')
             .setDisplayOrigin(0.5, 0.5)
             .setOrigin(0.5, 0.5)
             .setDisplaySize(Config.player.size, Config.player.size)

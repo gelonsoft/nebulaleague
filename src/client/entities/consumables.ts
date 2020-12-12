@@ -72,7 +72,7 @@ export class PillConsumable extends Consumable {
     public health: number
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        super(scene, x, y, 'atlas', 'pill_yellow.png')
+        super(scene, x, y, Config.textureKeys.icons, 'fire-ray.png')
         this.health = 500
         this.name = 'pill'
     }

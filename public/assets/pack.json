@@ -3,9 +3,15 @@
         "files": [
             {
                 "type": "atlas",
-                "key": "atlas",
-                "textureURL": "assets/tilesheet.png",
-                "atlasURL": "assets/tilesheet.json"
+                "key": "icons",
+                "textureURL": "assets/icons/icons.png",
+                "atlasURL": "assets/icons/icons.json"
+            },
+            {
+                "type": "atlas",
+                "key": "entities",
+                "textureURL": "assets/entities/entities.png",
+                "atlasURL": "assets/entities/entities.json"
             },
             {
                 "type": "image",

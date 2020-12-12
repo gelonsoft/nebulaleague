@@ -32,7 +32,13 @@ export class EffectIconContainer extends Phaser.GameObjects.Container {
         this.innerWidth = this.width - this.padding
         this.innerHeight = this.height - this.padding
         this.graphic = new Phaser.GameObjects.Graphics(scene)
-        this.image = new Phaser.GameObjects.Image(scene, this.innerPadding, this.innerPadding, 'atlas', frame)
+        this.image = new Phaser.GameObjects.Image(
+            scene,
+            this.innerPadding,
+            this.innerPadding,
+            Config.textureKeys.icons,
+            frame
+        )
         this.add([this.graphic, this.image])
         this.create()
     }
