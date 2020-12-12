@@ -1,197 +1,20 @@
 import { Config } from '~/shared/config'
-import { Event } from '~/shared/events'
-import {
-    ProjectileChanged,
-    ProjectileName,
-    ProjectileTemplate,
-    ProjectileDrawingSpriteModel,
-    ProjectileDrawingPrimitiveModel,
-    ProjectileModel,
-} from '~/shared/models'
+import { ProjectileName, ProjectileTemplate } from '~/shared/models'
 import { GameScene } from '~/client/scenes/gameScene'
-import { Player } from '~/client/entities/player'
+import { Projectile } from '~/client/entities/projectile'
 
-type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
-
-export class Projectile extends Phaser.GameObjects.Container implements ProjectileModel {
-    public scene: GameScene
-    public name: string
-    public fromPlayerId = 'uknown'
-    public hittedPlayerIds: Set<string>
-    public tickAfter: number
-    public tickTimer: number
-    public readonly projectileTemplate: ProjectileTemplate
-    public drawing: ProjectileDrawing
-    public body: Phaser.Physics.Arcade.Body
-    public group: ProjectileName
-
-    public constructor(scene: GameScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(scene)
-        this.scene = scene
-        this.name = name
-        this.hittedPlayerIds = new Set()
-        this.projectileTemplate = projectileTemplate
-        this.group = projectileTemplate.name
-        this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
-        this.tickTimer = 0
-        this.initPhysics()
-        this.initDrawing()
-        this.scene.add.existing(this)
-    }
-
-    public initPhysics() {
-        this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-        this.body.setCircle(
-            this.projectileTemplate.radius,
-            -this.projectileTemplate.radius,
-            -this.projectileTemplate.radius
-        )
-        this.deactivate()
-    }
-
-    public initDrawing(): void {
-        switch (this.projectileTemplate.drawing.style) {
-            case 'sprite':
-                this.drawing = new ProjectileDrawingSprite(
-                    this.scene,
-                    (this.projectileTemplate.drawing as unknown) as ProjectileDrawingSpriteModel
-                )
-
-                break
-            case 'primitive':
-                this.drawing = new ProjectileDrawingPrimitive(
-                    this.scene,
-                    (this.projectileTemplate.drawing as unknown) as ProjectileDrawingPrimitiveModel
-                )
-                break
-        }
-        this.add(this.drawing)
-    }
-
-    public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
-        if (this.projectileTemplate.triggerAfter) {
-            this.scene.tweens.add({
-                targets: this,
-                alpha: { from: 0.2, to: 1 },
-                duration: this.projectileTemplate.triggerAfter * 1000,
-                ease: 'Cubic.easeIn',
-                onStart: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(true)
-                    this.body.reset(initialPosition.x, initialPosition.y)
-                    this.activate()
-                },
-                onComplete: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(false)
-                },
-            })
-        } else {
-            this.body.reset(initialPosition.x, initialPosition.y)
-            this.activate()
-        }
-
-        if (this.projectileTemplate.speed) {
-            const ux = Math.cos(initialRotation)
-            const uy = Math.sin(initialRotation)
-            this.setRotation(initialRotation + Math.PI / 2)
-            this.body.velocity.x = ux * this.projectileTemplate.speed
-            this.body.velocity.y = uy * this.projectileTemplate.speed
-        }
-
-        this.scene.time.addEvent({
-            delay: this.projectileTemplate.lifespan * 1000,
-            callback: () => this.kill(),
-            callbackScope: this,
-        })
-        this.scene.game.events.emit(Event.ProjectileFired, this)
-    }
-
-    public actionOnCollision(hittedPlayer: Player): void {
-        switch (this.projectileTemplate.collidingBehaviour) {
-            case 'kill':
-                hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
-                this.kill()
-                break
-            case 'single':
-                if (!this.hittedPlayerIds.has(hittedPlayer.id)) {
-                    hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
-                    this.hittedPlayerIds.add(hittedPlayer.id)
-                }
-                break
-            case 'multiple':
-                this.tickTimer += this.scene.game.loop.delta / 1000
-                if (this.tickTimer >= this.tickAfter) {
-                    this.tickTimer = 0
-                    hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
-                }
-                break
-        }
-    }
-
-    public activate(): void {
-        this.tickTimer = this.tickAfter
-        this.setActive(true)
-        this.setVisible(true)
-        this.body.setEnable(true)
-    }
-
-    public deactivate(): void {
-        this.setActive(false)
-        this.setVisible(false)
-        this.body.setEnable(false)
-        this.body.reset(-1000, -1000)
-    }
-
-    public kill(): void {
-        this.deactivate()
-        this.scene.game.events.emit(Event.ProjectileKilled, this)
-    }
-
-    public setFromPlayerId(fromPlayerId: string): void {
-        this.fromPlayerId = fromPlayerId
-    }
-
-    public getChanged(): ProjectileChanged {
-        return {
-            x: this.body.center.x,
-            y: this.body.center.y,
-        }
-    }
-}
-
-export class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
-    public constructor(scene: GameScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
-        super(scene, 0, 0, 'atlas', ProjectileDrawingSprite.frame)
-        this.setSize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
-        this.setDisplaySize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
-    }
-}
-
-export class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
-    public constructor(scene: GameScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
-        super(scene)
-        this.fillStyle(ProjectileDrawingPrimitive.fillColor, ProjectileDrawingPrimitive.fillAlpha)
-        this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
-        this.lineStyle(2, ProjectileDrawingPrimitive.strokeColor, ProjectileDrawingPrimitive.strokeAlpha)
-        this.strokeCircle(0, 0, ProjectileDrawingPrimitive.radius)
-    }
-}
-
-export class Projectiles {
+export class Projectiles extends Phaser.Physics.Arcade.Group {
     public projectiles: Phaser.Physics.Arcade.Group
     public projectileByIds: Map<string, Projectile>
     public scene: GameScene
     constructor(scene: GameScene) {
+        super(scene.physics.world, scene, [], {
+            enable: false,
+            active: false,
+            visible: false,
+            classType: Projectile,
+        })
         this.scene = scene
-        this.projectiles = new Phaser.Physics.Arcade.Group(
-            this.scene.physics.world,
-            this.scene,
-            [], {
-                enable: false,
-                active: false,
-                visible: false,
-                
-                classType: Projectile
-            })
         this.projectileByIds = new Map<ProjectileName, Projectile>()
 
         this.addProjectile(Config.projectiles.pistolBullet, 100)
@@ -213,37 +36,10 @@ export class Projectiles {
         indexes.forEach((index) => {
             const projectileName = `${projectileTemplate.name}-${index}`
             const projectile = new Projectile(this.scene, projectileName, projectileTemplate)
-            this.projectiles.add(projectile)
+            this.add(projectile)
             projectile.body.enable = false
         })
     }
-
-    public static getTimeToReachTarget(fromProjectilesGroup: ProjectileName, targetDistance: number) {
-        if (Config.projectiles[fromProjectilesGroup].speed) {
-            return targetDistance / Config.projectiles[fromProjectilesGroup].speed!
-        } else {
-            return 0
-        }
-    }
-
-    public static getDistance(fromProjectilesGroup: ProjectileName): number {
-        const projectileConfig = Config.projectiles[fromProjectilesGroup]
-        if(projectileConfig.speed) {
-            return projectileConfig.speed * projectileConfig.lifespan
-        } else {
-            return 0
-        }
-    }
-
-    // public getProjectile(projectileNameModel: string): Projectile {
-    //     const projectileNameGroup = projectileNameModel.split('-')[0]
-    //     this.projectiles
-    //     const projectile = this.projectiles
-    //         .get(projectileNameGroup)!
-    //         .getChildren()
-    //         .find((projectile: Projectile) => projectile.name === projectileNameModel) as Projectile
-    //     return projectile
-    // }
 
     public fire(
         projectileGroup: ProjectileName,
@@ -251,21 +47,32 @@ export class Projectiles {
         position: Phaser.Math.Vector2,
         rotation?: number
     ): void {
-        const projectile: Projectile = this.projectiles.getChildren().find((projectile: Projectile) => {
+        const projectile: Projectile = this.getChildren().find((projectile: Projectile) => {
             return projectile.active === false && projectile.group === projectileGroup
         }) as Projectile
         projectile.setFromPlayerId(fromPlayerId)
         projectile.fire(position, rotation || 0)
     }
-
-    public getAll(): Array<Phaser.Physics.Arcade.Group> {
-        // return Array.from(this.projectiles.values())
-        return []
-    }
-    
 }
 
-export function buildProjectiles(scene: GameScene): Projectiles  {
+export function getProjectileTimeToReachTarget(fromProjectile: ProjectileName, targetDistance: number) {
+    const projectileConfig = Config.projectiles[fromProjectile]
+    if (Config.projectiles[fromProjectile].speed) {
+        return targetDistance / projectileConfig.speed!
+    } else {
+        return 0
+    }
+}
+
+export function  getProjectileDistance(fromProjectile: ProjectileName): number {
+    const projectileConfig = Config.projectiles[fromProjectile]
+    if (projectileConfig.speed) {
+        return projectileConfig.speed * projectileConfig.lifespan
+    } else {
+        return 0
+    }
+}
+
+export function buildProjectiles(scene: GameScene): Projectiles {
     return new Projectiles(scene)
 }
-

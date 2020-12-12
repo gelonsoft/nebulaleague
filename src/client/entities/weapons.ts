@@ -3,7 +3,7 @@ import { ProjectileName, WeaponModel } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
-import { Projectiles } from '~/client/entities/projectiles'
+import { Projectiles, getProjectileDistance } from '~/client/entities/projectiles'
 
 export class Weapon {
     public scene: GameScene
@@ -26,7 +26,7 @@ export class Weapon {
         this.cooldownDelay = weaponModel.cooldownDelay
         this.projectileKey = weaponModel.projectileKey
         this.canFire = true
-        this.rangeDistance = Projectiles.getDistance(this.projectileKey)
+        this.rangeDistance = getProjectileDistance(this.projectileKey)
         this.laserGraphics = this.scene.add.graphics({
             lineStyle: weaponModel.laser,
         })

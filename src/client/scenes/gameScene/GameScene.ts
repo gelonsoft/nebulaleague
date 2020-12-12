@@ -3,13 +3,13 @@ import {
     ActionKey,
     SceneGameKey,
     PlayerAction,
-    PlayerChanged,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
-import { Projectile, Projectiles } from '~/client/entities/projectiles'
+import { buildProjectiles, Projectiles } from '~/client/entities/projectiles'
+import { Projectile } from '~/client/entities/projectile'
 import { buildWeapons, Weapon } from '~/client/entities/weapons'
 import { Ability, buildAbilities } from '~/client/entities/abilities'
 import { Event } from '~/shared/events'
@@ -61,8 +61,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public create(): void {
-        console.log('create')
-        this.projectiles = new Projectiles(this)
+        this.projectiles = buildProjectiles(this)
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
 
@@ -261,7 +260,7 @@ export class GameScene extends Phaser.Scene {
         this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
         this.physics.overlap(
             this.players,
-            this.projectiles.projectiles,
+            this.projectiles,
             this.handleEnemyProjectileCollide,
         )
         

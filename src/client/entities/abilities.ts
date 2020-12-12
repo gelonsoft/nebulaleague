@@ -3,7 +3,7 @@ import { AbilityDrawingStyle, AbilityModel, AbilityAction, ProjectileName } from
 import { Config } from '~/shared/config'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
-import { Projectiles } from '~/client/entities/projectiles'
+import { getProjectileDistance, Projectiles } from '~/client/entities/projectiles'
 
 export class Ability {
     public scene: GameScene
@@ -60,7 +60,7 @@ export class Ability {
                 break
 
             case AbilityDrawingStyle.RayFromPlayer:
-                this.rangeDistance = Projectiles.getDistance(this.projectileKey!)
+                this.rangeDistance = getProjectileDistance(this.projectileKey!)
                 this.rangeGraphics = this.scene.add.graphics()
                 this.rayGraphics = this.scene.add.graphics()
                 break

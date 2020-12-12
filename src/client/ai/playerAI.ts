@@ -6,7 +6,7 @@ import { ActionKey, PlayerDirection } from '~/shared/models'
 import { PlayerAIConfig } from '~/client/ai/playerConfigAI'
 import { Weapon } from '~/client/entities/weapons'
 import { Ability } from '~/client/entities/abilities'
-import { Projectiles } from '~/client/entities/projectiles'
+import { getProjectileTimeToReachTarget } from '~/client/entities/projectiles'
 import * as _ from 'lodash'
 
 
@@ -211,9 +211,6 @@ export class PlayerAI {
         this.playersInHittableRange = playersInRange
     }
 
-    public setProjectilesInHittableRange(): void {
-        this.scene.projectiles.getAll()
-    }
 
     public isInRangeCircle(
         sourcePosition: Phaser.Math.Vector2,
@@ -335,7 +332,7 @@ export class PlayerAI {
         const choosenAction: Weapon | Ability = choosenPlayer.actions[choosenActionKey]
         let predictedPosition = new Phaser.Math.Vector2()
         if(choosenAction.projectileKey) {
-            const timeToReachTarget = Projectiles.getTimeToReachTarget(
+            const timeToReachTarget = getProjectileTimeToReachTarget(
                 choosenAction.projectileKey,
                 choosenPlayer.body.center.clone().distance(this.player.body.center)
             )
