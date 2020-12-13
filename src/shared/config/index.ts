@@ -1,3 +1,5 @@
+const isDebug = process.env.DEBUG === 'true' || false
+
 import { MapSchema } from '@colyseus/schema'
 import {
     AbilityName,
@@ -22,15 +24,20 @@ import abilitiesConfig from './abilitiesConfig'
 
 type Debug = {
     lobyTo: GameMode | undefined
-    playerSelectionSkip: boolean
     defaultClient: ClientMode
+    playerSelectionSkip: boolean
+    displayBanner: boolean
+    displayBody: boolean
+
 }
 
 export class Config {
     public static readonly debug: Debug = {
-        lobyTo: undefined,
-        playerSelectionSkip: false,
         defaultClient: 'colyseus',
+        lobyTo: isDebug ? undefined: undefined,
+        displayBanner: isDebug,
+        playerSelectionSkip: isDebug ? false: false,
+        displayBody: isDebug ? false: false,
     }
 
     public static readonly scenes = {

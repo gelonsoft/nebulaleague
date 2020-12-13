@@ -199,6 +199,27 @@
 					}
 				},
 				{
+					"filename": "charged_arrow_bullet.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 24,
+						"h": 27
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 24,
+						"h": 27
+					},
+					"frame": {
+						"x": 241,
+						"y": 151,
+						"w": 24,
+						"h": 27
+					}
+				},
+				{
 					"filename": "beams-blue1.png",
 					"rotated": false,
 					"trimmed": false,
@@ -214,7 +235,7 @@
 					},
 					"frame": {
 						"x": 241,
-						"y": 151,
+						"y": 180,
 						"w": 21,
 						"h": 19
 					}
@@ -235,7 +256,7 @@
 					},
 					"frame": {
 						"x": 241,
-						"y": 172,
+						"y": 201,
 						"w": 20,
 						"h": 19
 					}
@@ -256,7 +277,7 @@
 					},
 					"frame": {
 						"x": 241,
-						"y": 193,
+						"y": 222,
 						"w": 19,
 						"h": 18
 					}
@@ -276,8 +297,8 @@
 						"h": 18
 					},
 					"frame": {
-						"x": 241,
-						"y": 213,
+						"x": 263,
+						"y": 201,
 						"w": 18,
 						"h": 18
 					}
@@ -297,7 +318,7 @@
 						"h": 17
 					},
 					"frame": {
-						"x": 262,
+						"x": 283,
 						"y": 195,
 						"w": 18,
 						"h": 17
@@ -318,7 +339,7 @@
 						"h": 17
 					},
 					"frame": {
-						"x": 282,
+						"x": 303,
 						"y": 195,
 						"w": 18,
 						"h": 17
@@ -330,6 +351,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:046d940feb44435af1586409c3009843:7145c5d5898b4c3657d7d341a5f39cb7:d80676a5e85c5032e708efda4f84d8e3$"
+		"smartupdate": "$TexturePacker:SmartUpdate:9d33bfe922ac4a6bf8ace89174b51928:705f9aeed2ef83e2bb361ce60faf988a:d80676a5e85c5032e708efda4f84d8e3$"
 	}
 }

@@ -1,8 +1,12 @@
+import * as _ from 'lodash'
+import { diff } from 'deep-object-diff'
+import * as Stats from 'stats.js'
 import {
     Position,
     ActionKey,
     SceneGameKey,
     PlayerAction,
+    PlayerChanged,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
 
@@ -30,6 +34,9 @@ export class GameScene extends Phaser.Scene {
     public mainCameraZoom: number
     public backgroundImageKey: string
     public backgroundImage: Phaser.GameObjects.Image
+    public currentPlayerChanged: PlayerChanged
+    public previousPlayerChanged: PlayerChanged
+    public stats: Stats
     
     constructor(gameKey: SceneGameKey) {
         super({
@@ -51,6 +58,12 @@ export class GameScene extends Phaser.Scene {
 
         
         this.client = this.game.registry.get('client') as Client
+        this.currentPlayerChanged = {}
+        this.previousPlayerChanged = {}
+
+        this.stats = new Stats()
+        document.body.appendChild(this.stats.dom)
+        
         if (this.game.debug) {
             // this.scene.run('debugScene', this)
         }
@@ -71,7 +84,6 @@ export class GameScene extends Phaser.Scene {
         const existingPlayers = Array.from(this.client.gameState.players.values()).map((playerModel) => {
             return new Player(this, playerModel)
         })
-
         this.players = this.physics.add
             .group({
                 collideWorldBounds: true,
@@ -91,7 +103,7 @@ export class GameScene extends Phaser.Scene {
 
 
     public createBackground(): void {
-        this.add
+        this.backgroundImage = this.add
             .image(0, 0, this.backgroundImageKey)
             .setScrollFactor(Config.world.paralaxScrollFactor, Config.world.paralaxScrollFactor)
             .setDisplaySize(
@@ -215,9 +227,18 @@ export class GameScene extends Phaser.Scene {
         )
     }
 
-    public handlePlayerPlayerCollide(_player1: Player, player2: Player): void {
-        player2.body.velocity.scale(-1)
-        player2.hit(Config.player.toOtherDamage)
+    public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
+        if (player1.id === this.player.id) {
+            player1.body.velocity.scale(-1)
+            // player1.body.position.add(player1.body.velocity.normalize().scale(100))
+            player1.hit(Config.player.toOtherDamage)
+        }
+
+        if (player2.id === this.player.id) {
+            player2.body.velocity.scale(-1)
+            // player1.body.position.add(player1.body.velocity.normalize().scale(100))
+            player2.hit(Config.player.toOtherDamage)
+        }
     }
 
     public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
@@ -249,15 +270,15 @@ export class GameScene extends Phaser.Scene {
                 )
                 this.player.action(playerAction.action, pointerVector)
             }
-            this.client.gameSendPlayerUpdated(this.player.getChanged())
         })
     }
     
     public update(): void {
+        this.stats.begin()
+        this.previousPlayerChanged = this.currentPlayerChanged
         this.mainControl.update()
         this.playerControl.update()
-        console.log(this.game.loop.actualFps)
-        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide)
+        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, undefined, this)
         this.physics.overlap(
             this.players,
             this.projectiles,
@@ -274,5 +295,11 @@ export class GameScene extends Phaser.Scene {
             .forEach((player: Player) => {
                 player.update()
             })
+        this.currentPlayerChanged = this.player.getChanged()
+        const diffPlayer = diff(this.previousPlayerChanged, this.currentPlayerChanged)
+        if(!_.isEmpty(diffPlayer)) {
+            this.client.gameSendPlayerUpdated(diffPlayer)
+        }
+        this.stats.end()
     }
 }

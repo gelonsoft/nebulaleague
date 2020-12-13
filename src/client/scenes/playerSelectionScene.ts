@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { AbilityName, ActionModel, ActionName, ControlledBy, PlayerModel, WeaponName } from '~/shared/models'
+import { AbilityName, ActionModel, ActionName, ControlledBy, PlayerConfig, PlayerModel, WeaponName } from '~/shared/models'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { Client } from '~/client/client'
@@ -293,12 +293,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             false
         )
         this.client = this.game.registry.get('client') as Client
-        // this.playerConfig = {
-        //     ...Config.player.defaultConfig,
-        //     ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
-        //     name: this.client.lobyUser.name,
-        // }
-
         if (Config.debug.playerSelectionSkip && this.game.debug) {
             this.client.emitPlayerSelectionStart(this.playerConfig)
         }
@@ -308,7 +302,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     create() {
         this.playerConfig = {
-            ...Config.player.defaultConfig,
+            ...Config.player.defaultModel,
             ...(JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerModel),
             name: this.client.lobyUser.name,
         }
@@ -341,7 +335,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
         ]
 
         const playerConfUpdated: PlayerModel = {
-            ...this.playerConfig,
+            ...Config.defaultPlayerModel,
             weaponPrimaryKey: weapons[0].item.key as WeaponName,
             weaponSecondaryKey: weapons[1].item.key as WeaponName,
             abilityKey1: abilities[0].item.key as AbilityName,

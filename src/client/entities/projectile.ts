@@ -138,7 +138,7 @@ export class Projectile extends Phaser.GameObjects.Container implements Projecti
         this.setActive(false)
         this.setVisible(false)
         this.body.setEnable(false)
-        this.body.reset(-1000, -1000)
+        this.body.reset(200, 200)
     }
 
     public kill(): void {

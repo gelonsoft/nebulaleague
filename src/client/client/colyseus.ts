@@ -111,32 +111,49 @@ export class ColyseusClient extends Client {
 
     
     public async emitGameInit() {
-        let isStarted = false
+        // let isStarted = false
         this.gameRoom = await this.colyseus.joinOrCreate('gameRoom', {
             playerConfig: this.playerConfig,
         })
         
         this.gameRoom.onStateChange.once((state: GameStateSchema) => {
             this.gameState = state
+            console.log(this.gameState)
+            this.gameRoom.state.players.forEach((playerModel: PlayerModelSchema, playerId: string) => {
+                playerModel.onChange = (_changes) => {
+                    const targetedPlayer = this.gameScene.players.getChildren().
+                        find((player: Player) => player.id === playerId) as Player
+
+                    Object.assign(targetedPlayer, playerModel)
+                }})
+                                               
+            
+            this.gameRoom.state.players.onAdd = (playerModel: PlayerModelSchema, playerId: string) => {
+                this.gameScene.players.add(new Player(this.gameScene, playerModel))
+                playerModel.onChange = (_changes) => {
+                    const targetedPlayer = this.gameScene.players.getChildren().
+                        find((player: Player) => player.id === playerId) as Player
+                    Object.assign(targetedPlayer, playerModel)
+                }
+            }
+
+            this.gameRoom.state.players.onRemove = (playerModel: PlayerModelSchema, playerId: string) => {
+                const player = this.gameScene.players.getChildren()
+                    .find((player: Player) => player.id === playerId) as Player
+                player.healthBar.destroy()
+                this.gameScene.players.remove(player, true, true)
+            }
+
             this.playerSelectionScene.scene.start(this.gameKey)
             this.gameScene.scene.launch(Config.scenes.hud.key).sendToBack()
-            isStarted = true
+            
         })
 
-        this.gameRoom.state.players.onAdd = (playerModel: PlayerModelSchema, playerId: string) => {
-            if(isStarted) {
-                this.gameScene.players.add(new Player(this.gameScene, playerModel))
-            }
-            playerModel.onChange = (_changes) => {
-                const targetedPlayer = this.gameScene.players.getChildren().
-                    find((player: Player) => player.id === playerId) as Player
-                Object.assign(targetedPlayer, playerModel)
-            }
-        }
     }
-
+        
     public gameSendPlayerUpdated(playerChanged: PlayerChanged): void {
         this.gameRoom.send('playerChanged', playerChanged)
+        // console.log(playerChanged)
     }
     
 }

@@ -4,6 +4,22 @@ import { Player } from '~/client/entities/player'
 import { PlayerAction, PlayerDirection } from '~/shared/models'
 import { DebugScene } from '~/client/scenes/debugScene'
 
+type controlKeys =
+    | 'moveRightDvorak'
+    | 'moveUpDvorak'
+    | 'moveDownDvorak'
+    | 'moveLeftQwerty'
+    | 'moveRightQwerty'
+    | 'moveUpQwerty'
+    | 'moveDownQwerty'
+    | 'moveLeftAzerty'
+    | 'moveUpAzerty'
+    | 'ability1'
+    | 'ability2'
+    | 'ability3'
+    | 'ability4'
+
+
 export class MainControl {
     public scene: GameScene
     public controls: Record<string, Phaser.Input.Keyboard.Key>
@@ -39,9 +55,10 @@ export class MainControl {
     }
 }
 
+
 export class PlayerControl {
     public scene: GameScene
-    public controls: Record<string, Phaser.Input.Keyboard.Key>
+    public controls: Record<controlKeys, Phaser.Input.Keyboard.Key>
     public action: PlayerAction
     public player: Player
     public prevMoveLeft: boolean
@@ -88,8 +105,8 @@ export class PlayerControl {
         const right = this.controls.moveRightDvorak.isDown || this.controls.moveRightQwerty.isDown ? 1 : 0
         const up =
             this.controls.moveUpDvorak.isDown ||
-                this.controls.moveUpQwerty.isDown ||
-                this.controls.moveUpAzerty.isDown
+            this.controls.moveUpQwerty.isDown ||
+            this.controls.moveUpAzerty.isDown
                 ? -1
                 : 0
         const down = this.controls.moveDownDvorak.isDown || this.controls.moveDownQwerty.isDown ? 1 : 0
@@ -110,10 +127,12 @@ export class PlayerControl {
     }
 
     public handleSwitchWeapon(): void {
-        const ability1 = this.scene.input.keyboard.checkDown(this.controls.ability1, 200)
-        const ability2 = this.scene.input.keyboard.checkDown(this.controls.ability2, 200)
-        const ability3 = this.scene.input.keyboard.checkDown(this.controls.ability3, 200)
-        const ability4 = this.scene.input.keyboard.checkDown(this.controls.ability4, 200)
+        // Phaser.Input.Keyboard.JustDown()
+        const ability1 = Phaser.Input.Keyboard.JustDown(this.controls.ability1)
+        const ability2 = Phaser.Input.Keyboard.JustDown(this.controls.ability2)
+        const ability3 = Phaser.Input.Keyboard.JustDown(this.controls.ability3)
+        const ability4 = Phaser.Input.Keyboard.JustDown(this.controls.ability4)
+        
 
         if (ability1) {
             this.action.selectAbility = 'ability1'

@@ -181,7 +181,49 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_001.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/ak47.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/anchor.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/blunderbuss.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/brain-freeze.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/brandy-bottle.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/burning-meteor.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/cannon-shot.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/charged-arrow.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/cog.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/crossed-swords.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/fire-ray.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/fire-wave.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/fire-zone.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/fishing-net.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/flame.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/focused-lightning.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/frostfire.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/frozen-block.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/frozen-body.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/gamepad.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/hamburger-menu.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/harpoon-chain.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/iceberg.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/lightning-shout.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/lucifer-cannon.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/organigram.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/p90.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/pistol-gun.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/psychic-waves.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/revolver.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/rolling-bomb.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/rolling-energy.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/root-tip.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/rune-sword.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/running-shoe.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/snail.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/spiked-mace.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/stone-block.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/teleport.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/thompson-m1928.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/uncertainty.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/vibrating-shield.png</key>
+            <key type="filename">../../../../Pictures/nebulaleague/icons/wingfoot.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -190,144 +232,58 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>27,20,53,40</rect>
+                <rect>12,12,24,24</rect>
                 <key>scale9Paddings</key>
-                <rect>27,20,53,40</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_002.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,19,51,37</rect>
-                <key>scale9Paddings</key>
-                <rect>25,19,51,37</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_003.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,24,50,47</rect>
-                <key>scale9Paddings</key>
-                <rect>25,24,50,47</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_004.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,27,63,54</rect>
-                <key>scale9Paddings</key>
-                <rect>32,27,63,54</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_005.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>34,21,68,42</rect>
-                <key>scale9Paddings</key>
-                <rect>34,21,68,42</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_006.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>24,37,47,74</rect>
-                <key>scale9Paddings</key>
-                <rect>24,37,47,74</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_007.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>43,38,86,75</rect>
-                <key>scale9Paddings</key>
-                <rect>43,38,86,75</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_008.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,21,50,41</rect>
-                <key>scale9Paddings</key>
-                <rect>25,21,50,41</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_009.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>29,21,57,41</rect>
-                <key>scale9Paddings</key>
-                <rect>29,21,57,41</rect>
+                <rect>12,12,24,24</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_001.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_002.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_003.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_004.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_005.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_006.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_007.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_008.png</filename>
-            <filename>../../../../Pictures/kenny/k2/2D assets/Space Shooter Extension (275 assets)/PNG/Sprites/Ships/spaceShips_009.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/ak47.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/anchor.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/blunderbuss.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/brain-freeze.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/brandy-bottle.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/burning-meteor.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/cannon-shot.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/charged-arrow.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/cog.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/crossed-swords.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/fire-ray.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/fire-wave.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/fire-zone.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/fishing-net.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/flame.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/focused-lightning.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/frostfire.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/frozen-block.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/frozen-body.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/gamepad.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/hamburger-menu.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/harpoon-chain.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/iceberg.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/lightning-shout.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/lucifer-cannon.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/organigram.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/p90.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/pistol-gun.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/psychic-waves.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/revolver.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/rolling-bomb.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/rolling-energy.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/root-tip.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/rune-sword.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/running-shoe.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/snail.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/spiked-mace.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/stone-block.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/teleport.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/thompson-m1928.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/uncertainty.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/vibrating-shield.png</filename>
+            <filename>../../../../Pictures/nebulaleague/icons/wingfoot.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

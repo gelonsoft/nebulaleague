@@ -132,7 +132,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>../public/assets/entities/entities.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -378,6 +378,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">../../../../Pictures/spacefighter/my/charged_arrow_bullet.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileList</key>
         <array>
@@ -396,6 +411,7 @@
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_007.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_008.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_009.png</filename>
+            <filename>../../../../Pictures/spacefighter/my/charged_arrow_bullet.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

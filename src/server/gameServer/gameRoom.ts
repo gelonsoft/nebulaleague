@@ -21,19 +21,21 @@ export class GameRoom extends Room<GameStateSchema> {
         this.setState(new GameStateSchema())
 
         this.onMessage("playerChanged", (client, playerChanged: PlayerChanged) => {
+            console.log(playerChanged)
             Object.assign(this.state.players.get(client.sessionId), playerChanged)
         })
         
     }
 
     onJoin(client: Client, option: Option) {
+        console.log(client.sessionId)
         this.state.players.set(
             client.sessionId,
             new PlayerModelSchema().assign({
+                ...option.playerConfig,
                 id: client.sessionId,
                 x: 0,
                 y: 0,
-                ...option.playerConfig,
             })
         )
     }

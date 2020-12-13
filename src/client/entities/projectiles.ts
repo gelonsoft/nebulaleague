@@ -4,7 +4,6 @@ import { GameScene } from '~/client/scenes/gameScene'
 import { Projectile } from '~/client/entities/projectile'
 
 export class Projectiles extends Phaser.Physics.Arcade.Group {
-    public projectiles: Phaser.Physics.Arcade.Group
     public projectileByIds: Map<string, Projectile>
     public scene: GameScene
     constructor(scene: GameScene) {

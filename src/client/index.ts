@@ -10,6 +10,7 @@ import { LobbyScene } from '~/client/scenes/lobbyScene'
 import { MainMenuScene } from '~/client/scenes/mainMenuScene'
 import { DeathScene } from '~/client/scenes/deathScene'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
+import { Config } from '~/shared/config'
 
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {
@@ -54,13 +55,13 @@ export class PhaserSpaceGame {
             audio: {
                 noAudio: true,
             },
-            banner: isDebug,
+            banner: Config.debug.displayBanner,
             physics: {
                 default: 'arcade',
                 arcade: {
                     gravity: { x: 0, y: 0 },
                     fps: 60,
-                    debug: isDebug,
+                    debug: Config.debug.displayBody,
                 },
             },
             scene: scenes,
