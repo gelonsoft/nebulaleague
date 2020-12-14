@@ -18,7 +18,7 @@ export class LobbyScene extends Phaser.Scene {
         })
     }
 
-    init(): void {
+    async init() {
         // window.addEventListener(
         //     'resize',
         //     () => {
@@ -28,7 +28,7 @@ export class LobbyScene extends Phaser.Scene {
         // )
 
         this.client = this.game.registry.get('client') as Client
-        this.client.emitLobyInit()
+        await this.client.lobbyClient.init()
         if (Config.debug.lobyTo !== undefined) {
             this.start(Config.debug.lobyTo)
         }
@@ -43,7 +43,7 @@ export class LobbyScene extends Phaser.Scene {
     }
 
     start(mode: GameMode) {
-        this.client.emitLobyStart({
+        this.client.lobbyClient.start({
             name: 'anonymous',
             gameMode: mode,
             ready: true,
@@ -82,6 +82,5 @@ export class LobbyScene extends Phaser.Scene {
     create(): void {
         this.createBackground()
         this.createModeButtonContainer()
-        // this.createMenu()
     }
 }

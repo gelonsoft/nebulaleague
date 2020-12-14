@@ -1,13 +1,7 @@
 import * as _ from 'lodash'
 import { diff } from 'deep-object-diff'
 import * as Stats from 'stats.js'
-import {
-    Position,
-    ActionKey,
-    SceneGameKey,
-    PlayerAction,
-    PlayerChanged,
-} from '~/shared/models'
+import { Position, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
 import { Config } from '~/shared/config'
 
 import { MyGame } from '~/client/index'
@@ -37,7 +31,7 @@ export class GameScene extends Phaser.Scene {
     public currentPlayerChanged: PlayerChanged
     public previousPlayerChanged: PlayerChanged
     public stats: Stats
-    
+
     constructor(gameKey: SceneGameKey) {
         super({
             key: gameKey,
@@ -56,21 +50,16 @@ export class GameScene extends Phaser.Scene {
             false
         )
 
-        
         this.client = this.game.registry.get('client') as Client
         this.currentPlayerChanged = {}
         this.previousPlayerChanged = {}
 
         this.stats = new Stats()
         document.body.appendChild(this.stats.dom)
-        
-        if (this.game.debug) {
-            // this.scene.run('debugScene', this)
-        }
+
         this.backgroundImageKey = 'backgroundGalaxy3'
         this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
         this.registerEvent()
-        
     }
 
     public create(): void {
@@ -81,26 +70,25 @@ export class GameScene extends Phaser.Scene {
         this.settingCamera()
         this.createBackground()
 
-        const existingPlayers = Array.from(this.client.gameState.players.values()).map((playerModel) => {
-            return new Player(this, playerModel)
-        })
+        const existingPlayers = Array.from(this.client.gameClient.state.players.values()).map(
+            (playerModel) => {
+                return new Player(this, playerModel)
+            }
+        )
         this.players = this.physics.add
             .group({
                 collideWorldBounds: true,
                 classType: Player,
             })
-            .addMultiple(
-                existingPlayers
-            )
+            .addMultiple(existingPlayers)
         this.player = this.players
             .getChildren()
-            .find((player: Player) => player.id === this.client.id) as Player
-        
+            .find((player: Player) => player.id === this.client.gameClient.id) as Player
+        debugger
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
         this.cameras.main.startFollow(this.player, true)
     }
-
 
     public createBackground(): void {
         this.backgroundImage = this.add
@@ -114,7 +102,6 @@ export class GameScene extends Phaser.Scene {
             .setAlpha(0.9)
             .setDepth(-1)
     }
-    
 
     public syncHealth(player: Player): void {
         if (player.id === this.player.id) {
@@ -204,7 +191,6 @@ export class GameScene extends Phaser.Scene {
         return this.cameras.main.getWorldPoint(pointer.x, pointer.y)
     }
 
-    
     get pointerPosition(): Position {
         const pointer = this.input.activePointer
         const pointerFromWorld = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
@@ -247,16 +233,14 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-
     public registerEvent(): void {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
                 this.player.move(playerAction.direction)
-                
             } else {
                 this.player.move(this.player.previousDirection)
             }
-            
+
             if (playerAction.rotation) {
                 this.player.rotateFromPointer(playerAction.rotation)
             }
@@ -272,19 +256,15 @@ export class GameScene extends Phaser.Scene {
             }
         })
     }
-    
+
     public update(): void {
         this.stats.begin()
         this.previousPlayerChanged = this.currentPlayerChanged
         this.mainControl.update()
         this.playerControl.update()
         this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, undefined, this)
-        this.physics.overlap(
-            this.players,
-            this.projectiles,
-            this.handleEnemyProjectileCollide,
-        )
-        
+        this.physics.overlap(this.players, this.projectiles, this.handleEnemyProjectileCollide)
+
         if (this.player.active) {
             this.player.draw()
         }
@@ -297,8 +277,10 @@ export class GameScene extends Phaser.Scene {
             })
         this.currentPlayerChanged = this.player.getChanged()
         const diffPlayer = diff(this.previousPlayerChanged, this.currentPlayerChanged)
-        if(!_.isEmpty(diffPlayer)) {
-            this.client.gameSendPlayerUpdated(diffPlayer)
+        if (!_.isEmpty(diffPlayer)) {
+            this.client.gameClient.update({
+                player: diffPlayer,
+            })
         }
         this.stats.end()
     }

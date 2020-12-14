@@ -67,7 +67,11 @@ export type PlayerModel = PlayerConfig & {
 }
 
 
+
 export type PlayerChanged = Partial<PlayerModel>
+export type GameChanged = {
+    player?: PlayerChanged
+}
 
 
 export type PlayerDirection = {

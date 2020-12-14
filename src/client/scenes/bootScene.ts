@@ -1,7 +1,6 @@
 import { MyGame } from '~/client/index'
 import { Client } from '~/client/client'
 import { Config } from '~/shared/config'
-import { getDefaultClient } from '~/client/client'
 
 export class BootScene extends Phaser.Scene {
     public game: MyGame
@@ -16,7 +15,7 @@ export class BootScene extends Phaser.Scene {
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault()
         }
-        this.registry.set('client', getDefaultClient(this.game))
+        this.registry.set('client', new Client(this.game))
     }
 
     preload(): void {
