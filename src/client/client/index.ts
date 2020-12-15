@@ -9,7 +9,7 @@ import { LobbyClient } from '~/client/client/lobbyClient'
 import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import { GameClient } from '~/client/client/gameClient'
 import { GameOnlineClient } from '~/client/client/gameOnlineClient'
-import { GameMode, SceneGameKey } from '~/shared/models'
+import { GameMode, PlayerConfig, PlayerConfigSchema, SceneGameKey, User, UserSchema } from '~/shared/models'
 
 export class Client {
     public game: MyGame
@@ -23,6 +23,8 @@ export class Client {
     public lobbyClient: LobbyClient
     public playerSelectionClient: PlayerSelectionClient
     public gameClient: GameClient
+    public user: User
+    public playerConfig: PlayerConfig
     
     constructor(game: MyGame) {
         this.game = game
@@ -40,13 +42,12 @@ export class Client {
         this.gameFfaScene = this.game.scene.getScene(Config.scenes.gameFfa.key) as GameFfaScene
         this.gameTrainingScene = this.game.scene.getScene(Config.scenes.gameTraining.key) as GameTrainingScene
         this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
+        this.playerSelectionClient = new PlayerSelectionClient(this)
         this.lobbyClient = new LobbyClient(this)
         this.playerSelectionClient = new PlayerSelectionClient(this)
         this.gameClient = new GameOnlineClient(this)
-        this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
-        this.lobbyClient = new LobbyClient(this)
-        this.playerSelectionClient = new PlayerSelectionClient(this)
-        this.gameClient = new GameOnlineClient(this)
+        this.user = Config.defaultUser
+        this.playerConfig = Config.defaultPlayerConfig
     }
 
     public get gameKey(): SceneGameKey {
@@ -58,8 +59,13 @@ export class Client {
     }
 
     public get gameMode(): GameMode {
-        return this.lobbyClient.state.users.get(this.lobbyClient.id).gameMode
+        return this.user.gameMode
     }
+}
 
-    
+
+export {
+    LobbyClient,
+    PlayerSelectionClient,
+    GameClient,
 }

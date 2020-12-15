@@ -266,7 +266,7 @@ export function createSlotsContainer(
 export class PlayerSelectionScene extends Phaser.Scene {
     public game: MyGame
     public client: Client
-    public playerConfig: PlayerModel
+    public playerConfig: PlayerConfig
     public background: Phaser.GameObjects.Image
     public slotContainer: Phaser.GameObjects.Container
     public gameContainer: Phaser.GameObjects.Container
@@ -302,9 +302,9 @@ export class PlayerSelectionScene extends Phaser.Scene {
 
     create() {
         this.playerConfig = {
-            ...Config.player.defaultConfig,
+            ...this.client.playerConfig,
             ...(JSON.parse(window.localStorage.getItem('playerConfig')!)),
-            name: this.client.lobbyClient.user.name
+            name: this.client.user.name
         }
 
         this.createBackground()

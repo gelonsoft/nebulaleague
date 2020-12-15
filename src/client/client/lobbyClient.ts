@@ -7,17 +7,14 @@ import {
 } from '~/shared/models'
 
 import * as Colyseus from 'colyseus.js'
-import { Config } from '~/shared/config'
 
 export class LobbyClient {
     public room: Colyseus.Room<LobbyStateSchema>
     public state: LobbyState
     public client: Client
-    public user: User
 
     constructor(client: Client) {
         this.client = client
-        this.user = Config.defaultUser
     }
 
     get id(): string {
@@ -36,6 +33,7 @@ export class LobbyClient {
                 changes.forEach((change) => {
                     if (userId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
+                            this.client.user = user
                             this.room.leave()
                             void this.client.playerSelectionClient.init()
                         }
@@ -49,9 +47,6 @@ export class LobbyClient {
     }
 
     public start(user: User): void {
-        this.user = user
         this.room.send('userReady', user)
     }
-
-    
 }

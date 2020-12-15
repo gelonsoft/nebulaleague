@@ -26,8 +26,7 @@ export class LobbyScene extends Phaser.Scene {
         //     },
         //     false
         // )
-
-        this.client = this.game.registry.get('client') as Client
+        this.client = this.registry.get('client') as Client
         await this.client.lobbyClient.init()
         if (Config.debug.lobyTo !== undefined) {
             this.start(Config.debug.lobyTo)

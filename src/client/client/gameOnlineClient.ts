@@ -22,7 +22,7 @@ export class GameOnlineClient extends GameClient {
     
     public async init() {
         this.room = await this.client.colyseus.joinOrCreate('gameRoom', {
-            playerConfig: this.client.playerSelectionClient.playerConfig,
+            playerConfig: this.client.playerConfig,
         })
         
         this.room.onStateChange.once((state: GameStateSchema) => {

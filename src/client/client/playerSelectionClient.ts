@@ -13,12 +13,10 @@ export class PlayerSelectionClient {
     public room: Colyseus.Room<PlayerSelectionStateSchema>
     public state: PlayerSelectionState
     public client: Client
-    public playerConfig: PlayerConfig
 
     constructor(client: Client) {
         this.client = client
         this.state = Config.defaultPlayerSelectionState
-        this.playerConfig = Config.defaultPlayerConfig
     }
 
     get id(): string {
@@ -28,7 +26,7 @@ export class PlayerSelectionClient {
     public async init() {
         this.room = await this.client.colyseus.joinOrCreate('playerSelectionRoom', {
             gameMode: this.client.gameMode,
-            player: this.playerConfig,
+            player: this.client.playerConfig,
         })
         this.room.onStateChange.once((state: PlayerSelectionState) => {
             this.state = state
@@ -40,6 +38,7 @@ export class PlayerSelectionClient {
                 changes.forEach((change) => {
                     if (playerId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
+                            this.client.playerConfig = playerConfig
                             this.room.leave()
                             void this.client.gameClient.init()
                         }
@@ -51,7 +50,6 @@ export class PlayerSelectionClient {
 
     public start(playerConfig: PlayerConfig): void {
         window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
-        this.playerConfig = playerConfig
-        this.room.send('playerReady', this.playerConfig)
+        this.room.send('playerReady', playerConfig)
     }
 }
