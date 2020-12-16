@@ -14,6 +14,9 @@ export class UserSchema extends Schema implements User  {
 
     @type('boolean')
     ready: boolean
+
+    @type('boolean')
+    offline: boolean
 }
 
 export class LobbyStateSchema extends Schema implements LobbyState {

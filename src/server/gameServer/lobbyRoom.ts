@@ -7,7 +7,6 @@ export class LobbyRoom extends ColyseusLobbyRoom {
     state: LobbyStateSchema
 
     async onCreate() {
-        console.log('on create loby')
         await super.onCreate({})
         this.onMessage('userReady', (client: Client, userOption: User) => {
             const user = this.state.users.get(client.sessionId)
@@ -18,7 +17,6 @@ export class LobbyRoom extends ColyseusLobbyRoom {
     }
 
     onJoin(client: Client, userOption: User & LobbyOptions) {
-        console.log('on join loby')
         super.onJoin(client, userOption)
         this.state.users.set(client.sessionId, new UserSchema().assign(userOption))
     }

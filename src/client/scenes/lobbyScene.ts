@@ -41,11 +41,12 @@ export class LobbyScene extends Phaser.Scene {
             .setAlpha(0.5)
     }
 
-    start(mode: GameMode) {
+    start(mode: GameMode, offline=false) {
         this.client.lobbyClient.start({
             name: 'anonymous',
             gameMode: mode,
             ready: true,
+            offline: offline,
         })
     }
 
@@ -59,7 +60,7 @@ export class LobbyScene extends Phaser.Scene {
             buttonWidth,
             0,
             'organigram.png',
-            'Ffa Mode',
+            'FFA Mode',
             (_pointer: Phaser.Input.Pointer) => this.start('ffa')
         )
         this.trainingButton = new GameModeButton(
@@ -67,8 +68,8 @@ export class LobbyScene extends Phaser.Scene {
             0,
             0,
             'gamepad.png',
-            'Training Mode',
-            (_pointer: Phaser.Input.Pointer) => this.start('training')
+            'FFA against Bot ',
+            (_pointer: Phaser.Input.Pointer) => this.start('ffa', true)
         )
 
         this.gameModeContainer = this.add

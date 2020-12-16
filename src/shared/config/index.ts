@@ -96,6 +96,7 @@ export class Config {
         gameMode: 'ffa',
         name: 'anonymous',
         ready: false,
+        offline: false,
     }
 
     public static readonly defaultPlayerConfig: PlayerConfig = {

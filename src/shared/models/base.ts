@@ -229,8 +229,9 @@ export type EffectModel = {
 export type User = {
     name: string
     gameMode: GameMode
-    gameRoom?: string
     ready: boolean
+    offline: boolean
+    gameRoom?: string
 }
 
 export type LobbyState = {
