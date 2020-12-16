@@ -1,9 +1,8 @@
 import * as Colyseus from 'colyseus.js'
-import { Client } from '.'
-import { GameClient } from './gameClient'
+import { Client, GameClient } from '.'
 import { Config } from '~/shared/config'
-import { GameChanged, GameState, GameStateSchema, PlayerChanged, PlayerModelSchema } from '~/shared/models'
-import { Player } from '../entities/player'
+import { GameChanged, GameState, GameStateSchema, PlayerModelSchema } from '~/shared/models'
+import { Player } from '~/client/entities/player'
 
 
 export class GameOnlineClient extends GameClient {
@@ -27,7 +26,6 @@ export class GameOnlineClient extends GameClient {
         
         this.room.onStateChange.once((state: GameStateSchema) => {
             this.state = state
-            console.log(this.state)
             this.room.state.players.forEach((playerModel: PlayerModelSchema, playerId: string) => {
                 playerModel.onChange = (_changes) => {
                     const targetedPlayer = this.client.gameScene.players.getChildren().
@@ -35,7 +33,6 @@ export class GameOnlineClient extends GameClient {
 
                     Object.assign(targetedPlayer, playerModel)
                 }})
-                                               
             
             this.room.state.players.onAdd = (playerModel: PlayerModelSchema, playerId: string) => {
                 this.client.gameScene.players.add(new Player(this.client.gameScene, playerModel))

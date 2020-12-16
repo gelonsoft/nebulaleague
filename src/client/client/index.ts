@@ -25,7 +25,7 @@ export class Client {
     public gameClient: GameClient
     public user: User
     public playerConfig: PlayerConfig
-    
+
     constructor(game: MyGame) {
         this.game = game
         const host = window.document.location.host.replace(/:.*/, '')
@@ -63,9 +63,4 @@ export class Client {
     }
 }
 
-
-export {
-    LobbyClient,
-    PlayerSelectionClient,
-    GameClient,
-}
+export { LobbyClient, PlayerSelectionClient, GameClient }

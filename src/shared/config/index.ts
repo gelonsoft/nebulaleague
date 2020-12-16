@@ -49,6 +49,7 @@ export class Config {
         },
         death: {
             key: 'deathScene',
+            
         },
         debug: {
             key: 'debugScene',
@@ -65,7 +66,9 @@ export class Config {
         playerSelection: {
             key: 'playerSelectionScene',
         },
-        game: {},
+        game: {
+            kep: 'gameScene'
+        },
         gameTraining: {
             key: 'gameTrainingScene' as SceneGameKey,
         },
@@ -77,6 +80,11 @@ export class Config {
     public static readonly textureKeys = {
         entities: 'entities',
         icons: 'icons',
+    }
+
+    public static readonly cursors = {
+        crossair: 'url(assets/cursors/cursor.cur), pointer',
+        skill: 'url(assets/cursors/SC2-cursor.cur), pointer',
     }
 
     public static readonly modeToGameKey: Record<GameMode, SceneGameKey> = {

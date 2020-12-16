@@ -227,7 +227,7 @@ export class Player extends Phaser.GameObjects.Container {
             this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
             this.scene.syncSelectedWeapon(this, true)
             this.actions[this.selectedAbilityKey].clearDraw()
-            this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
+            this.scene.input.setDefaultCursor(Config.cursors.crossair)
             this.selectedAbilityKey = null
         } else {
             this.fire(selectedWeaponKey, pointerPosition)
@@ -282,7 +282,7 @@ export class Player extends Phaser.GameObjects.Container {
         this.scene.syncSelectedAbility(this, selectedAbilityKey, false)
         this.scene.syncSelectedWeapon(this, true)
         this.actions[selectedAbilityKey].clearDraw()
-        this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
+        this.scene.input.setDefaultCursor(Config.cursors.crossair)
     }
 
     public selectAbility(key: AbilityKey) {
@@ -292,7 +292,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, true)
                 this.actions[this.selectedAbilityKey].clearDraw()
                 this.selectedAbilityKey = null
-                this.scene.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
+                this.scene.input.setDefaultCursor(Config.cursors.crossair)
             } else {
                 if (this.selectedAbilityKey) {
                     this.scene.syncSelectedAbility(this, this.selectedAbilityKey, false)
@@ -303,7 +303,7 @@ export class Player extends Phaser.GameObjects.Container {
                 this.scene.syncSelectedWeapon(this, false)
                 this.actions.weaponPrimary.laserGraphics.clear()
                 this.actions.weaponSecondary.laserGraphics.clear()
-                this.scene.input.setDefaultCursor('url(assets/cursors/SC2-cursor.cur), pointer')
+                this.scene.input.setDefaultCursor(Config.cursors.skill)
             }
         }
     }

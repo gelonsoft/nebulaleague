@@ -84,7 +84,7 @@ export class GameScene extends Phaser.Scene {
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.client.gameClient.id) as Player
-        debugger
+
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
         this.cameras.main.startFollow(this.player, true)
