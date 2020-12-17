@@ -10,6 +10,9 @@ import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import { GameClient } from '~/client/client/gameClient'
 import { GameOnlineClient } from '~/client/client/gameOnlineClient'
 import { GameMode, PlayerConfig, PlayerConfigSchema, SceneGameKey, User, UserSchema } from '~/shared/models'
+import { PlayerSelectionOfflineClient } from './PlayerSelctionOfflineClient'
+import { PlayerSelectionOnlineClient } from './PlayerSelectionOnlineClient'
+import { GameOfflineClient } from './gameOfflineClient'
 
 export class Client {
     public game: MyGame
@@ -42,9 +45,7 @@ export class Client {
         this.gameFfaScene = this.game.scene.getScene(Config.scenes.gameFfa.key) as GameFfaScene
         this.gameTrainingScene = this.game.scene.getScene(Config.scenes.gameTraining.key) as GameTrainingScene
         this.hudScene = this.game.scene.getScene(Config.scenes.hud.key) as HudScene
-        this.playerSelectionClient = new PlayerSelectionClient(this)
         this.lobbyClient = new LobbyClient(this)
-        this.playerSelectionClient = new PlayerSelectionClient(this)
         this.gameClient = new GameOnlineClient(this)
         this.user = Config.defaultUser
         this.playerConfig = Config.defaultPlayerConfig
@@ -61,6 +62,23 @@ export class Client {
     public get gameMode(): GameMode {
         return this.user.gameMode
     }
+
+    public initPlayerSelection(user: User) {
+        this.user = user
+        this.playerSelectionClient = this.user.offline
+            ? new PlayerSelectionOfflineClient(this)
+            : new PlayerSelectionOnlineClient(this)
+        void this.playerSelectionClient.init()
+    }
+
+    public initGame(playerConfig: PlayerConfig) {
+        this.playerConfig = playerConfig
+        this.gameClient = this.user.offline
+            ? new GameOfflineClient(this)
+            : new GameOnlineClient(this)
+        void this.gameClient.init()
+    }
+    
 }
 
 export { LobbyClient, PlayerSelectionClient, GameClient }

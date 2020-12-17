@@ -33,9 +33,8 @@ export class LobbyClient {
                 changes.forEach((change) => {
                     if (userId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
-                            this.client.user = user
                             this.room.leave()
-                            void this.client.playerSelectionClient.init()
+                            this.client.initPlayerSelection(user)
                         }
                     }
                 })
