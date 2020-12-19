@@ -6,7 +6,6 @@ import { Config } from '~/shared/config'
 
 export class LobbyScene extends Phaser.Scene {
     public game: MyGame
-    public client: Client
     public background: Phaser.GameObjects.Image
     public gameModeContainer: Phaser.GameObjects.Container
     public trainingButton: GameModeButton
@@ -14,7 +13,7 @@ export class LobbyScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: Config.scenes.loby.key,
+            key: Config.scenes.lobby.key,
         })
     }
 
@@ -26,8 +25,6 @@ export class LobbyScene extends Phaser.Scene {
         //     },
         //     false
         // )
-        this.client = this.registry.get('client') as Client
-        await this.client.lobbyClient.init()
         if (Config.debug.lobyTo !== undefined) {
             this.start(Config.debug.lobyTo)
         }
@@ -42,7 +39,7 @@ export class LobbyScene extends Phaser.Scene {
     }
 
     start(mode: GameMode, offline=false) {
-        this.client.lobbyClient.start({
+        this.game.client.lobbyClient.start({
             name: 'anonymous',
             gameMode: mode,
             ready: true,

@@ -11,19 +11,25 @@ import { MainMenuScene } from '~/client/scenes/mainMenuScene'
 import { DeathScene } from '~/client/scenes/deathScene'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { Config } from '~/shared/config'
+import { Client } from './client'
+
+type Scenes = {
+    boot: BootScene
+    death: DeathScene
+    debug: DebugScene
+    hud: HudScene
+    loby: LobbyScene
+    mainMenu: MainMenuScene
+    playerSelection: PlayerSelectionScene
+    game: GameScene
+    gameTraining: GameTrainingScene
+    gameFfa: GameFfaScene
+}
 
 const isDebug = process.env.DEBUG === 'true' || false
 export class MyGame extends Phaser.Game {
     public debug: boolean
-    constructor(GameConfig?: Phaser.Types.Core.GameConfig) {
-        super(GameConfig)
-        this.debug = isDebug
-    }
-}
-
-
-export class PhaserSpaceGame {
-    private game: MyGame
+    public client: Client
     constructor() {
         const scenes = [
             BootScene,
@@ -35,10 +41,9 @@ export class PhaserSpaceGame {
             PlayerSelectionScene,
             GameFfaScene,
             GameTrainingScene,
-            
         ]
-        this.game = new MyGame({
-            // type: Phaser.CANVAS,
+
+        super({
             type: Phaser.WEBGL,
             title: 'nebulaleague',
             scale: {
@@ -60,18 +65,26 @@ export class PhaserSpaceGame {
                 default: 'arcade',
                 arcade: {
                     gravity: { x: 0, y: 0 },
-                    fps: 60,
                     debug: Config.debug.displayBody,
                 },
             },
             scene: scenes,
         })
 
-        this.game.scene.start('bootScene')
+        this.debug = isDebug
+
         window.addEventListener('resize', () => {
-            this.game.scale.resize(window.innerWidth, window.innerHeight)
+            this.scale.resize(window.innerWidth, window.innerHeight)
         })
+
     }
+
+    start() {
+        super.start()
+        this.client = new Client(this)
+    }
+    
 }
 
-new PhaserSpaceGame()
+
+new MyGame()

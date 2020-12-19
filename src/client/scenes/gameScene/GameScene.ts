@@ -70,7 +70,7 @@ export class GameScene extends Phaser.Scene {
         this.settingCamera()
         this.createBackground()
 
-        const existingPlayers = Array.from(this.client.gameClient.state.players.values()).map(
+        const existingPlayers = Array.from(this.game.client.gameClient.state.players.values()).map(
             (playerModel) => {
                 return new Player(this, playerModel)
             }
@@ -83,7 +83,7 @@ export class GameScene extends Phaser.Scene {
             .addMultiple(existingPlayers)
         this.player = this.players
             .getChildren()
-            .find((player: Player) => player.id === this.client.gameClient.id) as Player
+            .find((player: Player) => player.id === this.game.client.gameClient.id) as Player
 
         this.playerControl = new PlayerControl(this, this.player)
         this.mainControl = new MainControl(this)
@@ -278,7 +278,7 @@ export class GameScene extends Phaser.Scene {
         this.currentPlayerChanged = this.player.getChanged()
         const diffPlayer = diff(this.previousPlayerChanged, this.currentPlayerChanged)
         if (!_.isEmpty(diffPlayer)) {
-            this.client.gameClient.update({
+            this.game.client.gameClient.update({
                 player: diffPlayer,
             })
         }

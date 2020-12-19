@@ -5,7 +5,6 @@ import { GameChanged, GameState } from '~/shared/models'
 
 export class GameOfflineClient extends GameClient {
     public state: GameState
-    public client: Client
     
     constructor(client: Client) {
         super(client)

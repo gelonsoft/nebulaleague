@@ -7,17 +7,11 @@ import {
 } from '~/shared/models'
 
 import * as Colyseus from 'colyseus.js'
-import { Config } from '~/shared/config'
 
 export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
     public room: Colyseus.Room<PlayerSelectionStateSchema>
     public state: PlayerSelectionState
-    public client: Client
 
-    constructor(client: Client) {
-        super(client)
-        this.state = Config.defaultPlayerSelectionState
-    }
 
     get id(): string {
         return this.room.sessionId
@@ -30,7 +24,7 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
         })
         this.room.onStateChange.once((state: PlayerSelectionState) => {
             this.state = state
-            this.client.lobbyScene.scene.start(Config.scenes.playerSelection.key)
+            this.onInit()
         })
 
         this.room.state.players.onAdd = (playerConfig: PlayerConfigSchema, playerId: string) => {
@@ -39,7 +33,7 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
                     if (playerId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
                             this.room.leave()
-                            this.client.initGame(playerConfig)
+                            this.onStart(playerConfig)
                         }
                     }
                 })
@@ -48,7 +42,6 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
     }
 
     public start(playerConfig: PlayerConfig): void {
-        super.start(playerConfig)
         this.room.send('playerReady', playerConfig)
     }
 }

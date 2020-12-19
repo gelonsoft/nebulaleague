@@ -15,7 +15,6 @@ export class BootScene extends Phaser.Scene {
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault()
         }
-        this.registry.set('client', new Client(this.game))
     }
 
     preload(): void {
@@ -60,8 +59,8 @@ export class BootScene extends Phaser.Scene {
     }
 
     update(): void {
-        this.scene.start(Config.scenes.loby.key)
-    }
+        this.game.client.initLobby()
+   }
 
     private createLoadingGraphics(): void {
         this.loadingBar = this.add.graphics()

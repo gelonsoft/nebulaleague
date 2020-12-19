@@ -12,9 +12,18 @@ export class LobbyClient {
     public room: Colyseus.Room<LobbyStateSchema>
     public state: LobbyState
     public client: Client
+    public onInit: () => void
+    public onStart: (user: User) => void
+    
 
-    constructor(client: Client) {
+    constructor(
+        client: Client,
+        onInit: () => void,
+        onStart: (user: User) => void
+    ) {
         this.client = client
+        this.onInit = onInit
+        this.onStart = onStart
     }
 
     get id(): string {
@@ -26,6 +35,7 @@ export class LobbyClient {
 
         this.room.onStateChange.once((state: LobbyState) => {
             this.state = state
+            this.onInit()
         })
 
         this.room.state.users.onAdd = (user: UserSchema, userId: string) => {
@@ -34,7 +44,7 @@ export class LobbyClient {
                     if (userId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
                             this.room.leave()
-                            this.client.initPlayerSelection(user)
+                            this.onStart(user)
                         }
                     }
                 })

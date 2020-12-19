@@ -292,21 +292,11 @@ export class PlayerSelectionScene extends Phaser.Scene {
             },
             false
         )
-        this.client = this.game.registry.get('client') as Client
-        if (Config.debug.playerSelectionSkip && this.game.debug) {
-            this.client.playerSelectionClient.start(this.playerConfig)
-        }
-
         this.initDrag()
     }
 
     create() {
-        this.playerConfig = {
-            ...this.client.playerConfig,
-            ...(JSON.parse(window.localStorage.getItem('playerConfig')!)),
-            name: this.client.user.name
-        }
-
+        this.playerConfig = {...this.game.client.playerConfig}
         this.createBackground()
         this.createSlots()
         this.createPlayButton()
@@ -345,7 +335,7 @@ export class PlayerSelectionScene extends Phaser.Scene {
             controlledBy: 'human',
             ready: true,
         }
-        this.client.playerSelectionClient.start(playerConfUpdated)
+        this.game.client.playerSelectionClient.start(playerConfUpdated)
     }
 
     initDrag() {

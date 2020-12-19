@@ -3,14 +3,24 @@ import {
     PlayerSelectionState,
     PlayerConfig,
 } from '~/shared/models'
+import { Config } from '~/shared/config'
 
 
 export abstract class PlayerSelectionClient {
     public client: Client
     public state: PlayerSelectionState
+    public onInit: () => void
+    public onStart: (playerConfig: PlayerConfig) => void
 
-    constructor(client: Client) {
+    constructor(
+        client: Client,
+        onInit: () => void,
+        onStart: (playerConfig: PlayerConfig) => void
+    ) {
         this.client = client
+        this.onInit = onInit
+        this.onStart = onStart
+        this.state = Config.defaultPlayerSelectionState
     }
 
     get id(): string {
@@ -18,7 +28,5 @@ export abstract class PlayerSelectionClient {
     }
 
     public abstract async init(): Promise<unknown>
-    public start(playerConfig: PlayerConfig) {
-        window.localStorage.setItem('playerConfig', JSON.stringify(playerConfig))
-    } 
+    public abstract start(playerConfig: PlayerConfig): void 
 }

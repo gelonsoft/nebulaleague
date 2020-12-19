@@ -129,8 +129,7 @@ export class HudScene extends Phaser.Scene {
     }
 
     create(): void {
-        const client = this.registry.get('client') as Client 
-        this.gameScene = client.gameScene
+        this.gameScene = this.game.client.gameScene
         this.player = this.gameScene.player
         this.gameScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
         this.gameScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)

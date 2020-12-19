@@ -49,7 +49,6 @@ export class Config {
         },
         death: {
             key: 'deathScene',
-            
         },
         debug: {
             key: 'debugScene',
@@ -57,8 +56,8 @@ export class Config {
         hud: {
             key: 'hudScene',
         },
-        loby: {
-            key: 'lobyScene',
+        lobby: {
+            key: 'lobbyScene',
         },
         mainMenu: {
             key: 'mainMenuScene',
@@ -100,7 +99,6 @@ export class Config {
     }
 
     public static readonly defaultPlayerConfig: PlayerConfig = {
-        name: 'anonymous',
         controlledBy: 'ai',
         weaponPrimaryKey: 'pistol',
         weaponSecondaryKey: 'ak47',

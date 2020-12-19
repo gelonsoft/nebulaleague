@@ -47,7 +47,6 @@ export type ProjectileName =
 export type ActionName = WeaponName | AbilityName
 
 export type PlayerConfig = {
-    name: string
     controlledBy: ControlledBy
     weaponPrimaryKey: WeaponName
     weaponSecondaryKey: WeaponName
