@@ -1,4 +1,4 @@
-import { PlayerSelectionClient } from '.'
+import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import { PlayerSelectionState, PlayerConfig } from '~/shared/models'
 
 export class PlayerSelectionOfflineClient extends PlayerSelectionClient {

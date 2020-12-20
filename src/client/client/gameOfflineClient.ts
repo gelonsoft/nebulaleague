@@ -1,25 +1,15 @@
-import { Client, GameClient } from '.'
-import { Config } from '~/shared/config'
-import { GameChanged, GameState } from '~/shared/models'
-
+import { GameClient } from '~/client/client/gameClient'
+import { GameChanged } from '~/shared/models'
 
 export class GameOfflineClient extends GameClient {
-    public state: GameState
-    
-    constructor(client: Client) {
-        super(client)
-        this.state = Config.defaultGameState
-    }
-
     get id(): string {
         return 'offline'
     }
-    
-    public async init() {
 
+    public async init() {
+        this.onInit()
+        return Promise.resolve()
     }
-    
-    public update(gameChanged: GameChanged): void {
-        
-    }    
+
+    public update(_gameChanged: GameChanged): void {}
 }

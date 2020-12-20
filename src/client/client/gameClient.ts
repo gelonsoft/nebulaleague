@@ -1,12 +1,20 @@
 import { GameChanged, GameState } from '~/shared/models'
 import { Client } from '~/client/client'
+import { MyGame } from '~/client/index'
+import { Config } from '~/shared/config'
 
 export abstract class GameClient {
-    public client: Client
+    public game: MyGame
     public state: GameState
+    public onInit: () => void
     
-    constructor(client: Client) {
-        this.client = client
+    constructor(
+        game: MyGame,
+        onInit: () => void,
+    ) {
+        this.game = game
+        this.onInit = onInit
+        this.state = Config.defaultGameState
     }
 
     public get id(): string {

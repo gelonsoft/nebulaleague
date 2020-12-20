@@ -42,6 +42,7 @@ export class BootScene extends Phaser.Scene {
             () => {
                 this.progressBar.destroy()
                 this.loadingBar.destroy()
+                this.game.client.initLobby()
             },
             this
         )
@@ -58,9 +59,6 @@ export class BootScene extends Phaser.Scene {
         }
     }
 
-    update(): void {
-        this.game.client.initLobby()
-   }
 
     private createLoadingGraphics(): void {
         this.loadingBar = this.add.graphics()

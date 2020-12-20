@@ -17,7 +17,7 @@ export class LobbyScene extends Phaser.Scene {
         })
     }
 
-    async init() {
+    init() {
         // window.addEventListener(
         //     'resize',
         //     () => {
@@ -25,9 +25,6 @@ export class LobbyScene extends Phaser.Scene {
         //     },
         //     false
         // )
-        if (Config.debug.lobyTo !== undefined) {
-            this.start(Config.debug.lobyTo)
-        }
     }
 
     createBackground() {

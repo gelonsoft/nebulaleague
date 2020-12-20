@@ -1,23 +1,23 @@
-import { Client } from '.'
 import {
     PlayerSelectionState,
     PlayerConfig,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
+import { MyGame } from '~/client/index'
 
 
 export abstract class PlayerSelectionClient {
-    public client: Client
+    public game: MyGame
     public state: PlayerSelectionState
     public onInit: () => void
     public onStart: (playerConfig: PlayerConfig) => void
 
     constructor(
-        client: Client,
+        game: MyGame,
         onInit: () => void,
         onStart: (playerConfig: PlayerConfig) => void
     ) {
-        this.client = client
+        this.game = game
         this.onInit = onInit
         this.onStart = onStart
         this.state = Config.defaultPlayerSelectionState

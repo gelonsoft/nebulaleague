@@ -1,4 +1,4 @@
-import { Client, PlayerSelectionClient } from '.'
+import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import {
     PlayerSelectionStateSchema,
     PlayerSelectionState,
@@ -18,12 +18,13 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
     }
 
     public async init() {
-        this.room = await this.client.colyseus.joinOrCreate('playerSelectionRoom', {
-            gameMode: this.client.gameMode,
-            player: this.client.playerConfig,
+        this.room = await this.game.client.colyseus.joinOrCreate('playerSelectionRoom', {
+            gameMode: this.game.currentGameMode,
+            player: this.game.client.playerConfig,
         })
         this.room.onStateChange.once((state: PlayerSelectionState) => {
             this.state = state
+            console.log('onPlayerSelectionStateChanged')
             this.onInit()
         })
 
@@ -32,8 +33,9 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
                 changes.forEach((change) => {
                     if (playerId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
-                            this.room.leave()
+                            console.log(change)
                             this.onStart(playerConfig)
+                            this.room.leave()
                         }
                     }
                 })

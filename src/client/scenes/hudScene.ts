@@ -129,7 +129,7 @@ export class HudScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.gameScene = this.game.client.gameScene
+        this.gameScene = this.game.scenes.game
         this.player = this.gameScene.player
         this.gameScene.events.on(Event.playerHealthChanged, this.updateHealth, this)
         this.gameScene.events.on(Event.actionsCollodownChanged, this.updateActionsCooldown, this)
@@ -231,4 +231,6 @@ export class HudScene extends Phaser.Scene {
     private updateEffectChanged(icons: Set<EffectModel>) {
         refreshEffectIcons(icons, this.effectIconsContainer)
     }
+
+    
 }

@@ -310,7 +310,6 @@ export class PlayerSelectionScene extends Phaser.Scene {
             .container(0, 0, [this.slotContainer, this.playButtonDOM])
             .setSize(this.slotContainer.width, this.playButtonDOM.height + this.playButtonDOM.height)
             .setPosition(gameContainerX, gameContainerY)
-        return Promise.resolve({})
     }
 
     start() {
