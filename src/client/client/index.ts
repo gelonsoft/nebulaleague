@@ -1,5 +1,5 @@
 import * as Colyseus from 'colyseus.js'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
 
 import { PlayerConfig, User } from '~/shared/models'

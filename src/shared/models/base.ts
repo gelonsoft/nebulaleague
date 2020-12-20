@@ -65,13 +65,10 @@ export type PlayerModel = PlayerConfig & {
     health: number
 }
 
-
-
 export type PlayerChanged = Partial<PlayerModel>
 export type GameChanged = {
     player?: PlayerChanged
 }
-
 
 export type PlayerDirection = {
     x: number

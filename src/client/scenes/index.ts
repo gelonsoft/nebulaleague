@@ -1,0 +1,21 @@
+import { GameScene, GameFfaScene, GameTrainingScene } from '~/client/scenes/gameScene'
+import { HudScene } from '~/client/scenes/hudScene'
+import { BootScene } from '~/client/scenes/bootScene'
+import { DebugScene } from '~/client/scenes/debugScene'
+import { LobbyScene } from '~/client/scenes/lobbyScene'
+import { MainMenuScene } from '~/client/scenes/mainMenuScene'
+import { DeathScene } from '~/client/scenes/deathScene'
+import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
+
+export {
+    BootScene,
+    DeathScene,
+    DebugScene,
+    GameFfaScene,
+    GameScene,
+    GameTrainingScene,
+    HudScene,
+    LobbyScene,
+    MainMenuScene,
+    PlayerSelectionScene
+}

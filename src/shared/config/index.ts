@@ -18,12 +18,13 @@ import {
     ClientMode,
     User,
 } from '~/shared/models'
-import weaponsConfig from './weaponsConfig'
-import projectilesConfig from './projectilesConfig'
-import abilitiesConfig from './abilitiesConfig'
+import weaponsConfig from '~/shared/config/weaponsConfig'
+import projectilesConfig from '~/shared/config/projectilesConfig'
+import abilitiesConfig from '~/shared/config/abilitiesConfig'
 
 type Debug = {
-    lobyTo: GameMode | undefined
+    lobyTo: GameMode | null
+    debugMode: boolean
     defaultClient: ClientMode
     playerSelectionSkip: boolean
     displayBanner: boolean
@@ -31,14 +32,27 @@ type Debug = {
 
 }
 
+const debugConfig: Debug = {
+    defaultClient: 'colyseus',
+    debugMode: true,
+    lobyTo: null,
+    playerSelectionSkip: false,
+    displayBanner: true,
+    displayBody: true,
+}
+
+const prodConfig: Debug = {
+    defaultClient: 'colyseus',
+    debugMode: false,
+    lobyTo: null,
+    playerSelectionSkip: false,
+    displayBanner: false,
+    displayBody: false,
+}
+
+
 export class Config {
-    public static readonly debug: Debug = {
-        defaultClient: 'colyseus',
-        lobyTo: isDebug ? undefined: undefined,
-        displayBanner: isDebug,
-        playerSelectionSkip: isDebug ? false: false,
-        displayBody: isDebug ? false: false,
-    }
+    public static readonly debug: Debug = isDebug ? debugConfig : prodConfig
 
     public static readonly scenes = {
         boot: {

@@ -3,7 +3,7 @@ import { AbilityName, ActionModel, ActionName, ControlledBy, PlayerConfig, Playe
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { Client } from '~/client/client'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 
 const COLOR_BACKGROUND = 0x000000
 const COLOR_BACKGROUND_DISABLED = 0x444444

@@ -1,7 +1,7 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { ActionKey, EffectModel, WeaponKey } from '~/shared/models'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { GameScene } from '~/client/scenes/gameScene'
 import { HealthBar } from '~/client/entities/healthbar'

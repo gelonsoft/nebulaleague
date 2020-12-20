@@ -1,6 +1,6 @@
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 

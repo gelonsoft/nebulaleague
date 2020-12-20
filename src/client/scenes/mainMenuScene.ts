@@ -1,4 +1,4 @@
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
 
 export class MainMenuScene extends Phaser.Scene {
@@ -26,7 +26,7 @@ export class MainMenuScene extends Phaser.Scene {
             this.scene.stop('hudScene')
             this.scene.stop('playerSelectionScene')
             this.scene.stop()
-            if (this.game.debug) {
+            if (Config.debug.debugMode) {
                 this.scene.sleep('debugScene')
             }
             this.scene.start('menuScene')

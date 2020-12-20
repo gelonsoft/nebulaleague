@@ -4,14 +4,14 @@ import * as Stats from 'stats.js'
 import { Position, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
 import { Config } from '~/shared/config'
 
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Client } from '~/client/client'
 import { buildProjectiles, Projectiles } from '~/client/entities/projectiles'
 import { Projectile } from '~/client/entities/projectile'
 import { buildWeapons, Weapon } from '~/client/entities/weapons'
 import { Ability, buildAbilities } from '~/client/entities/abilities'
 import { Event } from '~/shared/events'
-import { MainControl, PlayerControl } from '~/client/controls'
+import { MainController, PlayerController } from '~/client/controllers'
 import { Player, ActionTimeInterface } from '~/client/entities/player'
 
 export class GameScene extends Phaser.Scene {
@@ -22,8 +22,8 @@ export class GameScene extends Phaser.Scene {
     public projectiles: Projectiles
     public weapons: Record<string, Weapon>
     public abilities: Record<string, Ability>
-    public mainControl: MainControl
-    public playerControl: PlayerControl
+    public mainControl: MainController
+    public playerControl: PlayerController
     public freeCamera: boolean
     public mainCameraZoom: number
     public backgroundImageKey: string
@@ -85,8 +85,8 @@ export class GameScene extends Phaser.Scene {
             .getChildren()
             .find((player: Player) => player.id === this.game.client.gameClient.id) as Player
 
-        this.playerControl = new PlayerControl(this, this.player)
-        this.mainControl = new MainControl(this)
+        this.playerControl = new PlayerController(this, this.player)
+        this.mainControl = new MainController(this)
         this.cameras.main.startFollow(this.player, true)
     }
 

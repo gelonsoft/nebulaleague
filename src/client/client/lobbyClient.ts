@@ -7,7 +7,7 @@ import {
 } from '~/shared/models'
 
 import * as Colyseus from 'colyseus.js'
-import { MyGame } from '..'
+import { MyGame } from '~/client/games/myGame'
 
 export class LobbyClient {
     public room: Colyseus.Room<LobbyStateSchema>

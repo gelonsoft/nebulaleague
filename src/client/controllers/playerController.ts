@@ -1,8 +1,7 @@
-import { Event } from '~/shared/events'
 import { GameScene } from '~/client/scenes/gameScene'
-import { Player } from '~/client/entities/player'
 import { PlayerAction, PlayerDirection } from '~/shared/models'
-import { DebugScene } from '~/client/scenes/debugScene'
+import { Player } from '~/client/entities/player'
+import { Event } from '~/shared/events'
 
 type controlKeys =
     | 'moveRightDvorak'
@@ -20,43 +19,7 @@ type controlKeys =
     | 'ability4'
 
 
-export class MainControl {
-    public scene: GameScene
-    public controls: Record<string, Phaser.Input.Keyboard.Key>
-    public isDebugSceneActive: boolean
-    constructor(scene: GameScene) {
-        this.scene = scene
-        this.controls = {
-            toggleDebugScene: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L),
-            toggleMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
-        }
-        this.isDebugSceneActive = true
-    }
-
-    public update(): void {
-        const toggleDebugScene = this.scene.input.keyboard.checkDown(this.controls.toggleDebugScene, 200)
-        const toggleHelpMenuDown = this.scene.input.keyboard.checkDown(this.controls.toggleMenu, 200)
-
-        if (this.scene.game.debug && toggleDebugScene && this.isDebugSceneActive) {
-            this.scene.scene.pause('debugScene')
-            this.isDebugSceneActive = false
-        } else if (this.scene.game.debug && toggleDebugScene && !this.isDebugSceneActive) {
-            this.scene.scene.resume('debugScene')
-            this.isDebugSceneActive = true
-        }
-
-        if (toggleHelpMenuDown) {
-            if (this.scene.scene.isActive('mainMenuScene')) {
-                this.scene.scene.sleep('mainMenuScene')
-            } else {
-                this.scene.scene.launch('mainMenuScene')
-            }
-        }
-    }
-}
-
-
-export class PlayerControl {
+export class PlayerController {
     public scene: GameScene
     public controls: Record<controlKeys, Phaser.Input.Keyboard.Key>
     public action: PlayerAction
@@ -127,7 +90,6 @@ export class PlayerControl {
     }
 
     public handleSwitchWeapon(): void {
-        // Phaser.Input.Keyboard.JustDown()
         const ability1 = Phaser.Input.Keyboard.JustDown(this.controls.ability1)
         const ability2 = Phaser.Input.Keyboard.JustDown(this.controls.ability2)
         const ability3 = Phaser.Input.Keyboard.JustDown(this.controls.ability3)
@@ -204,96 +166,4 @@ export class PlayerControl {
             this.scene.game.events.emit(Event.playerAction, this.action)
         }
     }
-}
-
-export class DebugControl {
-    public scene: DebugScene
-    public controls: Record<string, Phaser.Input.Keyboard.Key>
-    public cameraControls: Phaser.Cameras.Controls.SmoothedKeyControl
-    public isFreeCamera: boolean
-    public isPaused: boolean
-    constructor(scene: DebugScene) {
-        this.scene = scene
-        this.controls = {
-            toggleHelpMenu: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
-            toggleCamera: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T),
-            pause: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
-            slowGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
-            speedGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
-            resetGame: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
-            fullscreen: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F),
-        }
-        this.cameraControls = settingCameraControl(this.scene.mainScene)
-    }
-
-    public update(delta: number): void {
-        const toggleCameraDown = this.scene.input.keyboard.checkDown(this.controls.toggleCamera, 200)
-        const togglePauseDown = this.scene.input.keyboard.checkDown(this.controls.pause, 200)
-        const toggleHelpMenuDown = this.scene.input.keyboard.checkDown(this.controls.toggleHelpMenu, 200)
-        const slowGameDown = this.scene.input.keyboard.checkDown(this.controls.slowGame, 200)
-        const speedGameDown = this.scene.input.keyboard.checkDown(this.controls.speedGame, 200)
-        const resetGameSpeedDown = this.scene.input.keyboard.checkDown(this.controls.resetGame, 200)
-        const fullscreen = this.scene.input.keyboard.checkDown(this.controls.fullscreen, 200)
-
-        if (toggleCameraDown) {
-            if (this.isFreeCamera) {
-                this.scene.mainScene.cameras.main.stopFollow()
-            } else {
-                this.scene.mainScene.cameras.main.startFollow(this.scene.mainScene.player, true)
-            }
-            this.isFreeCamera = !this.isFreeCamera
-        }
-
-        if (togglePauseDown) {
-            if (this.isPaused) {
-                this.scene.resumeScene()
-            } else {
-                this.scene.pauseScene()
-            }
-            this.isPaused = !this.isPaused
-        }
-
-        if (slowGameDown) {
-            this.scene.slowDownGame()
-        }
-
-        if (speedGameDown) {
-            this.scene.speedUpGame()
-        }
-
-        if (resetGameSpeedDown) {
-            this.scene.resetGameSpeed()
-        }
-
-        if (toggleHelpMenuDown) {
-            this.scene.toggleHelpMenu()
-        }
-
-        this.cameraControls.update(delta)
-
-        if (fullscreen) {
-            if (this.scene.scale.isFullscreen) {
-                this.scene.scale.stopFullscreen()
-            } else {
-                this.scene.scale.startFullscreen()
-            }
-        }
-    }
-}
-
-export function settingCameraControl(scene: GameScene): Phaser.Cameras.Controls.SmoothedKeyControl {
-    const cursors = scene.input.keyboard.createCursorKeys()
-    const controlConfig = {
-        camera: scene.cameras.main,
-        left: cursors.left,
-        right: cursors.right,
-        up: cursors.up,
-        down: cursors.down,
-        zoomIn: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-        zoomOut: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N),
-        acceleration: 0.06,
-        drag: 0.0005,
-        maxSpeed: 1.0,
-    }
-    return new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig)
 }

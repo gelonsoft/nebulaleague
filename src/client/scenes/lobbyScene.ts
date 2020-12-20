@@ -1,4 +1,4 @@
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Client } from '~/client/client'
 import { GameModeButton } from '~/client/ui/buttons'
 import { GameMode } from '~/shared/models'

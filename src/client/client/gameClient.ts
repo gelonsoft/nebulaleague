@@ -1,6 +1,6 @@
 import { GameChanged, GameState } from '~/shared/models'
 import { Client } from '~/client/client'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
 
 export abstract class GameClient {

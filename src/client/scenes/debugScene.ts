@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { Config } from '~/shared/config'
 import { GameScene } from '~/client/scenes/gameScene'
-import { MyGame } from '~/client/index'
-import { DebugControl } from '~/client/controls'
+import { MyGame } from '~/client/games/myGame'
+import { DebugController } from '~/client/controllers'
 import { PlayerAI } from '~/client/ai/playerAI'
 import { Player } from '~/client/entities/player'
 
@@ -29,7 +29,7 @@ export class DebugScene extends Phaser.Scene {
     public cornerCoords: Array<any>
     public helpText: Array<any>
     public helpDisplayed: boolean
-    public debugControl: DebugControl
+    public debugControl: DebugController
     public debugMenu: Phaser.GameObjects.DOMElement
     public debugEntities: Array<any>
     public debugEntitiesAI: Array<PlayerAI>
@@ -82,7 +82,7 @@ export class DebugScene extends Phaser.Scene {
 
         // the scene being debugged
         this.mainScene = scene
-        this.debugControl = new DebugControl(this)
+        this.debugControl = new DebugController(this)
 
         if (this.showCornerCoords) {
             // this.initCornerCoords()

@@ -1,5 +1,4 @@
-import { MyGame } from '~/client/index'
-import { Client } from '~/client/client'
+import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
 
 export class BootScene extends Phaser.Scene {
@@ -54,7 +53,7 @@ export class BootScene extends Phaser.Scene {
         // load our package
         this.load.pack('preload', 'assets/pack.json', 'preload')
 
-        if (this.game.debug) {
+        if (Config.debug.debugMode) {
             this.load.html('debugMenuHTML', 'assets/html/debugMenu.html')
         }
     }

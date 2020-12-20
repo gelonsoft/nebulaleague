@@ -3,7 +3,7 @@ import {
     PlayerConfig,
 } from '~/shared/models'
 import { Config } from '~/shared/config'
-import { MyGame } from '~/client/index'
+import { MyGame } from '~/client/games/myGame'
 
 
 export abstract class PlayerSelectionClient {
