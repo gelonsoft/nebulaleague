@@ -1,4 +1,3 @@
-import 'phaser'
 import * as _ from 'lodash'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Config } from '~/shared/config'

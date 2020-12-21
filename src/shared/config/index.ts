@@ -15,7 +15,6 @@ import {
     WeaponModel,
     PlayerSelectionState,
     ProjectileModel,
-    ClientMode,
     User,
 } from '~/shared/models'
 import weaponsConfig from '~/shared/config/weaponsConfig'
@@ -25,7 +24,6 @@ import abilitiesConfig from '~/shared/config/abilitiesConfig'
 type Debug = {
     lobyTo: GameMode | null
     debugMode: boolean
-    defaultClient: ClientMode
     playerSelectionSkip: boolean
     displayBanner: boolean
     displayBody: boolean
@@ -33,7 +31,6 @@ type Debug = {
 }
 
 const debugConfig: Debug = {
-    defaultClient: 'colyseus',
     debugMode: true,
     lobyTo: null,
     playerSelectionSkip: false,
@@ -42,8 +39,7 @@ const debugConfig: Debug = {
 }
 
 const prodConfig: Debug = {
-    defaultClient: 'colyseus',
-    debugMode: false,
+    debugMode: false ,
     lobyTo: null,
     playerSelectionSkip: false,
     displayBanner: false,

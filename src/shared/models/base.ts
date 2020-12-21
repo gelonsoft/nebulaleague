@@ -1,5 +1,4 @@
 import { MapSchema } from '@colyseus/schema'
-export type ClientMode = 'offline' | 'colyseus'
 export type Position = { x: number; y: number }
 export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'

@@ -41,7 +41,6 @@ export class Client {
     public initLobby() {
         const onInit = () => {
             this.game.scenes.startLoby()
-            console.log('onInit')
         }
 
         const onStart = (user: User) => {

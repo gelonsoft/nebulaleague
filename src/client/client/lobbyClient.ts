@@ -36,7 +36,6 @@ export class LobbyClient {
 
         this.room.onStateChange.once((state: LobbyState) => {
             this.state = state
-            console.log('onStateChange')
             this.onInit()
         })
 

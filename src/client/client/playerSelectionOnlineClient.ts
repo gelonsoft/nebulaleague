@@ -24,7 +24,6 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
         })
         this.room.onStateChange.once((state: PlayerSelectionState) => {
             this.state = state
-            console.log('onPlayerSelectionStateChanged')
             this.onInit()
         })
 
@@ -33,7 +32,6 @@ export class PlayerSelectionOnlineClient extends PlayerSelectionClient {
                 changes.forEach((change) => {
                     if (playerId === this.room.sessionId) {
                         if (change.field === 'ready' && change.value === true) {
-                            console.log(change)
                             this.onStart(playerConfig)
                             this.room.leave()
                         }

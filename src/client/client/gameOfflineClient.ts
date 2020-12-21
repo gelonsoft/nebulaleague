@@ -1,5 +1,5 @@
 import { GameClient } from '~/client/client/gameClient'
-import { GameChanged } from '~/shared/models'
+import { GameChanged, GameStateSchema, PlayerModelSchema } from '~/shared/models'
 
 export class GameOfflineClient extends GameClient {
     get id(): string {
@@ -7,6 +7,17 @@ export class GameOfflineClient extends GameClient {
     }
 
     public async init() {
+        this.state = new GameStateSchema()
+        this.state.players.set(
+            this.id,
+            new PlayerModelSchema().assign({
+                ...this.game.client.playerConfig,
+                id: this.id,
+                x: 0,
+                y: 0,
+            })
+        )
+        
         this.onInit()
         return Promise.resolve()
     }
