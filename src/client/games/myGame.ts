@@ -3,7 +3,6 @@ import {
     DeathScene,
     DebugScene,
     GameFfaScene,
-    GameTrainingScene,
     HudScene,
     LobbyScene,
     MainMenuScene,
@@ -30,7 +29,6 @@ export class MyGame extends Phaser.Game {
             DeathScene,
             PlayerSelectionScene,
             GameFfaScene,
-            GameTrainingScene,
         ]
 
         super({
@@ -52,8 +50,8 @@ export class MyGame extends Phaser.Game {
             },
             banner: Config.debug.displayBanner,
             physics: {
-                default: 'arcade',
-                arcade: {
+                default: 'matter',
+                matter: {
                     gravity: { x: 0, y: 0 },
                     debug: Config.debug.displayBody,
                 },

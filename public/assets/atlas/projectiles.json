@@ -1,0 +1,188 @@
+{
+	"textures": [
+		{
+			"image": "projectiles.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 388,
+				"h": 783
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "t2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 386,
+						"h": 394
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 386,
+						"h": 394
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 386,
+						"h": 394
+					}
+				},
+				{
+					"filename": "t1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 364,
+						"h": 364
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 364,
+						"h": 364
+					},
+					"frame": {
+						"x": 1,
+						"y": 397,
+						"w": 364,
+						"h": 364
+					}
+				},
+				{
+					"filename": "beams-blue1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 21,
+						"h": 19
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 19
+					},
+					"frame": {
+						"x": 1,
+						"y": 763,
+						"w": 21,
+						"h": 19
+					}
+				},
+				{
+					"filename": "beams-red1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 20,
+						"h": 19
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 19
+					},
+					"frame": {
+						"x": 24,
+						"y": 763,
+						"w": 20,
+						"h": 19
+					}
+				},
+				{
+					"filename": "beams-cyan1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 18
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 18
+					},
+					"frame": {
+						"x": 46,
+						"y": 763,
+						"w": 19,
+						"h": 18
+					}
+				},
+				{
+					"filename": "beam-yellow1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 18
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 18
+					},
+					"frame": {
+						"x": 67,
+						"y": 763,
+						"w": 18,
+						"h": 18
+					}
+				},
+				{
+					"filename": "beams-green1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 17
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 17
+					},
+					"frame": {
+						"x": 87,
+						"y": 763,
+						"w": 18,
+						"h": 17
+					}
+				},
+				{
+					"filename": "beams-purple1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 17
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 17
+					},
+					"frame": {
+						"x": 107,
+						"y": 763,
+						"w": 18,
+						"h": 17
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:b597f71a49274ff4dfbdc131351c84ae:d6b64540bc26cddf0753fb3e7c13d062:9b6e6842273e8724f51d1457138f1678$"
+	}
+}

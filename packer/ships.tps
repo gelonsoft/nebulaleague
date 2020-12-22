@@ -132,7 +132,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../public/assets/entities/entities.json</filename>
+                <filename>../public/assets/atlas/ships.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -316,92 +316,9 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beam-yellow1.png</key>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beams-cyan1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,9,9</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,9,9</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beams-blue1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,11,9</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,11,9</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beams-green1.png</key>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beams-purple1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,4,9,9</rect>
-                <key>scale9Paddings</key>
-                <rect>5,4,9,9</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/nebulaleague/entities/projectiles/beams-red1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,9</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,9</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../../Pictures/spacefighter/my/charged_arrow_bullet.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,7,12,13</rect>
-                <key>scale9Paddings</key>
-                <rect>6,7,12,13</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beam-yellow1.png</filename>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beams-blue1.png</filename>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beams-cyan1.png</filename>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beams-green1.png</filename>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beams-purple1.png</filename>
-            <filename>../../../../Pictures/nebulaleague/entities/projectiles/beams-red1.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_001.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_002.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_003.png</filename>
@@ -411,7 +328,6 @@
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_007.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_008.png</filename>
             <filename>../../../../Pictures/nebulaleague/entities/Ships/spaceShips_009.png</filename>
-            <filename>../../../../Pictures/spacefighter/my/charged_arrow_bullet.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

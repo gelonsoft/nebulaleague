@@ -2,7 +2,7 @@ import {
     EffectKeys,
     ProjectileName,
     ProjectileTemplate,
-} from '../models'
+} from '~/shared/models'
 
 
 const projectilesConfig: Record<ProjectileName, ProjectileTemplate> = {

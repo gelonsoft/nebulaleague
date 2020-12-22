@@ -4,14 +4,20 @@
             {
                 "type": "atlas",
                 "key": "icons",
-                "textureURL": "assets/icons/icons.png",
-                "atlasURL": "assets/icons/icons.json"
+                "textureURL": "assets/atlas/icons.png",
+                "atlasURL": "assets/atlas/icons.json"
             },
             {
                 "type": "atlas",
-                "key": "entities",
-                "textureURL": "assets/entities/entities.png",
-                "atlasURL": "assets/entities/entities.json"
+                "key": "ships",
+                "textureURL": "assets/atlas/ships.png",
+                "atlasURL": "assets/atlas/ships.json"
+            },
+            {
+                "type": "atlas",
+                "key": "projectiles",
+                "textureURL": "assets/atlas/projectiles.png",
+                "atlasURL": "assets/atlas/projectiles.json"
             },
             {
                 "type": "image",

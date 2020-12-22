@@ -1,5 +1,5 @@
 import { MapSchema } from '@colyseus/schema'
-export type Position = { x: number; y: number }
+export type Vector = { x: number; y: number }
 export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
@@ -69,13 +69,8 @@ export type GameChanged = {
     player?: PlayerChanged
 }
 
-export type PlayerDirection = {
-    x: number
-    y: number
-}
-
 export type PlayerAction = {
-    direction?: PlayerDirection
+    direction?: Vector
     rotation?: number
     selectAbility?: AbilityKey
     action?: WeaponKey

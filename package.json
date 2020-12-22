@@ -29,6 +29,7 @@
     "dependencies": {
         "@colyseus/monitor": "^0.12.2",
         "@colyseus/social": "^0.10.9",
+        "@types/matter-js": "^0.14.8",
         "bulma": "^0.9.1",
         "colyseus": "^0.14.4",
         "colyseus.js": "^0.14.1",
@@ -38,7 +39,10 @@
         "express": "^4.17.1",
         "fluent-behavior-tree": "^1.2.6",
         "html-webpack-plugin": "^4.5.0",
+        "install": "^0.13.0",
+        "matter-js": "^0.14.2",
         "module-alias": "^2.2.2",
+        "npm": "^6.14.10",
         "object-assign-deep": "^0.4.0",
         "phaser": "^3.50.0",
         "stats.js": "^0.17.0",

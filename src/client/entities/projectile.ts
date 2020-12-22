@@ -13,7 +13,7 @@ import { Player } from '~/client/entities/player'
 
 type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
 
-export class Projectile extends Phaser.GameObjects.Container implements ProjectileModel {
+export class Projectile extends Phaser.Physics.Matter.Sprite implements ProjectileModel {
     public scene: GameScene
     public name: string
     public fromPlayerId = 'uknown'
@@ -26,7 +26,7 @@ export class Projectile extends Phaser.GameObjects.Container implements Projecti
     public group: ProjectileName
 
     public constructor(scene: GameScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(scene)
+        super(scene.matter.world, 0, 0, Config.textureKeys.projectiles, projectileTemplate.drawing.frame)
         this.scene = scene
         this.name = name
         this.hittedPlayerIds = new Set()
@@ -35,7 +35,7 @@ export class Projectile extends Phaser.GameObjects.Container implements Projecti
         this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
         this.tickTimer = 0
         this.initPhysics()
-        this.initDrawing()
+        // this.initDrawing()
         this.scene.add.existing(this)
     }
 
@@ -49,24 +49,24 @@ export class Projectile extends Phaser.GameObjects.Container implements Projecti
         this.deactivate()
     }
 
-    public initDrawing(): void {
-        switch (this.projectileTemplate.drawing.style) {
-            case 'sprite':
-                this.drawing = new ProjectileDrawingSprite(
-                    this.scene,
-                    (this.projectileTemplate.drawing as unknown) as ProjectileDrawingSpriteModel
-                )
+    // public initDrawing(): void {
+    //     switch (this.projectileTemplate.drawing.style) {
+    //         case 'sprite':
+    //             this.drawing = new ProjectileDrawingSprite(
+    //                 this.scene,
+    //                 (this.projectileTemplate.drawing as unknown) as ProjectileDrawingSpriteModel
+    //             )
 
-                break
-            case 'primitive':
-                this.drawing = new ProjectileDrawingPrimitive(
-                    this.scene,
-                    (this.projectileTemplate.drawing as unknown) as ProjectileDrawingPrimitiveModel
-                )
-                break
-        }
-        this.add(this.drawing)
-    }
+    //             break
+    //         case 'primitive':
+    //             this.drawing = new ProjectileDrawingPrimitive(
+    //                 this.scene,
+    //                 (this.projectileTemplate.drawing as unknown) as ProjectileDrawingPrimitiveModel
+    //             )
+    //             break
+    //     }
+    //     // this.add(this.drawing)
+    // }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
         if (this.projectileTemplate.triggerAfter) {

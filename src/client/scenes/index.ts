@@ -1,4 +1,4 @@
-import { GameScene, GameFfaScene, GameTrainingScene } from '~/client/scenes/gameScene'
+import { GameScene, GameFfaScene } from '~/client/scenes/gameScene'
 import { HudScene } from '~/client/scenes/hudScene'
 import { BootScene } from '~/client/scenes/bootScene'
 import { DebugScene } from '~/client/scenes/debugScene'
@@ -13,7 +13,6 @@ export {
     DebugScene,
     GameFfaScene,
     GameScene,
-    GameTrainingScene,
     HudScene,
     LobbyScene,
     MainMenuScene,

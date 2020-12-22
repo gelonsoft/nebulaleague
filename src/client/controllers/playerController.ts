@@ -1,5 +1,5 @@
 import { GameScene } from '~/client/scenes/gameScene'
-import { PlayerAction, PlayerDirection } from '~/shared/models'
+import { PlayerAction, Vector } from '~/shared/models'
 import { Player } from '~/client/entities/player'
 import { Event } from '~/shared/events'
 
@@ -31,8 +31,8 @@ export class PlayerController {
     public canLeftTrigger: boolean
     public canRightTrigger: boolean
     public active: boolean
-    public previousDirection: PlayerDirection
-    public currentDirection: PlayerDirection
+    public previousDirection: Vector
+    public currentDirection: Vector
     public previousMouseRotation: number
     public currentMouseRotation: number
 
@@ -75,7 +75,7 @@ export class PlayerController {
         const down = this.controls.moveDownDvorak.isDown || this.controls.moveDownQwerty.isDown ? 1 : 0
 
         this.previousDirection = this.currentDirection
-        const playerDirection: PlayerDirection = {
+        const playerDirection: Vector = {
             x: left + right,
             y: up + down,
         }
@@ -110,8 +110,8 @@ export class PlayerController {
     public handleMouse(): void {
         const pointer = this.scene.input.activePointer
         const pointerRotation = Phaser.Math.Angle.Between(
-            this.player.body.center.x,
-            this.player.body.center.y,
+            this.player.x,
+            this.player.y,
             this.scene.pointerPosition.x,
             this.scene.pointerPosition.y
         )

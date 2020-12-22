@@ -69,7 +69,10 @@ export class Ability {
     public draw(player: Player, pointerPosition: Phaser.Math.Vector2): void {
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
-            const targetPosition = this.isInRangeToTrigger(player.body.center, pointerPosition)
+            const targetPosition = this.isInRangeToTrigger(
+                new Phaser.Math.Vector2(player.body.position),
+                pointerPosition
+            )
                 ? pointerPosition
                 : this.getMaxRadiusPosition(player)
 
@@ -82,9 +85,9 @@ export class Ability {
         if (this.rangeGraphics) {
             this.rangeGraphics.clear()
             this.rangeGraphics.fillStyle(this.rangeDistanceColor, this.rangeDistanceAlpha)
-            this.rangeGraphics.fillCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
+            this.rangeGraphics.fillCircle(player.x, player.y, this.rangeDistance)
             this.rangeGraphics.lineStyle(2, this.rangeDistanceColor, this.rangeDistanceAlpha)
-            this.rangeGraphics.strokeCircle(player.body.center.x, player.body.center.y, this.rangeDistance)
+            this.rangeGraphics.strokeCircle(player.x, player.y, this.rangeDistance)
         }
 
         if (this.rayGraphics) {
@@ -92,8 +95,8 @@ export class Ability {
             const rayEndPosition = this.getMaxRadiusPosition(player)
 
             const line = new Phaser.Geom.Line(
-                player.body.center.x,
-                player.body.center.y,
+                player.x,
+                player.y,
                 rayEndPosition.x,
                 rayEndPosition.y
             )
@@ -132,7 +135,7 @@ export class Ability {
         return Phaser.Math.Vector2.ONE.clone()
             .setToPolar(player.rotation - Math.PI / 2)
             .scale(this.rangeDistance)
-            .add(player.body.center)
+            .add(new Phaser.Math.Vector2(player.body.position))
     }
 
     public trigger(
@@ -152,7 +155,7 @@ export class Ability {
                     duration: this.triggerAfter * 1000,
                     ease: 'Cubic.easeIn',
                     onComplete: () => {
-                        player.body.reset(targetPosition.x, targetPosition.y)
+                        player.setPosition(targetPosition.x, targetPosition.y)
                         this.scene.tweens.add({
                             targets: player,
                             alpha: { from: 0.2, to: 1 },

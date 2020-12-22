@@ -87,7 +87,8 @@ export class Config {
     }
 
     public static readonly textureKeys = {
-        entities: 'entities',
+        ships: 'ships',
+        projectiles: 'projectiles',
         icons: 'icons',
     }
 

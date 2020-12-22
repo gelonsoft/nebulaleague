@@ -3,12 +3,11 @@ import { ProjectileName, ProjectileTemplate } from '~/shared/models'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Projectile } from '~/client/entities/projectile'
 
-export class Projectiles extends Phaser.Physics.Arcade.Group {
+export class Projectiles extends Phaser.GameObjects.Group {
     public projectileByIds: Map<string, Projectile>
     public scene: GameScene
     constructor(scene: GameScene) {
-        super(scene.physics.world, scene, [], {
-            enable: false,
+        super(scene, [], {
             active: false,
             visible: false,
             classType: Projectile,

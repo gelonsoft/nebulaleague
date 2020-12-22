@@ -1,7 +1,8 @@
 import * as _ from 'lodash'
-import { diff } from 'deep-object-diff'
+import * as Matter  from "matter-js"
 import * as Stats from 'stats.js'
-import { Position, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
+import { diff } from 'deep-object-diff'
+import { Vector, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
 import { Config } from '~/shared/config'
 
 import { MyGame } from '~/client/games/myGame'
@@ -17,7 +18,7 @@ import { Player, ActionTimeInterface } from '~/client/entities/player'
 export class GameScene extends Phaser.Scene {
     public game: MyGame
     public player: Player
-    public players: Phaser.Physics.Arcade.Group
+    public players: Phaser.GameObjects.Group
     public client: Client
     public projectiles: Projectiles
     public weapons: Record<string, Weapon>
@@ -63,7 +64,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public create(): void {
-        this.projectiles = buildProjectiles(this)
+        // this.projectiles = buildProjectiles(this)
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
 
@@ -75,9 +76,11 @@ export class GameScene extends Phaser.Scene {
                 return new Player(this, playerModel)
             }
         )
-        this.players = this.physics.add
+;
+        
+        this.players = this.add
             .group({
-                collideWorldBounds: true,
+                // collideWorldBounds: true,
                 classType: Player,
             })
             .addMultiple(existingPlayers)
@@ -191,7 +194,7 @@ export class GameScene extends Phaser.Scene {
         return this.cameras.main.getWorldPoint(pointer.x, pointer.y)
     }
 
-    get pointerPosition(): Position {
+    get pointerPosition(): Vector {
         const pointer = this.input.activePointer
         const pointerFromWorld = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
         return {
@@ -205,7 +208,7 @@ export class GameScene extends Phaser.Scene {
         this.freeCamera = false
         this.cameras.main.setZoom(this.mainCameraZoom)
         this.cameras.main.setBounds(0, 0, Config.world.width, Config.world.height)
-        this.physics.world.setBounds(
+        this.matter.world.setBounds(
             0,
             0,
             Config.world.width,
@@ -215,14 +218,14 @@ export class GameScene extends Phaser.Scene {
 
     public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
         if (player1.id === this.player.id) {
-            player1.body.velocity.scale(-1)
-            // player1.body.position.add(player1.body.velocity.normalize().scale(100))
+            const newVelocity = Matter.Vector.mult(player1.body.position, -1)
+            player1.setVelocity(newVelocity.x, newVelocity.y)
             player1.hit(Config.player.toOtherDamage)
         }
 
         if (player2.id === this.player.id) {
-            player2.body.velocity.scale(-1)
-            // player1.body.position.add(player1.body.velocity.normalize().scale(100))
+            const newVelocity = Matter.Vector.mult(player1.body.position, -1)
+            player2.setVelocity(newVelocity.x, newVelocity.y)
             player2.hit(Config.player.toOtherDamage)
         }
     }
@@ -262,8 +265,8 @@ export class GameScene extends Phaser.Scene {
         this.previousPlayerChanged = this.currentPlayerChanged
         this.mainControl.update()
         this.playerControl.update()
-        this.physics.overlap(this.players, this.players, this.handlePlayerPlayerCollide, undefined, this)
-        this.physics.overlap(this.players, this.projectiles, this.handleEnemyProjectileCollide)
+        // this.matter.overlap(this.players, this.players, this.handlePlayerPlayerCollide, undefined, this)
+        // this.matter.overlap(this.players, this.projectiles, this.handleEnemyProjectileCollide)
 
         if (this.player.active) {
             this.player.draw()

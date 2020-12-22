@@ -1,0 +1,209 @@
+{
+	"textures": [
+		{
+			"image": "ships.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 501,
+				"h": 246
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "spaceShips_007.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 172,
+						"h": 151
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 172,
+						"h": 151
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 172,
+						"h": 151
+					}
+				},
+				{
+					"filename": "spaceShips_006.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 94,
+						"h": 148
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 94,
+						"h": 148
+					},
+					"frame": {
+						"x": 175,
+						"y": 1,
+						"w": 94,
+						"h": 148
+					}
+				},
+				{
+					"filename": "spaceShips_004.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 126,
+						"h": 108
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 126,
+						"h": 108
+					},
+					"frame": {
+						"x": 271,
+						"y": 1,
+						"w": 126,
+						"h": 108
+					}
+				},
+				{
+					"filename": "spaceShips_002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 101,
+						"h": 74
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 101,
+						"h": 74
+					},
+					"frame": {
+						"x": 399,
+						"y": 1,
+						"w": 101,
+						"h": 74
+					}
+				},
+				{
+					"filename": "spaceShips_005.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 136,
+						"h": 84
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 136,
+						"h": 84
+					},
+					"frame": {
+						"x": 1,
+						"y": 154,
+						"w": 136,
+						"h": 84
+					}
+				},
+				{
+					"filename": "spaceShips_003.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 94
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 94
+					},
+					"frame": {
+						"x": 175,
+						"y": 151,
+						"w": 100,
+						"h": 94
+					}
+				},
+				{
+					"filename": "spaceShips_009.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 114,
+						"h": 82
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 114,
+						"h": 82
+					},
+					"frame": {
+						"x": 277,
+						"y": 111,
+						"w": 114,
+						"h": 82
+					}
+				},
+				{
+					"filename": "spaceShips_008.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 82
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 82
+					},
+					"frame": {
+						"x": 399,
+						"y": 77,
+						"w": 100,
+						"h": 82
+					}
+				},
+				{
+					"filename": "spaceShips_001.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 106,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 106,
+						"h": 80
+					},
+					"frame": {
+						"x": 393,
+						"y": 161,
+						"w": 106,
+						"h": 80
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:44fc359a9c996bfab4521da6a68383a7:a18ea88cbd7eba7a6919e1b1792b4b86:78154fe33c5dfc8c7f67f0a3677ac0ac$"
+	}
+}
