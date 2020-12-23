@@ -66,8 +66,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     public previousDirection: Vector
     public actions: ActionsInterface
     public selectedAbilityKey: ActionKey | null
-    public accelerationChange: number
-    public accelerationSteady: number
     public actionTimes: ActionTimesInterface
     public effects: Set<EffectModel>
     public burningTime: Phaser.Time.TimerEvent | null
@@ -85,18 +83,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
                 label: playerModel.id,
             }
         )
-
-        this.setDisplayOrigin(0.5, 0.5)
-            .setOrigin(0.5, 0.5)
-            .setDisplaySize(Config.player.size, Config.player.size)
-
-        this.setBody({
-            type: 'circle',
-            radius: this.displayWidth / 2,
-        })
-
-        this.accelerationChange = Config.player.accelerationChange
-        this.accelerationSteady = Config.player.accelerationSteady
+        this.scene.add.existing(this)
 
         this.scene = scene
         this.playerModel = playerModel
@@ -110,9 +97,15 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.controlledBy = playerModel.controlledBy
         this.deathCooldownDelay = 10
 
+        
+        this.setDisplaySize(Config.player.size, Config.player.size)
+        this.setBody({
+            type: 'circle',
+            radius: this.displayWidth / 2,
+        })
         this.initHealthbar()
         this.initEffectsContainer()
-        this.scene.add.existing(this)
+
         // this.controlledByAI = null
 
         this.actionTimes = {
@@ -148,8 +141,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     public directionToVelocity(playerDirection: Vector): Vector {
-        const linearSpeed = 10
-        const crossSpeed = Math.cos(Math.PI / 4) * linearSpeed
+        const linearSpeed = this.defaultSpeed
+        const crossSpeed = Math.cos(Math.PI / 4) * this.defaultSpeed
         const { x, y } = playerDirection
         const directions: Record<string, Vector> = {
             '00': { x: 0, y: 0 },
@@ -167,7 +160,10 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     public move(playerDirection: Vector): void {
         const velocity = this.directionToVelocity(playerDirection)
-        this.setVelocity(velocity.x, velocity.y)
+        this.setVelocity(
+            velocity.x * this.scene.game.loop.delta / 1000,
+            velocity.y * this.scene.game.loop.delta / 1000,
+        )
         this.previousDirection = playerDirection
     }
 
@@ -450,8 +446,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     public setAliveState(otherPlayers: Phaser.GameObjects.Group): void {
         // let overlaping = true
-        const x = 0
-        const y = 0
+        const x = 50
+        const y = 50
 
         // while (overlaping) {
         //     overlaping = false

@@ -35,7 +35,6 @@ export class Projectiles extends Phaser.GameObjects.Group {
             const projectileName = `${projectileTemplate.name}-${index}`
             const projectile = new Projectile(this.scene, projectileName, projectileTemplate)
             this.add(projectile)
-            projectile.body.enable = false
         })
     }
 

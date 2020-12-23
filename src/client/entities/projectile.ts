@@ -26,7 +26,14 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
     public group: ProjectileName
 
     public constructor(scene: GameScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(scene.matter.world, 0, 0, Config.textureKeys.projectiles, projectileTemplate.drawing.frame)
+        super(
+            scene.matter.world,
+            0,
+            0,
+            Config.textureKeys.projectiles,
+            projectileTemplate.drawing.frame,
+        )
+
         this.scene = scene
         this.name = name
         this.hittedPlayerIds = new Set()
@@ -34,39 +41,15 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
         this.group = projectileTemplate.name
         this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
         this.tickTimer = 0
-        this.initPhysics()
-        // this.initDrawing()
-        this.scene.add.existing(this)
-    }
-
-    public initPhysics() {
-        this.scene.physics.world.enableBody(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-        this.body.setCircle(
-            this.projectileTemplate.radius,
-            -this.projectileTemplate.radius,
-            -this.projectileTemplate.radius
-        )
+        
+        this.setDisplaySize(projectileTemplate.radius * 2, projectileTemplate.radius * 2)
+        this.setBody({
+            type: 'circle',
+            radius: projectileTemplate.radius,
+        })
         this.deactivate()
     }
 
-    // public initDrawing(): void {
-    //     switch (this.projectileTemplate.drawing.style) {
-    //         case 'sprite':
-    //             this.drawing = new ProjectileDrawingSprite(
-    //                 this.scene,
-    //                 (this.projectileTemplate.drawing as unknown) as ProjectileDrawingSpriteModel
-    //             )
-
-    //             break
-    //         case 'primitive':
-    //             this.drawing = new ProjectileDrawingPrimitive(
-    //                 this.scene,
-    //                 (this.projectileTemplate.drawing as unknown) as ProjectileDrawingPrimitiveModel
-    //             )
-    //             break
-    //     }
-    //     // this.add(this.drawing)
-    // }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
         if (this.projectileTemplate.triggerAfter) {
@@ -76,16 +59,15 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
                 duration: this.projectileTemplate.triggerAfter * 1000,
                 ease: 'Cubic.easeIn',
                 onStart: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(true)
-                    this.body.reset(initialPosition.x, initialPosition.y)
+                    this.setPosition(initialPosition.x, initialPosition.y)
                     this.activate()
                 },
                 onComplete: (_tween, _targets, _gameObject) => {
-                    this.body.setEnable(false)
+                    this.deactivate()
                 },
             })
         } else {
-            this.body.reset(initialPosition.x, initialPosition.y)
+            this.setPosition(initialPosition.x, initialPosition.y)
             this.activate()
         }
 
@@ -93,8 +75,10 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
             const ux = Math.cos(initialRotation)
             const uy = Math.sin(initialRotation)
             this.setRotation(initialRotation + Math.PI / 2)
-            this.body.velocity.x = ux * this.projectileTemplate.speed
-            this.body.velocity.y = uy * this.projectileTemplate.speed
+            this.setVelocity(
+                ux * this.projectileTemplate.speed * this.scene.game.dt,
+                uy * this.projectileTemplate.speed * this.scene.game.dt,
+            )
         }
 
         this.scene.time.addEvent({
@@ -131,14 +115,18 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
         this.tickTimer = this.tickAfter
         this.setActive(true)
         this.setVisible(true)
-        this.body.setEnable(true)
+        this.world.add(this.body)
+        this.setFriction(0)
+        this.setFrictionAir(0)
+        this.setFrictionStatic(0)
+        this.setSensor(true)
     }
 
     public deactivate(): void {
         this.setActive(false)
         this.setVisible(false)
-        this.body.setEnable(false)
-        this.body.reset(200, 200)
+        this.world.remove(this.body)
+        // this.setPosition(200, 200)
     }
 
     public kill(): void {

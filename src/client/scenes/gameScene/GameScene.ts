@@ -64,7 +64,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public create(): void {
-        // this.projectiles = buildProjectiles(this)
+        this.projectiles = buildProjectiles(this)
         this.weapons = buildWeapons(this)
         this.abilities = buildAbilities(this)
 

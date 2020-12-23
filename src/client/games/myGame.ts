@@ -9,6 +9,7 @@ import {
     PlayerSelectionScene
 } from '~/client/scenes'
 
+
 import { Config } from '~/shared/config'
 import { Client } from '~/client/client'
 import { GameMode, SceneGameKey } from '~/shared/models'
@@ -60,7 +61,9 @@ export class MyGame extends Phaser.Game {
         })
     }
 
-
+    public get dt () {
+        return this.loop.delta / 1000
+    }
 
     public get currentGameKey(): SceneGameKey {
         return Config.modeToGameKey[this.currentGameMode]
