@@ -1,3 +1,4 @@
+import * as Matter from 'matter'
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import {
@@ -7,49 +8,54 @@ import {
     ProjectileDrawingSpriteModel,
     ProjectileDrawingPrimitiveModel,
     ProjectileModel,
+    Vector,
 } from '~/shared/models'
 import { GameScene } from '~/client/scenes/gameScene'
 import { Player } from '~/client/entities/player'
 
-type ProjectileDrawing = ProjectileDrawingSprite | ProjectileDrawingPrimitive
 
 export class Projectile extends Phaser.Physics.Matter.Sprite implements ProjectileModel {
     public scene: GameScene
-    public name: string
+    public body: Matter.BodyType
     public fromPlayerId = 'uknown'
     public hittedPlayerIds: Set<string>
     public tickAfter: number
     public tickTimer: number
     public readonly projectileTemplate: ProjectileTemplate
-    public drawing: ProjectileDrawing
-    public body: Phaser.Physics.Arcade.Body
     public group: ProjectileName
 
     public constructor(scene: GameScene, name: string, projectileTemplate: ProjectileTemplate) {
-        super(
-            scene.matter.world,
-            0,
-            0,
-            Config.textureKeys.projectiles,
-            projectileTemplate.drawing.frame,
-        )
+        super(scene.matter.world, 0, 0, Config.textureKeys.projectiles, projectileTemplate.drawing.frame)
 
         this.scene = scene
         this.name = name
-        this.hittedPlayerIds = new Set()
         this.projectileTemplate = projectileTemplate
-        this.group = projectileTemplate.name
-        this.tickAfter = projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
-        this.tickTimer = 0
-        
-        this.setDisplaySize(projectileTemplate.radius * 2, projectileTemplate.radius * 2)
-        this.setBody({
-            type: 'circle',
-            radius: projectileTemplate.radius,
-        })
+        this.init()
+        this.initPhysics()
         this.deactivate()
     }
 
+    public init() {
+        this.hittedPlayerIds = new Set()
+        this.group = this.projectileTemplate.name
+        this.tickAfter = this.projectileTemplate.tickAfter || Config.projectile.defaultTickAfter
+        this.tickTimer = 0
+        this.setDisplaySize(this.projectileTemplate.radius * 2, this.projectileTemplate.radius * 2)
+    }
+
+    public initPhysics() {
+        this.setBody({
+            type: 'circle',
+            radius: this.projectileTemplate.radius,
+        })
+        this.body.label = this.name
+        this.setFriction(0)
+        this.setFrictionAir(0)
+        this.setFrictionStatic(0)
+        this.setCollisionGroup(Config.matter.group.bullet)
+        this.setCollidesWith(Config.matter.group.player)
+        this.setSensor(true)
+    }
 
     public fire(initialPosition: Phaser.Math.Vector2, initialRotation: number): void {
         if (this.projectileTemplate.triggerAfter) {
@@ -59,16 +65,14 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
                 duration: this.projectileTemplate.triggerAfter * 1000,
                 ease: 'Cubic.easeIn',
                 onStart: (_tween, _targets, _gameObject) => {
-                    this.setPosition(initialPosition.x, initialPosition.y)
-                    this.activate()
+                    this.activate(initialPosition)
                 },
                 onComplete: (_tween, _targets, _gameObject) => {
                     this.deactivate()
                 },
             })
         } else {
-            this.setPosition(initialPosition.x, initialPosition.y)
-            this.activate()
+            this.activate(initialPosition)
         }
 
         if (this.projectileTemplate.speed) {
@@ -77,13 +81,13 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
             this.setRotation(initialRotation + Math.PI / 2)
             this.setVelocity(
                 ux * this.projectileTemplate.speed * this.scene.game.dt,
-                uy * this.projectileTemplate.speed * this.scene.game.dt,
+                uy * this.projectileTemplate.speed * this.scene.game.dt
             )
         }
 
         this.scene.time.addEvent({
             delay: this.projectileTemplate.lifespan * 1000,
-            callback: () => this.kill(),
+            callback: () => this.deactivate(),
             callbackScope: this,
         })
         this.scene.game.events.emit(Event.ProjectileFired, this)
@@ -93,7 +97,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
         switch (this.projectileTemplate.collidingBehaviour) {
             case 'kill':
                 hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
-                this.kill()
+                this.deactivate()
                 break
             case 'single':
                 if (!this.hittedPlayerIds.has(hittedPlayer.id)) {
@@ -111,27 +115,18 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
         }
     }
 
-    public activate(): void {
+    public activate(position: Vector): void {
         this.tickTimer = this.tickAfter
+        this.setPosition(position.x, position.y)
         this.setActive(true)
         this.setVisible(true)
         this.world.add(this.body)
-        this.setFriction(0)
-        this.setFrictionAir(0)
-        this.setFrictionStatic(0)
-        this.setSensor(true)
     }
 
     public deactivate(): void {
         this.setActive(false)
         this.setVisible(false)
         this.world.remove(this.body)
-        // this.setPosition(200, 200)
-    }
-
-    public kill(): void {
-        this.deactivate()
-        this.scene.game.events.emit(Event.ProjectileKilled, this)
     }
 
     public setFromPlayerId(fromPlayerId: string): void {
@@ -140,26 +135,8 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
 
     public getChanged(): ProjectileChanged {
         return {
-            x: this.body.center.x,
-            y: this.body.center.y,
+            x: this.x,
+            y: this.y,
         }
-    }
-}
-
-class ProjectileDrawingSprite extends Phaser.GameObjects.Sprite {
-    public constructor(scene: GameScene, ProjectileDrawingSprite: ProjectileDrawingSpriteModel) {
-        super(scene, 0, 0, ProjectileDrawingSprite.texture, ProjectileDrawingSprite.frame)
-        this.setSize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
-        this.setDisplaySize(ProjectileDrawingSprite.radius * 2, ProjectileDrawingSprite.radius * 2)
-    }
-}
-
-class ProjectileDrawingPrimitive extends Phaser.GameObjects.Graphics {
-    public constructor(scene: GameScene, ProjectileDrawingPrimitive: ProjectileDrawingPrimitiveModel) {
-        super(scene)
-        this.fillStyle(ProjectileDrawingPrimitive.fillColor, ProjectileDrawingPrimitive.fillAlpha)
-        this.fillCircle(0, 0, ProjectileDrawingPrimitive.radius)
-        this.lineStyle(2, ProjectileDrawingPrimitive.strokeColor, ProjectileDrawingPrimitive.strokeAlpha)
-        this.strokeCircle(0, 0, ProjectileDrawingPrimitive.radius)
     }
 }

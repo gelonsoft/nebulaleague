@@ -54,7 +54,11 @@ export class MyGame extends Phaser.Game {
                 default: 'matter',
                 matter: {
                     gravity: { x: 0, y: 0 },
-                    debug: Config.debug.displayBody,
+                    debug: {
+                        showBody: true,
+                        showStaticBody: true,
+                        showCollisions: true
+                    }
                 },
             },
             scene: scenes,

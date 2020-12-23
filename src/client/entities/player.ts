@@ -63,7 +63,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     public healthBar: HealthBar
     public effectIconsContainer: Phaser.GameObjects.Container
     public controlledBy: ControlledBy
-    public previousDirection: Vector
     public actions: ActionsInterface
     public selectedAbilityKey: ActionKey | null
     public actionTimes: ActionTimesInterface
@@ -72,41 +71,30 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     public deathCooldownDelay: number
     public playerModel: PlayerModel
 
-    constructor(scene: GameScene, playerModel: PlayerModel) {
-        super(
-            scene.matter.world,
-            playerModel.x,
-            playerModel.y,
-            Config.textureKeys.ships,
-            'spaceShips_001.png',
-            {
-                label: playerModel.id,
-            }
-        )
-        this.scene.add.existing(this)
-
+    constructor(scene: GameScene, playerModel: PlayerModel) {        
+        super(scene.matter.world, playerModel.x, playerModel.y, Config.textureKeys.ships, 'spaceShips_001.png')
         this.scene = scene
+        this.scene.add.existing(this)
         this.playerModel = playerModel
-        this.previousDirection = { x: 0, y: 0 }
-        this.id = playerModel.id
+        this.init()
+        this.initPhysics()
+        this.initHealthbar()
+        this.initEffectsContainer()
+    }
+
+    public init() {
+        this.id = this.playerModel.id
         this.maxHealth = Config.player.defaultHealth
         this.health = this.maxHealth
         this.defaultSpeed = Config.player.defaultSpeed
         this.isParalyzed = false
         this.isStunned = false
-        this.controlledBy = playerModel.controlledBy
+        this.controlledBy = this.playerModel.controlledBy
         this.deathCooldownDelay = 10
-
-        
+        this.selectedAbilityKey = null
+        this.effects = new Set()
+        this.burningTime = null
         this.setDisplaySize(Config.player.size, Config.player.size)
-        this.setBody({
-            type: 'circle',
-            radius: this.displayWidth / 2,
-        })
-        this.initHealthbar()
-        this.initEffectsContainer()
-
-        // this.controlledByAI = null
 
         this.actionTimes = {
             weaponPrimary: { cooldown: 0, ready: true },
@@ -119,18 +107,29 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         }
 
         this.actions = {
-            weaponPrimary: this.scene.weapons[playerModel.weaponPrimaryKey],
-            weaponSecondary: this.scene.weapons[playerModel.weaponSecondaryKey],
-            ability1: this.scene.abilities[playerModel.abilityKey1],
-            ability2: this.scene.abilities[playerModel.abilityKey2],
-            ability3: this.scene.abilities[playerModel.abilityKey3],
-            ability4: this.scene.abilities[playerModel.abilityKey4],
+            weaponPrimary: this.scene.weapons[this.playerModel.weaponPrimaryKey],
+            weaponSecondary: this.scene.weapons[this.playerModel.weaponSecondaryKey],
+            ability1: this.scene.abilities[this.playerModel.abilityKey1],
+            ability2: this.scene.abilities[this.playerModel.abilityKey2],
+            ability3: this.scene.abilities[this.playerModel.abilityKey3],
+            ability4: this.scene.abilities[this.playerModel.abilityKey4],
         }
-        this.selectedAbilityKey = null
-        this.effects = new Set()
-        this.burningTime = null
     }
 
+    public initPhysics() {
+        this.setBody({
+            type: 'circle',
+            radius: this.displayWidth / 2,
+        })
+        this.body.label = this.id
+        this.setFriction(0)
+        this.setFrictionAir(0)
+        this.setFrictionStatic(0)
+        this.setFixedRotation()
+        this.setCollisionGroup(Config.matter.group.player)
+        this.setCollidesWith(Config.matter.group.player | Config.matter.group.bullet)
+    }
+    
     public initHealthbar(): void {
         this.healthBar = new HealthBar(this.scene, 0, 0, 120, 12, 0, this.maxHealth)
         this.healthBar.refresh(this.health)
@@ -161,10 +160,9 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     public move(playerDirection: Vector): void {
         const velocity = this.directionToVelocity(playerDirection)
         this.setVelocity(
-            velocity.x * this.scene.game.loop.delta / 1000,
-            velocity.y * this.scene.game.loop.delta / 1000,
+            velocity.x * this.scene.game.dt,
+            velocity.y * this.scene.game.dt,
         )
-        this.previousDirection = playerDirection
     }
 
     public rotateFromPointer(pointerRotation: number): void {

@@ -6,7 +6,6 @@ import { Vector, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/
 import { Config } from '~/shared/config'
 
 import { MyGame } from '~/client/games/myGame'
-import { Client } from '~/client/client'
 import { buildProjectiles, Projectiles } from '~/client/entities/projectiles'
 import { Projectile } from '~/client/entities/projectile'
 import { buildWeapons, Weapon } from '~/client/entities/weapons'
@@ -19,7 +18,6 @@ export class GameScene extends Phaser.Scene {
     public game: MyGame
     public player: Player
     public players: Phaser.GameObjects.Group
-    public client: Client
     public projectiles: Projectiles
     public weapons: Record<string, Weapon>
     public abilities: Record<string, Ability>
@@ -51,7 +49,6 @@ export class GameScene extends Phaser.Scene {
             false
         )
 
-        this.client = this.game.registry.get('client') as Client
         this.currentPlayerChanged = {}
         this.previousPlayerChanged = {}
 
@@ -91,6 +88,17 @@ export class GameScene extends Phaser.Scene {
         this.playerControl = new PlayerController(this, this.player)
         this.mainControl = new MainController(this)
         this.cameras.main.startFollow(this.player, true)
+
+
+        this.matter.world.on('collisionstart',  (event: Phaser.Physics.Matter.Events.CollisionStartEvent ) => {
+            event.pairs.forEach((pair: Phaser.Types.Physics.Matter.MatterCollisionData) => {
+                console.log(pair.bodyA)
+                console.log(pair.bodyB)
+            })
+            // event.pairs[0].bodyA.gameObject.setTint(0xff0000)
+            // event.pairs[0].bodyB.gameObject.setTint(0x00ff00)
+        })
+        
     }
 
     public createBackground(): void {
@@ -216,34 +224,31 @@ export class GameScene extends Phaser.Scene {
         )
     }
 
-    public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
-        if (player1.id === this.player.id) {
-            const newVelocity = Matter.Vector.mult(player1.body.position, -1)
-            player1.setVelocity(newVelocity.x, newVelocity.y)
-            player1.hit(Config.player.toOtherDamage)
-        }
+    // public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
+    //     if (player1.id === this.player.id) {
+    //         const newVelocity = Matter.Vector.mult(player1.body.position, -1)
+    //         player1.setVelocity(newVelocity.x, newVelocity.y)
+    //         player1.hit(Config.player.toOtherDamage)
+    //     }
 
-        if (player2.id === this.player.id) {
-            const newVelocity = Matter.Vector.mult(player1.body.position, -1)
-            player2.setVelocity(newVelocity.x, newVelocity.y)
-            player2.hit(Config.player.toOtherDamage)
-        }
-    }
+    //     if (player2.id === this.player.id) {
+    //         const newVelocity = Matter.Vector.mult(player1.body.position, -1)
+    //         player2.setVelocity(newVelocity.x, newVelocity.y)
+    //         player2.hit(Config.player.toOtherDamage)
+    //     }
+    // }
 
-    public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
-        if (hittedPlayer.id !== projectile.fromPlayerId) {
-            projectile.actionOnCollision(hittedPlayer)
-        }
-    }
+    // public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
+    //     if (hittedPlayer.id !== projectile.fromPlayerId) {
+    //         projectile.actionOnCollision(hittedPlayer)
+    //     }
+    // }
 
     public registerEvent(): void {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
                 this.player.move(playerAction.direction)
-            } else {
-                this.player.move(this.player.previousDirection)
             }
-
             if (playerAction.rotation) {
                 this.player.rotateFromPointer(playerAction.rotation)
             }

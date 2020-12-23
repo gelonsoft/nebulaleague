@@ -50,6 +50,13 @@ const prodConfig: Debug = {
 export class Config {
     public static readonly debug: Debug = isDebug ? debugConfig : prodConfig
 
+    public static matter = {
+        group: {
+            player: 0x00000001,
+            bullet: 0x00000010
+        }
+    }
+    
     public static readonly scenes = {
         boot: {
             key: 'bootScene',
@@ -142,7 +149,6 @@ export class Config {
         size: 52,
         accelerationSteady: 5000,
         accelerationChange: 1000,
-        drag: 400,
         defaultSpeed: 400,
         defaultHealth: 1000,
         toOtherDamage: 100,
