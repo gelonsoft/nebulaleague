@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as Matter  from "matter-js"
+import * as Matter from 'matter-js'
 import * as Stats from 'stats.js'
 import { diff } from 'deep-object-diff'
 import { Vector, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
@@ -73,8 +73,6 @@ export class GameScene extends Phaser.Scene {
                 return new Player(this, playerModel)
             }
         )
-;
-        
         this.players = this.add
             .group({
                 // collideWorldBounds: true,
@@ -89,16 +87,22 @@ export class GameScene extends Phaser.Scene {
         this.mainControl = new MainController(this)
         this.cameras.main.startFollow(this.player, true)
 
-
-        this.matter.world.on('collisionstart',  (event: Phaser.Physics.Matter.Events.CollisionStartEvent ) => {
+        this.matter.world.on('collisionstart', (event: Phaser.Physics.Matter.Events.CollisionStartEvent) => {
             event.pairs.forEach((pair: Phaser.Types.Physics.Matter.MatterCollisionData) => {
-                console.log(pair.bodyA)
-                console.log(pair.bodyB)
+                const isCollidingWithBullet =
+                    (pair.bodyA.collisionFilter.group === Config.matter.group.player &&
+                        pair.bodyB.collisionFilter.group === Config.matter.group.bullet) ||
+                    (pair.bodyA.collisionFilter.group === Config.matter.group.bullet &&
+                        pair.bodyB.collisionFilter.group === Config.matter.group.player)
+                
+                if(isCollidingWithBullet) {
+                    console.log('hello')
+                }
+                
             })
             // event.pairs[0].bodyA.gameObject.setTint(0xff0000)
             // event.pairs[0].bodyB.gameObject.setTint(0x00ff00)
         })
-        
     }
 
     public createBackground(): void {
@@ -276,13 +280,7 @@ export class GameScene extends Phaser.Scene {
         if (this.player.active) {
             this.player.draw()
         }
-
-        this.players
-            .getChildren()
-            .filter((player: Player) => player.active)
-            .forEach((player: Player) => {
-                player.update()
-            })
+        this.players.children.each((player: Player) => player.update())
         this.currentPlayerChanged = this.player.getChanged()
         const diffPlayer = diff(this.previousPlayerChanged, this.currentPlayerChanged)
         if (!_.isEmpty(diffPlayer)) {
