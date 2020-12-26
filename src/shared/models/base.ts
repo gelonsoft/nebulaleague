@@ -1,4 +1,6 @@
 import { MapSchema } from '@colyseus/schema'
+import { GameScene } from '~/server/games/scenes/gameScene'
+import { Game } from '~/server/games/game'
 export type Vector = { x: number; y: number }
 export type ControlledBy = 'human' | 'ai'
 export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
@@ -236,3 +238,8 @@ export type GameState = {
     players: MapSchema<PlayerModel>
     projectiles: MapSchema<ProjectileModel>
 }
+
+export type GameStateServer = GameState & {
+    // game: Game
+}
+

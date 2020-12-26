@@ -57,17 +57,17 @@ export class LobbyScene extends Phaser.Scene {
             'FFA',
             (_pointer: Phaser.Input.Pointer) => this.start('ffa')
         )
-        this.ffaBotButton = new GameModeButton(
-            this,
-            0,
-            0,
-            'gamepad.png',
-            'FFA Bot ',
-            (_pointer: Phaser.Input.Pointer) => this.start('ffa', true)
-        )
+        // this.ffaBotButton = new GameModeButton(
+        //     this,
+        //     0,
+        //     0,
+        //     'gamepad.png',
+        //     'FFA Bot ',
+        //     (_pointer: Phaser.Input.Pointer) => this.start('ffa', true)
+        // )
 
         this.gameModeContainer = this.add
-            .container(0, 0, [this.ffaButton, this.ffaBotButton])
+            .container(0, 0, [this.ffaButton])
             .setSize(buttonWidth * 2, buttonHeight)
             .setPosition(this.scale.width / 2 - (buttonWidth * 2) / 2, this.scale.height / 2 - 200)
     }

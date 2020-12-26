@@ -4,29 +4,28 @@ import * as http from 'http'
 import * as express from 'express'
 import * as path from 'path'
 import * as DotenFlow from 'dotenv-flow'
-import { Server } from "colyseus"
-import { monitor } from "@colyseus/monitor"
-import { LobbyRoom } from '~/server/gameServer/lobbyRoom'
-import { PlayerSelectionRoom } from '~/server/gameServer/playerSelectionRoom'
-import { GameRoom } from '~/server/gameServer/gameRoom'
+import { Server } from 'colyseus'
+import { monitor } from '@colyseus/monitor'
+import { LobbyRoom } from '~/server/rooms/lobbyRoom'
+import { PlayerSelectionRoom } from '~/server/rooms/playerSelectionRoom'
+import { GameRoom } from '~/server/rooms/gameRoom'
 
 import settingWebpackFormServer from './settingWebpackFormServer'
 DotenFlow.config()
 
 const app = express()
-
 app.set('port', process.env.PORT || 3000)
 app.set('debug', process.env.DEBUG == 'true' || false)
 
 const httpServer = http.createServer(app)
 const server = new Server({
     server: httpServer,
-    express: app
+    express: app,
 })
 
 if (app.get('debug')) {
-    app.use("/colyseus", monitor())
     settingWebpackFormServer(app)
+    app.use('/colyseus', monitor())
 }
 
 app.use('/assets', express.static(path.resolve('./public/assets')))
@@ -43,3 +42,7 @@ server.define('gameRoom', GameRoom)
 void server.listen(app.get('port'))
 console.info(`Server running at http://127.0.0.1:${app.get('port')}`)
 
+process.on('SIGINT', function () {
+    httpServer.close()
+    process.exit(0)
+})

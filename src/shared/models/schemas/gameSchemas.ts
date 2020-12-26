@@ -1,4 +1,6 @@
 import { Schema, type, MapSchema } from '@colyseus/schema'
+import { GameScene } from '~/server/games/scenes/gameScene'
+import { Game } from '~/server/games/game'
 
 import {
     AbilityName,
@@ -13,8 +15,8 @@ import {
     ProjectileDrawingSpriteModel,
     ProjectileName,
     ProjectileDrawingBaseModel,
-    GameState,
 } from '~/shared/models'
+import { GameStateServer } from '../base'
 
 export class PlayerModelSchema extends Schema implements PlayerModel {
     @type('string')
@@ -130,7 +132,7 @@ export class ProjectileModelSchema extends Schema implements ProjectileModel {
 }
 
 
-export class GameStateSchema extends Schema implements GameState {
+export class GameStateSchema extends Schema implements GameStateSchema {
     @type({ map: PlayerModelSchema })
     players = new MapSchema<PlayerModel>()
 

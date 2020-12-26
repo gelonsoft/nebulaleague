@@ -1,15 +1,10 @@
 import { Client, Room } from 'colyseus'
-import {
-    GameMode,
-    PlayerConfig,
-} from '~/shared/models'
+import { GameMode, PlayerConfig } from '~/shared/models'
 
 import {
     PlayerSelectionStateSchema,
-    PlayerConfigSchema
+    PlayerConfigSchema,
 } from '~/shared/models/schemas/playerSelectionSchemas'
-
-
 
 type Option = {
     gameMode: GameMode
@@ -31,20 +26,15 @@ export class PlayerSelectionRoom extends Room<PlayerSelectionStateSchema> {
             const player = this.state.players.get(client.sessionId)
             Object.assign(player, playerOption)
         })
-        
+
         this.setState(new PlayerSelectionStateSchema())
     }
-    
+
     onJoin(client: Client, option: Option) {
-        this.state.players.set(
-            client.sessionId,
-            new PlayerConfigSchema().assign(option.player)
-        )
+        this.state.players.set(client.sessionId, new PlayerConfigSchema().assign(option.player))
     }
 
     onLeave(client: Client) {
-        this.state.players.delete(client.sessionId);
+        this.state.players.delete(client.sessionId)
     }
-    
-    
 }

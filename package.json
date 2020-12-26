@@ -8,6 +8,8 @@
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
         "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node dist/server/server.js\"",
+        "dev:d": "env NODE_ENV=development  node --inspect dist/server/server.js",
+        "dev:c": "env NODE_ENV=development  node inspect dist/server/server.js",
         "dev:client": "webpack-dev-server --config client/webpack/dev.config.js",
         "build:client": "webpack --config webpack.prod.config.js",
         "build:server": "tsc",
@@ -29,6 +31,7 @@
     "dependencies": {
         "@colyseus/monitor": "^0.12.2",
         "@colyseus/social": "^0.10.9",
+        "@geckos.io/phaser-on-nodejs": "^1.2.3",
         "@types/matter-js": "^0.14.8",
         "bulma": "^0.9.1",
         "colyseus": "^0.14.4",
