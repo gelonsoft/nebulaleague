@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Config } from '~/shared/config'
 import { Event } from '~/shared/events'
 import { ActionKey, EffectModel, WeaponKey } from '~/shared/models'

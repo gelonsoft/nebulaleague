@@ -70,7 +70,7 @@ export class Ability {
         if (this.radiusGraphics) {
             this.radiusGraphics.clear()
             const targetPosition = this.isInRangeToTrigger(
-                new Phaser.Math.Vector2(player.body.position),
+                new Phaser.Math.Vector2(player.x, player.y),
                 pointerPosition
             )
                 ? pointerPosition
@@ -135,7 +135,7 @@ export class Ability {
         return Phaser.Math.Vector2.ONE.clone()
             .setToPolar(player.rotation - Math.PI / 2)
             .scale(this.rangeDistance)
-            .add(new Phaser.Math.Vector2(player.body.position))
+            .add(new Phaser.Math.Vector2(player.x, player.y))
     }
 
     public trigger(
@@ -173,6 +173,7 @@ export class Ability {
                     pointerPosition.y
                 )
                 this.projectiles.fire(this.projectileKey!, player.id, sourcePosition, rotationFromPlayer)
+                //TODO replace by action
                 break
             }
             case AbilityAction.ProjectileFromPointer:

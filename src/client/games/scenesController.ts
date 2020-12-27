@@ -54,7 +54,7 @@ export class ScenesController {
     public startGame() {
         this.stopAll()
         this.game.scene.start()
-        this.hud.scene.start().bringToTop()
+        // this.hud.scene.start().bringToTop()
     }
     
     public get game(): GameScene {

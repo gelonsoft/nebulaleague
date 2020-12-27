@@ -79,7 +79,7 @@ export class DeathScene extends Phaser.Scene {
     public handleMouse(): void {
         const pointer = this.input.activePointer
         if (pointer.leftButtonDown()) {
-            this.mainScene.player.setAliveState(this.mainScene.players)
+            // this.mainScene.player.setAliveState(this.mainScene.players)
             this.mainScene.stopDeathTransition(this.mainScene.player)
         }
     }

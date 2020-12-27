@@ -1,7 +1,5 @@
 import * as _ from 'lodash'
-import * as Matter from 'matter-js'
 import * as Stats from 'stats.js'
-import { diff } from 'deep-object-diff'
 import { Vector, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
 import { Config } from '~/shared/config'
 
@@ -19,17 +17,11 @@ export class GameScene extends Phaser.Scene {
     public player: Player
     public players: Phaser.GameObjects.Group
     public projectiles: Projectiles
-    public weapons: Record<string, Weapon>
-    public abilities: Record<string, Ability>
     public mainControl: MainController
     public playerControl: PlayerController
-    public freeCamera: boolean
     public mainCameraZoom: number
     public backgroundImageKey: string
     public backgroundImage: Phaser.GameObjects.Image
-    public currentPlayerChanged: PlayerChanged
-    public previousPlayerChanged: PlayerChanged
-    public stats: Stats
 
     constructor(gameKey: SceneGameKey) {
         super({
@@ -49,22 +41,12 @@ export class GameScene extends Phaser.Scene {
             false
         )
 
-        this.currentPlayerChanged = {}
-        this.previousPlayerChanged = {}
-
-        this.stats = new Stats()
-        document.body.appendChild(this.stats.dom)
-
-        this.backgroundImageKey = 'backgroundGalaxy3'
         this.input.setDefaultCursor('url(assets/cursors/cursor.cur), pointer')
         this.registerEvent()
     }
 
     public create(): void {
         this.projectiles = buildProjectiles(this)
-        this.weapons = buildWeapons(this)
-        this.abilities = buildAbilities(this)
-
         this.settingCamera()
         this.createBackground()
 
@@ -73,12 +55,9 @@ export class GameScene extends Phaser.Scene {
                 return new Player(this, playerModel)
             }
         )
-        this.players = this.add
-            .group({
-                // collideWorldBounds: true,
-                classType: Player,
-            })
+        this.players = this.add .group({classType: Player,})
             .addMultiple(existingPlayers)
+        
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.game.client.gameClient.id) as Player
@@ -86,23 +65,6 @@ export class GameScene extends Phaser.Scene {
         this.playerControl = new PlayerController(this, this.player)
         this.mainControl = new MainController(this)
         this.cameras.main.startFollow(this.player, true)
-
-        this.matter.world.on('collisionstart', (event: Phaser.Physics.Matter.Events.CollisionStartEvent) => {
-            event.pairs.forEach((pair: Phaser.Types.Physics.Matter.MatterCollisionData) => {
-                const isCollidingWithBullet =
-                    (pair.bodyA.collisionFilter.group === Config.matter.group.player &&
-                        pair.bodyB.collisionFilter.group === Config.matter.group.bullet) ||
-                    (pair.bodyA.collisionFilter.group === Config.matter.group.bullet &&
-                        pair.bodyB.collisionFilter.group === Config.matter.group.player)
-                
-                if(isCollidingWithBullet) {
-                    console.log('hello')
-                }
-                
-            })
-            // event.pairs[0].bodyA.gameObject.setTint(0xff0000)
-            // event.pairs[0].bodyB.gameObject.setTint(0x00ff00)
-        })
     }
 
     public createBackground(): void {
@@ -118,65 +80,6 @@ export class GameScene extends Phaser.Scene {
             .setDepth(-1)
     }
 
-    public syncHealth(player: Player): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.playerHealthChanged)
-        }
-    }
-
-    public syncAbilitiesCooldown(
-        player: Player,
-        selectedAbilityKey: string,
-        actionTime: ActionTimeInterface
-    ): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.abilitiesCooldownChanged, selectedAbilityKey, actionTime)
-        }
-    }
-
-    public syncActionCooldwon(
-        player: Player,
-        selectedActionKey: ActionKey,
-        actionTime: ActionTimeInterface
-    ): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.actionsCollodownChanged, selectedActionKey, actionTime)
-        }
-    }
-
-    public syncSelectedAbility(player: Player, selectedAbilityKey: string, selected: boolean): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.abilitiesSelectedChanged, selectedAbilityKey, selected)
-        }
-    }
-
-    public syncWeaponCooldown(
-        player: Player,
-        selectedWeaponKey: string,
-        actionTime: ActionTimeInterface
-    ): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.weaponsCooldownChanged, selectedWeaponKey, actionTime)
-        }
-    }
-
-    public syncSelectedWeapon(player: Player, selected: boolean): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.weaponSelectedChanged, selected)
-        }
-    }
-
-    public syncEffects(player: Player): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.effectsChanged, player.effects)
-        }
-    }
-
-    public syncDeathTextCooldown(player: Player, cooldown: number): void {
-        if (player.id === this.player.id) {
-            this.events.emit(Event.deathCooldownChanged, cooldown)
-        }
-    }
 
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
@@ -217,7 +120,6 @@ export class GameScene extends Phaser.Scene {
 
     public settingCamera(): void {
         this.mainCameraZoom = 0.5
-        this.freeCamera = false
         this.cameras.main.setZoom(this.mainCameraZoom)
         this.cameras.main.setBounds(0, 0, Config.world.width, Config.world.height)
         this.matter.world.setBounds(
@@ -228,66 +130,29 @@ export class GameScene extends Phaser.Scene {
         )
     }
 
-    // public handlePlayerPlayerCollide(player1: Player, player2: Player): void {
-    //     if (player1.id === this.player.id) {
-    //         const newVelocity = Matter.Vector.mult(player1.body.position, -1)
-    //         player1.setVelocity(newVelocity.x, newVelocity.y)
-    //         player1.hit(Config.player.toOtherDamage)
-    //     }
-
-    //     if (player2.id === this.player.id) {
-    //         const newVelocity = Matter.Vector.mult(player1.body.position, -1)
-    //         player2.setVelocity(newVelocity.x, newVelocity.y)
-    //         player2.hit(Config.player.toOtherDamage)
-    //     }
-    // }
-
-    // public handleEnemyProjectileCollide(hittedPlayer: Player, projectile: Projectile): void {
-    //     if (hittedPlayer.id !== projectile.fromPlayerId) {
-    //         projectile.actionOnCollision(hittedPlayer)
-    //     }
-    // }
 
     public registerEvent(): void {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
             if (playerAction.direction) {
-                this.player.move(playerAction.direction)
+                // this.player.move(playerAction.direction)
             }
             if (playerAction.rotation) {
-                this.player.rotateFromPointer(playerAction.rotation)
+                // this.player.rotateFromPointer(playerAction.rotation)
             }
             if (playerAction.selectAbility) {
-                this.player.selectAbility(playerAction.selectAbility)
+                // this.player.selectAbility(playerAction.selectAbility)
             }
             if (playerAction.action) {
                 const pointerVector = new Phaser.Math.Vector2(
                     playerAction.pointerPosition!.x,
                     playerAction.pointerPosition!.y
                 )
-                this.player.action(playerAction.action, pointerVector)
+                // this.player.action(playerAction.action, pointerVector)
             }
         })
     }
 
     public update(): void {
-        this.stats.begin()
-        this.previousPlayerChanged = this.currentPlayerChanged
-        this.mainControl.update()
-        this.playerControl.update()
-        // this.matter.overlap(this.players, this.players, this.handlePlayerPlayerCollide, undefined, this)
-        // this.matter.overlap(this.players, this.projectiles, this.handleEnemyProjectileCollide)
-
-        if (this.player.active) {
-            this.player.draw()
-        }
-        this.players.children.each((player: Player) => player.update())
-        this.currentPlayerChanged = this.player.getChanged()
-        const diffPlayer = diff(this.previousPlayerChanged, this.currentPlayerChanged)
-        if (!_.isEmpty(diffPlayer)) {
-            this.game.client.gameClient.update({
-                player: diffPlayer,
-            })
-        }
-        this.stats.end()
+        
     }
 }

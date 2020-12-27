@@ -38,7 +38,7 @@ export class GameOnlineClient extends GameClient {
 
             this.room.state.players.onRemove = (_playerModel: PlayerModelSchema, playerId: string) => {
                 const player = getPlayer(playerId)
-                player.healthBar.destroy()
+                // player.healthBar.destroy()
                 this.game.scenes.game.players.remove(player, true, true)
             }
         })

@@ -96,12 +96,12 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
     public actionOnCollision(hittedPlayer: Player): void {
         switch (this.projectileTemplate.collidingBehaviour) {
             case 'kill':
-                hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
+                // hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
                 this.deactivate()
                 break
             case 'single':
                 if (!this.hittedPlayerIds.has(hittedPlayer.id)) {
-                    hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
+                    // hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
                     this.hittedPlayerIds.add(hittedPlayer.id)
                 }
                 break
@@ -109,7 +109,7 @@ export class Projectile extends Phaser.Physics.Matter.Sprite implements Projecti
                 this.tickTimer += this.scene.game.loop.delta / 1000
                 if (this.tickTimer >= this.tickAfter) {
                     this.tickTimer = 0
-                    hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
+                    // hittedPlayer.hit(this.projectileTemplate.damage, this.projectileTemplate.effects)
                 }
                 break
         }
