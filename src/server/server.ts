@@ -23,6 +23,7 @@ const server = new Server({
     express: app,
 })
 
+
 if (app.get('debug')) {
     settingWebpackFormServer(app)
     app.use('/colyseus', monitor())

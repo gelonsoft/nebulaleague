@@ -1,10 +1,10 @@
 import '@geckos.io/phaser-on-nodejs'
-import 'phaser'
 import { GameScene } from '~/server/games/scenes/gameScene'
 import { GameStateSchema } from '~/shared/models/schemas/gameSchemas'
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.HEADLESS,
+    parent: 'phaser-game',
     width: 1280,
     height: 720,
     banner: false,
@@ -22,6 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [GameScene],
 }
 
+
 export class Game extends Phaser.Game {
     public state: GameStateSchema
     constructor(state: GameStateSchema) {
@@ -29,8 +30,8 @@ export class Game extends Phaser.Game {
         this.state = state
     }
 
-    start() {
-        super.start()
+    public get gameScene(): GameScene {
+        return this.scene.getScene('gameScene') as GameScene
     }
     
     public get dt () {

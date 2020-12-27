@@ -8,7 +8,7 @@
     "scripts": {
         "clean": "rimraf public/css public/*.js rimraf public/css public/*.txt index.html",
         "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node dist/server/server.js\"",
-        "dev:d": "env NODE_ENV=development  node --inspect dist/server/server.js",
+        "dev:d": "env NODE_ENV=development tsc-watch --onSuccess \"node --inspect dist/server/server.js\"",
         "dev:c": "env NODE_ENV=development  node inspect dist/server/server.js",
         "dev:client": "webpack-dev-server --config client/webpack/dev.config.js",
         "build:client": "webpack --config webpack.prod.config.js",
@@ -47,7 +47,7 @@
         "module-alias": "^2.2.2",
         "npm": "^6.14.10",
         "object-assign-deep": "^0.4.0",
-        "phaser": "^3.50.0",
+        "phaser": "~3.23.0",
         "phaser-matter-collision-plugin": "^0.10.2",
         "stats.js": "^0.17.0",
         "ts-behavior-tree": "^1.2.0",
