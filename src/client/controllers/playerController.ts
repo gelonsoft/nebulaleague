@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { GameScene } from '~/client/scenes/gameScene'
 import { PlayerAction, Vector } from '~/shared/models'
 import { Player } from '~/client/entities/player'
@@ -163,7 +164,9 @@ export class PlayerController {
             this.action = {}
             this.handleKeyboard()
             this.handleMouse()
-            this.scene.game.events.emit(Event.playerAction, this.action)
+            if(!_.isEmpty(this.action)) {
+                this.scene.game.client.gameClient.inputUpdate(this.action)
+            }
         }
     }
 }

@@ -1,8 +1,6 @@
 import * as _ from 'lodash'
-import * as Stats from 'stats.js'
-import { Vector, ActionKey, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
+import { Vector, SceneGameKey, PlayerAction, PlayerChanged } from '~/shared/models'
 import { Config } from '~/shared/config'
-
 import { MyGame } from '~/client/games/myGame'
 import { buildProjectiles, Projectiles } from '~/client/entities/projectiles'
 import { Projectile } from '~/client/entities/projectile'
@@ -10,7 +8,7 @@ import { buildWeapons, Weapon } from '~/client/entities/weapons'
 import { Ability, buildAbilities } from '~/client/entities/abilities'
 import { Event } from '~/shared/events'
 import { MainController, PlayerController } from '~/client/controllers'
-import { Player, ActionTimeInterface } from '~/client/entities/player'
+import { Player } from '~/client/entities/player'
 
 export class GameScene extends Phaser.Scene {
     public game: MyGame
@@ -55,9 +53,8 @@ export class GameScene extends Phaser.Scene {
                 return new Player(this, playerModel)
             }
         )
-        this.players = this.add .group({classType: Player,})
-            .addMultiple(existingPlayers)
-        
+        this.players = this.add.group({ classType: Player }).addMultiple(existingPlayers)
+
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.game.client.gameClient.id) as Player
@@ -79,7 +76,6 @@ export class GameScene extends Phaser.Scene {
             .setAlpha(0.9)
             .setDepth(-1)
     }
-
 
     public startDeathTransition(player: Player): void {
         if (player.id === this.player.id) {
@@ -130,29 +126,13 @@ export class GameScene extends Phaser.Scene {
         )
     }
 
-
     public registerEvent(): void {
         this.game.events.on(Event.playerAction, (playerAction: PlayerAction) => {
-            if (playerAction.direction) {
-                // this.player.move(playerAction.direction)
-            }
-            if (playerAction.rotation) {
-                // this.player.rotateFromPointer(playerAction.rotation)
-            }
-            if (playerAction.selectAbility) {
-                // this.player.selectAbility(playerAction.selectAbility)
-            }
-            if (playerAction.action) {
-                const pointerVector = new Phaser.Math.Vector2(
-                    playerAction.pointerPosition!.x,
-                    playerAction.pointerPosition!.y
-                )
-                // this.player.action(playerAction.action, pointerVector)
-            }
+            this.game.client.gameClient.inputUpdate(playerAction)
         })
     }
 
     public update(): void {
-        
+        this.playerControl.update()
     }
 }

@@ -1,6 +1,6 @@
 import * as Colyseus from 'colyseus.js'
 import { GameClient } from '~/client/client/gameClient'
-import { GameChanged, GameStateSchema, PlayerModelSchema } from '~/shared/models'
+import { GameChanged, GameStateSchema, PlayerAction, PlayerModelSchema } from '~/shared/models'
 import { Player } from '~/client/entities/player'
 
 export class GameOnlineClient extends GameClient {
@@ -22,9 +22,10 @@ export class GameOnlineClient extends GameClient {
             const getPlayer = (playerId: string): Player => {
                 return getPlayers().find((player: Player) => player.id === playerId) as Player
             }
-            const updatePlayer = (playerId: string, playerModel: PlayerModelSchema) => {
+            const updatePlayer = (playerId: string, playerModelSchema: PlayerModelSchema) => {
                 const player = getPlayer(playerId)
-                Object.assign(player, playerModel)
+                player.x = playerModelSchema.x
+                player.y = playerModelSchema.y
             }
             
             this.room.state.players.forEach((playerModel: PlayerModelSchema, playerId: string) => {
@@ -44,7 +45,7 @@ export class GameOnlineClient extends GameClient {
         })
     }
 
-    public update(gameChanged: GameChanged): void {
-        this.room.send('playerChanged', gameChanged.player)
+    public inputUpdate(playerAction: PlayerAction): void {
+        this.room.send('inputUpdate', playerAction)
     }
 }

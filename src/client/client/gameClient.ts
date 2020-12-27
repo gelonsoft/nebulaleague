@@ -1,4 +1,4 @@
-import { GameChanged, GameState } from '~/shared/models'
+import { GameChanged, GameState, PlayerAction } from '~/shared/models'
 import { Client } from '~/client/client'
 import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
@@ -21,5 +21,5 @@ export abstract class GameClient {
         return 'unknown'
     }
     public abstract async init(): Promise<unknown>
-    public abstract update(gameChanged: GameChanged): void 
+    public abstract inputUpdate(playerAction: PlayerAction): void 
 }

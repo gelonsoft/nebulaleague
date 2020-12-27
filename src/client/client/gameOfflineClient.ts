@@ -1,5 +1,5 @@
 import { GameClient } from '~/client/client/gameClient'
-import { GameChanged, GameStateSchema, PlayerModelSchema } from '~/shared/models'
+import { GameChanged, GameStateSchema, PlayerAction, PlayerModelSchema } from '~/shared/models'
 
 export class GameOfflineClient extends GameClient {
     get id(): string {
@@ -30,6 +30,7 @@ export class GameOfflineClient extends GameClient {
         this.onInit()
         return Promise.resolve()
     }
-
-    public update(_gameChanged: GameChanged): void {}
+    
+    public inputUpdate(playerAction: PlayerAction) {}
+    
 }

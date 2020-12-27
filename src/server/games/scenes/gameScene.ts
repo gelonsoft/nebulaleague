@@ -11,11 +11,22 @@ export class GameScene extends Phaser.Scene {
         super({ key: 'gameScene' })
     }
 
-    init() {}
+    public init() {}
 
-    create() {
+    public create() {
         this.players = this.add.group({ classType: Player })
     }
 
-    update() {}
+    public update() {
+        this.players.getChildren().forEach((player: Player) => {
+            const playerSchema = this.game.state.players.get(player.id)
+            
+            playerSchema.x = player.x
+            playerSchema.y = player.y
+        })
+    }
+
+    public playerById(id: string): Player {
+        return this.players.getChildren().find((player: Player) => player.id === id) as Player
+    }
 }
