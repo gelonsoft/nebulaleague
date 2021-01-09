@@ -8,7 +8,6 @@ import { Player, ActionTimeInterface } from '~/client/entities/player'
 import { GameScene } from '~/client/scenes/gameScene'
 import { HealthBar } from '~/client/entities/healthbar'
 import { createEffectIconsContainer, refreshEffectIcons } from '~/client/entities/effects'
-import { Client } from '../client'
 
 class SlotContainer extends Phaser.GameObjects.Container {
     public scene: Phaser.Scene
@@ -233,6 +232,4 @@ export class HudScene extends Phaser.Scene {
     private updateEffectChanged(icons: Set<EffectModel>) {
         refreshEffectIcons(icons, this.effectIconsContainer)
     }
-
-    
 }
