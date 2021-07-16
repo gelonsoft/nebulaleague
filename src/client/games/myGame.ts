@@ -2,7 +2,7 @@ import {
     BootScene,
     DeathScene,
     DebugScene,
-    GameFfaScene,
+    GameFfaScene, HeroStatScene,
     HudScene,
     LobbyScene,
     MainMenuScene,
@@ -30,6 +30,7 @@ export class MyGame extends Phaser.Game {
             DeathScene,
             PlayerSelectionScene,
             GameFfaScene,
+            HeroStatScene
         ]
 
         super({
@@ -45,7 +46,7 @@ export class MyGame extends Phaser.Game {
             dom: {
                 createContainer: true,
             },
-            backgroundColor: 0x444400,
+            backgroundColor: 0xf0f0f0,
             audio: {
                 noAudio: true,
             },

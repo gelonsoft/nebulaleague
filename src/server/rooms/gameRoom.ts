@@ -19,7 +19,7 @@ export class GameRoom extends Room<GameStateSchema> {
         this.game = new Game(this.state)
         this.scene = this.game.gameScene
         
-        this.onMessage('inputUpdate', (client, playerAction: PlayerAction) => {
+        this.onMessage('inputUpdate', (client: { sessionId: string }, playerAction: PlayerAction) => {
             const player = this.scene.playerById(client.sessionId)
 
             if (playerAction.direction) {

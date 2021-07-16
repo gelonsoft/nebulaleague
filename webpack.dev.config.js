@@ -2,8 +2,8 @@ const webpack = require('webpack')
 const path = require("path")
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const pathToPhaser = path.join(__dirname, "/node_modules/phaser/")
-const phaser = path.join(pathToPhaser, "dist/phaser.js")
+const pathToPhaser = path.join(__dirname, "node_modules/phaser/")
+const phaser = path.join(__dirname, "/node_modules/phaser/dist/phaser.js")
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('dotenv-flow').config()
 
@@ -38,25 +38,23 @@ module.exports = {
     module: {
         rules: [{
             test: /\.ts$/,
-            use: {
+            use: 'ts-loader',/*{
                 loader: 'ts-loader',
                 options: {
                     configFile: "tsconfig.json"
-                },  
-            },
+                },
+            }, */
             exclude: [
                 path.resolve(__dirname, "typings"),
                 path.resolve(__dirname, "node_modules")
             ],
-        }, {
-            test: /phaser\.js$/, loader: "expose-loader?Phaser"
-        }, {
+        }, /*{
+            test: /phaser\.js$/, use: "expose-loader?Phaser"
+        },*/ {
             test: /\.scss$/,
             use: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader'
-                },
+                "style-loader",
+                "css-loader",
                 {
                     loader: 'sass-loader',
                     options: {
@@ -72,7 +70,7 @@ module.exports = {
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: "vendor",
+                 //   name: "vendor",
                     chunks: "all"
                 }
             }
@@ -84,7 +82,7 @@ module.exports = {
             template: 'src/index.ejs',
             filename: 'index.html',
             scriptLoading: 'defer',
-            googleAnalycticsId: 'UA-62380614-3',
+            googleAnalyticsId: 'UA-62380614-3',
         }),
         new webpack.EnvironmentPlugin({
             DEBUG: process.env.DEBUG || true

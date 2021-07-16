@@ -20,9 +20,10 @@ export class GameScene extends Phaser.Scene {
     public update() {
         this.players.getChildren().forEach((player: Player) => {
             const playerSchema = this.game.state.players.get(player.id)
-            
-            playerSchema.x = player.x
-            playerSchema.y = player.y
+            if (playerSchema) {
+                playerSchema.x = player.x
+                playerSchema.y = player.y
+            }
         })
     }
 

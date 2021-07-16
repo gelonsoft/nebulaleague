@@ -3,6 +3,7 @@ import { Client } from '~/client/client'
 import { GameModeButton } from '~/client/ui/buttons'
 import { GameMode } from '~/shared/models'
 import { Config } from '~/shared/config'
+import  'phaser'
 
 export class LobbyScene extends Phaser.Scene {
     public game: MyGame

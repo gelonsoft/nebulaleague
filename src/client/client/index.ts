@@ -1,9 +1,7 @@
 import * as Colyseus from 'colyseus.js'
 import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
-
 import { PlayerConfig, User } from '~/shared/models'
-
 import { LobbyClient } from '~/client/client/lobbyClient'
 import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import { PlayerSelectionOnlineClient } from '~/client/client/playerSelectionOnlineClient'
@@ -28,7 +26,8 @@ export class Client {
             location.protocol.replace('http', 'ws') +
                 '//' +
                 host +
-                (window.document.location.port ? ':' + window.document.location.port : '')
+                //(window.document.location.port ? ':' + window.document.location.port : '')
+                (window.document.location.port ? ':' + (window.document.location.port=="8080"?3000:window.document.location.port) : '')
         )
 
         this.user = Config.defaultUser

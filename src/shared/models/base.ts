@@ -7,9 +7,9 @@ export type WeaponKey = 'weaponPrimary' | 'weaponSecondary'
 export type AbilityKey = 'ability1' | 'ability2' | 'ability3' | 'ability4'
 export type ActionKey = WeaponKey | AbilityKey
 export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
-export type GameMode = 'training' | 'ffa'
+export type GameMode = 'training' | 'ffa' | 'tst'
 
-export type SceneGameKey = 'gameFfaScene' | 'gameTrainingScene'
+export type SceneGameKey = 'gameFfaScene' | 'gameTrainingScene' | 'heroStatScene'
 
 export type SceneKey =
     | SceneGameKey
@@ -20,6 +20,7 @@ export type SceneKey =
     | 'lobyScene'
     | 'mainMenuScene'
     | 'playerSelectionScene'
+    | 'heroStatScene'
 
 export type AbilityName =
     | 'blink'

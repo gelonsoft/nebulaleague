@@ -49,6 +49,7 @@ export class BootScene extends Phaser.Scene {
         // load templates
         this.load.html('mainMenuHTML', 'assets/html/mainMenu.html')
         this.load.html('mainMenuSceneHTML', 'assets/html/mainMenuScene.html')
+        this.load.html('heroStatHTML', 'assets/html/heroStat.html')
 
         // load our package
         this.load.pack('preload', 'assets/pack.json', 'preload')

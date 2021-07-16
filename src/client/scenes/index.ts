@@ -6,6 +6,7 @@ import { LobbyScene } from '~/client/scenes/lobbyScene'
 import { MainMenuScene } from '~/client/scenes/mainMenuScene'
 import { DeathScene } from '~/client/scenes/deathScene'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
+import { HeroStatScene } from '~/client/scenes/heroStatScene'
 
 export {
     BootScene,
@@ -16,5 +17,6 @@ export {
     HudScene,
     LobbyScene,
     MainMenuScene,
-    PlayerSelectionScene
+    PlayerSelectionScene,
+    HeroStatScene
 }

@@ -8,12 +8,14 @@ import { DeathScene } from '~/client/scenes/deathScene'
 import { PlayerSelectionScene } from '~/client/scenes/playerSelectionScene'
 import { Config } from '~/shared/config'
 import { MyGame } from '~/client/games/myGame'
+import {HeroStatScene} from "~/client/scenes/heroStatScene";
 
 
 export class ScenesController {
     public myGame: MyGame
     public boot: BootScene
     public lobby: LobbyScene
+    public heroStat: HeroStatScene
     public playerSelection: PlayerSelectionScene
     public hud: HudScene
     public death: DeathScene
@@ -24,6 +26,7 @@ export class ScenesController {
         this.myGame = myGame
         this.boot = this.myGame.scene.getScene(Config.scenes.boot.key) as BootScene
         this.lobby = this.myGame.scene.getScene(Config.scenes.lobby.key) as LobbyScene
+        this.heroStat = this.myGame.scene.getScene(Config.scenes.heroStat.key) as HeroStatScene
         this.playerSelection = this.myGame.scene.getScene(
             Config.scenes.playerSelection.key
         ) as PlayerSelectionScene
@@ -42,7 +45,9 @@ export class ScenesController {
 
     public startLoby() {
         this.stopAll()
-        this.lobby.scene.start()
+//
+        //this.lobby.scene.start()
+        this.heroStat.scene.start()
     }
     
 

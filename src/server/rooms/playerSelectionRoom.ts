@@ -37,4 +37,6 @@ export class PlayerSelectionRoom extends Room<PlayerSelectionStateSchema> {
     onLeave(client: Client) {
         this.state.players.delete(client.sessionId)
     }
+
+
 }

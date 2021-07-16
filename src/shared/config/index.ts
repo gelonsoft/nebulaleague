@@ -58,6 +58,9 @@ export class Config {
     }
     
     public static readonly scenes = {
+        heroStat: {
+            key: 'heroStatScene' as SceneGameKey
+        },
         boot: {
             key: 'bootScene',
             cameraBackgroundColor: 0x000000,
@@ -105,12 +108,14 @@ export class Config {
     }
 
     public static readonly modeToGameKey: Record<GameMode, SceneGameKey> = {
+        tst: Config.scenes.heroStat.key,
         training: Config.scenes.gameTraining.key,
         ffa: Config.scenes.gameFfa.key,
     }
 
     public static readonly defaultUser: User = {
-        gameMode: 'ffa',
+        //gameMode: 'ffa',
+        gameMode: 'tst',
         name: 'anonymous',
         ready: false,
         offline: false,
@@ -174,7 +179,7 @@ export class Config {
         height: 60,
         padding: 4,
         paddingInner: 2,
-        background: 0x1313a8,
+        background: 0x4a4a4a,
         backgroundItem: 0x000000,
         slotColorSelected: 0x3366e5,
         slotColorUnselected: 0x5577d5,

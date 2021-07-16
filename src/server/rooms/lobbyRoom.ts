@@ -1,7 +1,8 @@
 import { Client, LobbyRoom as ColyseusLobbyRoom } from 'colyseus'
-import { LobbyOptions } from 'colyseus/lib/rooms/LobbyRoom'
+//import { LobbyOptions } from
 import { LobbyStateSchema, UserSchema } from '~/shared/models/schemas/lobbySchemas'
 import { User } from '~/shared/models'
+import {LobbyOptions} from "@colyseus/core/build/rooms/LobbyRoom";
 
 export class LobbyRoom extends ColyseusLobbyRoom {
     state: LobbyStateSchema

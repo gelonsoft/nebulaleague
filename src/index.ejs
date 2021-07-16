@@ -1,14 +1,16 @@
+
 <!DOCTYPE html>
 <html>
     <head>
         <title><%= htmlWebpackPlugin.options.title %></title>
         <link rel="icon" href="/assets/favicons/favicon.ico">
-        <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.googleAnalycticsId %>"></script>
+        <!--<script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.googleAnalyticsId %>"></script> -->
         <script>
+
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '<%= htmlWebpackPlugin.options.googleAnalycticsId %>');
+        gtag('config', '<%= htmlWebpackPlugin.options.googleAnalyticsId %>');
         </script>
     </head>
     <body>
