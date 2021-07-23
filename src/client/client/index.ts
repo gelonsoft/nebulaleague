@@ -1,7 +1,7 @@
 import * as Colyseus from 'colyseus.js'
 import { MyGame } from '~/client/games/myGame'
 import { Config } from '~/shared/config'
-import { PlayerConfig, User } from '~/shared/models'
+import {MainPlayerConfig, PlayerConfig, User} from '~/shared/models'
 import { LobbyClient } from '~/client/client/lobbyClient'
 import { PlayerSelectionClient } from '~/client/client/playerSelectionClient'
 import { PlayerSelectionOnlineClient } from '~/client/client/playerSelectionOnlineClient'
@@ -9,6 +9,7 @@ import { PlayerSelectionOfflineClient } from '~/client/client/playerSelctionOffl
 import { GameClient } from '~/client/client/gameClient'
 import { GameOnlineClient } from '~/client/client/gameOnlineClient'
 import { GameOfflineClient } from '~/client/client/gameOfflineClient'
+import {MainGameClient} from "~/client/client/mainGameClient";
 
 export class Client {
     public game: MyGame
@@ -16,7 +17,9 @@ export class Client {
     public lobbyClient: LobbyClient
     public playerSelectionClient: PlayerSelectionClient
     public gameClient: GameClient
+    public mainGameClient: MainGameClient
     public user: User
+    public mainPlayerConfig: MainPlayerConfig
     public playerConfig: PlayerConfig
 
     constructor(game: MyGame) {
@@ -31,10 +34,42 @@ export class Client {
         )
 
         this.user = Config.defaultUser
+        this.mainPlayerConfig =  (JSON.parse(window.localStorage.getItem('mainPlayerConfig')!) as MainPlayerConfig) ||  ({login: null, token: null})
         this.playerConfig =
             (JSON.parse(window.localStorage.getItem('playerConfig')!) as PlayerConfig) ||
             Config.defaultPlayerConfig
         this.playerConfig.ready = false
+    }
+
+    public async initMainClientByToken(): Promise<boolean> {
+        const token = this.mainPlayerConfig.token
+        if (token) {
+            return this.mainGameClient.tryInitByToken(token)
+        } else {
+            return Promise.resolve(false)
+        }
+    }
+
+
+
+    public initLogin() {
+
+    }
+
+    public initMainClient() {
+        const onInit = () => {
+            if (this.mainGameClient.state.player.token) {
+                this.mainPlayerConfig.token=this.mainGameClient.state.player.token
+                window.localStorage.setItem('mainPlayerConfig', JSON.stringify(this.mainPlayerConfig))
+            }
+            this.game.scenes.startLoby()
+        }
+
+        const onStart = (user: User) => {
+            this.user = user
+            this.initPlayerSelection()
+        }
+        this.mainGameClient = new MainGameClient(this.game, onInit)
     }
 
     public initLobby() {

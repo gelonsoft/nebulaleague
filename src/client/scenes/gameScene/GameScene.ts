@@ -48,7 +48,7 @@ export class GameScene extends Phaser.Scene {
         this.settingCamera()
         this.createBackground()
 
-        const existingPlayers = Array.from(this.game.client.gameClient.state.players.values()).map(
+        const existingPlayers = Array.from(this.game.client.gameClient.oldState.players.values()).map(
             (playerModel) => {
                 return new Player(this, playerModel)
             }
@@ -58,6 +58,7 @@ export class GameScene extends Phaser.Scene {
         this.player = this.players
             .getChildren()
             .find((player: Player) => player.id === this.game.client.gameClient.id) as Player
+
 
         this.playerControl = new PlayerController(this, this.player)
         this.mainControl = new MainController(this)

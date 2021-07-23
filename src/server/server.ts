@@ -9,8 +9,10 @@ import { monitor } from '@colyseus/monitor'
 import { LobbyRoom } from '~/server/rooms/lobbyRoom'
 import { PlayerSelectionRoom } from '~/server/rooms/playerSelectionRoom'
 import { GameRoom } from '~/server/rooms/gameRoom'
+import {connect} from 'mongoose'
 
 import settingWebpackFormServer from './settingWebpackFormServer'
+import {MainRoom} from "~/server/rooms/mainRoom";
 DotenFlow.config()
 
 const app = express()
@@ -40,10 +42,16 @@ app.get('/', (_req: express.Request, res: express.Response) => {
 server.define('lobyRoom', LobbyRoom)
 server.define('playerSelectionRoom', PlayerSelectionRoom)
 server.define('gameRoom', GameRoom)
-void server.listen(app.get('port'))
-console.info(`Server running at http://127.0.0.1:${app.get('port')}`)
+server.define('mainGameRoom', MainRoom)
 
-process.on('SIGINT', function () {
-    httpServer.close()
-    process.exit(0)
+void connect(process.env.DEMO_DATABASE||"",{useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+    void server.listen(app.get('port'))
+    console.info(`Server running at http://127.0.0.1:${app.get('port')}`)
+
+    process.on('SIGINT', function () {
+        httpServer.close()
+        process.exit(0)
+    })
 })
+
+

@@ -5,7 +5,7 @@ import { Config } from '~/shared/config'
 
 export abstract class GameClient {
     public game: MyGame
-    public state: GameState
+    public oldState: GameState
     public onInit: () => void
     
     constructor(
@@ -14,12 +14,12 @@ export abstract class GameClient {
     ) {
         this.game = game
         this.onInit = onInit
-        this.state = Config.defaultGameState
+        this.oldState = Config.defaultGameState
     }
 
     public get id(): string {
         return 'unknown'
     }
     public abstract async init(): Promise<unknown>
-    public abstract inputUpdate(playerAction: PlayerAction): void 
+    public abstract inputUpdate(playerAction: PlayerAction): void
 }

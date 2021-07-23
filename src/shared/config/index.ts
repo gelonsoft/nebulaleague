@@ -73,6 +73,9 @@ export class Config {
         debug: {
             key: 'debugScene',
         },
+        login: {
+            key: 'loginScene' as SceneGameKey,
+        },
         hud: {
             key: 'hudScene',
         },

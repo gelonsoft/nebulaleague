@@ -15,7 +15,8 @@
         "experimentalDecorators": true,
         "paths": {
             "~/*": ["src/*"]
-        }
+        },
+      "allowSyntheticDefaultImports": true
     },
 	"typeRoots": [
 		"node_modules/@types",

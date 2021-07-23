@@ -3,6 +3,18 @@
         "files": [
             {
                 "type": "atlas",
+                "key": "heroes",
+                "textureURL": "assets/atlas/gastronomy-0.png",
+                "atlasURL": "assets/atlas/gastronomy.json"
+            },
+            {
+                "type": "atlas",
+                "key": "items",
+                "textureURL": "assets/atlas/symbol-0.png",
+                "atlasURL": "assets/atlas/symbol.json"
+            },
+            {
+                "type": "atlas",
                 "key": "icons",
                 "textureURL": "assets/atlas/icons.png",
                 "atlasURL": "assets/atlas/icons.json"

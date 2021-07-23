@@ -7,8 +7,8 @@ export class GameOfflineClient extends GameClient {
     }
 
     public async init() {
-        this.state = new GameStateSchema()
-        this.state.players.set(
+        this.oldState = new GameStateSchema()
+        this.oldState.players.set(
             this.id,
             new PlayerModelSchema().assign({
                 ...this.game.client.playerConfig,
@@ -17,7 +17,7 @@ export class GameOfflineClient extends GameClient {
                 y: 200,
             })
         )
-        this.state.players.set(
+        this.oldState.players.set(
             'secound',
             new PlayerModelSchema().assign({
                 ...this.game.client.playerConfig,

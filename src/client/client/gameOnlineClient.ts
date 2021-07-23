@@ -16,7 +16,7 @@ export class GameOnlineClient extends GameClient {
         })
 
         this.room.onStateChange.once((state: GameStateSchema) => {
-            this.state = state
+            this.oldState = state
             this.onInit()
             const getPlayers = () => this.game.scenes.game.players.getChildren()
             const getPlayer = (playerId: string): Player => {

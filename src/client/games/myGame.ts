@@ -4,16 +4,23 @@ import {
     DebugScene,
     GameFfaScene, HeroStatScene,
     HudScene,
-    LobbyScene,
+    LobbyScene, LoginScene,
     MainMenuScene,
     PlayerSelectionScene
 } from '~/client/scenes'
 
 
-import { Config } from '~/shared/config'
-import { Client } from '~/client/client'
-import { GameMode, SceneGameKey } from '~/shared/models'
-import { ScenesController } from '~/client/games/scenesController'
+import {Config} from '~/shared/config'
+import {Client} from '~/client/client'
+import {GameMode, SceneGameKey} from '~/shared/models'
+import {ScenesController} from '~/client/games/scenesController'
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
+// @ts-ignore
+import TextTypingPlugin from "phaser3-rex-plugins/plugins/texttyping-plugin.js";
+// @ts-ignore
+import TextEditPlugin from 'phaser3-rex-plugins/plugins/textedit-plugin.js';
+// @ts-ignore
+import InputTextPlugin from 'phaser3-rex-plugins/plugins/inputtext-plugin.js';
 
 
 export class MyGame extends Phaser.Game {
@@ -30,12 +37,15 @@ export class MyGame extends Phaser.Game {
             DeathScene,
             PlayerSelectionScene,
             GameFfaScene,
-            HeroStatScene
+            HeroStatScene,
+            LoginScene
         ]
 
         super({
             type: Phaser.WEBGL,
             title: 'nebulaleague',
+            width: 1024,
+            height: 768,
             scale: {
                 width: window.innerWidth * window.devicePixelRatio,
                 height: window.innerHeight * window.devicePixelRatio,
@@ -54,7 +64,7 @@ export class MyGame extends Phaser.Game {
             physics: {
                 default: 'matter',
                 matter: {
-                    gravity: { x: 0, y: 0 },
+                    gravity: {x: 0, y: 0},
                     debug: {
                         showBody: true,
                         showStaticBody: true,
@@ -62,11 +72,35 @@ export class MyGame extends Phaser.Game {
                     }
                 },
             },
+            plugins: {
+                global: [{
+                    key: 'rexInputTextPlugin',
+                    plugin: InputTextPlugin,
+                    start: true
+                },
+                    {
+                        key: 'rexTextTyping',
+                        plugin: TextTypingPlugin,
+                        start: true
+                    },
+                    {
+                        key: 'rexTextEdit',
+                        plugin: TextEditPlugin,
+                        start: true
+                    }],
+                scene: [{
+                    key: 'rexUI',
+                    plugin: RexUIPlugin,
+                    mapping: 'rexUI'
+                }
+                    // ...
+                ]
+            },
             scene: scenes,
         })
     }
 
-    public get dt () {
+    public get dt() {
         return this.loop.delta / 1000
     }
 
@@ -78,7 +112,7 @@ export class MyGame extends Phaser.Game {
         return this.client.user.gameMode
     }
 
-    
+
     start() {
         super.start()
         this.client = new Client(this)

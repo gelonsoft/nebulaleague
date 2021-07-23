@@ -41,7 +41,13 @@ export class BootScene extends Phaser.Scene {
             () => {
                 this.progressBar.destroy()
                 this.loadingBar.destroy()
-                this.game.client.initLobby()
+                this.game.client.initMainClient()
+                void this.game.client.initMainClientByToken().then((v) => {
+                    if (!v) this.game.scenes.startLogin()
+                })
+                //this.game.scenes.startLogin()
+                //this.game.client.initLobby()
+
             },
             this
         )
@@ -49,7 +55,7 @@ export class BootScene extends Phaser.Scene {
         // load templates
         this.load.html('mainMenuHTML', 'assets/html/mainMenu.html')
         this.load.html('mainMenuSceneHTML', 'assets/html/mainMenuScene.html')
-        this.load.html('heroStatHTML', 'assets/html/heroStat.html')
+
 
         // load our package
         this.load.pack('preload', 'assets/pack.json', 'preload')
@@ -58,6 +64,8 @@ export class BootScene extends Phaser.Scene {
             this.load.html('debugMenuHTML', 'assets/html/debugMenu.html')
         }
     }
+
+
 
 
     private createLoadingGraphics(): void {

@@ -25,19 +25,6 @@ export class GameRoom extends Room<GameStateSchema> {
             if (playerAction.direction) {
                 player.move(playerAction.direction)
             }
-            // if (playerAction.rotation) {
-            //     player.rotateFromPointer(playerAction.rotation)
-            // }
-            // if (playerAction.selectAbility) {
-            //     player.selectAbility(playerAction.selectAbility)
-            // }
-            // if (playerAction.action) {
-            //     const pointerVector = new Phaser.Math.Vector2(
-            //         playerAction.pointerPosition!.x,
-            //         playerAction.pointerPosition!.y
-            //     )
-            //     player.action(playerAction.action, pointerVector)
-            // }
             
         })
     }

@@ -9,7 +9,7 @@ export type ActionKey = WeaponKey | AbilityKey
 export type WeaponName = 'pistol' | 'ak47' | 'p90' | 'revolver' | 'thompson'
 export type GameMode = 'training' | 'ffa' | 'tst'
 
-export type SceneGameKey = 'gameFfaScene' | 'gameTrainingScene' | 'heroStatScene'
+export type SceneGameKey = 'gameFfaScene' | 'gameTrainingScene' | 'heroStatScene'     | 'loginScene'
 
 export type SceneKey =
     | SceneGameKey
@@ -17,10 +17,11 @@ export type SceneKey =
     | 'deathScene'
     | 'debugScene'
     | 'hudScene'
-    | 'lobyScene'
+    | 'lobbyScene'
     | 'mainMenuScene'
     | 'playerSelectionScene'
     | 'heroStatScene'
+
 
 export type AbilityName =
     | 'blink'
@@ -59,6 +60,12 @@ export type PlayerConfig = {
     ready: boolean
 }
 
+export type MainPlayerConfig = {
+    login: string
+    token: string
+    ready: boolean
+}
+
 export type PlayerModel = PlayerConfig & {
     id: string
     x: number
@@ -66,6 +73,8 @@ export type PlayerModel = PlayerConfig & {
     rotation: number
     health: number
 }
+
+
 
 export type PlayerChanged = Partial<PlayerModel>
 export type GameChanged = {
@@ -212,6 +221,34 @@ export enum EffectKeys {
     Freeze = 'freezed',
 }
 
+export enum HeroStats {
+    MagicAttack,
+    PhysicAttack,
+    PureAttack,
+    Health,
+    Armor,
+    MagicProtection,
+    MagicPiercing,
+    PhysicPiercing,
+    Intelligence,
+    Agility,
+    Power
+}
+
+export enum HeroRoles {
+    Healer = 'healer',
+    Mag = 'mag',
+    Tank = 'tank'
+}
+
+
+export enum HeroRanks {
+    White= '0xCCCCCC',
+    Green = '0x00FF00',
+    Blue = '0x0000FF',
+    Red = '0xFF0000'
+}
+
 export type EffectModel = {
     name: EffectKeys
     value: number
@@ -235,6 +272,8 @@ export type PlayerSelectionState = {
     players: MapSchema<PlayerConfig>
 }
 
+
+
 export type GameState = {
     players: MapSchema<PlayerModel>
     projectiles: MapSchema<ProjectileModel>
@@ -244,3 +283,10 @@ export type GameStateServer = GameState & {
     // game: Game
 }
 
+export type MainPlayerModel = {
+    playerId: number,
+    playerName: string,
+    playerLevel: number,
+    coins: number,
+    playerEnergy: number
+}
