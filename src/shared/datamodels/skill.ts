@@ -1,4 +1,4 @@
-import {HeroTemplateId} from "~/shared/models/hero";
+
 
 export type SkillBehaviorType = 'AlchemistArmorDebuff' | 'AlchemistHealPrevent' | 'AlchemistPassive' | 'AlchemistUlt' | 'AntimageBuff' | 'AntimageDebuff'
     | 'AntimagePassive' | 'AntimageUlt' | 'ArachneJump' | 'ArbalesterAutoAttack' | 'ArbalesterRicochet' | 'ArcherConvertProjectile' | 'ArcherProjectile'
@@ -111,12 +111,10 @@ export type SkillBehavior = {
 
 export type Skill = {
     id: number,
-    hero: HeroTemplateId,
+    hero: number,
     power: number,
     tier: number,
     behavior: SkillBehavior,
     icon: string,
     disabled: number,
-
-
 }

@@ -9,10 +9,12 @@ export interface IUserEntity extends Document {
     login: string;
     password: string;
     playerName: string;
-    coins: number;
+    gold: number;
     playerLevel: number;
     token?: string;
     activeSessionId?: string;
+    stamina: number,
+    lastStaminaUpdate: number
 }
 
 export const UserEntitySchema: Schema = new Schema({
@@ -20,10 +22,12 @@ export const UserEntitySchema: Schema = new Schema({
     login: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     playerName: { type: String, required: true, unique: true },
-    coins: { type: Number },
+    gold: { type: Number },
     playerLevel: { type: Number, required: true },
     token: { type: String },
     activeSessionId: { type: String },
+    stamina: { type: Number },
+    lastStaminaUpdate: { type: Number }
 });
 
 // Export the model and return your IUser interface

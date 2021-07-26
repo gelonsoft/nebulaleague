@@ -93,7 +93,7 @@ export class LoginScene extends Phaser.Scene {
 
         this.submitButton.hideButton(0)
 
-        this.messageText = this.add.text(437, 460, '', {color: '0xCC0000'}).setAlign("center").setOrigin(0.5, 0.5)
+        this.messageText = this.add.text(437, 490, '', {color: '0xCC0000'}).setAlign("center").setOrigin(0.5, 0.5)
 
     }
 

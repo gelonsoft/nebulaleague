@@ -235,11 +235,7 @@ export enum HeroStats {
     Power
 }
 
-export enum HeroRoles {
-    Healer = 'healer',
-    Mag = 'mag',
-    Tank = 'tank'
-}
+
 
 
 export enum HeroRanks {
@@ -272,8 +268,6 @@ export type PlayerSelectionState = {
     players: MapSchema<PlayerConfig>
 }
 
-
-
 export type GameState = {
     players: MapSchema<PlayerModel>
     projectiles: MapSchema<ProjectileModel>
@@ -287,6 +281,7 @@ export type MainPlayerModel = {
     playerId: number,
     playerName: string,
     playerLevel: number,
-    coins: number,
-    playerEnergy: number
+    gold: number,
+    stamina: number,
+    lastStaminaUpdate: number
 }

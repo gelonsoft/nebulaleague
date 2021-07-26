@@ -1,4 +1,4 @@
-import {Skill} from "~/shared/models/skill";
+import {Skill} from "~/shared/datamodels/skill";
 
 const skillConfig: Record<string, Skill> = {
     "1": {

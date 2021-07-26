@@ -13,6 +13,7 @@ export class MainRoom extends Room<MainGameStateSchema> {
     maxClients: 1
     state: MainGameStateSchema
     helper: MainRoomHelper
+    playerId: number
     onCreate() {
         this.setState(new MainGameStateSchema())
         this.helper=new MainRoomHelper(this)
@@ -26,17 +27,8 @@ export class MainRoom extends Room<MainGameStateSchema> {
         return this.helper.onAuth(client,options,request)
     }
 
-    onJoin(client: Client, options: any, auth: {
-        token: string,playerId: number, playerName: string, coins: number }) {
-        console.log(auth)
-        const player = new MainPlayerModelSchema().assign({
-            playerId: auth.playerId,
-            playerName: auth.playerName,
-            coins: auth.coins,
-            token: auth.token
-        });
+    onJoin(client: Client, options: any, auth: IUserEntity) {
 
-        this.state.player= player
     }
 
 
